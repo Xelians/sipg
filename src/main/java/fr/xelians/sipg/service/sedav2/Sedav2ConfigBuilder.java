@@ -1,0 +1,147 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package fr.xelians.sipg.service.sedav2;
+
+/**
+ * La classe Sedav2ConfigBuilder facilite la création d'un objet Sedav2Config en suivant le principe de conception du
+ * pattern builder.
+ *
+ * @author Emmanuel Deviller
+ * @see Sedav2Config
+ */
+public class Sedav2ConfigBuilder {
+
+    private boolean validate = true;
+    private boolean format = false;
+    private int indent = 3;
+    private int thread = 0;
+    private boolean strict = true;
+    private boolean checkBinary = true;
+    private boolean checkSize = true;
+    private boolean checkDigest = true;
+
+    private Sedav2ConfigBuilder() {
+    }
+
+    /**
+     * Instancie le builder.
+     *
+     * @return le builder
+     */
+    public static Sedav2ConfigBuilder builder() {
+        return new Sedav2ConfigBuilder();
+    }
+
+    /**
+     * Spécifie si une validation doit être réalisée lors de la conversion. True par défaut.
+     *
+     * @param validate si une validation doit être réalisée
+     * @return le builder
+     */
+    public Sedav2ConfigBuilder validate(boolean validate) {
+        this.validate = validate;
+        return this;
+    }
+
+    /**
+     * Spécifie si le fichier de description doit être formaté (pretty-print). False par défaut.
+     *
+     * @param format si le fichier de description doit être formaté
+     * @return le builder
+     */
+    public Sedav2ConfigBuilder format(boolean format) {
+        this.format = format;
+        return this;
+    }
+
+    /**
+     * Spécifie la valeur de l'indentation lors du formatage. 3 par défaut.
+     *
+     * @param indent la valeur de l'indentation
+     * @return le builder
+     */
+    public Sedav2ConfigBuilder indent(int indent) {
+        this.indent = indent;
+        return this;
+    }
+
+    /**
+     * Spécifie le nombre de threads à utiliser lors de la conversion. Le nombre de coeur du CPU par défaut.
+     *
+     * @param thread le nombre de threads
+     * @return le builder
+     */
+    public Sedav2ConfigBuilder thread(int thread) {
+        this.thread = thread;
+        return this;
+    }
+
+    /**
+     * Spécifie si la conversion doit être stricte. False par défaut.
+     *
+     * @param strict si la conversion doit être stricte
+     * @return le builder
+     */
+    public Sedav2ConfigBuilder strict(boolean strict) {
+        this.strict = strict;
+        return this;
+    }
+
+    /**
+     * Spécifie si la validation doit vérifier les objets binaires.
+     *
+     * @param checkBinary si la validation doit vérifier les objets binaires
+     * @return le builder
+     */
+    public Sedav2ConfigBuilder checkBinary(boolean checkBinary) {
+        this.checkBinary = checkBinary;
+        return this;
+    }
+
+    /**
+     * Spécifie si la validation doit vérifier la taille des objets binaires.
+     *
+     * @param checkSize si la validation doit vérifier la taille des objets binaires
+     * @return le builder
+     */
+    public Sedav2ConfigBuilder checkSize(boolean checkSize) {
+        this.checkSize = checkSize;
+        return this;
+    }
+
+    /**
+     * Spécifie si la validation doit vérifier l'empreinte des objets binaires.
+     *
+     * @param checkDigest si la validation doit vérifier l'empreinte des objets binaires
+     * @return le builder
+     */
+    public Sedav2ConfigBuilder checkDigest(boolean checkDigest) {
+        this.checkDigest = checkDigest;
+        return this;
+    }
+
+    /**
+     * Instancie la classe Sedav2Config selon les paramètres précédemment spécifiés dans le builder.
+     *
+     * @return la configuration SEDA v2
+     */
+    public Sedav2Config build() {
+        return new Sedav2Config(validate, format, indent, thread, strict, checkBinary, checkSize, checkDigest);
+    }
+}
