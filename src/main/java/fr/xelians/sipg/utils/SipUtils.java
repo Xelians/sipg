@@ -85,7 +85,8 @@ public final class SipUtils {
      */
     private static BinarySignatureIdentifier initDroidSignatures() {
         Path signaturePath = null;
-        try (InputStream is = ClassLoader.getSystemResourceAsStream("droid_signaturefile.xml")) {
+        // try (InputStream is = ClassLoader.getSystemResourceAsStream("droid_signaturefile.xml")) {
+        try (InputStream is = resourceAsStream("droid_signaturefile.xml")) {
             if (is != null) {
                 signaturePath = Files.createTempFile("droid", ".xml");
                 Files.copy(is, signaturePath, StandardCopyOption.REPLACE_EXISTING);
@@ -249,7 +250,8 @@ public final class SipUtils {
      * @return la ressource système
      */
     public static InputStream resourceAsStream(String name) {
-        return ClassLoader.getSystemResourceAsStream(name);
+        // return ClassLoader.getSystemResourceAsStream(name);
+        return Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
     }
 
     /**
