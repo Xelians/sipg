@@ -444,7 +444,26 @@ class Sedav2Converter {
         aut.setContent(dmct);
         unit.getArchiveUnits().forEach(u -> aut.getArchiveUnitOrDataObjectReferenceOrDataObjectGroup().add(toArchiveUnitType(u, dopt)));
 
+        setArchiveUnitReferences(unit, aut);
+
         return aut;
+    }
+
+    private void setArchiveUnitReferences(ArchiveUnit unit, ArchiveUnitType aut) {
+        for (ArchiveUnitRef ref : unit.getReferences()) {
+            postProcessors.add(() -> {
+                ArchiveUnit au = ref.getReference();
+                ArchiveUnitType reference = archiveMap.get(au);
+                if (reference == null) {
+                    throw new SipgException("The related referenced archive unit does not exist in this archive");
+                }
+                ArchiveUnitType referenceArchiveUnitType = new ArchiveUnitType();
+
+                referenceArchiveUnitType.setId(incAndGetCounter());
+                referenceArchiveUnitType.setArchiveUnitRefId(reference);
+                aut.getArchiveUnitOrDataObjectReferenceOrDataObjectGroup().add(referenceArchiveUnitType);
+            });
+        }
     }
 
     private Node toNode(String fragment) {

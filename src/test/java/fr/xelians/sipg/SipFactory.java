@@ -333,6 +333,9 @@ public class SipFactory {
         unit1.addArchiveUnit(unit4);
         archiveTransfer.addArchiveUnit(unit1);
 
+        unit1.addReference(new ArchiveUnitRef(unit2));
+        unit1.addReference(new ArchiveUnitRef(unit3));
+
         return archiveTransfer;
     }
 

@@ -115,6 +115,11 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     protected final List<ArchiveUnit> archiveUnits = new ArrayList<>();
 
     /**
+     * La liste des archives unites référencées par cette unité d'archive.
+     */
+    protected final List<ArchiveUnitRef> references = new ArrayList<>();
+
+    /**
      * L'identifiant unique de l'archive unit dans le document.
      */
     protected String id;
@@ -1979,6 +1984,36 @@ public class ArchiveUnit implements ArchiveUnitContainer {
         return new ArrayList<>(archiveUnits);
     }
 
+    /**
+     * Ajoute une référence d'unité d'archive à la liste d'autres unités d'archives référencées par cette unité d'archive
+     *
+     * @param reference référence à l'unité d'archive
+     */
+    public void addReference(ArchiveUnitRef reference) {
+        Validate.notNull(reference, SipUtils.NOT_NULL, "reference");
+	    references.add(reference);
+    }
+
+    /**
+     * Supprime une référence d'unité d'archive de la liste d'autres références d'unités d'archives contenues dans cette unité d'archive.
+     *
+     * @param reference la référence d'unité d'archive à supprimer
+     * @return true si la suppression a été réalisée avec succès, sinon false
+     */
+    public boolean removeReference(ArchiveUnitRef reference) {
+        Validate.notNull(reference, SipUtils.NOT_NULL, "reference");
+        return references.remove(reference);
+    }
+
+    /**
+     * Fournit la liste d'autres références d'unités d'archives contenues dans cette unité d'archive.
+     *
+     * @return la liste d'autres références d'unités d'archives
+     */
+    public List<ArchiveUnitRef> getReferences() {
+        return new ArrayList<>(references);
+    }
+    
     /**
      * Ajoute l'élément à la liste des éléments étendus qui n'appartiennent pas à l'ontolgie standard.
      *
