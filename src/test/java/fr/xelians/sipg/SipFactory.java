@@ -318,10 +318,10 @@ public class SipFactory {
 
     //AgentType
     unit1.addWriter(AgentBuilder.builder()
-        .withFirstName("Baptiste").withFullName("Nichele").withBirthDate(LocalDate.ofEpochDay(0))
-        .addActivity("Consultant").addFunction("Tech")
-        .withBirthPlace(PlaceBuilder.builder().withCountry("France").withCity("Paris").build())
-        .build());
+                                .withFirstName("Baptiste").withFullName("Nichele").withBirthDate(LocalDate.ofEpochDay(0))
+                                .addActivity("Consultant").addFunction("Tech")
+                                .withBirthPlace(PlaceBuilder.builder().withCountry("France").withCity("Paris").build())
+                                .build());
 
     //Extension d'ontologie
     Element extended = new Element("Extended", "Ontology extend 1");
@@ -343,7 +343,7 @@ public class SipFactory {
     unit3.setMimeType("application/pdf");
     unit3.setSignatureStatus("True");
     unit3.setFileInfo(FileInfoBuilder.builder().withFilename("FileName.pdf").withLastModified(todaytime)
-        .withCreatingApplicationName("PdfBox").build());
+                                     .withCreatingApplicationName("PdfBox").build());
     unit3.addTitle("AU binaryObject");
     unit3.setUpdateOperation(new UpdateOperation("mySystemId"));
 
@@ -358,6 +358,9 @@ public class SipFactory {
     unit1.addArchiveUnit(unit3);
     unit1.addArchiveUnit(unit4);
     archiveTransfer.addArchiveUnit(unit1);
+
+    unit1.addReference(new ArchiveUnitRef(unit2));
+    unit1.addReference(new ArchiveUnitRef(unit3));
 
     return archiveTransfer;
   }
@@ -450,19 +453,19 @@ public class SipFactory {
     LocalDateTime todaytime = LocalDateTime.now();
 
     Event event1 = EventBuilder.builder().withDateTime(todaytime).withDetail("MyDetails1")
-        .withDetailData("MyDetailsData1").withIdentifier("MyIdentifier1")
-        .withOutcome("MyOutcome1").withOutcomeDetail("MyOutcomeDetail1").withType("MyType1")
-        .withTypeCode("MyTypeCode1").build();
+                               .withDetailData("MyDetailsData1").withIdentifier("MyIdentifier1")
+                               .withOutcome("MyOutcome1").withOutcomeDetail("MyOutcomeDetail1").withType("MyType1")
+                               .withTypeCode("MyTypeCode1").build();
 
     Event event2 = EventBuilder.builder().withDateTime(todaytime).withDetail("MyDetails2")
-        .withDetailData("MyDetailsData2").withIdentifier("MyIdentifier2")
-        .withOutcome("MyOutcome2").withOutcomeDetail("MyOutcomeDetail2").withType("MyType2")
-        .withTypeCode("MyTypeCode2").build();
+                               .withDetailData("MyDetailsData2").withIdentifier("MyIdentifier2")
+                               .withOutcome("MyOutcome2").withOutcomeDetail("MyOutcomeDetail2").withType("MyType2")
+                               .withTypeCode("MyTypeCode2").build();
 
     Event event3 = EventBuilder.builder().withDateTime(todaytime).withDetail("MyDetails3")
-        .withDetailData("MyDetailsData3").withIdentifier("MyIdentifier3")
-        .withOutcome("MyOutcome3").withOutcomeDetail("MyOutcomeDetail3").withType("MyType3")
-        .withTypeCode("MyTypeCode3").build();
+                               .withDetailData("MyDetailsData3").withIdentifier("MyIdentifier3")
+                               .withOutcome("MyOutcome3").withOutcomeDetail("MyOutcomeDetail3").withType("MyType3")
+                               .withTypeCode("MyTypeCode3").build();
 
     unit1.addLogEvent(event1);
     unit1.addLogEvent(event2);
@@ -486,12 +489,12 @@ public class SipFactory {
     unit1.setSubmissionAgency(new Agency("AG001", "My Archive Agency"));
 
     unit1.addAddressee(AgentBuilder.builder()
-        .withFirstName("Marc").withFullName("Lavolle").withBirthDate(today)
-        .addActivity("Sword").addFunction("Jedi")
-        .withBirthPlace(
-            PlaceBuilder.builder().withAddress("19 Holliday Street").withGeogName("GEOName").withPostalCode("94300")
-                .withRegion("Oregon").withCountry("USA").withCity("NY").build())
-        .build());
+                                   .withFirstName("Marc").withFullName("Lavolle").withBirthDate(today)
+                                   .addActivity("Sword").addFunction("Jedi")
+                                   .withBirthPlace(
+                                           PlaceBuilder.builder().withAddress("19 Holliday Street").withGeogName("GEOName").withPostalCode("94300")
+                                                       .withRegion("Oregon").withCountry("USA").withCity("NY").build())
+                                   .build());
 
     unit1.setSource("My Source1");
 
@@ -506,7 +509,7 @@ public class SipFactory {
     unit2.setFormatId("pdf");
     unit2.setFormatName("Portable Document Format");
     unit2.setFileInfo(FileInfoBuilder.builder().withFilename("MyFile.pdf").withLastModified(todaytime)
-        .withCreatingApplicationName("PdfBox").build());
+                                     .withCreatingApplicationName("PdfBox").build());
     unit2.setSignatureStatus("No Signature");
 
     AccessRules aRule2 = new AccessRules();
@@ -543,52 +546,52 @@ public class SipFactory {
     unit2.addTag("MyValue23");
 
     unit2.addAuthorizedAgent(AgentBuilder.builder()
-        .withFirstName("Jacques").withFullName("Terner").withBirthDate(today)
-        .withBirthName("Jacky Ho").withGivenName("Joe").withGender("Male").addIdentifier("JH")
-        .withDeathDate(today)
-        .addActivity("Controller").addFunction("BOSS").addPosition("High")
-        .addNationality("French").addRole("SmallBoss").addMandate("Mandataire")
-        .withBirthPlace(PlaceBuilder.builder().withAddress("MyAddress").withGeogName("LND")
-            .withRegion("Sussex").withPostalCode("98765").withCountry("England").withCity("London").build())
-        .withDeathPlace(PlaceBuilder.builder().withAddress("MyAddress").withGeogName("PRS")
-            .withRegion("Seine").withPostalCode("75012").withCountry("France").withCity("Paris").build())
-        .build());
+                                         .withFirstName("Jacques").withFullName("Terner").withBirthDate(today)
+                                         .withBirthName("Jacky Ho").withGivenName("Joe").withGender("Male").addIdentifier("JH")
+                                         .withDeathDate(today)
+                                         .addActivity("Controller").addFunction("BOSS").addPosition("High")
+                                         .addNationality("French").addRole("SmallBoss").addMandate("Mandataire")
+                                         .withBirthPlace(PlaceBuilder.builder().withAddress("MyAddress").withGeogName("LND")
+                                                                     .withRegion("Sussex").withPostalCode("98765").withCountry("England").withCity("London").build())
+                                         .withDeathPlace(PlaceBuilder.builder().withAddress("MyAddress").withGeogName("PRS")
+                                                                     .withRegion("Seine").withPostalCode("75012").withCountry("France").withCity("Paris").build())
+                                         .build());
 
     unit2.addWriter(AgentBuilder.builder()
-        .withFirstName("Emmanuel").withFullName("Deviller").withBirthDate(today)
-        .addActivity("Developper").addFunction("CTO")
-        .withBirthPlace(PlaceBuilder.builder().withCountry("France").withCity("Paris").build())
-        .build());
+                                .withFirstName("Emmanuel").withFullName("Deviller").withBirthDate(today)
+                                .addActivity("Developper").addFunction("CTO")
+                                .withBirthPlace(PlaceBuilder.builder().withCountry("France").withCity("Paris").build())
+                                .build());
 
     unit2.addWriter(AgentBuilder.builder()
-        .withFirstName("Baptiste").withFullName("Nichele").withBirthDate(today)
-        .addActivity("Consultant").addFunction("Expert")
-        .withBirthPlace(PlaceBuilder.builder().withCountry("Germany").withCity("Baden-Baden").build())
-        .build());
+                                .withFirstName("Baptiste").withFullName("Nichele").withBirthDate(today)
+                                .addActivity("Consultant").addFunction("Expert")
+                                .withBirthPlace(PlaceBuilder.builder().withCountry("Germany").withCity("Baden-Baden").build())
+                                .build());
 
     unit2.addAddressee(AgentBuilder.builder()
-        .withFirstName("Marc").withFullName("Lavolle").withBirthDate(today)
-        .addActivity("Sword").addFunction("Jedi")
-        .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
-        .build());
+                                   .withFirstName("Marc").withFullName("Lavolle").withBirthDate(today)
+                                   .addActivity("Sword").addFunction("Jedi")
+                                   .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+                                   .build());
 
     unit2.addRecipient(AgentBuilder.builder()
-        .withFirstName("Tom").withFullName("Johns").withBirthDate(today)
-        .addActivity("Sword").addFunction("Guerrier")
-        .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
-        .build());
+                                   .withFirstName("Tom").withFullName("Johns").withBirthDate(today)
+                                   .addActivity("Sword").addFunction("Guerrier")
+                                   .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+                                   .build());
 
     unit2.addTransmitter(AgentBuilder.builder()
-        .withFirstName("Jacques").withFullName("Garel").withBirthDate(today)
-        .addActivity("Lance").addFunction("Magicien")
-        .withBirthPlace(PlaceBuilder.builder().withCountry("Espagne").withCity("Madrid").build())
-        .build());
+                                     .withFirstName("Jacques").withFullName("Garel").withBirthDate(today)
+                                     .addActivity("Lance").addFunction("Magicien")
+                                     .withBirthPlace(PlaceBuilder.builder().withCountry("Espagne").withCity("Madrid").build())
+                                     .build());
 
     unit2.addSender(AgentBuilder.builder()
-        .withFirstName("Ben").withFullName("Targatien").withBirthDate(today)
-        .addActivity("Dague").addFunction("Voleur")
-        .withBirthPlace(PlaceBuilder.builder().withCountry("Royaume-Uni").withCity("Londres").build())
-        .build());
+                                .withFirstName("Ben").withFullName("Targatien").withBirthDate(today)
+                                .addActivity("Dague").addFunction("Voleur")
+                                .withBirthPlace(PlaceBuilder.builder().withCountry("Royaume-Uni").withCity("Londres").build())
+                                .build());
 
     Element e1 = new Element("MyExtTag1", "MyExtValue1");
     e1.addAttribute("attr1", "val1");
@@ -625,16 +628,16 @@ public class SipFactory {
     unit3.setAppraisalRules(aRule3);
 
     Signer signer = SignerBuilder.builder()
-        .withFirstName("Marc").withFullName("Lavolle").withBirthDate(today)
-        .addActivity("Sword").addFunction("Jedi").addMandate("Signer")
-        .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
-        .withSigningTime(todaytime).build();
+                                 .withFirstName("Marc").withFullName("Lavolle").withBirthDate(today)
+                                 .addActivity("Sword").addFunction("Jedi").addMandate("Signer")
+                                 .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+                                 .withSigningTime(todaytime).build();
 
     Validator validator = ValidatorBuilder.builder()
-        .withFirstName("Marc").withFullName("Lavolle").withBirthDate(today)
-        .addActivity("Sword").addFunction("Jedi").addMandate("Validator")
-        .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
-        .withValidationTime(todaytime).build();
+                                          .withFirstName("Marc").withFullName("Lavolle").withBirthDate(today)
+                                          .addActivity("Sword").addFunction("Jedi").addMandate("Validator")
+                                          .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+                                          .withValidationTime(todaytime).build();
 
     Signature signature = new Signature();
     signature.addSigner(signer);
