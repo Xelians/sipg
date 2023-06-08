@@ -17,6 +17,25 @@
     <url>https://github.com/Xelians/sipg</url>
     <description>Sip Generator</description>
 
+    <developers>
+        <developer>
+            <name>Emmanuel Deviller</name>
+            <organization>Xelians</organization>
+            <organizationUrl>https://www.xelians.fr/</organizationUrl>
+            <roles>
+                <role>Developper</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Baptiste Nichèle</name>
+            <organization>Mintika</organization>
+            <organizationUrl>https://www.mintika.fr/</organizationUrl>
+            <roles>
+                <role>Advisor</role>
+            </roles>
+        </developer>
+    </developers>
+
     <!-- General Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
