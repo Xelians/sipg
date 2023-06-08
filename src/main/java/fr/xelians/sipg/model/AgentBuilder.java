@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * La classe AgentBuilder facilite la création d'un objet Agent en suivant le principe de conception du pattern builder.
+ * La classe AgentBuilder facilite la création d'un objet Agent en suivant le principe de conception du pattern
+ * builder.
  *
  * @author Emmanuel Deviller
  * @see Agent
@@ -39,7 +40,7 @@ public class AgentBuilder {
     private Place birthPlace;
     private LocalDate deathDate;
     private Place deathPlace;
-    private String corpname;
+    private String corpName;
 
     private List<String> nationalities = new ArrayList<>();
     private List<String> identifiers = new ArrayList<>();
@@ -163,11 +164,11 @@ public class AgentBuilder {
     /**
      * Spécifie l'entité d'appartenance de la personne.
      *
-     * @param corpname l'entité
+     * @param corpName l'entité
      * @return le builder
      */
-    public AgentBuilder withCorpname(String corpname) {
-        this.corpname = corpname;
+    public AgentBuilder withCorpName(String corpName) {
+        this.corpName = corpName;
         return this;
     }
 
@@ -218,7 +219,7 @@ public class AgentBuilder {
     /**
      * Spécifie la liste des positions de la personne.
      *
-     * @param list la liste des position
+     * @param list la liste des positions
      * @return le builder
      */
     public AgentBuilder withPositions(List<String> list) {
@@ -229,7 +230,7 @@ public class AgentBuilder {
     /**
      * Spécifie la liste des rôles de la personne.
      *
-     * @param list la liste des rôle
+     * @param list la liste des rôles
      * @return le builder
      */
     public AgentBuilder withRoles(List<String> list) {
@@ -328,10 +329,11 @@ public class AgentBuilder {
     /**
      * Instancie la classe Agent selon les paramètres précédemment spécifiés dans le builder.
      *
-     * @return l 'agent
+     * @return l'agent
      */
     public Agent build() {
-        Agent agent = new Agent(firstName, birthName, fullName, givenName, gender, birthDate, birthPlace, deathDate, deathPlace, corpname);
+        Agent agent = new Agent(firstName, birthName, fullName, givenName, gender, birthDate, birthPlace, deathDate,
+                deathPlace, corpName);
         nationalities.forEach(agent::addNationality);
         identifiers.forEach(agent::addIdentifier);
         functions.forEach(agent::addFunction);

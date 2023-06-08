@@ -28,7 +28,7 @@ import java.util.Objects;
  * vie, et qui est associé à une unité d'archive.
  *
  * <p>
- * Supporté en SEDA v2.1 .
+ * Supporté en SEDA v2.1 et FNTC v4.
  * </p>
  *
  * @author Emmanuel Deviller
@@ -343,7 +343,8 @@ public class Event {
      */
     @Override
     public String toString() {
-        return "Event{" + "identifier=" + identifier + ", typeCode=" + typeCode + ", type=" + type + ", dateTime=" + dateTime
+        return "Event{" + "identifier=" + identifier + ", typeCode=" + typeCode + ", type=" + type + ", dateTime="
+                + dateTime
                 + ", detail=" + detail + ", outcome=" + outcome + ", outcomeDetail=" + outcomeDetail + ", outcomeDetailMessage="
                 + outcomeDetailMessage + ", detailData=" + detailData + '}';
     }

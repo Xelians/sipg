@@ -54,7 +54,8 @@ class Sedav2Parser extends DefaultHandler {
      * @throws ParserConfigurationException the parser configuration exception
      * @throws SAXException                 the sax exception
      */
-    static ArrayList<Sedav2BinaryObject> parse(InputStream is) throws IOException, ParserConfigurationException, SAXException {
+    static ArrayList<Sedav2BinaryObject> parse(InputStream is)
+            throws IOException, ParserConfigurationException, SAXException {
         Sedav2Parser parser = new Sedav2Parser();
         XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
         reader.setContentHandler(parser);

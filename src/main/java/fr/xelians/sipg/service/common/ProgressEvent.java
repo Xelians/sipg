@@ -49,7 +49,7 @@ public class ProgressEvent<T> {
     /**
      * Indique l'identifiant de l'événement.
      *
-     * @return l 'identifiant de l'événement
+     * @return l'identifiant de l'événement
      */
     public String getId() {
         return id;
@@ -67,7 +67,7 @@ public class ProgressEvent<T> {
     /**
      * Indique l'étape de l'événement.
      *
-     * @return l 'étape
+     * @return l'étape
      */
     public T getStep() {
         return step;

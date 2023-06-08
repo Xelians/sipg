@@ -21,7 +21,8 @@ package fr.xelians.sipg.model;
 import java.time.LocalDateTime;
 
 /**
- * La classe EventBuilder facilite la création d'un objet Event en suivant le principe de conception du pattern builder.
+ * La classe EventBuilder facilite la création d'un objet Event en suivant le principe de conception du pattern
+ * builder.
  *
  * @author Emmanuel Deviller
  * @see Event
@@ -152,10 +153,11 @@ public class EventBuilder {
     /**
      * Instancie la classe Event selon les paramètres précédemment spécifiés dans le builder.
      *
-     * @return l 'évènement
+     * @return l'évènement
      */
     public Event build() {
-        return new Event(identifier, typeCode, type, dateTime, detail, outcome, outcomeDetail, outcomeDetailMessage, detailData);
+        return new Event(identifier, typeCode, type, dateTime, detail, outcome, outcomeDetail, outcomeDetailMessage,
+                detailData);
     }
 
 }

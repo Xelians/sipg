@@ -45,7 +45,7 @@ public class Signer extends Agent {
     /**
      * Instancie la classe avec l'identifiant de l'agent.
      *
-     * @param identifier l'identifiant
+     * @param identifier  l'identifiant
      * @param signingTime la date et heure de signature
      */
     public Signer(String identifier, LocalDateTime signingTime) {
@@ -65,13 +65,14 @@ public class Signer extends Agent {
      * @param birthPlace  le lieu de naissance
      * @param deathDate   la date de décès
      * @param deathPlace  le lieu de décès
-     * @param corpname    l'entité
+     * @param corpName    l'entité
      * @param signingTime la date et heure de signature
      */
     public Signer(String firstName, String birthName, String fullName, String givenName, String gender,
-                  LocalDate birthDate, Place birthPlace, LocalDate deathDate, Place deathPlace, String corpname, LocalDateTime signingTime) {
+                  LocalDate birthDate, Place birthPlace, LocalDate deathDate, Place deathPlace, String corpName,
+                  LocalDateTime signingTime) {
 
-        super(firstName, birthName, fullName, givenName, gender, birthDate, birthPlace, deathDate, deathPlace, corpname);
+        super(firstName, birthName, fullName, givenName, gender, birthDate, birthPlace, deathDate, deathPlace, corpName);
         this.signingTime = signingTime;
     }
 

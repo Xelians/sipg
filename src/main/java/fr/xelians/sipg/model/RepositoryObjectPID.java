@@ -19,7 +19,7 @@
 package fr.xelians.sipg.model;
 
 /**
- * La classe RepositoryObjectPID représente une référence à un un objet-données ou à un groupe d'objets-données déjà
+ * La classe RepositoryObjectPID représente une référence à un objet-données ou à un groupe d'objets-données déjà
  * conservé(s) dans un système d'archivage.
  *
  * <p>

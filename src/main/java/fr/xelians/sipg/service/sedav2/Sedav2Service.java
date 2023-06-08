@@ -25,7 +25,7 @@ import fr.xelians.sipg.service.common.ProgressListener;
 import fr.xelians.sipg.service.common.ProgressState;
 import fr.xelians.sipg.utils.ByteArrayInOutStream;
 import fr.xelians.sipg.utils.SipUtils;
-import fr.xelians.sipg.utils.SipgException;
+import fr.xelians.sipg.utils.SipException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -96,7 +96,7 @@ public class Sedav2Service {
             sedaSchema = sf.newSchema(new StreamSource(is1));
             sedaContext = JAXBContext.newInstance(fr.gouv.culture.archivesdefrance.seda.v2.ObjectFactory.class);
         } catch (IOException | JAXBException | SAXException ex) {
-            throw new SipgException("Unable to initialize XSD Schemas, JAXBContext and Marshaller", ex);
+            throw new SipException("Unable to initialize XSD Schemas, JAXBContext and Marshaller", ex);
         }
     }
 
@@ -120,11 +120,11 @@ public class Sedav2Service {
     }
 
     /**
-     * Sérialise l'archive dans un paquet zip au format SEDA v2.1. Le ficher XML de description de l'archive peut
-     * être validé selon le schéma RNG défini par le Validator.
+     * Sérialise l'archive dans un paquet zip au format SEDA v2.1. Le fichier XML de description de l'archive peut être
+     * validé selon le schéma RNG défini par le Validator.
      * <p>
-     * Note. L'objet Validator n'est pas thread-safe, il est de la responsabilité de l'application appelante de
-     * s'assurer que l'objet {@link Validator} n'est utilisé à tout moment que par une seule et même thread.
+     * Note. L'objet Validator n'est pas thread-safe, il est de la responsabilité de l'application appelante de s'assurer
+     * que l'objet {@link Validator} n'est utilisé à tout moment que par une seule et même thread.
      *
      * @param archive   l'archive à sérialiser
      * @param zipPath   le path du paquet zip
@@ -147,12 +147,12 @@ public class Sedav2Service {
     }
 
     /**
-     * Sérialise l'archive dans un paquet zip au format SEDA v2.1. Le ficher XML de description de l'archive peut
-     * être validé selon le schéma RNG défini par le Validator. La configuration permet de contrôler le
-     * processus de conversion et de sérialisation.
+     * Sérialise l'archive dans un paquet zip au format SEDA v2.1. Le fichier XML de description de l'archive peut être
+     * validé selon le schéma RNG défini par le Validator. La configuration permet de contrôler le processus de conversion
+     * et de sérialisation.
      * <p>
-     * Note. L'objet Validator n'est pas thread-safe, il est de la responsabilité de l'application appelante de
-     * s'assurer que l'objet {@link Validator} n'est utilisé à tout moment que par une seule et même thread.
+     * Note. L'objet Validator n'est pas thread-safe, il est de la responsabilité de l'application appelante de s'assurer
+     * que l'objet {@link Validator} n'est utilisé à tout moment que par une seule et même thread.
      *
      * @param archive   l'archive à sérialiser
      * @param zipPath   le path du paquet zip
@@ -167,7 +167,7 @@ public class Sedav2Service {
         try {
             Files.deleteIfExists(zipPath);
         } catch (IOException ex) {
-            throw new SipgException("Unable to delete file " + zipPath, ex);
+            throw new SipException("Unable to delete file " + zipPath, ex);
         }
 
         try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath)) {
@@ -182,7 +182,7 @@ public class Sedav2Service {
 
                 Marshaller sedaMarshaller = sedaContext.createMarshaller();
                 sedaMarshaller.setSchema(config.isValidate() ? sedaSchema : null);
-                sedaMarshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", namespaceMapper) ;
+                sedaMarshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", namespaceMapper);
                 sedaMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
 
                 if (LOGGER.isDebugEnabled()) {
@@ -192,7 +192,7 @@ public class Sedav2Service {
 
                 // Marshall & prettyPrint
                 if (config.isFormat()) {
-                    // JAXB_FORMATTED_OUTPUT is buggy and does not format XML with DOM nodes. Hence this ugly hack...
+                    // JAXB_FORMATTED_OUTPUT is buggy and does not format XML with DOM nodes. Hence, this ugly hack...
                     ByteArrayInOutStream baios = new ByteArrayInOutStream(1024);
                     sedaMarshaller.marshal(att, baios);
                     SipUtils.formatXml(baios.getInputStream(), os, config.getIndent());
@@ -201,7 +201,7 @@ public class Sedav2Service {
                 }
             }
         } catch (IOException | ExecutionException | InterruptedException | JAXBException | SAXException ex) {
-            throw new SipgException("Unable to serialize archive " + zipPath, ex);
+            throw new SipException("Unable to serialize archive " + zipPath, ex);
         }
     }
 
@@ -215,8 +215,8 @@ public class Sedav2Service {
     }
 
     /**
-     * Valide le XML de description de l'archive selon le schéma défini par le standard SEDA v2.1. La configuration
-     * permet de contrôler le processus de validation.
+     * Valide le XML de description de l'archive selon le schéma défini par le standard SEDA v2.1. La configuration permet
+     * de contrôler le processus de validation.
      *
      * @param archive l'archive à valider
      * @param config  la configuration utilisée lors du processus de validation
@@ -229,8 +229,8 @@ public class Sedav2Service {
      * Valide le XML de description de l'archive selon le schéma défini par le standard SEDA v2.1. Le XML de description
      * de l'archive peut être validé selon le schéma RNG défini par le Validator.
      * <p>
-     * Note. L'objet Validator n'est pas thread-safe, il est de la responsabilité de l'application appelante de
-     * s'assurer que l'objet {@link Validator} n'est utilisé à tout moment que par une seule et même thread.
+     * Note. L'objet Validator n'est pas thread-safe, il est de la responsabilité de l'application appelante de s'assurer
+     * que l'objet {@link Validator} n'est utilisé à tout moment que par une seule et même thread.
      *
      * @param archive   l'archive à valider
      * @param validator le validateur RNG
@@ -241,11 +241,11 @@ public class Sedav2Service {
 
     /**
      * Valide le XML de description de l'archive selon le schéma défini par le standard SEDA v2.1. Le XML de description
-     * de l'archive peut être validé selon le schéma RNG défini par le Validator. La configuration permet de
-     * contrôler le processus de validation.
+     * de l'archive peut être validé selon le schéma RNG défini par le Validator. La configuration permet de contrôler le
+     * processus de validation.
      * <p>
-     * Note. L'objet Validator n'est pas thread-safe, il est de la responsabilité de l'application appelante de
-     * s'assurer que l'objet {@link Validator} n'est utilisé à tout moment que par une seule et même thread.
+     * Note. L'objet Validator n'est pas thread-safe, il est de la responsabilité de l'application appelante de s'assurer
+     * que l'objet {@link Validator} n'est utilisé à tout moment que par une seule et même thread.
      *
      * @param archive   l'archive à valider
      * @param validator le validateur RNG
@@ -265,7 +265,7 @@ public class Sedav2Service {
             }
         } catch (IOException | ExecutionException | InterruptedException | JAXBException | SAXException ex) {
             Thread.currentThread().interrupt();
-            throw new SipgException("Unable to validate archive", ex);
+            throw new SipException("Unable to validate archive", ex);
         }
     }
 
@@ -323,8 +323,8 @@ public class Sedav2Service {
     }
 
     /**
-     * Valide le fichier XML ou l'archive selon le schéma défini par le standard SEDA v2.1.Le {@link Validator} permet
-     * d'appliquer une validation supplémentaire.Note. L'objet Validator n'est pas thread-safe, il est de la
+     * Valide le fichier XML ou l'archive selon le schéma défini par le standard SEDA v2.1. Le {@link Validator} permet
+     * d'appliquer une validation supplémentaire. Note. L'objet Validator n'est pas thread-safe, il est de la
      * responsabilité de l'application appelante de s'assurer que l'objet {@link Validator} n'est utilisé à tout moment
      * que par une seule et même thread.
      *
@@ -351,7 +351,7 @@ public class Sedav2Service {
         try (InputStream is = Files.newInputStream(xmlPath)) {
             this.validate(new StreamSource(is));
         } catch (IOException ex) {
-            throw new SipgException("Unable to validate " + xmlPath, ex);
+            throw new SipException("Unable to validate " + xmlPath, ex);
         }
 
         // Check manifest is valid against rng
@@ -359,7 +359,7 @@ public class Sedav2Service {
             try (InputStream is = Files.newInputStream(xmlPath)) {
                 validator.validate(new StreamSource(is));
             } catch (IOException | SAXException ex) {
-                throw new SipgException("Unable to validate " + xmlPath, ex);
+                throw new SipException("Unable to validate " + xmlPath, ex);
             }
         }
     }
@@ -377,11 +377,12 @@ public class Sedav2Service {
             sedaValidator.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             sedaValidator.validate(source);
         } catch (IOException | SAXException ex) {
-            throw new SipgException("Unable to validate " + source, ex);
+            throw new SipException("Unable to validate " + source, ex);
         }
     }
 
-    private void validateZip(Path zipPath, Validator validator, Sedav2Config config, ProgressListener<Sedav2Step> listener) {
+    private void validateZip(Path zipPath, Validator validator, Sedav2Config config,
+                             ProgressListener<Sedav2Step> listener) {
 
         String id = FilenameUtils.removeExtension(zipPath.getFileName().toString());
         updateListener(listener, id, SUCCESS, Sedav2Step.START, "Archive: " + zipPath);
@@ -390,7 +391,7 @@ public class Sedav2Service {
         if (Files.notExists(zipPath)) {
             String msg = "Archive does not exist: " + zipPath;
             updateListener(listener, id, FAIL, Sedav2Step.ARCHIVE_EXIST, msg);
-            throw new SipgException(msg);
+            throw new SipException(msg);
         }
         updateListener(listener, id, SUCCESS, Sedav2Step.ARCHIVE_EXIST, "Archive exists");
 
@@ -398,7 +399,7 @@ public class Sedav2Service {
         if (!Files.isReadable(zipPath) || Files.isDirectory(zipPath)) {
             String msg = "Archive is not a readable zip: " + zipPath;
             updateListener(listener, id, FAIL, Sedav2Step.ARCHIVE_READABLE, msg);
-            throw new SipgException(msg);
+            throw new SipException(msg);
         }
         updateListener(listener, id, SUCCESS, Sedav2Step.ARCHIVE_READABLE, "Archive is readable");
 
@@ -411,7 +412,7 @@ public class Sedav2Service {
             if (Files.notExists(manifestPath) || Files.isDirectory(manifestPath)) {
                 String msg = "Archive does not contain a manifest: " + zipPath;
                 updateListener(listener, id, FAIL, Sedav2Step.MANIFEST_EXIST, msg);
-                throw new SipgException(msg);
+                throw new SipException(msg);
             }
             updateListener(listener, id, SUCCESS, Sedav2Step.MANIFEST_EXIST, "Manifest exists");
 
@@ -426,7 +427,7 @@ public class Sedav2Service {
             } catch (IOException | SAXException ex) {
                 String msg = "Unable to validate manifest: " + zipPath;
                 updateListener(listener, id, FAIL, Sedav2Step.MANIFEST_SEDA, msg);
-                throw new SipgException(msg, ex);
+                throw new SipException(msg, ex);
             }
             updateListener(listener, id, SUCCESS, Sedav2Step.MANIFEST_SEDA, "Manifest conforms to SEDA");
 
@@ -437,7 +438,7 @@ public class Sedav2Service {
                 } catch (IOException | SAXException ex) {
                     String msg = "Unable to validate manifest: " + zipPath;
                     updateListener(listener, id, FAIL, Sedav2Step.MANIFEST_VALIDATOR, msg);
-                    throw new SipgException(msg, ex);
+                    throw new SipException(msg, ex);
                 }
                 updateListener(listener, id, SUCCESS, Sedav2Step.MANIFEST_VALIDATOR, "Manifest conforms to validator");
             }
@@ -450,7 +451,7 @@ public class Sedav2Service {
                 } catch (IOException | ParserConfigurationException | SAXException ex) {
                     String msg = "Unable to parse manifest: " + zipPath;
                     updateListener(listener, id, FAIL, Sedav2Step.MANIFEST_PARSE, msg);
-                    throw new SipgException(msg, ex);
+                    throw new SipException(msg, ex);
                 }
                 updateListener(listener, id, SUCCESS, Sedav2Step.MANIFEST_PARSE, "Manifest is parsed");
 
@@ -461,7 +462,7 @@ public class Sedav2Service {
                     if (Files.notExists(binaryPath) || Files.isDirectory(binaryPath)) {
                         String msg = "Binary object does not exist: " + zipPath + "!" + binaryPath;
                         updateListener(listener, id, FAIL, Sedav2Step.BINARY_EXIST, msg);
-                        throw new SipgException(msg);
+                        throw new SipException(msg);
                     }
                     updateListener(listener, id, SUCCESS, Sedav2Step.BINARY_EXIST, "Binary object exists: " + binaryPath);
 
@@ -470,7 +471,7 @@ public class Sedav2Service {
                     if (!"Content".equals(parentPath.getFileName().toString())) {
                         String msg = "Binary object folder is not valid: " + zipPath + "!" + binaryPath;
                         updateListener(listener, id, FAIL, Sedav2Step.BINARY_FOLDER, msg);
-                        throw new SipgException(msg);
+                        throw new SipException(msg);
                     }
                     updateListener(listener, id, SUCCESS, Sedav2Step.BINARY_FOLDER, "Binary object folder is valid");
 
@@ -479,7 +480,7 @@ public class Sedav2Service {
                         if (Files.size(binaryPath) != binaryObject.getSize()) {
                             String msg = "Binary object size is not valid: " + zipPath + "!" + binaryPath;
                             updateListener(listener, id, FAIL, Sedav2Step.BINARY_SIZE, msg);
-                            throw new SipgException(msg);
+                            throw new SipException(msg);
                         }
                         updateListener(listener, id, SUCCESS, Sedav2Step.BINARY_SIZE, "Binary object size is valid");
                     }
@@ -490,7 +491,7 @@ public class Sedav2Service {
                         if (!digest.equals(binaryObject.getDigest())) {
                             String msg = binaryPath + "Binary object  digest is not valid: " + zipPath + "!" + binaryPath;
                             updateListener(listener, id, FAIL, Sedav2Step.BINARY_DIGEST, msg);
-                            throw new SipgException(msg);
+                            throw new SipException(msg);
                         }
                         updateListener(listener, id, SUCCESS, Sedav2Step.BINARY_DIGEST, "Binary object digest is valid");
                     }
@@ -501,13 +502,14 @@ public class Sedav2Service {
         } catch (IOException ex) {
             String msg = "Unable to open: " + zipPath;
             updateListener(listener, id, FAIL, Sedav2Step.ARCHIVE_UNZIP, msg);
-            throw new SipgException(msg, ex);
+            throw new SipException(msg, ex);
         }
 
         updateListener(listener, id, SUCCESS, Sedav2Step.COMPLETE, "Archive is valid");
     }
 
-    private void updateListener(ProgressListener<Sedav2Step> listener, String id, ProgressState status, Sedav2Step step, String message) {
+    private void updateListener(ProgressListener<Sedav2Step> listener, String id, ProgressState status, Sedav2Step step,
+                                String message) {
         if (listener != null) {
             listener.progressChanged(new ProgressEvent<>(id, status, step, message));
         }

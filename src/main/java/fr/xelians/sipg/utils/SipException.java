@@ -16,16 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package fr.xelians.sipg.utils;
 
 /**
- * La classe SipgException définit une exception spécifique à la librairie SipG. Note. Il est fortement déconseillé d'utiliser
- * cette classe en dehors de la librairie.
+ * La classe SipException définit une exception spécifique à la librairie. Note. Il est fortement déconseillé
+ * d'utiliser cette classe en dehors de la librairie.
  *
  * @author Emmanuel Deviller
  */
-public class SipgException extends RuntimeException {
+public class SipException extends RuntimeException {
 
     /**
      * The Serial version uid.
@@ -37,7 +36,7 @@ public class SipgException extends RuntimeException {
      *
      * @param message le message
      */
-    public SipgException(String message) {
+    public SipException(String message) {
         super(message);
     }
 
@@ -46,7 +45,7 @@ public class SipgException extends RuntimeException {
      *
      * @param cause la cause
      */
-    public SipgException(Throwable cause) {
+    public SipException(Throwable cause) {
         super(cause);
     }
 
@@ -56,7 +55,7 @@ public class SipgException extends RuntimeException {
      * @param message le message
      * @param cause   la cause
      */
-    public SipgException(String message, Throwable cause) {
+    public SipException(String message, Throwable cause) {
         super(message, cause);
     }
 }

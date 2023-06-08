@@ -51,18 +51,17 @@ public class Sedav2Resolver implements LSResourceResolver {
     }
 
     @Override
-    public LSInput resolveResource(final String type, final String namespaceURI, final String publicId, String systemId, final String baseURI) {
+    public LSInput resolveResource(final String type, final String namespaceURI, final String publicId, String systemId,
+            final String baseURI) {
 
-        switch (systemId) {
-            case "http://www.w3.org/2001/xml.xsd":
-                return new LSInputImpl(publicId, systemId, xmlInputStream);
-            case "http://www.w3.org/1999/xlink.xsd":
-                return new LSInputImpl(publicId, systemId, xlinkInputStream);
-            default:
+        return switch (systemId) {
+            case "http://www.w3.org/2001/xml.xsd" -> new LSInputImpl(publicId, systemId, xmlInputStream);
+            case "http://www.w3.org/1999/xlink.xsd" -> new LSInputImpl(publicId, systemId, xlinkInputStream);
+            default -> {
                 LOGGER.info("Unable to resolve resource {}", systemId);
-        }
-
-        return null;
+                yield null;
+            }
+        };
     }
 
 }

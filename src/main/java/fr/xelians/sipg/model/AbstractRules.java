@@ -39,13 +39,14 @@ public abstract class AbstractRules {
     protected final List<Rule> rules = new ArrayList<>();
 
     /**
-     * La liste des identifiants des règles qui pourront être retirées de l'héritage dans ce nœud.
+     * La liste des identifiants des règles qui pourront être retirées de l'héritage dans ce nœud. Cette propriété est
+     * ignorée en FNTC v4.
      */
     protected final List<String> preventRuleNames = new ArrayList<>();
 
     /**
-     * Indique si les règles de gestion héritées des unités d'archive parents doivent être ignorées pour l’unité
-     * d'archive concernée.
+     * Indique si les règles de gestion héritées des unités d'archives parentes doivent être ignorées pour l’unité d'archive
+     * concernée. Cette propriété est ignorée en FNTC v4.
      */
     protected Boolean preventInheritance;
 
@@ -90,7 +91,7 @@ public abstract class AbstractRules {
      * Supprime une règle de communicabilité.
      *
      * @param rule la règle de communicabilité à supprimer
-     * @return true si la suppression de la règle a réalisée avec succès, false sinon
+     * @return true si la suppression de la règle a réalisé avec succès, false sinon
      */
     public boolean removeRule(Rule rule) {
         Validate.notNull(rule, SipUtils.NOT_NULL, "rule");
@@ -107,7 +108,7 @@ public abstract class AbstractRules {
     }
 
     /**
-     * Ajoute l'identifiant de la règle qui pourra être retirée de l'héritage dans ce noeud.
+     * Ajoute l'identifiant de la règle qui pourra être retirée de l'héritage dans ce nœud.
      *
      * @param ruleName l'identifiant de la règle
      */
@@ -117,18 +118,18 @@ public abstract class AbstractRules {
     }
 
     /**
-     * Supprime l'identifiant de la règle qui pourra être retirée de l'héritage dans ce noeud.
+     * Supprime l'identifiant de la règle qui pourra être retirée de l'héritage dans ce nœud.
      *
      * @param ruleName l'identifiant de la règle
-     * @return true si la suppression de l'identifiant a réalisée avec succès, false sinon
+     * @return true si la suppression de l'identifiant a réalisé avec succès, false sinon
      */
     public boolean removePreventRuleName(String ruleName) {
-        Validate.notNull(ruleName, SipUtils.NOT_NULL, "rulename");
+        Validate.notNull(ruleName, SipUtils.NOT_NULL, "ruleName");
         return preventRuleNames.remove(ruleName);
     }
 
     /**
-     * Fournit la liste des identifiants des règles qui pourront être retirées de l'héritage dans ce noeud.
+     * Fournit la liste des identifiants des règles qui pourront être retirées de l'héritage dans ce nœud.
      *
      * @return la liste des identifiants
      */
@@ -157,17 +158,17 @@ public abstract class AbstractRules {
     }
 
     /**
-     * Indique si les règles de gestion héritées des unités d'archive parents doivent être ignorées pour l’unité
-     * d'archive concernée.
+     * Indique si les règles de gestion héritées des unités d'archives parentes doivent être ignorées pour l’unité d'archive
+     * concernée.
      *
-     * @return l 'interdiction d'hériter
+     * @return l'interdiction d'hériter
      */
     public Boolean isPreventInheritance() {
         return preventInheritance;
     }
 
     /**
-     * Spécifie si les règles de gestion héritées des unités d'archive parents doivent être ignorées pour l’unité
+     * Spécifie si les règles de gestion héritées des unités d'archives parentes doivent être ignorées pour l’unité
      * d'archive concernée.
      *
      * @param preventInheritance interdiction d'hériter

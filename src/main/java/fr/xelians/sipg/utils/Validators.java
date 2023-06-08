@@ -38,7 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * La classe Validators offre des méthodes pour obtenir des validateurs RNG  et valider des documents XML.
+ * La classe Validators offre des méthodes pour obtenir des validateurs RNG et valider des documents XML.
  *
  * @author Emmanuel Deviller
  */
@@ -62,7 +62,7 @@ public class Validators {
         try (BufferedReader rngReader = Files.newBufferedReader(rngPath, StandardCharsets.UTF_8)) {
             return getRngValidator(rngReader);
         } catch (IOException ex) {
-            throw new SipgException("Unable to create RNG validator for " + rngPath, ex);
+            throw new SipException("Unable to create RNG validator for " + rngPath, ex);
         }
     }
 
@@ -80,14 +80,16 @@ public class Validators {
     private static Schema getRngSchema(StreamSource source) {
         try {
             // Initialize RNG validator through JAXP. SchemaFactory is not tread safe , so we create a new one for each RNG schema. XXE mitigation is not supported
-            System.setProperty(SchemaFactory.class.getName() + ":" + XMLConstants.RELAXNG_NS_URI, "com.thaiopensource.relaxng.jaxp.XMLSyntaxSchemaFactory");
+            System.setProperty(SchemaFactory.class.getName() + ":" + XMLConstants.RELAXNG_NS_URI,
+                    "com.thaiopensource.relaxng.jaxp.XMLSyntaxSchemaFactory");
             SchemaFactory rngSchemaFactory = SchemaFactory.newInstance(XMLConstants.RELAXNG_NS_URI);
-            rngSchemaFactory.setProperty("http://relaxng.org/properties/datatype-library-factory", new org.relaxng.datatype.helpers.DatatypeLibraryLoader());
+            rngSchemaFactory.setProperty("http://relaxng.org/properties/datatype-library-factory",
+                    new org.relaxng.datatype.helpers.DatatypeLibraryLoader());
             return rngSchemaFactory.newSchema(source);
         } catch (SAXNotRecognizedException | SAXNotSupportedException ex) {
-            throw new SipgException("Unable to initialize RNG Factory", ex);
+            throw new SipException("Unable to initialize RNG Factory", ex);
         } catch (SAXException ex) {
-            throw new SipgException("Unable to create RNG Validator", ex);
+            throw new SipException("Unable to create RNG Validator", ex);
         }
     }
 
@@ -107,7 +109,7 @@ public class Validators {
         try (InputStream is = Files.newInputStream(path)) {
             validate(new StreamSource(is), validator);
         } catch (IOException ex) {
-            throw new SipgException("Unable to validate " + path + " with validator", ex);
+            throw new SipException("Unable to validate " + path + " with validator", ex);
         }
     }
 
@@ -127,7 +129,7 @@ public class Validators {
         try {
             validator.validate(source);
         } catch (IOException | SAXException ex) {
-            throw new SipgException("Unable to validate " + source + " with validator", ex);
+            throw new SipException("Unable to validate " + source + " with validator", ex);
         }
     }
 }

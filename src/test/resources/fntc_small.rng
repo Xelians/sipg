@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar ns="org:afnor:medona:v1.0" xmlns:ns3="org:fntc:ta:v4.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <start>
+        <element name="ArchiveTransfer">
+            <element name="Date">
+                <data type="NMTOKEN"/>
+            </element>
+            <element name="MessageIdentifier">
+                <data type="NCName"/>
+            </element>
+            <element name="ArchivalAgreement">
+                <text/>
+            </element>
+            <element name="CodeListVersions">
+                <empty/>
+            </element>
+            <element name="DataObjectPackage">
+                <element name="BinaryDataObject">
+                    <attribute>
+                        <name ns="http://www.w3.org/XML/1998/namespace">id</name>
+                        <data type="NCName"/>
+                    </attribute>
+                    <!--                    <element name="Relationship">
+                        <attribute name="target">
+                            <data type="NCName"/>
+                        </attribute>
+                        <attribute name="type"/>
+                    </element>-->
+                    <element name="Attachment">
+                        <attribute name="filename">
+                            <data type="NCName"/>
+                        </attribute>
+                        <attribute name="uri"/>
+                    </element>
+                    <element name="Format">
+                        <data type="NCName"/>
+                    </element>
+                    <element name="MessageDigest">
+                        <attribute name="algorithm">
+                            <data type="NCName"/>
+                        </attribute>
+                        <text/>
+                    </element>
+                    <element name="SignatureStatus">
+                        <text/>
+                    </element>
+                    <element name="Size">
+                        <data type="integer"/>
+                    </element>
+                </element>
+                <element name="DescriptiveMetadata">
+                    <element name="ns3:ArchiveUnits">
+                        <element name="ns3:ArchiveUnit">
+                            <attribute>
+                                <name ns="http://www.w3.org/XML/1998/namespace">id</name>
+                                <data type="NCName"/>
+                            </attribute>
+                            <element name="ns3:Content">
+                                <element name="ns3:Title">
+                                    <data type="NCName"/>
+                                </element>
+                                <element name="ns3:DocumentType">
+                                    <data type="NCName"/>
+                                </element>
+                                <element name="ns3:Tag">
+                                    <attribute name="key">
+                                        <data type="NCName"/>
+                                    </attribute>
+                                    <data type="NCName"/>
+                                </element>
+                            </element>
+                            <element name="ns3:DataObjectReference">
+                                <element name="ns3:DataObjectReferenceId">
+                                    <data type="NCName"/>
+                                </element>
+                            </element>
+                        </element>
+                    </element>
+                </element>
+                <element name="ManagementMetadata">
+                    <element name="ArchivalProfile">
+                        <data type="NCName"/>
+                    </element>
+                    <element name="ServiceLevel">
+                        <data type="NCName"/>
+                    </element>
+                </element>
+            </element>
+            <element name="ArchivalAgency">
+                <ref name="Identifier"/>
+                <ref name="OrganizationDescriptiveMetadata"/>
+            </element>
+            <element name="TransferringAgency">
+                <ref name="Identifier"/>
+                <ref name="OrganizationDescriptiveMetadata"/>
+            </element>
+        </element>
+    </start>
+    <define name="Identifier">
+        <element name="Identifier">
+            <data type="NCName"/>
+        </element>
+    </define>
+    <define name="OrganizationDescriptiveMetadata">
+        <element name="OrganizationDescriptiveMetadata">
+            <element name="ns3:Name">
+                <text/>
+            </element>
+        </element>
+    </define>
+</grammar>

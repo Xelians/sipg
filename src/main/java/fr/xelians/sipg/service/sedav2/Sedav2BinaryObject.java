@@ -163,7 +163,8 @@ class Sedav2BinaryObject {
 
     @Override
     public String toString() {
-        return "BinaryData{" + "uri=" + uri + ", size=" + size + ", digest=" + digest + ", algorithm=" + algorithm + ", format=" + format + '}';
+        return "BinaryData{" + "uri=" + uri + ", size=" + size + ", digest=" + digest + ", algorithm=" + algorithm
+                + ", format=" + format + '}';
     }
 
 }

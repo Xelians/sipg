@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+    targetNamespace="org:fntc:ta:v4.0" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns="org:fntc:ta:v4.0"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified" 
+    version="1.0">
+
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+    <xsd:import namespace="http://www.w3.org/1999/xlink" schemaLocation="http://www.w3.org/1999/xlink.xsd"/>
+    
+
+    <!-- Hiérarchie et récursivité -->
+    <xsd:element name="ArchiveUnits" type="ArchiveUnitsType"/>
+
+    <xsd:complexType name="ArchiveUnitsType">
+        <xsd:annotation>
+            <xsd:documentation>Un élement ArchiveUnits peut contenir plusieurs ArchiveUnit.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="ArchiveUnit" type="ArchiveUnitType" minOccurs="0" maxOccurs="unbounded">
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+        
+    <xsd:complexType name="ArchiveUnitType">
+        <xsd:annotation>
+            <xsd:documentation>Unité de base des métadonnées de description contenant la gestion de
+                l'arborescence.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Management" type="ManagementType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Métadonnées de gestion applicables à l’ArchiveUnit
+                        concernée et à ses héritiers.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Content" type="DescriptiveMetadataContentType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Métadonnées de description associées à un
+                        ArchiveUnit.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="ArchiveUnit" type="ArchiveUnitType" minOccurs="0"
+                         maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Gestion de la récursivité. Une ArchiveUnit peut être contenu
+                        dans une ature ArchiveUnit.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="DataObjectReference" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="DataObjectReferenceId" type="DataObjectRefIdType" minOccurs="1"
+                                     maxOccurs="unbounded">
+                            <xsd:annotation>
+                                <xsd:documentation>Référence à un objet-données listé dans les
+                                    métadonnées de transport.</xsd:documentation>
+                            </xsd:annotation>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute ref="xml:id" use="required"/>
+    </xsd:complexType>
+
+    <!-- Gestion des identifiants dans les messages -->
+    <xsd:group name="IdentifierGroup">
+        <xsd:sequence>
+            <xsd:element name="FilePlanPosition" type="TextType" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Position de l’ArchiveUnit dans le plan de classement du service producteur.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="SystemId" type="TextType" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Identifiant attribué aux objets. Il est attribué par le SAE et correspond à un identifiant interne.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="DataObjectSystemId" type="TextType" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Identifiant attribué aux objets de données. Il est attribué par le SAE et correspond à un identifiant interne.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="OriginatingSystemId" type="TextType" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Identifiant système attribué à l’ArchiveUnit par l’application du service producteur.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="ArchivalAgencyArchiveUnitIdentifier" type="TextType" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Identifiant métier attribué à l'ArchiveUnit par le service d'archives. Peut être comparé à une cote.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="OriginatingAgencyArchiveUnitIdentifier" type="TextType"
+                minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Identifiant métier attribué à l’ArchiveUnit par le service producteur.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="TransferringAgencyArchiveUnitIdentifier" type="TextType"
+                minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Identifiant attribué à l'ArchiveUnit par le service versant.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="PhysicalId" type="TextType"
+                minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Identifiant attribué à un objet d'archive physique.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:group>
+    <!-- Level description -->
+    <xsd:group name="LevelGroup">
+        <xsd:sequence>
+            <xsd:element name="DescriptionLevel" type="TextType" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>Niveau de description au sens de la norme ISAD (G). Indique si l’ArchiveUnit correspond à un fonds, 
+                        à un sous-fonds, à une classe, à une série organique, à une sous-série organique, à un dossier, à un sous-dossier ou à une pièce.</xsd:documentation>
+                    <xsd:documentation>Référence : seda.DescriptionLevel</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:group>
+    
+    <!-- Date description -->
+    <xsd:group name="DateGroup">
+        <xsd:sequence>
+            <xsd:element name="CreatedDate" type="DateType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Date de création.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="TransactedDate" type="DateType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Date de la transaction.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="AcquiredDate" type="DateType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Date de numérisation.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="SentDate" type="DateType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Date d'envoi.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="ReceivedDate" type="DateType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Date de réception.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="RegisteredDate" type="DateType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Date d'enregistrement.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="StartDate" type="DateType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Date d'ouverture / date de début.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="EndDate" type="DateType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Date de fermeture / Date de fin.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:group>
+    <xsd:simpleType name="DateType">
+        <xsd:union memberTypes="xsd:date xsd:dateTime xsd:gYear xsd:gYearMonth xsd:gMonth xsd:gMonthDay xsd:gDay"/>
+    </xsd:simpleType>
+    
+    <!-- ID pour référencer l'objet de données -->
+    <xsd:simpleType name="DataObjectRefIdType">
+        <xsd:restriction base="xsd:IDREF"/>
+    </xsd:simpleType>
+    <xsd:complexType name="ManagementType">
+        <xsd:group ref="ManagementGroup"/>
+    </xsd:complexType>
+
+    <!-- Texte -->
+    <xsd:element name="Text" type="TextType"/>
+    <xsd:complexType name="TextType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute ref="xml:lang" use="optional"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <!-- Contenu du management -->
+    <xsd:group name="ManagementGroup">
+        <xsd:annotation>
+            <xsd:documentation>Contient les métadonnées de gestion.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="AccessRule" type="AccessRuleType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Gestion de la communicabilité.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="AppraisalRule" type="AppraisalRuleType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Gestion de la durée d’utilité
+                        administrative.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="LogBook" type="LogBookType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Gestion des traces.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Extended" type="ExtendedType" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:group>
+
+    <!-- Métadonnnées de description -->
+    <xsd:complexType name="DescriptiveMetadataContentType">
+        <xsd:sequence>
+            <xsd:group ref="LevelGroup"/>
+            <xsd:element name="Title" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:group ref="IdentifierGroup"/>
+            <xsd:element name="Description" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="DocumentType" type="TextType" minOccurs="0"/>
+            <xsd:element name="Tag" minOccurs="0" maxOccurs="unbounded" type="TagType"/>
+            <xsd:element name="Status" minOccurs="0" type="TextType"/>
+            <xsd:group ref="DateGroup"/>
+            <xsd:element name="Extended" type="ExtendedType" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <!-- Gestion de l'indexation -->
+    <xsd:complexType name="TagType">
+        <xsd:simpleContent>
+            <xsd:extension base="TextType">
+                <xsd:attribute name="key" type="xsd:token" use="optional" />
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+
+    <!-- Pour étendre les métadonnées de base -->
+    <xsd:complexType name="ExtendedType">
+        <xsd:complexContent>
+            <xsd:extension base="FntcOpenType"/>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- Type à spécifier -->
+    <xsd:complexType name="FntcOpenType" abstract="true">
+        <xsd:sequence>
+            <xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute ref="xml:id" use="optional"/>
+        <xsd:attribute ref="xlink:href" use="optional"/>
+    </xsd:complexType>
+
+    <!-- Gestion de la traçabilité -->
+    <xsd:complexType name="LogBookType">
+        <xsd:sequence>
+            <xsd:element name="Event" type="EventType" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- Gestion des événements -->
+    <xsd:complexType name="EventType">
+        <xsd:sequence>
+            <xsd:element name="EventIdentifier" type="TextType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Identifiant de l'événement.</xsd:documentation>
+                    <xsd:documentation>Références : premis.eventIdentifier</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="EventTypeCode" type="TextType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Code du type d'événement.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="EventType" type="TextType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Type d'événement.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="EventDateTime" type="xsd:date">
+                <xsd:annotation>
+                    <xsd:documentation>Date et heure de l'événement.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="EventDetail" type="TextType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Détail sur l'événement.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Outcome" type="TextType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Résultat du traitement.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="OutcomeDetail" type="TextType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Détail sur le résultat du traitement.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="OutcomeDetailMessage" type="TextType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Message détaillé sur le résultat du
+                        traitement.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="EventDetailData" type="TextType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Message technique détaillant l'erreur.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- Règle pour le sort final -->
+    <xsd:element name="AppraisalRule" type="AppraisalRuleType"/>
+    <xsd:complexType name="AppraisalRuleType">
+        <xsd:sequence>
+            <xsd:element name="AppraisalCode" type="xsd:token" minOccurs="0"/>
+            <xsd:element name="Duration" type="xsd:duration" minOccurs="0"/>
+            <xsd:element name="StartDate" type="xsd:date" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute ref="xml:id" use="optional"/>
+    </xsd:complexType>
+
+    <!-- Règle pour l'accès -->
+    <xsd:element name="AccessRule" type="AccessRuleType"/>
+    <xsd:complexType name="AccessRuleType">
+        <xsd:sequence>
+            <xsd:element name="Rule" type="xsd:token" minOccurs="0"/>
+            <xsd:element name="StartDate" type="xsd:date" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute ref="xml:id" use="optional"/>
+    </xsd:complexType>
+
+    <!-- Format de signature hérité de FNTC-TA_v2 -->
+    <xsd:element name="Format" type="TextType"/>
+
+    <!-- Nom de l'organisation -->
+    <xsd:element name="Name" type="TextType"/>
+
+</xsd:schema>

@@ -27,7 +27,7 @@ import java.util.Objects;
  * La classe Text représente un message localisable.
  *
  * <p>
- * Supporté en SEDA v2.1 .
+ * Supporté en SEDA v2.1 et FNTC v4.
  * </p>
  *
  * @author Emmanuel Deviller
@@ -40,7 +40,7 @@ public class Text {
     protected final String message;
 
     /**
-     * la langue du message
+     * La langue du message
      */
     protected final String lang;
 

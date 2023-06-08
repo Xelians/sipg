@@ -38,7 +38,7 @@ import java.util.Objects;
  * </p>
  *
  * <p>
- * Supporté en SEDA v2.1 .
+ * Supporté en SEDA v2.1 et FNTC v4.
  * </p>
  *
  * @author Emmanuel Deviller

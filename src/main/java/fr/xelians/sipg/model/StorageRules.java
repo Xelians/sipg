@@ -61,7 +61,7 @@ public class StorageRules extends AbstractRules {
     /**
      * Indique l'action à réaliser à l'échéance de la durée d’utilité courante.
      *
-     * @return l 'action à réaliser à l'échéance de la durée d’utilité courante
+     * @return l'action à réaliser à l'échéance de la durée d’utilité courante
      */
     public String getFinalAction() {
         return finalAction;

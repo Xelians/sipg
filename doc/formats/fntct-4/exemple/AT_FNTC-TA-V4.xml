@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ArchiveTransfer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="org:afnor:medona:v1.0 ./MEDONA.xsd"
+                 xmlns="org:afnor:medona:v1.0">
+    <!-- Modéliser l'ATR attestation de dépôt -->
+    <Comment>Fichier d'interopérabilité FNTC</Comment>
+    <Date>2005-12-01T10:22:45+01:00</Date>
+    <MessageIdentifier>Id Transaction</MessageIdentifier>
+    <Signature>
+        <Format xmlns="fntc-ta_v4">org.afnor.signformat.PKCS-7</Format>
+    </Signature>
+    <ArchivalAgreement><!-- Optionnel --></ArchivalAgreement>
+    <CodeListVersions/>
+    <DataObjectPackage>
+        <BinaryDataObject xml:id="Id01">
+            <Attachment uri="./F0001.ps7"/>
+            <Format>ps7</Format>
+            <MessageDigest algorithm=""/>
+            <SignatureStatus/>
+            <Size>1245</Size>
+        </BinaryDataObject>
+        <BinaryDataObject xml:id="Id02">
+            <Attachment uri="./F0001.tif" filename="F0001.tif"/>
+            <Format>TIFF</Format>
+            <MessageDigest algorithm="SHA-512">4s96YjyCgY45kD1hTRMEPw==</MessageDigest>
+            <SignatureStatus>True</SignatureStatus>
+            <Size>2365</Size>
+        </BinaryDataObject>
+        <DescriptiveMetadata>
+            <ArchiveUnits xmlns="fntc-ta_v4" xml:id="Id03">
+                <ArchiveUnit xml:id="Id04">
+                    <Management>
+                        <AccessRule/>
+                        <AppraisalRule/>
+                        <ExtendedManagementMetadata>
+                            <CeQueJeVeuxGestion xmlns="fntc-ta_v5"></CeQueJeVeuxGestion>
+                        </ExtendedManagementMetadata>
+                    </Management>
+                    <Content>
+                        <Title>FACTURE_001</Title>
+                        <DocumentType>facture</DocumentType>
+                        <Tag key="I1">ABC de L'informatique</Tag>
+                        <Tag key="I2">Avenue des roses 99009 Ouince</Tag>
+                        <Tag key="I3">AA-089623</Tag>
+                        <ExtendedMetadata>
+                            <CeQueJeVeuxDescription xmlns="fntc-ta_v5"></CeQueJeVeuxDescription>
+                        </ExtendedMetadata>
+                    </Content>
+                    <DataObjectReference>
+                        <DataObjectReferenceId>Id03</DataObjectReferenceId>
+                    </DataObjectReference>
+                </ArchiveUnit>
+            </ArchiveUnits>
+        </DescriptiveMetadata>
+        <ManagementMetadata/>
+    </DataObjectPackage>
+    <ArchivalAgency>
+        <Identifier>1234567890</Identifier>
+        <OrganizationDescriptiveMetadata>
+            <Name xmlns="fntc-ta_v4">TA</Name>
+        </OrganizationDescriptiveMetadata>
+    </ArchivalAgency>
+    <TransferringAgency>
+        <Identifier>DO-123</Identifier>
+        <OrganizationDescriptiveMetadata>
+            <Name xmlns="fntc-ta_v4">DO</Name>
+        </OrganizationDescriptiveMetadata>
+    </TransferringAgency>
+</ArchiveTransfer>

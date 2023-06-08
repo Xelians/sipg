@@ -6,12 +6,9 @@
 //
 package fr.gouv.culture.archivesdefrance.seda.v2;
 
+import jakarta.xml.bind.annotation.*;
+
 import java.math.BigInteger;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlSchemaType;
-import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * Objet-données numérique.

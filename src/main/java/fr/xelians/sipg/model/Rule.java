@@ -30,7 +30,7 @@ import java.util.Objects;
  * La classe Rule représente une règle de cycle de vie.
  *
  * <p>
- * Supporté en SEDA v2.1 .
+ * Supporté en SEDA v2.1 et FNTC v4.
  * </p>
  *
  * @author Emmanuel Deviller
@@ -48,7 +48,7 @@ public class Rule {
     protected final LocalDate startDate;
 
     /**
-     * Instancie la classe avec le arguments spécifiés.
+     * Instancie la classe avec les arguments spécifiés.
      *
      * @param name      le nom
      * @param startDate la date de départ du calcul
@@ -61,7 +61,7 @@ public class Rule {
     }
 
     /**
-     * Indique la nom de la règle
+     * Indique le nom de la règle
      *
      * @return le nom de la règle
      */

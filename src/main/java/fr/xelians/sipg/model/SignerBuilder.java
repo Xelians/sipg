@@ -41,7 +41,7 @@ public class SignerBuilder {
     private Place birthPlace;
     private LocalDate deathDate;
     private Place deathPlace;
-    private String corpname;
+    private String corpName;
     private LocalDateTime signingTime;
 
     private List<String> nationality = new ArrayList<>();
@@ -166,11 +166,11 @@ public class SignerBuilder {
     /**
      * Spécifie l'entité d'appartenance de la personne.
      *
-     * @param corpname l'entité
+     * @param corpName l'entité
      * @return le builder
      */
-    public SignerBuilder withCorpname(String corpname) {
-        this.corpname = corpname;
+    public SignerBuilder withCorpName(String corpName) {
+        this.corpName = corpName;
         return this;
     }
 
@@ -232,7 +232,7 @@ public class SignerBuilder {
     /**
      * Spécifie la liste des positions de la personne.
      *
-     * @param list la liste des position
+     * @param list la liste des positions
      * @return le builder
      */
     public SignerBuilder withPosition(List<String> list) {
@@ -243,7 +243,7 @@ public class SignerBuilder {
     /**
      * Spécifie la liste des rôles de la personne.
      *
-     * @param list la liste des rôle
+     * @param list la liste des rôles
      * @return le builder
      */
     public SignerBuilder withRole(List<String> list) {
@@ -345,7 +345,8 @@ public class SignerBuilder {
      * @return le signataire
      */
     public Signer build() {
-        Signer signer = new Signer(firstName, birthName, fullName, givenName, gender, birthDate, birthPlace, deathDate, deathPlace, corpname, signingTime);
+        Signer signer = new Signer(firstName, birthName, fullName, givenName, gender, birthDate, birthPlace, deathDate,
+                deathPlace, corpName, signingTime);
         nationality.forEach(signer::addNationality);
         identifier.forEach(signer::addIdentifier);
         function.forEach(signer::addFunction);

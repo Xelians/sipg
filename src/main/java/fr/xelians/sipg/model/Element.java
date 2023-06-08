@@ -31,7 +31,7 @@ import java.util.*;
  * peut également contenir une liste d'éléments enfants.
  *
  * <p>
- * Supporté en SEDA v2.1 .
+ * Supporté en SEDA v2.1 et FNTC v4.
  * </p>
  *
  * @author Emmanuel Deviller
@@ -39,24 +39,21 @@ import java.util.*;
 public class Element {
 
     /**
-     * Le nom de l'élément.
-     */
-    protected String name;
-
-    /**
-     * La valeur de l'élément.
-     */
-    protected String value;
-
-    /**
      * Les attributs de l'élément.
      */
     protected final Map<String, String> attributes;
-
     /**
      * La liste des éléments enfants.
      */
     protected final List<Element> elements = new ArrayList<>();
+    /**
+     * Le nom de l'élément.
+     */
+    protected String name;
+    /**
+     * La valeur de l'élément.
+     */
+    protected String value;
 
     /**
      * Instancie la classe avec le nom du tag.
@@ -153,7 +150,7 @@ public class Element {
      * Recherche un attribut dans l'ensemble des attributs de l'élément.
      *
      * @param key la clé de l'élément recherché
-     * @return l 'attribut recherché
+     * @return l'attribut recherché
      */
     public String getAttribute(String key) {
         return attributes.get(key);
@@ -172,7 +169,7 @@ public class Element {
     /**
      * Fournit une copie de l'ensemble des attributs de l'élément.
      *
-     * @return l 'ensemble des attributs
+     * @return l'ensemble des attributs
      */
     public Map<String, String> getAttributes() {
         return new HashMap<>(attributes);

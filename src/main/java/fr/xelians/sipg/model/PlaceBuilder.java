@@ -19,14 +19,15 @@
 package fr.xelians.sipg.model;
 
 /**
- * La classe AgentBuilder facilite la création d'un objet Place en suivant le principe de conception du pattern builder.
+ * La classe AgentBuilder facilite la création d'un objet Place en suivant le principe de conception du pattern
+ * builder.
  *
  * @author Emmanuel Deviller
  * @see Place
  */
 public class PlaceBuilder {
 
-    private String geogname;
+    private String geogName;
     private String address;
     private String postalCode;
     private String city;
@@ -48,11 +49,11 @@ public class PlaceBuilder {
     /**
      * Spécifie le nom géographique.
      *
-     * @param geogname le nom géographique.
+     * @param geogName le nom géographique.
      * @return le builder
      */
-    public PlaceBuilder withGeogname(String geogname) {
-        this.geogname = geogname;
+    public PlaceBuilder withGeogName(String geogName) {
+        this.geogName = geogName;
         return this;
     }
 
@@ -117,7 +118,7 @@ public class PlaceBuilder {
      * @return la place
      */
     public Place build() {
-        return new Place(geogname, address, postalCode, city, region, country);
+        return new Place(geogName, address, postalCode, city, region, country);
     }
 
 }

@@ -24,7 +24,7 @@ import java.util.Objects;
  * La classe CodeListVersions représente les versions des listes de codes utilisées dans l'archive.
  *
  * <p>
- * Supporté en SEDA v2.1.
+ * Supporté en SEDA v2.1 et en FNTC v4.
  * </p>
  *
  * @author Emmanuel Deviller
@@ -217,7 +217,8 @@ public class CodeListVersions {
     /**
      * Spécifie la version de la liste de l'algorithme de hachage utilisé dans le message.
      *
-     * @param messageDigestAlgorithmCodeListVersion la version de la liste de l'algorithme de hachage utilisé dans le message
+     * @param messageDigestAlgorithmCodeListVersion la version de la liste de l'algorithme de hachage utilisé dans le
+     *                                              message
      */
     public void setMessageDigestAlgorithmCodeListVersion(String messageDigestAlgorithmCodeListVersion) {
         this.messageDigestAlgorithmCodeListVersion = messageDigestAlgorithmCodeListVersion;
@@ -381,7 +382,8 @@ public class CodeListVersions {
     /**
      * Spécifie la version de la liste des codes pour les règles de durée d'utilité administrative.
      *
-     * @param appraisalRuleCodeListVersion la version de la liste des codes pour les règles de durée d'utilité administrative
+     * @param appraisalRuleCodeListVersion la version de la liste des codes pour les règles de durée d'utilité
+     *                                     administrative
      */
     public void setAppraisalRuleCodeListVersion(String appraisalRuleCodeListVersion) {
         this.appraisalRuleCodeListVersion = appraisalRuleCodeListVersion;
@@ -589,7 +591,19 @@ public class CodeListVersions {
      */
     @Override
     public String toString() {
-        return "CodeListVersions{" + "id=" + id + ", authorizationReasonCodeListVersion=" + authorizationReasonCodeListVersion + ", fileEncodingCodeListVersion=" + fileEncodingCodeListVersion + ", fileFormatCodeListVersion=" + fileFormatCodeListVersion + ", messageDigestAlgorithmCodeListVersion=" + messageDigestAlgorithmCodeListVersion + ", relationshipCodeListVersion=" + relationshipCodeListVersion + ", replyCodeListVersion=" + replyCodeListVersion + ", signatureStatusCodeListVersion=" + signatureStatusCodeListVersion + ", mimeTypeCodeListVersion=" + mimeTypeCodeListVersion + ", encodingCodeListVersion=" + encodingCodeListVersion + ", compressionAlgorithmCodeListVersion=" + compressionAlgorithmCodeListVersion + ", dataObjectVersionCodeListVersion=" + dataObjectVersionCodeListVersion + ", storageRuleCodeListVersion=" + storageRuleCodeListVersion + ", appraisalRuleCodeListVersion=" + appraisalRuleCodeListVersion + ", accessRuleCodeListVersion=" + accessRuleCodeListVersion + ", disseminationRuleCodeListVersion=" + disseminationRuleCodeListVersion + ", reuseRuleCodeListVersion=" + reuseRuleCodeListVersion + ", classificationRuleCodeListVersion=" + classificationRuleCodeListVersion + ", acquisitionInformationCodeListVersion=" + acquisitionInformationCodeListVersion + '}';
+        return "CodeListVersions{" + "id=" + id + ", authorizationReasonCodeListVersion="
+                + authorizationReasonCodeListVersion + ", fileEncodingCodeListVersion=" + fileEncodingCodeListVersion
+                + ", fileFormatCodeListVersion=" + fileFormatCodeListVersion + ", messageDigestAlgorithmCodeListVersion="
+                + messageDigestAlgorithmCodeListVersion + ", relationshipCodeListVersion=" + relationshipCodeListVersion
+                + ", replyCodeListVersion=" + replyCodeListVersion + ", signatureStatusCodeListVersion="
+                + signatureStatusCodeListVersion + ", mimeTypeCodeListVersion=" + mimeTypeCodeListVersion
+                + ", encodingCodeListVersion=" + encodingCodeListVersion + ", compressionAlgorithmCodeListVersion="
+                + compressionAlgorithmCodeListVersion + ", dataObjectVersionCodeListVersion=" + dataObjectVersionCodeListVersion
+                + ", storageRuleCodeListVersion=" + storageRuleCodeListVersion + ", appraisalRuleCodeListVersion="
+                + appraisalRuleCodeListVersion + ", accessRuleCodeListVersion=" + accessRuleCodeListVersion
+                + ", disseminationRuleCodeListVersion=" + disseminationRuleCodeListVersion + ", reuseRuleCodeListVersion="
+                + reuseRuleCodeListVersion + ", classificationRuleCodeListVersion=" + classificationRuleCodeListVersion
+                + ", acquisitionInformationCodeListVersion=" + acquisitionInformationCodeListVersion + '}';
     }
 
 }

@@ -48,7 +48,7 @@ public class Signature {
     protected Validator validator;
 
     /**
-     * L'algorithm utilisé par la signature.
+     * L'algorithme utilisé par la signature.
      */
     protected String digestAlgorithm = "SHA-512";
 
@@ -112,7 +112,7 @@ public class Signature {
     }
 
     /**
-     * Indique l'algorithm utilisé par la signature.
+     * Indique l'algorithme utilisé par la signature.
      *
      * @return l 'algorithm
      */
@@ -121,9 +121,9 @@ public class Signature {
     }
 
     /**
-     * Indique l'algorithm utilisé par la signature.
+     * Indique l'algorithme utilisé par la signature.
      *
-     * @param digestAlgorithm l'algorithm
+     * @param digestAlgorithm l'algorithme
      */
     public void setDigestAlgorithm(String digestAlgorithm) {
         this.digestAlgorithm = digestAlgorithm;

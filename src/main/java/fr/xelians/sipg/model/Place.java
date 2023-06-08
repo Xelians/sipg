@@ -31,7 +31,7 @@ public class Place {
     /**
      * Le nom géographique.
      */
-    protected String geogname;
+    protected String geogName;
 
     /**
      * L'adresse.
@@ -61,7 +61,7 @@ public class Place {
     /**
      * Instantiates a new Place.
      *
-     * @param geogname   the geogname
+     * @param geogName   the geogName
      * @param address    the address
      * @param postalCode the postal code
      * @param city       the city
@@ -69,14 +69,14 @@ public class Place {
      * @param country    the country
      */
     @JsonCreator
-    public Place(@JsonProperty("geogname") String geogname,
+    public Place(@JsonProperty("geogName") String geogName,
                  @JsonProperty("address") String address,
                  @JsonProperty("postalCode") String postalCode,
                  @JsonProperty("city") String city,
                  @JsonProperty("region") String region,
                  @JsonProperty("country") String country) {
 
-        this.geogname = geogname;
+        this.geogName = geogName;
         this.address = address;
         this.postalCode = postalCode;
         this.city = city;
@@ -89,8 +89,8 @@ public class Place {
      *
      * @return le nom géographique.
      */
-    public String getGeogname() {
-        return geogname;
+    public String getGeogName() {
+        return geogName;
     }
 
     /**
@@ -98,14 +98,14 @@ public class Place {
      *
      * @param value le nom géographique.
      */
-    public void setGeogname(String value) {
-        this.geogname = value;
+    public void setGeogName(String value) {
+        this.geogName = value;
     }
 
     /**
      * Indique l'adresse.
      *
-     * @return l 'adresse
+     * @return l'adresse
      */
     public String getAddress() {
         return address;
@@ -200,7 +200,7 @@ public class Place {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 29 * hash + Objects.hashCode(this.geogname);
+        hash = 29 * hash + Objects.hashCode(this.geogName);
         hash = 29 * hash + Objects.hashCode(this.address);
         hash = 29 * hash + Objects.hashCode(this.postalCode);
         hash = 29 * hash + Objects.hashCode(this.city);
@@ -227,7 +227,7 @@ public class Place {
             return false;
         }
         final Place other = (Place) obj;
-        if (!Objects.equals(this.geogname, other.geogname)) {
+        if (!Objects.equals(this.geogName, other.geogName)) {
             return false;
         }
         if (!Objects.equals(this.address, other.address)) {
@@ -252,7 +252,8 @@ public class Place {
      */
     @Override
     public String toString() {
-        return "Place{" + "geogname=" + geogname + ", address=" + address + ", postalCode=" + postalCode + ", city=" + city + ", region=" + region + ", country=" + country + '}';
+        return "Place{" + "geogName=" + geogName + ", address=" + address + ", postalCode=" + postalCode + ", city=" + city
+                + ", region=" + region + ", country=" + country + '}';
     }
 
 }

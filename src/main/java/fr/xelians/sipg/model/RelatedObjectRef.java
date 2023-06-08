@@ -50,7 +50,7 @@ public class RelatedObjectRef {
     protected final List<RelationRef> replaces;
 
     /**
-     * La liste des références de type "Requiert". Cette relation permet d'indiquer les objets nécessaire à la
+     * La liste des références de type "Requiert". Cette relation permet d'indiquer les objets nécessaires à la
      * compréhension du niveau courant de description.
      */
     protected final List<RelationRef> requires;
@@ -143,7 +143,7 @@ public class RelatedObjectRef {
 
     /**
      * Ajoute une référence à la liste des références de type "Requiert". Cette relation permet d'indiquer les objets
-     * nécessaire à la compréhension du niveau courant de description.
+     * nécessaires à la compréhension du niveau courant de description.
      *
      * @param require la référence à ajouter
      */
@@ -164,7 +164,7 @@ public class RelatedObjectRef {
     }
 
     /**
-     * Fournit la liste des références de type "Requiert". Cette relation permet d'indiquer les objets nécessaire à la
+     * Fournit la liste des références de type "Requiert". Cette relation permet d'indiquer les objets nécessaires à la
      * compréhension du niveau courant de description.
      *
      * @return la liste des références de type "Requiert"
@@ -174,8 +174,8 @@ public class RelatedObjectRef {
     }
 
     /**
-     * Ajoute une référence à la liste des références de type "Est une partie de". Cette relation permet d'indiquer
-     * qu'un objet est une partie d'un autre.
+     * Ajoute une référence à la liste des références de type "Est une partie de". Cette relation permet d'indiquer qu'un
+     * objet est une partie d'un autre.
      *
      * @param isPartOf la référence à ajouter
      */
@@ -206,8 +206,8 @@ public class RelatedObjectRef {
     }
 
     /**
-     * Ajoute une référence à la liste des références de type "Référence". Cette relation permet d'indiquer qu'un objet
-     * en référence un autre.
+     * Ajoute une référence à la liste des références de type "Référence". Cette relation permet d'indiquer qu'un objet en
+     * référence un autre.
      *
      * @param reference la référence à ajouter
      */

@@ -11,14 +11,16 @@ public class Sedav2Listener extends Marshaller.Listener {
 
     @Override
     public void beforeMarshal(Object source) {
-        if (source != null)
+        if (source != null) {
             LOGGER.info("Before: {}", ToStringBuilder.reflectionToString(source));
+        }
     }
 
     @Override
     public void afterMarshal(Object source) {
-        if (source != null)
+        if (source != null) {
             LOGGER.info("After: {}", source);
+        }
     }
 
 }

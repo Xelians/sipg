@@ -87,7 +87,7 @@ public class ClassificationRules extends AbstractRules {
      * Indique l'audience qui permet de gérer les questions de "diffusion restreinte", de "spécial France" et de
      * "Confidentiel Industrie".
      *
-     * @return l 'audience
+     * @return l'audience
      */
     public String getClassificationAudience() {
         return classificationAudience;
@@ -160,7 +160,7 @@ public class ClassificationRules extends AbstractRules {
     /**
      * Indique si une autorisation humaine est nécessaire pour réévaluer la classification.
      *
-     * @return l 'autorisation de réévaluation
+     * @return l'autorisation de réévaluation
      */
     public Boolean getNeedReassessingAuthorization() {
         return needReassessingAuthorization;

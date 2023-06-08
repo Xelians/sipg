@@ -1,0 +1,107 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="org:afnor:medona:v1.0" xmlns:ns1="org:afnor:medona:v1.0" xmlns:ns3="org:fntc:ta:v4.0">
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+    <xs:import namespace="org:fntc:ta:v4.0" schemaLocation="ns3.xsd"/>
+    <xs:element name="ArchiveTransfer">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:Date"/>
+                <xs:element ref="ns1:MessageIdentifier"/>
+                <xs:element ref="ns1:Signature"/>
+                <xs:element ref="ns1:ArchivalAgreement"/>
+                <xs:element ref="ns1:CodeListVersions"/>
+                <xs:element ref="ns1:DataObjectPackage"/>
+                <xs:element ref="ns1:ArchivalAgency"/>
+                <xs:element ref="ns1:TransferringAgency"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Date" type="xs:NMTOKEN"/>
+    <xs:element name="MessageIdentifier" type="xs:NCName"/>
+    <xs:element name="Signature">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns3:Format"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ArchivalAgreement" type="xs:string"/>
+    <xs:element name="CodeListVersions">
+        <xs:complexType/>
+    </xs:element>
+    <xs:element name="DataObjectPackage">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:BinaryDataObject"/>
+                <xs:element ref="ns1:DescriptiveMetadata"/>
+                <xs:element ref="ns1:ManagementMetadata"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="BinaryDataObject">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:Attachment"/>
+                <xs:element ref="ns1:Format"/>
+                <xs:element ref="ns1:MessageDigest"/>
+                <xs:element ref="ns1:SignatureStatus"/>
+                <xs:element ref="ns1:Size"/>
+            </xs:sequence>
+            <xs:attribute ref="xml:id" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Attachment">
+        <xs:complexType>
+            <xs:attribute name="filename" use="required" type="xs:NCName"/>
+            <xs:attribute name="uri" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Format" type="xs:NCName"/>
+    <xs:element name="MessageDigest">
+        <xs:complexType mixed="true">
+            <xs:attribute name="algorithm" use="required" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="SignatureStatus" type="xs:string"/>
+    <xs:element name="Size" type="xs:integer"/>
+    <xs:element name="DescriptiveMetadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns3:ArchiveUnits"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ManagementMetadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:ServiceLevel"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ServiceLevel" type="xs:NCName"/>
+    <xs:element name="ArchivalAgency">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:Identifier"/>
+                <xs:element ref="ns1:OrganizationDescriptiveMetadata"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="TransferringAgency">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:Identifier"/>
+                <xs:element ref="ns1:OrganizationDescriptiveMetadata"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Identifier" type="xs:NCName"/>
+    <xs:element name="OrganizationDescriptiveMetadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns3:Name"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -53,7 +53,8 @@ public class Sedav2Config {
      * @param checkSize   spécifie si la validation la taille des objets binaires
      * @param checkDigest spécifie si la validation vérifie l'empreinte des objets binaires
      */
-    public Sedav2Config(boolean validate, boolean format, int indent, int thread, boolean strict, boolean checkBinary, boolean checkSize, boolean checkDigest) {
+    public Sedav2Config(boolean validate, boolean format, int indent, int thread, boolean strict, boolean checkBinary,
+                        boolean checkSize, boolean checkDigest) {
         this.validate = validate;
         this.format = format;
         this.indent = indent;
@@ -138,7 +139,9 @@ public class Sedav2Config {
 
     @Override
     public String toString() {
-        return "Sedav2Config{" + "validate=" + validate + ", format=" + format + ", indent=" + indent + ", thread=" + thread + ", strict=" + strict + ", checkBinary=" + checkBinary + ", checkSize=" + checkSize + ", checkDigest=" + checkDigest + '}';
+        return "Sedav2Config{" + "validate=" + validate + ", format=" + format + ", indent=" + indent + ", thread=" + thread
+                + ", strict=" + strict + ", checkBinary=" + checkBinary + ", checkSize=" + checkSize + ", checkDigest="
+                + checkDigest + '}';
     }
 
 }

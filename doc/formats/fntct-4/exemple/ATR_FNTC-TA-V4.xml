@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ArchiveTransferReply xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="org:afnor:medona:v1.0 ./MEDONA.xsd" xmlns="org:afnor:medona:v1.0">
+    <Date>2012-06-11T17:30:47Z</Date>
+    <MessageIdentifier>Id Transaction</MessageIdentifier>
+    <CodeListVersions/>
+    <DataObjectPackage>
+        <BinaryDataObject xml:id="Id01">
+            <Attachment uri="./F0001.ps7"/>
+            <Format>ps7</Format>
+            <MessageDigest algorithm=""/>
+            <SignatureStatus/>
+            <Size>1245</Size>
+        </BinaryDataObject>
+        <DescriptiveMetadata>
+            <ArchiveUnits xmlns="fntc-ta_v4" xml:id="Id100">
+                <ArchiveUnit xml:id="Id101">
+                    <Management>
+                        <LogBook><!-- Gestion de la traçabilité -->
+                            <Event><!-- Optionnel et répétable -->
+                                <EventDateTime>2019-03-18</EventDateTime>
+                            </Event>
+                        </LogBook>
+                    </Management>
+                    <SystemId>aeaqaaaaeuhjoqzdabty6aljgn3bm4aaaacq</SystemId>
+                    <!-- Identifiant de la métadonnée de description créée dans le SAE -->
+                    <DataObjectSystemId>aeaaaaaaaahjoqzdabty6aljgn3bm2iaaaba</DataObjectSystemId>
+                    <!-- Identifiant de l'archive créée dans le SAE  -->
+                </ArchiveUnit>
+            </ArchiveUnits>
+        </DescriptiveMetadata>
+        <ManagementMetadata/>
+    </DataObjectPackage>
+    <ReplyCode>OK</ReplyCode>
+    <!-- Code de réponse du SAE -->
+    <MessageRequestIdentifier><!-- Identifiant du message aller (ArchiveTransfer) --></MessageRequestIdentifier>
+    <ArchivalAgency>
+        <Identifier/>
+    </ArchivalAgency>
+    <TransferringAgency>
+        <Identifier/>
+    </TransferringAgency>
+</ArchiveTransferReply>

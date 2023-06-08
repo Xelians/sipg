@@ -26,7 +26,7 @@ import java.time.LocalDate;
  * </p>
  *
  * <p>
- * Supporté en SEDA v2.1 .
+ * Supporté en SEDA v2.1 et FNTC v4.
  * </p>
  *
  * @author Emmanuel Deviller
@@ -34,7 +34,7 @@ import java.time.LocalDate;
 public class AppraisalRules extends AbstractRules {
 
     /**
-     * Action à entreprendre au terme de la durée d’utilité administrative.
+     * Action à entreprendre au terme de la durée d’utilité administrative. Cette propriété est ignorée en FNTC v4.
      */
     protected String finalAction;
 
@@ -63,7 +63,7 @@ public class AppraisalRules extends AbstractRules {
     /**
      * Indique l'action à entreprendre au terme de la durée d’utilité administrative.
      *
-     * @return l 'action à entreprendre
+     * @return l'action à entreprendre
      */
     public String getFinalAction() {
         return finalAction;

@@ -30,7 +30,7 @@ import java.util.Objects;
  * La classe CustodialItem représente la description d'une période ou d'un événement précis dans l'historique.
  *
  * <p>
- * Supporté en SEDA v2.1 .
+ * Supporté en SEDA v2.1 et FNTC v4 (étendu).
  * </p>
  *
  * @author Emmanuel Deviller
@@ -72,7 +72,7 @@ public class CustodialItem {
     /**
      * Indique l'évènement.
      *
-     * @return l 'évènement
+     * @return l'évènement
      */
     public String getValue() {
         return value;

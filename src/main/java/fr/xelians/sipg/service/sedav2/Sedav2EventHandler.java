@@ -20,19 +20,23 @@ public class Sedav2EventHandler implements ValidationEventHandler {
         }
 
         switch (event.getSeverity()) {
-            case ValidationEvent.WARNING:
+            case ValidationEvent.WARNING -> {
                 LOGGER.info("Warning {} {}", event.getMessage(), getLocation(event));
                 return true;
-            case ValidationEvent.ERROR:
+            }
+            case ValidationEvent.ERROR -> {
                 LOGGER.info("Error {} {}", event.getMessage(), getLocation(event));
                 return false;
-            case ValidationEvent.FATAL_ERROR:
+            }
+            case ValidationEvent.FATAL_ERROR -> {
                 LOGGER.info("FatalError {} {}", event.getMessage(), getLocation(event));
-                return false ;
-            default:
+                return false;
+            }
+            default -> {
                 assert false : "UnrecognizedSeverity";
+            }
         }
-        return false ;
+        return false;
     }
 
     private String getLocation(ValidationEvent event) {
@@ -48,7 +52,9 @@ public class Sedav2EventHandler implements ValidationEventHandler {
 
             if (url != null || line != -1) {
                 msg.append("line ").append(line);
-                if (url != null) msg.append(" of ").append(url);
+                if (url != null) {
+                    msg.append(" of ").append(url);
+                }
             } else if (obj != null) {
                 msg.append(" obj: ").append(obj);
             } else if (node != null) {

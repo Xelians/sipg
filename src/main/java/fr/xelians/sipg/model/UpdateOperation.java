@@ -31,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author Emmanuel Deviller
  */
 public class UpdateOperation {
+
     private String systemId;
     private String metadataName;
     private String metadataValue;
@@ -51,7 +52,8 @@ public class UpdateOperation {
      * @param metadataValue the metadata value
      */
     @JsonCreator
-    public UpdateOperation(@JsonProperty("metadataName") String metadataName, @JsonProperty("metadataValue") String metadataValue) {
+    public UpdateOperation(@JsonProperty("metadataName") String metadataName,
+                           @JsonProperty("metadataValue") String metadataValue) {
         this.metadataName = metadataName;
         this.metadataValue = metadataValue;
     }

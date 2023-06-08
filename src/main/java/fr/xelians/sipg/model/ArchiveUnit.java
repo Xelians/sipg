@@ -32,20 +32,20 @@ import java.util.List;
 
 /**
  * <p>
- * La classe ArchiveUnit représente une unité d'archive qui contient la référence de l'objet physique ou numérique
- * à archiver, les métadonnées de description, les règles et les métadonnées de gestion de l'objet.
- * Une unité d'archive peut contenir d'autres unités d'archives et constituer ainsi une arborescence. L'unité d'archive
- * racine de l'arborescence est rattachée à un ArchiveTransfer.
+ * La classe ArchiveUnit représente une unité d'archive qui contient la référence de l'objet physique ou numérique à
+ * archiver, les métadonnées de description, les règles et les métadonnées de gestion de l'objet. Une unité d'archive
+ * peut contenir d'autres unités d'archives et constituer ainsi une arborescence. L'unité d'archive racine de
+ * l'arborescence est rattachée à un ArchiveTransfer.
  * </p>
  *
  * <p>
- * Supporté en SEDA v2.1 .
+ * Supporté en SEDA v2.1 et FNTC v4.
  * </p>
  *
  * @author Emmanuel Deviller
  * @see ArchiveTransfer
  */
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class ArchiveUnit implements ArchiveUnitContainer {
 
     /**
@@ -62,8 +62,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     protected final List<Text> descriptions = new ArrayList<>();
     /**
-     * La liste des changements successifs de propriété, de responsabilité et de conservation des unités d'archives
-     * avant leur entrée dans le lieu de conservation. On peut notamment y indiquer comment s'est effectué le passage de
+     * La liste des changements successifs de propriété, de responsabilité et de conservation des unités d'archives avant
+     * leur entrée dans le lieu de conservation. On peut notamment y indiquer comment s'est effectué le passage de
      * l'application d'origine au fichier archivable. Correspond à l'historique de la conservation en ISAD(G).
      */
     protected final List<CustodialItem> custodialItems = new ArrayList<>();
@@ -110,7 +110,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     protected final List<Object> elements = new ArrayList<>();
     /**
-     * La liste d"autres unités d'archives contenues dans cette unité d'archive.
+     * La liste d'autres unités d'archives contenues dans cette unité d'archive.
      */
     protected final List<ArchiveUnit> archiveUnits = new ArrayList<>();
 
@@ -160,7 +160,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * L'algorithme utilisé pour générer l'empreinte (hash) de l'objet binaire.
      */
-    protected String digestAlgorithm = "SHA-512";
+    protected final String digestAlgorithm = "SHA-512";
     /**
      * Les informations techniques de l'objet binaire.
      */
@@ -249,7 +249,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     protected String type;
     /**
-     * Le type de document au sens diplomatique du terme (ex. compte-rendu de réunion, note, correspondance, etc.).
+     * Le type de document au sens diplomatique du terme (ex. compte rendu de réunion, note, correspondance, etc.).
      * Attention à ne pas confondre avec le Type.
      */
     protected String documentType;
@@ -258,8 +258,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     protected String descriptionLanguage;
     /**
-     * L'état de l'objet binaire ou physique (par rapport avec son cycle de vie). L'état permet par exemple d'indiquer
-     * si la signature du fichier a été vérifiée avant le transfert aux archives.
+     * L'état de l'objet binaire ou physique (par rapport avec son cycle de vie). L'état permet par exemple d'indiquer si
+     * la signature du fichier a été vérifiée avant le transfert aux archives.
      */
     protected String status;
     /**
@@ -294,29 +294,28 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     protected String gpsAltitude;
     /**
-     * L'altitude utilisée comme altitude de référence. Si l'altitude est au dessus du niveau de la mer, la valeur 0 est
+     * L'altitude utilisée comme altitude de référence. Si l'altitude est au-dessus du niveau de la mer, la valeur 0 est
      * normalement donnée. Si l'altitude est au-dessous du niveau de la mer, la valeur 1 est normalement donnée.
      */
     protected String gpsAltitudeRef;
     /**
-     * La latitude qui peut être exprimée de deux manières différentes : degrés, décimaux ou degrés, minutes et
-     * secondes. Si la latitude est exprimée en degrés, décimaux, le format type est dd, dd. Par ex: "45.3130339". Si la
-     * latitude est exprimée en degrés, minutes et secondes, le format type est dd, mm, ss. Par ex: "45 18 46.922".
+     * La latitude qui peut être exprimée de deux manières différentes : degrés, décimaux ou degrés, minutes et secondes.
+     * Si la latitude est exprimée en degrés, décimaux, le format type est dd, dd. Par ex: "45.3130339". Si la latitude
+     * est exprimée en degrés, minutes et secondes, le format type est dd, mm, ss. Par ex: "45 18 46.922".
      */
     protected String gpsLatitude;
     /**
-     * Indique la latitude. La valeur 'N' indique la latitude Nord, et 'S' indique la latitude Sud.
+     * Indique la latitude. La valeur 'N' indique la latitude nord, et 'S' indique la latitude sud.
      */
     protected String gpsLatitudeRef;
     /**
-     * La longitude peut être exprimée de deux manières différentes : degrés, décimaux ou degrés, minutes et secondes.
-     * Si la longitude est exprimée en degrés, décimaux, le format type est dd, dd. Par exemple : "5.392285833333334". Si la
+     * La longitude peut être exprimée de deux manières différentes : degrés, décimaux ou degrés, minutes et secondes. Si
+     * la longitude est exprimée en degrés, décimaux, le format type est dd, dd. Par exemple : "5.392285833333334". Si la
      * longitude est exprimée en degrés, minutes et secondes, le format type est dd, mm, ss. Par exemple : "5 23 32.229".
      */
     protected String gpsLongitude;
     /**
-     * Indique la longitude. La valeur 'E' indique la longitude Est, et 'W' indique la longitude
-     * Ouest.
+     * Indique la longitude. La valeur 'E' indique la longitude Est, et 'W' indique la longitude Ouest.
      */
     protected String gpsLongitudeRef;
     /**
@@ -365,7 +364,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * Indique l'identifiant de l'objet physique.
      *
-     * @return l 'identifiant de l'objet physique
+     * @return l'identifiant de l'objet physique
      */
     public String getPhysicalId() {
         return physicalId;
@@ -744,7 +743,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * Indique l'identifiant du service producteur.
      *
-     * @return l 'identifiant du service producteur
+     * @return l'identifiant du service producteur
      */
     public String getOriginatingAgencyIdentifier() {
         return originatingAgencyIdentifier;
@@ -762,7 +761,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * Indique l'identifiant du service versant.
      *
-     * @return l 'identifiant du service versant
+     * @return l'identifiant du service versant
      */
     public String getSubmissionAgencyIdentifier() {
         return submissionAgencyIdentifier;
@@ -837,8 +836,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Fournit la liste des évènements de l'unité d'archive. Un évènement correspond à toute opération concernant
-     * l'unité d'archive : opération de versement, de mise à jour de métadonnées, de préservation, etc.
+     * Fournit la liste des évènements de l'unité d'archive. Un évènement correspond à toute opération concernant l'unité
+     * d'archive : opération de versement, de mise à jour de métadonnées, de préservation, etc.
      *
      * @return la liste des évènements de l'unité d'archive
      */
@@ -847,9 +846,9 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique le niveau de description au sens de la norme ISAD (G). Indique si l’unité d'archive correspond à un
-     * fonds, à un sous-fonds, à une classe, à une série organique, à une sous-série organique, à un dossier, à un
-     * sous-dossier ou à une pièce.
+     * Indique le niveau de description au sens de la norme ISAD (G). Indique si l’unité d'archive correspond à un fonds,
+     * à un sous-fonds, à une classe, à une série organique, à une sous-série organique, à un dossier, à un sous-dossier
+     * ou à une pièce.
      *
      * @return le niveau de description
      */
@@ -858,9 +857,9 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Spécifie le niveau de description au sens de la norme ISAD (G). Indique si l’unité d'archive correspond à un
-     * fonds, à un sous-fonds, à une classe, à une série organique, à une sous-série organique, à un dossier, à un
-     * sous-dossier ou à une pièce.
+     * Spécifie le niveau de description au sens de la norme ISAD (G). Indique si l’unité d'archive correspond à un fonds,
+     * à un sous-fonds, à une classe, à une série organique, à une sous-série organique, à un dossier, à un sous-dossier
+     * ou à une pièce.
      *
      * @param descriptionLevel le niveau de description
      */
@@ -958,16 +957,24 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * Indique l'identifiant de l'archive unit. Note. L'identifiant de l'archive unit est unique dans le document.
      *
-     * @return l 'identifiant de l'archive unit.
+     * @return l'identifiant de l'archive unit.
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Spécifie l'attribut ID identifiant l'archive unit. Note. Les attributs de type ID permettent d'identifier de
-     * façon unique un élément dans le document. La valeur d'un attribut de type ID est unique parmi toutes les valeurs
-     * des attributs ID de tout le document (sinon le document XML n'est pas valide).
+     * Spécifie l'attribut ID identifiant l'archive unit. Il est de la responsabilité du développeur de s'assurer que
+     * l'attribut spécifié est unique dans le document. Pour éviter d'éventuels conflits avec les attributs générés
+     * automatiquement, il est conseillé de préfixer l'attribut une valeur différente de "ID" qui est celle utilisé par le
+     * générateur.
+     * <p>
+     * Note. Les attributs de type ID permettent d'identifier de manière unique un élément dans le document. La valeur
+     * d'un attribut de type ID doit donc être unique parmi toutes les valeurs de tous les attributs ID de tout le
+     * document. Dans le cas contraire le document XML n'est pas valide. Si l'ID d'un élément n'est pas défini, le
+     * générateur crée automatiquement en se basant sur une séquence un ID unique préfixé par "ID".
+     *
+     * @param id l'identifiant de l'archive unit
      */
     public void setId(String id) {
         this.id = id;
@@ -1059,8 +1066,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique l'identifiant métier attribué à l'unité d'archive par le service d'archives. Peut être comparé à une
-     * cote.
+     * Indique l'identifiant métier attribué à l'unité d'archive par le service d'archives. Peut être comparé à une cote.
      *
      * @return l 'identifiant
      */
@@ -1117,8 +1123,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * Ajoute un changement à la liste des changements. La liste contient les changements successifs de propriété, de
      * responsabilité et de conservation des unités d'archives avant leur entrée dans le lieu de conservation. On peut
-     * notamment y indiquer comment s'est effectué le passage de l'application d'origine au fichier archivable.
-     * Correspond à l'historique de la conservation en ISAD(G).
+     * notamment y indiquer comment s'est effectué le passage de l'application d'origine au fichier archivable. Correspond
+     * à l'historique de la conservation en ISAD(G).
      *
      * @param custodialItem le changement à ajouter
      */
@@ -1130,8 +1136,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * Ajoute un changement à la liste des changements. La liste contient les changements successifs de propriété, de
      * responsabilité et de conservation des unités d'archives avant leur entrée dans le lieu de conservation. On peut
-     * notamment y indiquer comment s'est effectué le passage de l'application d'origine au fichier archivable.
-     * Correspond à l'historique de la conservation en ISAD(G).
+     * notamment y indiquer comment s'est effectué le passage de l'application d'origine au fichier archivable. Correspond
+     * à l'historique de la conservation en ISAD(G).
      *
      * @param value l'intitulé du changement à ajouter
      * @param when  la date du changement à ajouter
@@ -1143,8 +1149,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * Supprime un changement à la liste des changements. La liste contient les changements successifs de propriété, de
      * responsabilité et de conservation des unités d'archives avant leur entrée dans le lieu de conservation. On peut
-     * notamment y indiquer comment s'est effectué le passage de l'application d'origine au fichier archivable.
-     * Correspond à l'historique de la conservation en ISAD(G).
+     * notamment y indiquer comment s'est effectué le passage de l'application d'origine au fichier archivable. Correspond
+     * à l'historique de la conservation en ISAD(G).
      *
      * @param custodialItem le changement à supprimer
      * @return true si la suppression a été réalisée avec succès, sinon false
@@ -1185,7 +1191,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique le type de document au sens diplomatique du terme (ex. compte-rendu de réunion, note, correspondance,
+     * Indique le type de document au sens diplomatique du terme (ex. compte rendu de réunion, note, correspondance,
      * etc.).
      *
      * @return le type de document
@@ -1195,7 +1201,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Spécifie le type de document au sens diplomatique du terme (ex. compte-rendu de réunion, note, correspondance,
+     * Spécifie le type de document au sens diplomatique du terme (ex. compte rendu de réunion, note, correspondance,
      * etc.).
      *
      * @param documentType le type de document
@@ -1291,8 +1297,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique le service producteur. Il s'agit d'une personne physique ou morale, publique ou privée, qui a produit,
-     * reçu et conservé des archives dans l'exercice de son activité.
+     * Indique le service producteur. Il s'agit d'une personne physique ou morale, publique ou privée, qui a produit, reçu
+     * et conservé des archives dans l'exercice de son activité.
      *
      * @return le service producteur
      */
@@ -1422,8 +1428,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Ajoute un destinataire à la liste des destinataires pour information. Utilisé pour indiquer le nom du
-     * destinataire en copie, pour information, par exemple dans un courrier électronique.
+     * Ajoute un destinataire à la liste des destinataires pour information. Utilisé pour indiquer le nom du destinataire
+     * en copie, pour information, par exemple dans un courrier électronique.
      *
      * @param recipient le destinataire à ajouter
      */
@@ -1617,11 +1623,10 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique l'altitude utilisée comme altitude de référence. Si l'altitude est au-dessus du niveau de la mer, la
-     * valeur 0 est normalement donnée. Si l'altitude est au-dessous du niveau de la mer, la valeur 1 est normalement
-     * donnée.
+     * Indique l'altitude utilisée comme altitude de référence. Si l'altitude est au-dessus du niveau de la mer, la valeur
+     * 0 est normalement donnée. Si l'altitude est au-dessous du niveau de la mer, la valeur 1 est normalement donnée.
      *
-     * @return l 'altitude de référence
+     * @return l'altitude de référence
      */
     public String getGpsAltitudeRef() {
         return gpsAltitudeRef;
@@ -1639,8 +1644,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique la latitude. La latitude qui peut être exprimée de deux manières différentes : degrés, décimaux ou
-     * degrés, minutes et secondes. Si la latitude est exprimée en degrés, décimaux, le format type est dd, dd. Par ex:
+     * Indique la latitude. La latitude qui peut être exprimée de deux manières différentes : degrés, décimaux ou degrés,
+     * minutes et secondes. Si la latitude est exprimée en degrés, décimaux, le format type est dd, dd. Par ex:
      * "45.3130339". Si la latitude est exprimée en degrés, minutes et secondes, le format type est dd, mm, ss. Par ex:
      * "45 18 46.922".
      *
@@ -1651,8 +1656,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Spécifie la latitude. La latitude qui peut être exprimée de deux manières différentes : degrés, décimaux ou
-     * degrés, minutes et secondes. Si la latitude est exprimée en degrés, décimaux, le format type est dd, dd. Par ex:
+     * Spécifie la latitude. La latitude qui peut être exprimée de deux manières différentes : degrés, décimaux ou degrés,
+     * minutes et secondes. Si la latitude est exprimée en degrés, décimaux, le format type est dd, dd. Par ex:
      * "45.3130339". Si la latitude est exprimée en degrés, minutes et secondes, le format type est dd, mm, ss. Par ex:
      * "45 18 46.922".
      *
@@ -1663,7 +1668,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique la latitude. La valeur 'N' indique la latitude Nord, et 'S' indique la latitude Sud.
+     * Indique la latitude. La valeur 'N' indique la latitude nord, et 'S' indique la latitude sud.
      *
      * @return la latitude de référence
      */
@@ -1672,7 +1677,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Spécifie la latitude. La valeur 'N' indique la latitude Nord, et 'S' indique la latitude Sud.
+     * Spécifie la latitude. La valeur 'N' indique la latitude nord, et 'S' indique la latitude sud.
      *
      * @param gpsLatitudeRef la latitude de référence
      */
@@ -1705,8 +1710,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique la longitude. La valeur 'E' indique la longitude Est, et 'W' indique la longitude
-     * Ouest.
+     * Indique la longitude. La valeur 'E' indique la longitude Est, et 'W' indique la longitude Ouest.
      *
      * @return la longitude de référence
      */
@@ -1715,8 +1719,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Spécifie la longitude. La valeur 'E' indique la longitude Est, et 'W' indique la longitude
-     * Ouest.
+     * Spécifie la longitude. La valeur 'E' indique la longitude Est, et 'W' indique la longitude Ouest.
      *
      * @param gpsLongitudeRef la longitude de référence
      */
@@ -1972,7 +1975,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * Fournit la liste d'autres unités d'archives contenues dans cette unité d'archive.
      *
-     * @return la liste d"autres unités d'archives
+     * @return la liste d'autres unités d'archives
      */
     @Override
     public List<ArchiveUnit> getArchiveUnits() {
@@ -2012,8 +2015,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
 
 
     /**
-     * Fournit le premier élément dont le "name" correspond à "elementName" dans la liste des éléments étendus.
-     * Note. La recherche s'effectue uniquement sur les objets de type Element (et non String).
+     * Fournit le premier élément dont le "name" correspond à "elementName" dans la liste des éléments étendus. Note. La
+     * recherche s'effectue uniquement sur les objets de type Element (et pas de type String).
      *
      * @param elementName le nom de l'élément recherché
      * @return l'élément trouvé sinon null
@@ -2022,17 +2025,18 @@ public class ArchiveUnit implements ArchiveUnitContainer {
         Validate.notNull(elementName, SipUtils.NOT_NULL, "elementName");
 
         for (Object e : elements) {
-            if (e instanceof Element) {
-                Element element = (Element) e;
-                if (elementName.equals(element.getName())) return element;
+            if (e instanceof Element element) {
+                if (elementName.equals(element.getName())) {
+                    return element;
+                }
             }
         }
         return null;
     }
 
     /**
-     * Fournit la liste des éléments dont le "name" correspond à "elementName" dans la liste des éléments étendus.
-     * Note. La recherche s'effectue uniquement sur les objets de type Element (et non String).
+     * Fournit la liste des éléments dont le "name" correspond à "elementName" dans la liste des éléments étendus. Note.
+     * La recherche s'effectue uniquement sur les objets de type Element (et pas de type String).
      *
      * @param elementName le nom des éléments recherchés
      * @return la liste des éléments trouvés
@@ -2042,9 +2046,10 @@ public class ArchiveUnit implements ArchiveUnitContainer {
 
         List<Element> els = new ArrayList<>();
         for (Object e : elements) {
-            if (e instanceof Element) {
-                Element element = (Element) e;
-                if (elementName.equals(element.getName())) els.add(element);
+            if (e instanceof Element element) {
+                if (elementName.equals(element.getName())) {
+                    els.add(element);
+                }
             }
         }
         return els;

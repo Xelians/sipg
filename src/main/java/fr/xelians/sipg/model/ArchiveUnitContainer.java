@@ -44,7 +44,7 @@ public interface ArchiveUnitContainer {
 
     /**
      * Fournit la liste des unités d'archives. Pour éviter d'exposer les données internes, il est conseillé de réaliser
-     * une copie défensife de la liste.
+     * une copie défensive de la liste.
      *
      * @return la liste des unités d'archives
      */

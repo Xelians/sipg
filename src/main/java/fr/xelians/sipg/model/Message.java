@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * La classe abstraite Message représente le message dans le protocole d'échange  SEDA.
+ * La classe abstraite Message représente le message dans le protocole d'échange FNTC et SEDA.
  *
  * <p>
- * Supporté en SEDA v2.1 .
+ * Supporté en SEDA v2.1 et FNTC v4.
  * </p>
  *
  * @author Emmanuel Deviller
@@ -35,29 +35,25 @@ import java.util.List;
 public abstract class Message {
 
     /**
+     * La liste des éléments signatures du message.
+     */
+    protected final List<Element> signatureElements = new ArrayList<>();
+    /**
      * La date du message.
      */
     protected LocalDateTime date;
-
     /**
      * L'identifiant du message.
      */
     protected String messageIdentifier;
-
     /**
      * Le commentaire sur le message.
      */
     protected String comment;
-
     /**
      * La signature du message.
      */
     protected String signature;
-
-    /**
-     * La liste des éléments signatures du message.
-     */
-    protected final List<Element> signatureElements = new ArrayList<>();
 
     /**
      * Indique la date du message.
@@ -80,7 +76,7 @@ public abstract class Message {
     /**
      * Indique l'identifiant du message.
      *
-     * @return l 'identifiant du message
+     * @return l'identifiant du message
      */
     public String getMessageIdentifier() {
         return messageIdentifier;

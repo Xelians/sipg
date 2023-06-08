@@ -26,10 +26,10 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Le classe Agent représente une personne physique ou morale.
+ * La classe Agent représente une personne physique ou morale.
  *
  * <p>
- * Supporté en SEDA v2.1 .
+ * Supporté en SEDA v2.1 et FNTC v4 (étendu).
  * </p>
  *
  * @author Emmanuel Deviller
@@ -41,94 +41,78 @@ import java.util.Objects;
 public class Agent {
 
     /**
-     * Prénom de la personne.
-     */
-    protected String firstName;
-
-    /**
-     * Nom de naissance de la personne.
-     */
-    protected String birthName;
-
-    /**
-     * Nom complet de la personne.
-     */
-    protected String fullName;
-
-    /**
-     * Nom d'usage de la personne.
-     */
-    protected String givenName;
-
-    /**
-     * Sexe de la personne.
-     */
-    protected String gender;
-
-    /**
-     * Date de naissance de la personne.
-     */
-    protected LocalDate birthDate;
-
-    /**
-     * Lieu de naissance de la personne.
-     */
-    protected Place birthPlace;
-
-    /**
-     * Date de décès de la personne.
-     */
-    protected LocalDate deathDate;
-
-    /**
-     * Lieu de décès de la personne.
-     */
-    protected Place deathPlace;
-
-    /**
-     * Entité d'appartenance de la personne. Il peut s'agir d'une organisation, d'une société, etc.
-     */
-    protected String corpname;
-
-    /**
      * Nationalités de la personne.
      */
     protected final List<String> nationalities = new ArrayList<>();
-
     /**
      * Identifiants de la personne.
      */
     protected final List<String> identifiers = new ArrayList<>();
-
     /**
      * Fonctions de la personne.
      */
     protected final List<String> functions = new ArrayList<>();
-
     /**
      * Activités de la personne.
      */
     protected final List<String> activities = new ArrayList<>();
-
     /**
      * Positions ou intitulés du poste de travail occupé par la personne.
      */
     protected final List<String> positions = new ArrayList<>();
-
     /**
      * Rôles ou droits avec lesquels une personne a réalisé une opération, notamment dans une application.
      */
     protected final List<String> roles = new ArrayList<>();
-
     /**
      * Propriétés intellectuelles et artistiques de la personne.
      */
     protected final List<String> mandates = new ArrayList<>();
+    /**
+     * Prénom de la personne.
+     */
+    protected String firstName;
+    /**
+     * Nom de naissance de la personne.
+     */
+    protected String birthName;
+    /**
+     * Nom complet de la personne.
+     */
+    protected String fullName;
+    /**
+     * Nom d'usage de la personne.
+     */
+    protected String givenName;
+    /**
+     * Sexe de la personne.
+     */
+    protected String gender;
+    /**
+     * Date de naissance de la personne.
+     */
+    protected LocalDate birthDate;
+    /**
+     * Lieu de naissance de la personne.
+     */
+    protected Place birthPlace;
+    /**
+     * Date de décès de la personne.
+     */
+    protected LocalDate deathDate;
+    /**
+     * Lieu de décès de la personne.
+     */
+    protected Place deathPlace;
+    /**
+     * Entité d'appartenance de la personne. Il peut s'agir d'une organisation, d'une société, etc.
+     */
+    protected String corpName;
 
     /**
      * Instancie la classe avec l'identifiant de l'agent.
      *
-     * @param identifier  l'identifiant
+     * @param identifier l'identifiant
      */
     public Agent(String identifier) {
         identifiers.add(identifier);
@@ -146,10 +130,10 @@ public class Agent {
      * @param birthPlace le lieu de naissance
      * @param deathDate  la date de décès
      * @param deathPlace le lieu de décès
-     * @param corpname   l'entité
+     * @param corpName   l'entité
      */
     public Agent(String firstName, String birthName, String fullName, String givenName, String gender,
-                 LocalDate birthDate, Place birthPlace, LocalDate deathDate, Place deathPlace, String corpname) {
+                 LocalDate birthDate, Place birthPlace, LocalDate deathDate, Place deathPlace, String corpName) {
 
         this.firstName = firstName;
         this.birthName = birthName;
@@ -160,7 +144,7 @@ public class Agent {
         this.birthPlace = birthPlace;
         this.deathDate = deathDate;
         this.deathPlace = deathPlace;
-        this.corpname = corpname;
+        this.corpName = corpName;
     }
 
     /**
@@ -356,10 +340,10 @@ public class Agent {
     /**
      * Indique l'entité d'appartenance de la personne.
      *
-     * @return l 'entité
+     * @return l'entité
      */
-    public String getCorpname() {
-        return corpname;
+    public String getCorpName() {
+        return corpName;
     }
 
     /**
@@ -367,8 +351,8 @@ public class Agent {
      *
      * @param value l'entité
      */
-    public void setCorpname(String value) {
-        this.corpname = value;
+    public void setCorpName(String value) {
+        this.corpName = value;
     }
 
     /**
@@ -381,7 +365,7 @@ public class Agent {
     }
 
     /**
-     * Ajoute un identifiants à la personne.
+     * Ajoute un identifiant à la personne.
      *
      * @param value l'identifiant à ajouter
      */
@@ -557,7 +541,7 @@ public class Agent {
         hash = 79 * hash + Objects.hashCode(this.deathDate);
         hash = 79 * hash + Objects.hashCode(this.deathPlace);
         hash = 79 * hash + Objects.hashCode(this.nationalities);
-        hash = 79 * hash + Objects.hashCode(this.corpname);
+        hash = 79 * hash + Objects.hashCode(this.corpName);
         hash = 79 * hash + Objects.hashCode(this.identifiers);
         hash = 79 * hash + Objects.hashCode(this.functions);
         hash = 79 * hash + Objects.hashCode(this.activities);
@@ -600,7 +584,7 @@ public class Agent {
         if (!Objects.equals(this.gender, other.gender)) {
             return false;
         }
-        if (!Objects.equals(this.corpname, other.corpname)) {
+        if (!Objects.equals(this.corpName, other.corpName)) {
             return false;
         }
         if (!Objects.equals(this.birthDate, other.birthDate)) {
@@ -643,7 +627,11 @@ public class Agent {
      */
     @Override
     public String toString() {
-        return "Agent{" + "firstName=" + firstName + ", birthName=" + birthName + ", fullName=" + fullName + ", givenName=" + givenName + ", gender=" + gender + ", birthDate=" + birthDate + ", birthPlace=" + birthPlace + ", deathDate=" + deathDate + ", deathPlace=" + deathPlace + ", nationality=" + nationalities + ", corpname=" + corpname + ", identifiers=" + identifiers + ", functions=" + functions + ", activities=" + activities + ", positions=" + positions + ", roles=" + roles + ", mandates=" + mandates + '}';
+        return "Agent{" + "firstName=" + firstName + ", birthName=" + birthName + ", fullName=" + fullName + ", givenName="
+                + givenName + ", gender=" + gender + ", birthDate=" + birthDate + ", birthPlace=" + birthPlace + ", deathDate="
+                + deathDate + ", deathPlace=" + deathPlace + ", nationality=" + nationalities + ", corpName=" + corpName
+                + ", identifiers=" + identifiers + ", functions=" + functions + ", activities=" + activities + ", positions="
+                + positions + ", roles=" + roles + ", mandates=" + mandates + '}';
     }
 
 }

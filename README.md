@@ -1,13 +1,14 @@
-# SipG
+# Siplib
 
 ## Présentation
-* SipG est une bibliothèque pour générer et valider des archives au format SEDA v2.1.
+* Siplib est une bibliothèque pour générer et valider des archives aux formats FNTC v4 et SEDA v2.1.
 
 ## Fonctionnalités
 
-La librairie SipG offre les fonctionnalités suivantes : 
+La librairie Siplib offre les fonctionnalités suivantes : 
 
-* Génération d’un SIP conforme au format SEDA v2.1
+* Génération d’un SIP conforme aux formats FNTC v4 et SEDA v2.1
+* Validation complète d'une archive existante aux formats FNTC v4 ou SEDA v2.1
 * Suivi précis des étapes de validation par callback 
 * Validation optionnelle du fichier de description de l'archive par un profil RNG 
 * Application automatique de valeurs par défaut raisonnables
@@ -15,30 +16,42 @@ La librairie SipG offre les fonctionnalités suivantes :
 * Identification des formats des objets binaires (intégration de la librairie Droid)
 * Calcul automatique des empreintes des objets binaires
 * Support des archives numériques et physiques
-* Validation complète d'une archive existante au format SEDA v2.1
 * Sérialisation/désérialisation du fichier de description au format JSON
 * Capacité à générer des archives extrêmement volumineuses (plus de 100 000 objets)
-* Support du multi-threads lors de la génération de l'archive
+* Support du multi-thread lors de la génération de l'archive
 * Documentation Javadoc exhaustive 
 
 ## Format SEDA v2.1
 
 Le standard d'échange de données pour l'archivage SEDA modélise les différentes transactions qui peuvent avoir 
-lieu entre des acteurs dans le cadre de l'archivage de données. 
+lieu entre des  acteurs dans le cadre de l'archivage de données. 
 
 La documentation complète du SEDA v2.1 est disponible sur le site de [France Archive](https://redirect.francearchives.fr/seda/).
 
+## Format FNTC v4
+
+Le standard FNTC v4 est un standard d'échange de données élaboré dans le cadre de la [FNTC](https://fntc-numerique.com/fr/accueil.html).
+
+Le standard FNTC v4 a pour principales caractéristiques :
+* Compatibilité avec les normes [MEDONA & DEPIP](https://www.archimag.com/archives-patrimoine/2018/04/19/depip-norme-nf-iso-20614-protocole-echange-donnees-interoperabilite) supportées par le [SIAF](https://siaf.hypotheses.org/806) 
+* Proximité syntaxique et sémantique avec le standard SEDA 2.1
+* Syntaxe non ambigüe en regard du XSD 1.0
+* Ontologie de description des unités d'archives réduite et simple
+* Extension de l’ontologie autorisée dans un cadre bien défini
+
+Les principales différences entre les formats SEDA v2.1 et FNTC v4 sont [listées ici](https://github.com/emmanueldeviller/siplib/blob/master/doc/assets/Diff_SEDA.md). 
+
 ## Architecture fonctionnelle
  
-La librairie SipG a pour objectif de faciliter la création et la validation d'archives. Dans un premier temps, l'application de traitement des archives récupère et transforme les données métiers, puis grâce à SipG, génère et valide les SIP (Submission Information Package) dans un format compatible avec celui du système d'archivage.
+La librairie Siplib a pour objectif de faciliter la création et la validation d'archives. Dans un premier temps, l'application de traitement des archives récupère et transforme les données métiers, puis grâce à Siplib, génère et valide les SIP (Submission Information Package) dans un format compatible avec celui du système d'archivage.
 
-![Schéma d'architecture](./doc/assets/architecture.png)
+![Schéma d'architecture](https://github.com/emmanueldeviller/siplib/blob/master/doc/assets/architecture.png)
 
 ## Exemples 
 
 Le répertoire contenant les tests d'intégration fournit de nombreux exemples d'utilisation de la librairie.
 
-### Création d’une archive SEDA avec SipG
+### Création d’une archive SEDA avec Siplib
 
 ```
 ArchiveUnit unit = new ArchiveUnit();                    // Instancie l’unité d’archive
@@ -55,7 +68,7 @@ archiveTransfer.addArchiveUnit(unit);                             // Ajoute l’
 Sedav2Service.getInstance().write(archiveTransfer, Paths.get("seda.zip"));  // Génère le SIP
 ```
 
-### Création d’une archive au format SEDA à partir d'un fichier CSV
+### Création d’une archive au format FNTC à partir d'un fichier CSV
 
 Fichier CSV :
 ```
@@ -82,21 +95,21 @@ try (BufferedReader reader = Files.newBufferedReader(csvPath)) {           // Ou
        archiveTransfer.addArchiveUnit(unit);                               // Ajout de l'unité à l'archive
    }
 }
-Sedav2Service.getInstance().write(archiveTransfer, Paths.get("seda.zip"));  // Génère le SIP
+Fntcv4Service.getInstance().write(archiveTransfer, Paths.get("fntc.zip"));  // Génère le SIP
 ```
 
-### Validation d'un fichier XML au format SEDA
+### Validation d'un fichier XML au format FNTC
 
 ```
-Path path = Paths.get("seda_small.xml");               // Le fichier XML à valider
-Sedav2Service.getInstance().validate(path);            // Validation du fichier 
+Path path = Paths.get("fntc_small.xml");               // Le fichier XML à valider
+Fntcv4Service.getInstance().validate(path);            // Validation du fichier au format FNTC v4 
 ```
 
 ### Validation d'un fichier XML selon un profil RNG
 
 ```
-Path path = Paths.get("seda_small.xml");               // Le fichier XML à valider
-Path rngPath = Paths.get("seda_small.rng");            // Le profil RNG
+Path path = Paths.get("fntc_small.xml");               // Le fichier XML à valider
+Path rngPath = Paths.get("fntc_small.rng");            // Le profil RNG
 Validator rng = Validators.getRngValidator(rngPath);   // Création d'un validator RNG
 Validators.validate(path, rng);                        // Validation du fichier avec le validateur
 ```
@@ -169,8 +182,19 @@ L'objet archiveTransfer, issu de la désérialisation, peut ainsi être utilisé
 4. Pusher la branche (git push origin newFeature)
 5. Créer une pull request
 
+## Ajouter une nouvelle release
+
+Après avoir testé la nouvelle release:
+* Modifier la version dans le fichier pom.xml
+* Commiter les modifications avec le message "Bump to version 1.4"
+* Associer un tag à ce commit (voir exemple ci-dessous)
+```
+git tag -a v1.4 -m "SipLib version 1.4"
+git push origin v1.4 or git push origin --tags
+```
+
 ## Licences
 
-La librairie SipG est publiée en Open Source sous [licence libre Apache v2](./doc/license/LICENCE.APACHE_V2).
+La librairie Siplib est publiée en Open Source sous [licence LGPL v3](https://github.com/emmanueldeviller/siplib/blob/master/doc/license/LICENCE.LGPL).
 
-La librairie [Droid](https://github.com/digital-preservation/droid) éditée par The British National Archive est disponible sur Github sous [licence BSD](./doc/license/LICENCE.DROID).
+La librairie [Droid](https://github.com/digital-preservation/droid) éditée par The British National Archive est disponible sur Github sous [licence BSD](https://github.com/emmanueldeviller/siplib/blob/master/doc/license/LICENCE.DROID).

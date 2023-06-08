@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ArchiveTransfer xmlns="org:afnor:medona:v1.0"
+                 xmlns:ns2="http://www.w3.org/1999/xlink"
+                 xmlns:ns3="org:fntc:ta:v4.0">
+    <Date>2020-02-22T23:34:35</Date>
+    <MessageIdentifier>gdncldtrezvpsmvc</MessageIdentifier>
+    <ArchivalAgreement>My Archival Agreement</ArchivalAgreement>
+    <CodeListVersions/>
+    <DataObjectPackage>
+        <BinaryDataObject xml:id="ID2">
+            <Attachment filename="dummy.pdf" uri="Content/f3b3ab9726383783_dummy.pdf"/>
+            <Format>pdf</Format>
+            <MessageDigest algorithm="SHA-512">ZjNiM2FiM2U2MzUxZTI1YjVjMTg4MmJlYThkMzdlZmFkZGMwZWE3MmJmMTUzYmIwNjc2ODhmNzc1YTI2ODEwZDMyYjU0ZjAxNGJmMWNlYmM3ZmU5MzA0MmQ4NWIxOGI1YjQ1M2UzMjJkMTU0YmM1NWQ1Y2MyNzU0YjBkZmI0YjI=</MessageDigest>
+            <SignatureStatus>nil</SignatureStatus>
+            <Size>13264</Size>
+        </BinaryDataObject>
+        <DescriptiveMetadata>
+            <ns3:ArchiveUnits>
+                <ns3:ArchiveUnit xml:id="ID1">
+                    <ns3:Content>
+                        <ns3:Title>MyTitle1</ns3:Title>
+                        <ns3:DocumentType>DOC001</ns3:DocumentType>
+                        <ns3:Tag key="MyKey1">MyValue1</ns3:Tag>
+                    </ns3:Content>
+                    <ns3:DataObjectReference>
+                        <ns3:DataObjectReferenceId>ID2</ns3:DataObjectReferenceId>
+                    </ns3:DataObjectReference>
+                </ns3:ArchiveUnit>
+            </ns3:ArchiveUnits>
+        </DescriptiveMetadata>
+        <ManagementMetadata>
+            <ArchivalProfile>MyArchivalProfile</ArchivalProfile>
+            <ServiceLevel>Level1</ServiceLevel>
+        </ManagementMetadata>
+    </DataObjectPackage>
+    <ArchivalAgency>
+        <Identifier>AG001</Identifier>
+        <OrganizationDescriptiveMetadata>
+            <ns3:Name>My Archive Agency</ns3:Name>
+        </OrganizationDescriptiveMetadata>
+    </ArchivalAgency>
+    <TransferringAgency>
+        <Identifier>AG002</Identifier>
+        <OrganizationDescriptiveMetadata>
+            <ns3:Name>My Transfer Agency</ns3:Name>
+        </OrganizationDescriptiveMetadata>
+    </TransferringAgency>
+</ArchiveTransfer>

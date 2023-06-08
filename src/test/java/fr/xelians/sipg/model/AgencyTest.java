@@ -18,8 +18,10 @@
  */
 package fr.xelians.sipg.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The type Agency test.
@@ -28,34 +30,34 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class AgencyTest {
 
-    /**
-     * Test get identifier not null.
-     */
-    @Test
-   void testGetIdentifierNotNull() {
-      assertThrows(NullPointerException.class, () -> new Agency(null, ""));
-   }
+  /**
+   * Test get identifier not null.
+   */
+  @Test
+  void testGetIdentifierNotNull() {
+    assertThrows(NullPointerException.class, () -> new Agency(null, ""));
+  }
 
-    /**
-     * Test of getIdentifier method, of class Agency.
-     */
-    @Test
-   void testGetIdentifier() {
-      String expResult = "identifier";
-      Agency instance = new Agency(expResult, "");
-      String result = instance.getIdentifier();
-      assertEquals(expResult, result);
-   }
+  /**
+   * Test of getIdentifier method, of class Agency.
+   */
+  @Test
+  void testGetIdentifier() {
+    String expResult = "identifier";
+    Agency instance = new Agency(expResult, "");
+    String result = instance.getIdentifier();
+    assertEquals(expResult, result);
+  }
 
-    /**
-     * Test of getName method, of class Agency.
-     */
-    @Test
-   void testGetName() {
-      String expResult = "name";
-      Agency instance = new Agency("", expResult);
-      String result = instance.getName();
-      assertEquals(expResult, result);
-   }
+  /**
+   * Test of getName method, of class Agency.
+   */
+  @Test
+  void testGetName() {
+    String expResult = "name";
+    Agency instance = new Agency("", expResult);
+    String result = instance.getName();
+    assertEquals(expResult, result);
+  }
 
 }

@@ -82,7 +82,7 @@ public class Sedav2ConfigBuilder {
     }
 
     /**
-     * Spécifie le nombre de threads à utiliser lors de la conversion. Le nombre de coeur du CPU par défaut.
+     * Spécifie le nombre de threads à utiliser lors de la conversion. Le nombre de cœurs du CPU par défaut.
      *
      * @param thread le nombre de threads
      * @return le builder

@@ -22,11 +22,12 @@ import java.util.ArrayList;
 
 /**
  * <p>
- * La classe ArchiveTransfer représente une archive à transférer. Elle peut contenir une ou plusieurs unités d'archives.
+ * La classe ArchiveTransfer représente une archive à transférer. Elle peut contenir une ou plusieurs unités
+ * d'archives.
  * </p>
  *
  * <p>
- * Supporté en SEDA v2.1 .
+ * Supporté en SEDA v2.1 et FNTC v4.
  * </p>
  *
  * @author Emmanuel Deviller
@@ -37,61 +38,51 @@ import java.util.ArrayList;
 public class ArchiveTransfer extends Message implements ArchiveUnitContainer {
 
     /**
+     * Liste des unités d'archives contenues dans l'archive.
+     */
+    protected final ArrayList<ArchiveUnit> archiveUnits;
+    /**
      * Listes de codes de références utilisés dans le message.
      */
     protected CodeListVersions codeListVersions;
-
     /**
      * Accord de service.
      */
     protected String archivalAgreement;
-
     /**
      * Service d'archives responsable du transfert.
      */
     protected Agency archivalAgency;
-
     /**
      * Service versant chargé de réaliser le transport.
      */
     protected Agency transferringAgency;
-
     /**
      * Profil d’archivage applicable aux unités d'archives.
      */
     protected String archivalProfile;
-
     /**
      * Niveau de service applicable aux unités d’archives.
      */
     protected String serviceLevel;
-
     /**
      * Modalités d'entrée des archives.
      */
     protected String acquisitionInformation;
-
     /**
      * Statut légal des archives.
      */
     protected String legalStatus;
-
     /**
      * Identifiant du service producteur - information de gestion à ne pas confondre avec OriginatingAgency dans les
      * métadonnées de description.
      */
     protected String originatingAgencyIdentifier;
-
     /**
      * Identifiant du service versant - information de gestion à ne pas confondre avec SubmissionAgency dans les
      * métadonnées de description.
      */
     protected String submissionAgencyIdentifier;
-
-    /**
-     * Liste des unités d'archives contenu dans l'archive.
-     */
-    protected final ArrayList<ArchiveUnit> archiveUnits;
 
     /**
      * Instancie la classe.
@@ -160,9 +151,9 @@ public class ArchiveTransfer extends Message implements ArchiveUnitContainer {
     }
 
     /**
-     * Fournit la liste des unités d'archives contenu dans l'archive.
+     * Fournit la liste des unités d'archives contenues dans l'archive.
      *
-     * @return a liste des unités d'archives
+     * @return la liste des unités d'archives
      */
     @Override
     public ArrayList<ArchiveUnit> getArchiveUnits() {
@@ -191,7 +182,7 @@ public class ArchiveTransfer extends Message implements ArchiveUnitContainer {
      * Spécifie le service d'archives responsable du transfert.
      *
      * @param agencyIdentifier l'identifiant du service d'archives
-     * @param agencyName       le nom du le service d'archives
+     * @param agencyName       le nom du service d'archives
      */
     public void setArchivalAgency(String agencyIdentifier, String agencyName) {
         this.archivalAgency = new Agency(agencyIdentifier, agencyName);
@@ -219,7 +210,7 @@ public class ArchiveTransfer extends Message implements ArchiveUnitContainer {
      * Spécifie le service versant chargé de réaliser le transport.
      *
      * @param agencyIdentifier l'identifiant du service versant
-     * @param agencyName       le nom du le service versant
+     * @param agencyName       le nom du service versant
      */
     public void setTransferringAgency(String agencyIdentifier, String agencyName) {
         this.transferringAgency = new Agency(agencyIdentifier, agencyName);
@@ -298,10 +289,10 @@ public class ArchiveTransfer extends Message implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique l'identifiant du service producteur - information de gestion à ne pas confondre avec OriginatingAgency
-     * dans les métadonnées de description.
+     * Indique l'identifiant du service producteur - information de gestion à ne pas confondre avec OriginatingAgency dans
+     * les métadonnées de description.
      *
-     * @return l 'identifiant du service producteur
+     * @return l'identifiant du service producteur
      */
     public String getOriginatingAgencyIdentifier() {
         return originatingAgencyIdentifier;
@@ -318,8 +309,8 @@ public class ArchiveTransfer extends Message implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique l'identifiant du service versant - information de gestion à ne pas confondre avec SubmissionAgency dans
-     * les métadonnées de description.
+     * Indique l'identifiant du service versant - information de gestion à ne pas confondre avec SubmissionAgency dans les
+     * métadonnées de description.
      *
      * @return l'identifiant du service versant
      */

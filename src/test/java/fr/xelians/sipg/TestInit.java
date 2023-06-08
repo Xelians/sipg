@@ -33,24 +33,23 @@ import org.slf4j.LoggerFactory;
  */
 public class TestInit implements BeforeAllCallback {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestInit.class);
+  /**
+   * The constant TEST_RESOURCES.
+   */
+  public static final String TEST_RESOURCES = "src/test/resources/";
+  /**
+   * The constant TEST_RESULTS.
+   */
+  public static final String TEST_RESULTS = "target/test-results/";
+  private static final Logger LOGGER = LoggerFactory.getLogger(TestInit.class);
 
-    /**
-     * The constant TEST_RESOURCES.
-     */
-    public static final String TEST_RESOURCES = "src/test/resources/";
-    /**
-     * The constant TEST_RESULTS.
-     */
-    public static final String TEST_RESULTS = "target/test-results/";
-
-    @Override
-    public void beforeAll(ExtensionContext context) throws Exception {
-        Path testDir = Paths.get(TEST_RESULTS);
-        if (Files.notExists(testDir)) {
-            LOGGER.info("Creating test results directory: " + TEST_RESULTS);
-            Files.createDirectories(testDir);
-        }
+  @Override
+  public void beforeAll(ExtensionContext context) throws Exception {
+    Path testDir = Paths.get(TEST_RESULTS);
+    if (Files.notExists(testDir)) {
+      LOGGER.info("Creating test results directory: " + TEST_RESULTS);
+      Files.createDirectories(testDir);
     }
+  }
 
 }

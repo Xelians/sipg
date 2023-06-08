@@ -18,6 +18,7 @@
  */
 package fr.xelians.sipg.service.common;
 
+import fr.xelians.sipg.service.fntcv4.Fntcv4Resolver;
 import fr.xelians.sipg.service.sedav2.Sedav2Resolver;
 import org.w3c.dom.ls.LSInput;
 
@@ -30,6 +31,7 @@ import java.io.Reader;
  * classe en dehors de la librairie.
  *
  * @author Emmanuel Deviller
+ * @see Fntcv4Resolver
  * @see Sedav2Resolver
  */
 public class LSInputImpl implements LSInput {
@@ -55,7 +57,7 @@ public class LSInputImpl implements LSInput {
     protected InputStream byteStream;
 
     /**
-     * Le flux d'entrée caractères.
+     * Le flux d'entrée des caractères.
      */
     protected Reader charStream;
 

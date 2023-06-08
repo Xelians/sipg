@@ -18,7 +18,7 @@
  */
 package fr.xelians.sipg;
 
-import fr.xelians.sipg.utils.SipgException;
+import fr.xelians.sipg.utils.SipException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -42,82 +42,78 @@ import org.slf4j.LoggerFactory;
  */
 public class TestUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
+  /**
+   * The constant TEST.
+   */
+  public static final String TEST = "**************** Testing ";
+  /**
+   * The constant FAIL.
+   */
+  public static final String FAIL = "Fail to complete ";
+  private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
+  private static SchemaFactory rngSchemaFactory;
 
-    /**
-     * The constant TEST.
-     */
-    public static final String TEST = "**************** Testing ";
-    /**
-     * The constant FAIL.
-     */
-    public static final String FAIL = "Fail to complete ";
+  private TestUtils() {
+  }
 
-    private static SchemaFactory rngSchemaFactory;
+  /**
+   * Gets method.
+   *
+   * @param testInfo the test info
+   * @return the method
+   */
+  public static String getMethod(TestInfo testInfo) {
+    return testInfo.getTestMethod().get().getName();
+  }
 
-    private TestUtils() {
+  /**
+   * Create pdf.
+   *
+   * @param message the message
+   * @param path    the path
+   */
+  public static void createPdf(String message, Path path) {
+
+    try (PDDocument doc = new PDDocument()) {
+      PDPage page = new PDPage();
+      doc.addPage(page);
+      PDFont font = PDType1Font.HELVETICA_BOLD;
+
+      try (PDPageContentStream content = new PDPageContentStream(doc, page)) {
+        content.beginText();
+        content.setFont(font, 24);
+        content.newLineAtOffset(100, 700);
+        content.showText(message);
+        content.endText();
+      }
+
+      try (OutputStream os = Files.newOutputStream(path)) {
+        doc.save(os);
+      }
+    } catch (IOException ex) {
+      String msg = String.format("Unable to create PDF %s", path);
+      LOGGER.warn(msg, ex);
+      throw new SipException(msg, ex);
     }
+  }
 
-    /**
-     * Gets method.
-     *
-     * @param testInfo the test info
-     * @return the method
-     */
-    public static String getMethod(TestInfo testInfo) {
-        return testInfo.getTestMethod().get().getName();
+  /**
+   * Extract text from pdf string.
+   *
+   * @param path the path
+   * @return the string
+   */
+  public static String extractTextFromPDF(Path path) {
+
+    try (InputStream is = Files.newInputStream(path);
+        PDDocument document = PDDocument.load(is)) {
+      return new PDFTextStripper().getText(document);
+    } catch (IOException ex) {
+      String msg = String.format("Unable to extract text from PDF %s", path);
+      LOGGER.warn(msg, ex);
+      throw new SipException(msg, ex);
     }
-
-    /**
-     * Create pdf.
-     *
-     * @param message the message
-     * @param path    the path
-     */
-    public static void createPdf(String message, Path path) {
-
-        try (PDDocument doc = new PDDocument()) {
-            PDPage page = new PDPage();
-            doc.addPage(page);
-            PDFont font = PDType1Font.HELVETICA_BOLD;
-
-            try (PDPageContentStream content = new PDPageContentStream(doc, page)) {
-                content.beginText();
-                content.setFont(font, 24);
-                content.newLineAtOffset(100, 700);
-                content.showText(message);
-                content.endText();
-            }
-
-            try (OutputStream os = Files.newOutputStream(path)) {
-                doc.save(os);
-            }
-        }
-        catch (IOException ex) {
-            String msg = String.format("Unable to create PDF %s", path);
-            LOGGER.warn(msg, ex);
-            throw new SipgException(msg, ex);
-        }
-    }
-
-    /**
-     * Extract text from pdf string.
-     *
-     * @param path the path
-     * @return the string
-     */
-    public static String extractTextFromPDF(Path path) {
-
-        try (InputStream is = Files.newInputStream(path);
-                PDDocument document = PDDocument.load(is)) {
-            return new PDFTextStripper().getText(document);
-        }
-        catch (IOException ex) {
-            String msg = String.format("Unable to extract text from PDF %s", path);
-            LOGGER.warn(msg, ex);
-            throw new SipgException(msg, ex);
-        }
-    }
+  }
 
 
 }

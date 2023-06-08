@@ -41,7 +41,7 @@ public class ValidatorBuilder {
     private Place birthPlace;
     private LocalDate deathDate;
     private Place deathPlace;
-    private String corpname;
+    private String corpName;
     private LocalDateTime validationTime;
 
     private List<String> nationality = new ArrayList<>();
@@ -166,11 +166,11 @@ public class ValidatorBuilder {
     /**
      * Spécifie l'entité d'appartenance de la personne.
      *
-     * @param corpname l'entité
+     * @param corpName l'entité
      * @return le builder
      */
-    public ValidatorBuilder withCorpname(String corpname) {
-        this.corpname = corpname;
+    public ValidatorBuilder withCorpName(String corpName) {
+        this.corpName = corpName;
         return this;
     }
 
@@ -232,7 +232,7 @@ public class ValidatorBuilder {
     /**
      * Spécifie la liste des positions de la personne.
      *
-     * @param list la liste des position
+     * @param list la liste des positions
      * @return le builder
      */
     public ValidatorBuilder withPosition(List<String> list) {
@@ -243,7 +243,7 @@ public class ValidatorBuilder {
     /**
      * Spécifie la liste des rôles de la personne.
      *
-     * @param list la liste des rôle
+     * @param list la liste des rôles
      * @return le builder
      */
     public ValidatorBuilder withRole(List<String> list) {
@@ -346,7 +346,7 @@ public class ValidatorBuilder {
      */
     public Validator build() {
         Validator validator = new Validator(firstName, birthName, fullName, givenName, gender, birthDate, birthPlace,
-                deathDate, deathPlace, corpname, validationTime);
+                deathDate, deathPlace, corpName, validationTime);
 
         nationality.forEach(validator::addNationality);
         identifier.forEach(validator::addIdentifier);

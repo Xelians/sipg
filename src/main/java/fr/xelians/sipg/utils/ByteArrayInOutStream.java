@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package fr.xelians.sipg.utils;
 
 import java.io.ByteArrayInputStream;
@@ -53,9 +52,9 @@ public class ByteArrayInOutStream extends ByteArrayOutputStream {
 
     /**
      * Creates a new ByteArrayInputStream that uses the internal byte array buffer of this ByteArrayInOutStream instance
-     * as its buffer array. The initial value of pos is set to zero and the initial value of count is the number of
-     * bytes that can be read from the byte array. The buffer array is not copied. This instance of ByteArrayInOutStream
-     * can not be used anymore after calling this method.
+     * as its buffer array. The initial value of pos is set to zero and the initial value of count is the number of bytes
+     * that can be read from the byte array. The buffer array is not copied. This instance of ByteArrayInOutStream can not
+     * be used anymore after calling this method.
      *
      * @return the ByteArrayInputStream instance
      */
