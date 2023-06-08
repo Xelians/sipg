@@ -48,7 +48,7 @@ public final class DroidUtils {
      */
     private static BinarySignatureIdentifier initDroidSignatures() {
         Path signatureTmpPath = null;
-        try (InputStream is = ClassLoader.getSystemResourceAsStream("droid_signaturefile.xml")) {
+        try (InputStream is = SipUtils.resourceAsStream("droid_signaturefile.xml")) {
             if (is != null) {
                 signatureTmpPath = Files.createTempFile("droid", ".xml");
                 Files.copy(is, signatureTmpPath, StandardCopyOption.REPLACE_EXISTING);

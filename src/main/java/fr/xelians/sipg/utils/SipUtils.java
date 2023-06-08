@@ -154,7 +154,7 @@ public final class SipUtils {
      * @return la ressource système
      */
     public static InputStream resourceAsStream(String name) {
-        return ClassLoader.getSystemResourceAsStream(name);
+        return Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
     }
 
     /**
