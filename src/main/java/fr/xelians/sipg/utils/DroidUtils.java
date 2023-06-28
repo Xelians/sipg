@@ -62,13 +62,16 @@ public final class DroidUtils {
                 return bsi;
             }
             throw new SipException("Unable to found Droid droid_signaturefile.xml in resource");
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             throw new SipException("Unable to init Droid signatures identifier", ex);
-        } finally {
+        }
+        finally {
             if (signatureTmpPath != null) {
                 try {
                     Files.deleteIfExists(signatureTmpPath);
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     // Ignore
                 }
             }
@@ -90,7 +93,8 @@ public final class DroidUtils {
             bsi.setSignatureFile(signaturePath.toString());
             bsi.init();
             return bsi;
-        } catch (SignatureParseException ex) {
+        }
+        catch (SignatureParseException ex) {
             throw new SipException("Unable to init Droid signatures identifier", ex);
         }
     }
@@ -126,15 +130,12 @@ public final class DroidUtils {
      * @return la liste de résultats de l'identification.
      */
     public static List<IdentificationResult> matchBinarySignatures(Path path, String extension,
-                                                                   BinarySignatureIdentifier bsi) {
+            BinarySignatureIdentifier bsi) {
 
-        try {
-            RequestMetaData metaData = new RequestMetaData(Files.size(path), Files.getLastModifiedTime(path).toMillis(),
-                    path.getFileName().toString());
-            RequestIdentifier identifier = new RequestIdentifier(path.toUri());
-            identifier.setParentId(1L);
+        RequestIdentifier identifier = new RequestIdentifier(path.toUri());
+        identifier.setParentId(1L);
 
-            IdentificationRequest<Path> request = new FileSystemIdentificationRequest(metaData, identifier);
+        try (IdentificationRequest<Path> request = new FileSystemIdentificationRequest(createMetadata(path), identifier)) {
             request.open(path);
 
             if (!StringUtils.isBlank(extension)) {
@@ -147,14 +148,19 @@ public final class DroidUtils {
                 }
             }
             return bsi.matchBinarySignatures(request).getResults();
-
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             throw new SipException("Unable to matchBinarySignatures for " + path, ex);
         }
     }
 
+    private static RequestMetaData createMetadata(Path path) throws IOException {
+        return new RequestMetaData(Files.size(path), Files.getLastModifiedTime(path).toMillis(),
+                path.getFileName().toString());
+    }
+
     private static IdentificationResultCollection matchBinarySignatures(IdentificationRequest<?> request,
-                                                                        List<InternalSignature> intSigs) {
+            List<InternalSignature> intSigs) {
 
         IdentificationResultCollection results = new IdentificationResultCollection(request);
         results.setRequestMetaData(request.getRequestMetaData());
@@ -194,7 +200,7 @@ public final class DroidUtils {
     }
 
     private static List<InternalSignature> getMatchingSignatures(ByteReader targetFile,
-                                                                 List<InternalSignature> intSigs) {
+            List<InternalSignature> intSigs) {
 
         List<InternalSignature> matchingSigs = new ArrayList<>();
         if (targetFile.getNumBytes() > 0) {
