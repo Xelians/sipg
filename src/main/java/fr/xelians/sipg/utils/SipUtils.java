@@ -41,6 +41,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -154,7 +155,8 @@ public final class SipUtils {
      * @return la ressource système
      */
     public static InputStream resourceAsStream(String name) {
-        return Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
+        // Load the resources from the current package
+        return SipUtils.class.getClassLoader().getResourceAsStream(name) ;
     }
 
     /**
