@@ -43,7 +43,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
         <maven.source.version>3.2.1</maven.source.version>
-        <javadoc.source.version>3.4.1</javadoc.source.version>
+        <javadoc.source.version>3.6.0</javadoc.source.version>
     </properties>
 
     <scm>
@@ -233,6 +233,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${javadoc.source.version}</version>
+                <configuration>
+                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                    <excludePackageNames>org.*:uk.*:fr.gouv.*</excludePackageNames>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -308,15 +312,6 @@
                 </reportSets>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.2</version>
-                <configuration>
-                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
-                    <excludePackageNames>org.*:uk.*:fr.gouv.*</excludePackageNames>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
                 <version>7.1.0</version>
@@ -376,7 +371,7 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
+                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>3.0.1</version>
@@ -390,6 +385,7 @@
                             </execution>
                         </executions>
                     </plugin>
+
                 </plugins>
             </build>
         </profile>
