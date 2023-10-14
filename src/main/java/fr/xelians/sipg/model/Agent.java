@@ -110,7 +110,7 @@ public class Agent {
     protected String corpName;
 
     /**
-     * Instancie la classe avec l'identifiant de l'agent.
+     * Instancie la classe.
      */
     public Agent() {
     }

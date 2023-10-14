@@ -43,6 +43,13 @@ public class Signer extends Agent {
     protected LocalDateTime signingTime;
 
     /**
+     * Instancie la classe.
+     */
+    public Signer() {
+        super();
+    }
+
+    /**
      * Instancie la classe avec l'identifiant de l'agent.
      *
      * @param identifier  l'identifiant
