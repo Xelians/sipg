@@ -52,6 +52,16 @@ public class Validator extends Agent {
     /**
      * Instancie la classe avec l'identifiant de l'agent.
      *
+     * @param validationTime la date et heure de validation
+     */
+    public Validator(LocalDateTime validationTime) {
+        super();
+        this.validationTime = validationTime;
+    }
+
+    /**
+     * Instancie la classe avec l'identifiant de l'agent.
+     *
      * @param identifier     l'identifiant
      * @param validationTime la date et heure de validation
      */
