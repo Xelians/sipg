@@ -111,6 +111,12 @@ public class Agent {
 
     /**
      * Instancie la classe avec l'identifiant de l'agent.
+     */
+    public Agent() {
+    }
+
+    /**
+     * Instancie la classe avec l'identifiant de l'agent.
      *
      * @param identifier l'identifiant
      */
@@ -133,7 +139,7 @@ public class Agent {
      * @param corpName   l'entité
      */
     public Agent(String firstName, String birthName, String fullName, String givenName, String gender,
-                 LocalDate birthDate, Place birthPlace, LocalDate deathDate, Place deathPlace, String corpName) {
+            LocalDate birthDate, Place birthPlace, LocalDate deathDate, Place deathPlace, String corpName) {
 
         this.firstName = firstName;
         this.birthName = birthName;
