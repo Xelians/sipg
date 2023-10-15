@@ -626,7 +626,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param ruleName  le nom de la règle
      * @param startDate la date de début
      */
-    public void setAccessRule(String ruleName, LocalDate startDate) {
+    public void setAccessRules(String ruleName, LocalDate startDate) {
         this.accessRules = new AccessRules(ruleName, startDate);
     }
 
@@ -682,7 +682,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param ruleName  le nom de la règle
      * @param startDate la date de début
      */
-    public void setClassificationRule(String ruleName, LocalDate startDate) {
+    public void setClassificationRules(String ruleName, LocalDate startDate) {
         this.classificationRules = new ClassificationRules(ruleName, startDate);
     }
 
@@ -710,7 +710,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param ruleName  le nom de la règle
      * @param startDate la date de début
      */
-    public void setReuseRule(String ruleName, LocalDate startDate) {
+    public void setReuseRules(String ruleName, LocalDate startDate) {
         this.reuseRules = new ReuseRules(ruleName, startDate);
     }
 
@@ -738,7 +738,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param ruleName  le nom de la règle
      * @param startDate la date de début
      */
-    public void setAppraisalRule(String ruleName, LocalDate startDate) {
+    public void setAppraisalRules(String ruleName, LocalDate startDate) {
         this.appraisalRules = new AppraisalRules(ruleName, startDate);
     }
 
@@ -766,7 +766,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param ruleName  le nom de la règle
      * @param startDate la date de début
      */
-    public void setStorageRule(String ruleName, LocalDate startDate) {
+    public void setStorageRules(String ruleName, LocalDate startDate) {
         this.storageRules = new StorageRules(ruleName, startDate);
     }
 

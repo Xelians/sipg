@@ -389,7 +389,7 @@ public class SipFactory {
     unit1.setMeasure(26);
 
     LocalDate today = LocalDate.now();
-    unit1.setAccessRule("AccessRule", today);
+    unit1.setAccessRules("AccessRule", today);
 
     AppraisalRules aRule1 = new AppraisalRules();
     aRule1.addRule("RuleName a1", today);
@@ -684,8 +684,8 @@ public class SipFactory {
       unit.setFormatId("pdf");
       unit.setSignatureStatus("No Signature");
 
-      unit.setAccessRule("AccessRule", today);
-      unit.setAppraisalRule("RuleName", today);
+      unit.setAccessRules("AccessRule", today);
+      unit.setAppraisalRules("RuleName", today);
       unit.getAppraisalRules().setDuration("P2DT12H30M0S");
       unit.getAppraisalRules().setFinalAction("Destroy");
 
@@ -730,8 +730,8 @@ public class SipFactory {
       unit.setFormatId("pdf");
       unit.setSignatureStatus("No Signature");
 
-      unit.setAccessRule("AccessRule", today);
-      unit.setAppraisalRule("RuleName", today);
+      unit.setAccessRules("AccessRule", today);
+      unit.setAppraisalRules("RuleName", today);
       unit.getAppraisalRules().setFinalAction("Keep");
 
       unit.setDocumentType("DOC00" + i);
