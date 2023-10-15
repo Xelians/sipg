@@ -30,6 +30,7 @@ import fr.xelians.sipg.service.json.JsonService;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.Validators;
 import java.nio.file.FileSystem;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.xml.validation.Validator;

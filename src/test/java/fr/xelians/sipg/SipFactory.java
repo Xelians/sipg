@@ -18,34 +18,7 @@
  */
 package fr.xelians.sipg;
 
-import fr.xelians.sipg.model.AccessRules;
-import fr.xelians.sipg.model.Agency;
-import fr.xelians.sipg.model.AgentBuilder;
-import fr.xelians.sipg.model.AppraisalRules;
-import fr.xelians.sipg.model.ArchiveTransfer;
-import fr.xelians.sipg.model.ArchiveUnit;
-import fr.xelians.sipg.model.ArchiveUnitContainer;
-import fr.xelians.sipg.model.ArchiveUnitRef;
-import fr.xelians.sipg.model.ClassificationRules;
-import fr.xelians.sipg.model.CodeListVersions;
-import fr.xelians.sipg.model.DataObjectRef;
-import fr.xelians.sipg.model.DisseminationRules;
-import fr.xelians.sipg.model.Element;
-import fr.xelians.sipg.model.Event;
-import fr.xelians.sipg.model.EventBuilder;
-import fr.xelians.sipg.model.ExternalReference;
-import fr.xelians.sipg.model.FileInfoBuilder;
-import fr.xelians.sipg.model.PlaceBuilder;
-import fr.xelians.sipg.model.RelatedObjectRef;
-import fr.xelians.sipg.model.RepositoryArchiveUnitPID;
-import fr.xelians.sipg.model.ReuseRules;
-import fr.xelians.sipg.model.Signature;
-import fr.xelians.sipg.model.Signer;
-import fr.xelians.sipg.model.SignerBuilder;
-import fr.xelians.sipg.model.StorageRules;
-import fr.xelians.sipg.model.UpdateOperation;
-import fr.xelians.sipg.model.Validator;
-import fr.xelians.sipg.model.ValidatorBuilder;
+import fr.xelians.sipg.model.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -606,6 +579,14 @@ public class SipFactory {
     unit2.addElement(e1);
     unit2.addElement(e2);
     unit2.addElement("<MyExtTag4>MyValue</MyExtTag4>");
+
+    RelatedObjectRef ror = new RelatedObjectRef();
+    ror.addVersionOf(new ArchiveUnitRef(unit1));
+    ror.addVersionOf(new DataObjectRef(unit1));
+    ror.addVersionOf(new RepositoryArchiveUnitPID("repo archive pid"));
+    ror.addVersionOf(new RepositoryObjectPID("repo object pid"));
+    ror.addVersionOf(new ExternalReference("Test external ref"));
+    unit2.setRelation(ror);
 
     unit1.addArchiveUnit(unit2);
 

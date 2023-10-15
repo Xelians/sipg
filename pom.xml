@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.xelians</groupId>
     <artifactId>sipg</artifactId>
-    <version>1.18</version>
+    <version>1.20</version>
     <packaging>jar</packaging>
 
     <organization>

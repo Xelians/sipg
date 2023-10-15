@@ -514,7 +514,6 @@ class Sedav2Converter {
     }
 
     private DataObjectOrArchiveUnitReferenceType toDataObjectOrArchiveUnitReferenceType(RelationRef relationRef) {
-
         DataObjectOrArchiveUnitReferenceType dooaurt = sedav2Factory.createDataObjectOrArchiveUnitReferenceType();
 
         if (relationRef instanceof ArchiveUnitRef) {
