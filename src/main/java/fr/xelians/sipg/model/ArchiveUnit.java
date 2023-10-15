@@ -29,6 +29,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * <p>
@@ -136,6 +137,12 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * La version de l'objet physique.
      */
     protected String physicalVersion;
+
+    /**
+     * Le path de l'objet binaire.
+     */
+    protected Supplier<Path> binaryPathSupplier;
+
     /**
      * Le path de l'objet binaire.
      */
@@ -400,6 +407,24 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setMeasure(double measure) {
         this.measure = measure;
+    }
+
+    /**
+     * Indique le fournisseur du path de l'objet binaire.
+     *
+     * @return le fournisseur du path de l'objet binaire
+     */
+    public Supplier<Path> getBinaryPathSupplier() {
+        return binaryPathSupplier;
+    }
+
+    /**
+     * Spécifie le fournisseur du path de l'objet binaire.
+     *
+     * @param binaryPathSupplier le fournisseur du path de l'objet binaire
+     */
+    public void setBinaryPathSupplier(Supplier<Path> binaryPathSupplier) {
+        this.binaryPathSupplier = binaryPathSupplier;
     }
 
     /**

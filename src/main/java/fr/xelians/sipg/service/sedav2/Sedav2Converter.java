@@ -21,9 +21,11 @@ package fr.xelians.sipg.service.sedav2;
 import fr.gouv.culture.archivesdefrance.seda.v2.*;
 import fr.xelians.sipg.model.*;
 import fr.xelians.sipg.utils.DroidUtils;
-import fr.xelians.sipg.utils.SipUtils;
 import fr.xelians.sipg.utils.SipException;
+import fr.xelians.sipg.utils.SipUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -86,7 +88,8 @@ class Sedav2Converter {
 
         try {
             documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch (ParserConfigurationException ex) {
+        }
+        catch (ParserConfigurationException ex) {
             throw new SipException("Unable to create DOM document builder", ex);
         }
     }
@@ -114,8 +117,7 @@ class Sedav2Converter {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, Sedav2Config config)
-            throws ExecutionException, InterruptedException {
+    static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, Sedav2Config config) throws ExecutionException, InterruptedException {
         return convert(archiveTransfer, null, config);
     }
 
@@ -129,8 +131,7 @@ class Sedav2Converter {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, FileSystem zipArchive)
-            throws ExecutionException, InterruptedException {
+    static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, FileSystem zipArchive) throws ExecutionException, InterruptedException {
         return convert(archiveTransfer, zipArchive, Sedav2Config.DEFAULT);
     }
 
@@ -145,8 +146,8 @@ class Sedav2Converter {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, FileSystem zipArchive, Sedav2Config config)
-            throws ExecutionException, InterruptedException {
+    static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, FileSystem zipArchive,
+            Sedav2Config config) throws ExecutionException, InterruptedException {
         Validate.notNull(archiveTransfer, SipUtils.NOT_NULL, "archiveTransfer");
         Validate.notNull(config, SipUtils.NOT_NULL, "config");
 
@@ -156,8 +157,7 @@ class Sedav2Converter {
         return att;
     }
 
-    private static void executeAndWait(Sedav2Converter converter, Sedav2Config config)
-            throws ExecutionException, InterruptedException {
+    private static void executeAndWait(Sedav2Converter converter, Sedav2Config config) throws ExecutionException, InterruptedException {
         if (!converter.tasks.isEmpty()) {
             ExecutorService executor = Executors.newFixedThreadPool(SipUtils.getPoolSize(config.getThread()));
             try {
@@ -166,7 +166,8 @@ class Sedav2Converter {
                 for (Future<Void> future : futures) {
                     future.get();
                 }
-            } finally {
+            }
+            finally {
                 executor.shutdownNow();
             }
         }
@@ -175,8 +176,7 @@ class Sedav2Converter {
     private ArchiveTransferType toArchiveTransferType(ArchiveTransfer transfer) {
         ArchiveTransferType att = sedav2Factory.createArchiveTransferType();
 
-        String mi = SipUtils.getIfBlank(transfer.getMessageIdentifier(),
-                RandomStringUtils.randomAlphabetic(32).toLowerCase());
+        String mi = SipUtils.getIfBlank(transfer.getMessageIdentifier(), RandomStringUtils.randomAlphabetic(32).toLowerCase());
         att.setMessageIdentifier(toIdentifierType(mi));
 
         LocalDateTime gcd = SipUtils.getIfNull(transfer.getDate(), LocalDateTime.now());
@@ -228,7 +228,12 @@ class Sedav2Converter {
     }
 
     private void addBinaryDataObjectType(DataObjectGroupType dogt, DataObjectRefType dor, ArchiveUnit unit) {
+        boolean removePath = false;
         Path binaryPath = unit.getBinaryPath();
+        if (binaryPath == null) {
+            binaryPath = unit.getBinaryPathSupplier().get();
+            removePath = true;
+        }
 
         MessageDigestBinaryObjectType mdbot = sedav2Factory.createMessageDigestBinaryObjectType();
         mdbot.setAlgorithm(unit.getDigestAlgorithm());
@@ -239,8 +244,7 @@ class Sedav2Converter {
         bdot.setMessageDigest(mdbot);
 
         if (StringUtils.isNotBlank(unit.getFormatId())) {
-            bdot.setFormatIdentification(
-                    toFormatIdentificationType(unit.getFormatId(), unit.getFormatName(), unit.getMimeType()));
+            bdot.setFormatIdentification(toFormatIdentificationType(unit.getFormatId(), unit.getFormatName(), unit.getMimeType()));
         }
 
         if (unit.getFileInfo() != null) {
@@ -250,7 +254,7 @@ class Sedav2Converter {
         dor.setDataObjectGroupReferenceId(dogt);
         dogt.getBinaryDataObjectOrPhysicalDataObject().add(bdot);
 
-        tasks.add(new ZipTask(binaryPath, bdot));
+        tasks.add(new ZipTask(binaryPath, removePath, bdot));
     }
 
     private ArchiveUnitType toArchiveUnitType(ArchiveUnit unit, DataObjectPackageType dopt) {
@@ -273,8 +277,7 @@ class Sedav2Converter {
         }
 
         // Process Binary
-        Path binaryPath = unit.getBinaryPath();
-        if (binaryPath != null) {
+        if (unit.getBinaryPath() != null || unit.getBinaryPathSupplier() != null) {
             addBinaryDataObjectType(dogt, dor, unit);
         }
 
@@ -287,8 +290,7 @@ class Sedav2Converter {
         }
 
         // ArchiveUnitProfile
-        ifNotNull(unit.getArchiveUnitProfile(),
-                e -> aut.setArchiveUnitProfile(toIdentifierType(unit.getArchiveUnitProfile())));
+        ifNotNull(unit.getArchiveUnitProfile(), e -> aut.setArchiveUnitProfile(toIdentifierType(unit.getArchiveUnitProfile())));
 
         // Process Management
         ManagementType mt = sedav2Factory.createManagementType();
@@ -321,10 +323,7 @@ class Sedav2Converter {
             mt.setClassificationRule(toClassificationRuleType(unit.getClassificationRules()));
         }
 
-        if (mt.getUpdateOperation() != null || mt.getAccessRule() != null || mt.getAppraisalRule() != null
-                || mt.getDisseminationRule() != null || mt.getReuseRule() != null
-                || mt.getStorageRule() != null || mt.getClassificationRule() != null
-                || mt.getLogBook() != null) {
+        if (mt.getUpdateOperation() != null || mt.getAccessRule() != null || mt.getAppraisalRule() != null || mt.getDisseminationRule() != null || mt.getReuseRule() != null || mt.getStorageRule() != null || mt.getClassificationRule() != null || mt.getLogBook() != null) {
 
             aut.setManagement(mt);
         }
@@ -426,10 +425,7 @@ class Sedav2Converter {
         unit.getSignatures().forEach(signature -> dmct.getSignature().add(toSignatureType(signature, dogt)));
 
         // GPS Group
-        if (unit.getGpsVersionID() != null || unit.getGpsDateStamp() != null
-                || unit.getGpsAltitude() != null || unit.getGpsAltitudeRef() != null
-                || unit.getGpsLatitude() != null || unit.getGpsLatitudeRef() != null
-                || unit.getGpsLongitude() != null || unit.getGpsLongitudeRef() != null) {
+        if (unit.getGpsVersionID() != null || unit.getGpsDateStamp() != null || unit.getGpsAltitude() != null || unit.getGpsAltitudeRef() != null || unit.getGpsLatitude() != null || unit.getGpsLatitudeRef() != null || unit.getGpsLongitude() != null || unit.getGpsLongitudeRef() != null) {
 
             final GpsType gps = new GpsType();
             ifNotNull(unit.getGpsVersionID(), gps::setGpsVersionID);
@@ -486,7 +482,8 @@ class Sedav2Converter {
             org.w3c.dom.Element element = docBuilder.parse(new InputSource(new StringReader(fragment))).getDocumentElement();
             element.setAttribute("xmlns", EXT_NS);
             return doc.importNode(element, true);
-        } catch (SAXException | IOException ex) {
+        }
+        catch (SAXException | IOException ex) {
             throw new SipException("Unable to create Node from document builder", ex);
         }
     }
@@ -533,10 +530,8 @@ class Sedav2Converter {
                     throw new SipException("The related referenced archive unit does not exist in this archive");
                 }
                 List<Object> objs = aut.getArchiveUnitOrDataObjectReferenceOrDataObjectGroup();
-                Optional<DataObjectRefType> opt = objs.stream().filter(DataObjectRefType.class::isInstance)
-                        .map(e -> (DataObjectRefType) e).findFirst();
-                dooaurt.setDataObjectReference(opt.orElseThrow(
-                        () -> new SipException("The related referenced data object does not exist in this archive")));
+                Optional<DataObjectRefType> opt = objs.stream().filter(DataObjectRefType.class::isInstance).map(e -> (DataObjectRefType) e).findFirst();
+                dooaurt.setDataObjectReference(opt.orElseThrow(() -> new SipException("The related referenced data object does not exist in this archive")));
             });
         } else if (relationRef instanceof RepositoryArchiveUnitPID) {
             dooaurt.setRepositoryArchiveUnitPID((String) relationRef.getReference());
@@ -572,8 +567,7 @@ class Sedav2Converter {
         ifNotNull(fileInfo.getCreatingApplicationVersion(), fit::setCreatingApplicationVersion);
         ifNotNull(fileInfo.getCreatingOs(), fit::setCreatingOs);
         ifNotNull(fileInfo.getCreatingOsVersion(), fit::setCreatingOsVersion);
-        ifNotNull(fileInfo.getDateCreatedByApplication(),
-                e -> fit.setDateCreatedByApplication(SipUtils.toXmlDateTime(e)));
+        ifNotNull(fileInfo.getDateCreatedByApplication(), e -> fit.setDateCreatedByApplication(SipUtils.toXmlDateTime(e)));
         ifNotNull(fileInfo.getLastModified(), e -> fit.setLastModified(SipUtils.toXmlDateTime(e)));
         return fit;
     }
@@ -582,8 +576,7 @@ class Sedav2Converter {
         UpdateOperationType uopt = sedav2Factory.createUpdateOperationType();
         if (StringUtils.isNotBlank(updateOperation.getSystemId())) {
             uopt.setSystemId(updateOperation.getSystemId());
-        } else if (StringUtils.isNotBlank(updateOperation.getMetadataName()) && StringUtils.isNotBlank(
-                updateOperation.getMetadataValue())) {
+        } else if (StringUtils.isNotBlank(updateOperation.getMetadataName()) && StringUtils.isNotBlank(updateOperation.getMetadataValue())) {
             ArchiveUnitIdentifierKeyType auikt = sedav2Factory.createArchiveUnitIdentifierKeyType();
             auikt.setMetadataName(updateOperation.getMetadataName());
             auikt.setMetadataValue(updateOperation.getMetadataValue());
@@ -627,8 +620,7 @@ class Sedav2Converter {
         ifNotNull(classificationRule.getClassificationLevel(), art::setClassificationLevel);
         ifNotNull(classificationRule.getClassificationOwner(), art::setClassificationOwner);
         ifNotNull(classificationRule.getClassificationAudience(), art::setClassificationAudience);
-        ifNotNull(classificationRule.getClassificationReassessingDate(),
-                s -> art.setClassificationReassessingDate(SipUtils.toXmlDate(s)));
+        ifNotNull(classificationRule.getClassificationReassessingDate(), s -> art.setClassificationReassessingDate(SipUtils.toXmlDate(s)));
         return art;
     }
 
@@ -875,7 +867,8 @@ class Sedav2Converter {
     private LevelType toLevelType(String levelType) {
         try {
             return LevelType.fromValue(levelType);
-        } catch (IllegalArgumentException iae) {
+        }
+        catch (IllegalArgumentException iae) {
             throw new SipException("Seda 2.1 does not support the level type: " + levelType, iae);
         }
     }
@@ -883,7 +876,8 @@ class Sedav2Converter {
     private LegalStatusType toLegalStatus(String legalStatusType) {
         try {
             return LegalStatusType.fromValue(legalStatusType);
-        } catch (IllegalArgumentException iae) {
+        }
+        catch (IllegalArgumentException iae) {
             throw new SipException("Seda 2.1 does not support the legal status : " + legalStatusType, iae);
         }
     }
@@ -947,6 +941,7 @@ class Sedav2Converter {
     private class ZipTask implements Callable<Void> {
 
         private final Path binaryPath;
+        private final boolean removePath;
         private final BinaryDataObjectType bdot;
 
         /**
@@ -955,8 +950,9 @@ class Sedav2Converter {
          * @param binaryPath the binary path
          * @param bdot       the bdot
          */
-        public ZipTask(Path binaryPath, BinaryDataObjectType bdot) {
+        public ZipTask(Path binaryPath, boolean removePath, BinaryDataObjectType bdot) {
             this.binaryPath = binaryPath;
+            this.removePath = removePath;
             this.bdot = bdot;
         }
 
@@ -966,7 +962,8 @@ class Sedav2Converter {
             if (Files.notExists(docEntry)) {
                 try {
                     Files.createDirectories(docEntry);
-                } catch (FileAlreadyExistsException ex) {
+                }
+                catch (FileAlreadyExistsException ex) {
                     LOGGER.warn("zip: ", ex);
                 }
             }
@@ -975,7 +972,8 @@ class Sedav2Converter {
             if (Files.notExists(zipEntry)) {
                 try (OutputStream out = Files.newOutputStream(zipEntry)) {
                     Files.copy(binaryPath, out);
-                } catch (FileAlreadyExistsException ex) {
+                }
+                catch (FileAlreadyExistsException ex) {
                     LOGGER.warn("zip: ", ex);
                 }
             }
@@ -994,15 +992,13 @@ class Sedav2Converter {
 
                 // Add binary file to zip
                 if (zipArchive != null) {
-                    Path zipEntry = zip(binaryPath,
-                            digest + "_" + Files.getLastModifiedTime(binaryPath).toMillis() + "_" + binaryPath.getFileName());
+                    Path zipEntry = zip(binaryPath, digest + "_" + Files.getLastModifiedTime(binaryPath).toMillis() + "_" + binaryPath.getFileName());
                     long size = (long) Files.getAttribute(zipEntry, "zip:size");
                     bdot.setSize(BigInteger.valueOf(size));
                     bdot.setUri(zipEntry.toString());
                 } else {
                     bdot.setSize(BigInteger.valueOf(Files.size(binaryPath)));
-                    bdot.setUri("Content/" + digest + "_" + Files.getLastModifiedTime(binaryPath).toMillis() + "_"
-                            + binaryPath.getFileName());
+                    bdot.setUri("Content/" + digest + "_" + Files.getLastModifiedTime(binaryPath).toMillis() + "_" + binaryPath.getFileName());
                 }
 
                 // Note. The Signature Identifier does not fully support NIO2 (ie. does not work with jimfs)
@@ -1014,13 +1010,21 @@ class Sedav2Converter {
                         bdot.setFormatIdentification(toFormatIdentificationType("Unknown", null, null));
                     } else {
                         IdentificationResult r = results.get(0);
-                        String name = StringUtils.isAllBlank(r.getName(), r.getVersion()) ? null
-                                : StringUtils.trim(r.getName() + " " + r.getVersion());
+                        String name = StringUtils.isAllBlank(r.getName(), r.getVersion()) ? null : StringUtils.trim(r.getName() + " " + r.getVersion());
                         String mimeType = StringUtils.isBlank(r.getMimeType()) ? null : r.getMimeType();
                         bdot.setFormatIdentification(toFormatIdentificationType(r.getPuid(), name, mimeType));
                     }
                 }
-            } catch (Exception ex) {
+
+                if (removePath) Files.delete(binaryPath);
+            }
+            catch (Exception ex) {
+                try {
+                    if (removePath) Files.deleteIfExists(binaryPath);
+                }
+                catch (IOException ioex) {
+                    // Ignore
+                }
                 throw new SipException("Fail to complete ZipTask for " + binaryPath, ex);
             }
 
