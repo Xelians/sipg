@@ -483,6 +483,27 @@ public class SipFactory {
     unit2.setFormatName("Portable Document Format");
     unit2.setFileInfo(FileInfoBuilder.builder().withFilename("MyFile.pdf").withLastModified(todaytime)
                                      .withCreatingApplicationName("PdfBox").build());
+
+    unit2.setDisseminationPath(binaryPath2);
+    unit2.setDisseminationFormatId("pdf");
+    unit2.setDisseminationFormatName("Portable Document Format");
+    unit2.setDisseminationFileInfo(FileInfoBuilder.builder().withFilename("MyFile.pdf").withLastModified(todaytime)
+                                     .withCreatingApplicationName("PdfBoxDissemination").build());
+
+    unit2.setThumbnailPath(binaryPath2);
+    unit2.setThumbnailVersion("Thumbnail_2");
+    unit2.setThumbnailFormatId("pdf");
+    unit2.setThumbnailFormatName("Portable Document Format");
+    unit2.setThumbnailFileInfo(FileInfoBuilder.builder().withFilename("MyFile.pdf").withLastModified(todaytime)
+                                     .withCreatingApplicationName("PdfBoxThumbnail").build());
+
+    unit2.setTextContentPath(binaryPath2);
+    unit2.setTextContentVersion("TextContent_1");
+    unit2.setTextContentFormatId("pdf");
+    unit2.setTextContentFormatName("Portable Document Format");
+    unit2.setTextContentFileInfo(FileInfoBuilder.builder().withFilename("MyFile.pdf").withLastModified(todaytime)
+                                              .withCreatingApplicationName("PdfBoxTextContent").build());
+
     unit2.setSignatureStatus("No Signature");
 
     AccessRules aRule2 = new AccessRules();

@@ -7,7 +7,10 @@
         "identifier": "AG002"
     },
     "archiveUnits": [{
-            "binaryPath": "${BinaryPath}",
+            "binaryMasterDataObject" : {
+              "binaryVersion" : "BinaryMaster",
+              "binaryPath" : "${BinaryPath}"
+            },
             "titles": [{
                     "message": "${Title}"
                 }],

@@ -23,9 +23,7 @@ import fr.xelians.sipg.model.*;
 import fr.xelians.sipg.utils.DroidUtils;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -55,6 +53,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 import static fr.xelians.sipg.utils.SipUtils.ifNotBlank;
 import static fr.xelians.sipg.utils.SipUtils.ifNotNull;
@@ -227,33 +226,58 @@ class Sedav2Converter {
         dogt.getBinaryDataObjectOrPhysicalDataObject().add(pdot);
     }
 
-    private void addBinaryDataObjectType(DataObjectGroupType dogt, DataObjectRefType dor, ArchiveUnit unit) {
+    private void addBinaryDataObjectTypes(DataObjectGroupType dogt, DataObjectRefType dor, ArchiveUnit unit) {
+        int size = dogt.getBinaryDataObjectOrPhysicalDataObject().size();
+
+        if (unit.getBinaryMasterDataObject() != null) {
+            addBinaryDataObjectType(dogt, unit.getBinaryMasterDataObject());
+        }
+        if (unit.getDisseminationDataObject() != null) {
+            addBinaryDataObjectType(dogt, unit.getDisseminationDataObject());
+        }
+        if (unit.getThumbnailDataObject() != null) {
+            addBinaryDataObjectType(dogt, unit.getThumbnailDataObject());
+        }
+        if (unit.getTextContentDataObject() != null) {
+            addBinaryDataObjectType(dogt, unit.getTextContentDataObject());
+        }
+
+        if (dogt.getBinaryDataObjectOrPhysicalDataObject().size() != size) {
+            dor.setDataObjectGroupReferenceId(dogt);
+        }
+    }
+
+    private void addBinaryDataObjectType(DataObjectGroupType dogt, BinaryDataObject bdo) {
         boolean removePath = false;
-        Path binaryPath = unit.getBinaryPath();
+        Path binaryPath = bdo.getBinaryPath();
         if (binaryPath == null) {
-            binaryPath = unit.getBinaryPathSupplier().get();
+            Supplier<Path> bs = bdo.getBinaryPathSupplier();
+            if (bs == null) {
+                return;
+            }
+            binaryPath = bdo.getBinaryPathSupplier().get();
             removePath = true;
         }
 
         MessageDigestBinaryObjectType mdbot = sedav2Factory.createMessageDigestBinaryObjectType();
-        mdbot.setAlgorithm(unit.getDigestAlgorithm());
+        mdbot.setAlgorithm(bdo.getDigestAlgorithm());
 
         BinaryDataObjectType bdot = sedav2Factory.createBinaryDataObjectType();
         bdot.setId(incAndGetCounter());
-        bdot.setDataObjectVersion(unit.getBinaryVersion());
+        bdot.setDataObjectVersion(bdo.getBinaryVersion());
         bdot.setMessageDigest(mdbot);
 
-        if (StringUtils.isNotBlank(unit.getFormatId())) {
-            bdot.setFormatIdentification(toFormatIdentificationType(unit.getFormatId(), unit.getFormatName(), unit.getMimeType()));
+        FormatIdentification fmtId = bdo.getFormatIdentification();
+        if (StringUtils.isNotBlank(fmtId.getFormatId())) {
+            bdot.setFormatIdentification(toFormatIdentificationType(fmtId.getFormatId(), fmtId.getFormatName(), fmtId.getMimeType()));
         }
 
-        if (unit.getFileInfo() != null) {
-            bdot.setFileInfo(toFileInfoType(unit.getFileInfo(), binaryPath.getFileName().toString()));
+        FileInfo fileInfo = bdo.getFileInfo();
+        if (fileInfo != null) {
+            bdot.setFileInfo(toFileInfoType(fileInfo, binaryPath.getFileName().toString()));
         }
 
-        dor.setDataObjectGroupReferenceId(dogt);
         dogt.getBinaryDataObjectOrPhysicalDataObject().add(bdot);
-
         tasks.add(new ZipTask(binaryPath, removePath, bdot));
     }
 
@@ -277,9 +301,7 @@ class Sedav2Converter {
         }
 
         // Process Binary
-        if (unit.getBinaryPath() != null || unit.getBinaryPathSupplier() != null) {
-            addBinaryDataObjectType(dogt, dor, unit);
-        }
+        addBinaryDataObjectTypes(dogt, dor, unit);
 
         if (dor.getDataObjectGroupReferenceId() != null) {
             aut.getArchiveUnitOrDataObjectReferenceOrDataObjectGroup().add(dor);

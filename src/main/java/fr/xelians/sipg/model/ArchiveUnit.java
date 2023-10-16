@@ -21,6 +21,7 @@ package fr.xelians.sipg.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -48,6 +49,8 @@ import java.util.function.Supplier;
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class ArchiveUnit implements ArchiveUnitContainer {
+
+    public static final String PHYSICAL_MASTER = "PhysicalMaster";
 
     /**
      * La liste des évènements de l'unité d'archive. Un évènement correspond à toute opération concernant l'unité
@@ -139,44 +142,29 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     protected String physicalVersion;
 
     /**
-     * Le path de l'objet binaire.
+     * L'objet binaire de type binary master.
      */
-    protected Supplier<Path> binaryPathSupplier;
+    protected BinaryDataObject binaryMasterDataObject;
 
     /**
-     * Le path de l'objet binaire.
+     * L'objet binaire de type dissemination (publication).
      */
-    protected Path binaryPath;
+    protected BinaryDataObject disseminationDataObject;
+
     /**
-     * La version de l'objet binaire.
+     * L'objet binaire de type thumbnail (vignette).
      */
-    protected String binaryVersion;
+    protected BinaryDataObject thumbnailDataObject;
+
     /**
-     * L'identifiant du format de l'objet binaire. Il est fortement conseillé d'identifier le format de l'objet binaire
-     * selon le référentiel Pronom distribué par The British National Archives.
+     * L'objet binaire de type text content (contenu texte).
      */
-    protected String formatId;
-    /**
-     * Le nom du format de l'objet binaire. Il est fortement conseillé de nommer le format de l'objet binaire selon le
-     * référentiel Pronom distribué par The British National Archives.
-     */
-    protected String formatName;
-    /**
-     * Le type MIME (Multipurpose Internet Mail Extensions) de l'objet binaire.
-     */
-    protected String mimeType;
+    protected BinaryDataObject textContentDataObject;
+
     /**
      * Le statut de la signature de l'objet binaire.
      */
     protected String signatureStatus;
-    /**
-     * L'algorithme utilisé pour générer l'empreinte (hash) de l'objet binaire.
-     */
-    protected final String digestAlgorithm = "SHA-512";
-    /**
-     * Les informations techniques de l'objet binaire.
-     */
-    protected FileInfo fileInfo;
     /**
      * Le profile d’archivage applicable à l'unité d'archive.
      */
@@ -410,57 +398,723 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique le fournisseur du path de l'objet binaire.
+     * Indique l'objet binaire de type binary master.
      *
-     * @return le fournisseur du path de l'objet binaire
+     * @return l'objet binaire
      */
-    public Supplier<Path> getBinaryPathSupplier() {
-        return binaryPathSupplier;
+    public BinaryDataObject getBinaryMasterDataObject() {
+        return binaryMasterDataObject;
     }
 
     /**
-     * Spécifie le fournisseur du path de l'objet binaire.
+     * Indique l'objet binaire de type dissemination.
+     *
+     * @return l'objet binaire
+     */
+    public BinaryDataObject getDisseminationDataObject() {
+        return disseminationDataObject;
+    }
+
+    /**
+     * Indique l'objet binaire de type thumbnail.
+     *
+     * @return l'objet binaire
+     */
+    public BinaryDataObject getThumbnailDataObject() {
+        return thumbnailDataObject;
+    }
+
+    /**
+     * Indique l'objet binaire de type text content.
+     *
+     * @return l'objet binaire
+     */
+    public BinaryDataObject getTextContentDataObject() {
+        return textContentDataObject;
+    }
+
+    /**
+     * Indique le fournisseur du path de l'objet binaire de type binary master.
+     *
+     * @return le fournisseur du path de l'objet binaire
+     */
+    @JsonIgnore
+    public Supplier<Path> getBinaryPathSupplier() {
+        return binaryMasterDataObject == null ? null : binaryMasterDataObject.getBinaryPathSupplier();
+    }
+
+    /**
+     * Spécifie le fournisseur du path de l'objet binaire de type binary master.
      *
      * @param binaryPathSupplier le fournisseur du path de l'objet binaire
      */
     public void setBinaryPathSupplier(Supplier<Path> binaryPathSupplier) {
-        this.binaryPathSupplier = binaryPathSupplier;
+        if (binaryMasterDataObject == null) {
+            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+        }
+        binaryMasterDataObject.setBinaryPathSupplier(binaryPathSupplier);
     }
 
     /**
-     * Indique le path de l'objet binaire.
+     * Indique le path de l'objet binaire de type binary master.
      *
      * @return le path de l'objet binaire
      */
+    @JsonIgnore
     public Path getBinaryPath() {
-        return binaryPath;
+        return binaryMasterDataObject == null ? null : binaryMasterDataObject.getBinaryPath();
     }
 
     /**
-     * Spécifie le path de l'objet binaire.
+     * Spécifie le path de l'objet binaire de type binary master.
      *
      * @param binaryPath le path de l'objet binaire
      */
     public void setBinaryPath(Path binaryPath) {
-        this.binaryPath = binaryPath;
+        if (binaryMasterDataObject == null) {
+            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+        }
+        binaryMasterDataObject.setBinaryPath(binaryPath);
     }
 
     /**
-     * Indique la version de l'objet binaire.
+     * Indique la version de l'objet binaire de type binary master.
      *
      * @return la version de l'objet binaire
      */
+    @JsonIgnore
     public String getBinaryVersion() {
-        return binaryVersion;
+        return binaryMasterDataObject == null ? null : binaryMasterDataObject.getBinaryVersion();
     }
 
     /**
-     * Spécifie la version de l'objet binaire.
+     * Spécifie la version de l'objet binaire de type binary master.
      *
-     * @param objectVersion la version de l'objet binaire
+     * @param binaryVersion la version de l'objet binaire
      */
-    public void setBinaryVersion(String objectVersion) {
-        this.binaryVersion = objectVersion;
+    public void setBinaryVersion(String binaryVersion) {
+        if (binaryVersion == null || !binaryVersion.startsWith(BinaryDataObject.BINARY_MASTER)) {
+            throw new SipException(String.format("Binary version %s does not start with %s", binaryVersion, BinaryDataObject.BINARY_MASTER));
+        }
+        if (binaryMasterDataObject == null) {
+            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+        }
+        binaryMasterDataObject.setBinaryVersion(binaryVersion);
+    }
+
+    /**
+     * Indique l'algorithme utilisé pour générer l'empreinte (hash) de l'objet binaire de type binary master.
+     *
+     * @return l'algorithme utilisé
+     */
+    @JsonIgnore
+    public String getDigestAlgorithm() {
+        return binaryMasterDataObject == null ? null : binaryMasterDataObject.getDigestAlgorithm();
+    }
+
+    /**
+     * Indique les informations techniques de l'objet binaire de type binary master.
+     *
+     * @return les informations techniques
+     */
+    @JsonIgnore
+    public FileInfo getFileInfo() {
+        return binaryMasterDataObject == null ? null : binaryMasterDataObject.getFileInfo();
+    }
+
+    /**
+     * Spécifie les informations techniques de l'objet binaire de type binary master.
+     *
+     * @param fileInfo les informations techniques
+     */
+    public void setFileInfo(FileInfo fileInfo) {
+        if (binaryMasterDataObject == null) {
+            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+        }
+        binaryMasterDataObject.setFileInfo(fileInfo);
+    }
+
+    /**
+     * Indique l'identifiant du format de l'objet binaire de type binary master. Il est fortement conseillé
+     * d'identifier le format de l'objet binaire selon le référentiel Pronom édité par The British National Archives.
+     *
+     * @return l 'identifiant du format de l'objet binaire
+     */
+    @JsonIgnore
+    public String getFormatId() {
+        return binaryMasterDataObject == null ? null : binaryMasterDataObject.getFormatIdentification().getFormatId();
+    }
+
+    /**
+     * Spécifie l'identifiant du format de l'objet binaire de type binary master. Il est fortement conseillé
+     * d'identifier le format de l'objet binaire selon le référentiel Pronom édité par The British National Archives.
+     *
+     * @param formatId l'identifiant du format de l'objet binaire
+     */
+    public void setFormatId(String formatId) {
+        if (binaryMasterDataObject == null) {
+            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+        }
+        binaryMasterDataObject.getFormatIdentification().setFormatId(formatId);
+    }
+
+    /**
+     * Indique le nom du format de l'objet binaire de type binary master. Il est fortement conseillé
+     * de nommer le format de l'objet binaire selon le référentiel Pronom édité par The British National Archives.
+     *
+     * @return le nom du format de l'objet binaire
+     */
+    @JsonIgnore
+    public String getFormatName() {
+        return binaryMasterDataObject == null ? null : binaryMasterDataObject.getFormatIdentification().getFormatName();
+    }
+
+    /**
+     * Spécifie le nom du format de l'objet binaire de type binary master. Il est fortement conseillé
+     * de nommer le format de l'objet binaire selon le référentiel Pronom édite par The British National Archives.
+     *
+     * @param formatName le nom du format de l'objet binaire
+     */
+    public void setFormatName(String formatName) {
+        if (binaryMasterDataObject == null) {
+            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+        }
+        binaryMasterDataObject.getFormatIdentification().setFormatName(formatName);
+    }
+
+    /**
+     * Indique le type MIME (Multipurpose Internet Mail Extensions) de l'objet binaire de type binary master.
+     *
+     * @return le type MIME
+     */
+    @JsonIgnore
+    public String getMimeType() {
+        return binaryMasterDataObject == null ? null : binaryMasterDataObject.getFormatIdentification().getMimeType();
+    }
+
+    /**
+     * Spécifie le type MIME (Multipurpose Internet Mail Extensions) de l'objet binaire de type binary master.
+     *
+     * @param mimeType le type MIME
+     */
+    public void setMimeType(String mimeType) {
+        if (binaryMasterDataObject == null) {
+            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+        }
+        binaryMasterDataObject.getFormatIdentification().setMimeType(mimeType);
+    }
+
+    /**
+     * Indique le fournisseur du path de l'objet binaire de type dissemination (publication).
+     *
+     * @return le fournisseur du path de l'objet binaire
+     */
+    @JsonIgnore
+    public Supplier<Path> getDisseminationPathSupplier() {
+        return disseminationDataObject == null ? null : disseminationDataObject.getBinaryPathSupplier();
+    }
+
+    /**
+     * Spécifie le fournisseur du path de l'objet binaire de type dissemination (publication).
+     *
+     * @param binaryPathSupplier le fournisseur du path de l'objet binaire
+     */
+    public void setDisseminationPathSupplier(Supplier<Path> binaryPathSupplier) {
+        if (disseminationDataObject == null) {
+            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+        }
+        disseminationDataObject.setBinaryPathSupplier(binaryPathSupplier);
+    }
+
+    /**
+     * Indique le path de l'objet binaire de type dissemination (publication).
+     *
+     * @return le path de l'objet binaire
+     */
+    @JsonIgnore
+    public Path getDisseminationPath() {
+        return disseminationDataObject == null ? null : disseminationDataObject.getBinaryPath();
+    }
+
+    /**
+     * Spécifie le path de l'objet binaire de type dissemination (publication).
+     *
+     * @param binaryPath le path de l'objet binaire
+     */
+    public void setDisseminationPath(Path binaryPath) {
+        if (disseminationDataObject == null) {
+            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+        }
+        disseminationDataObject.setBinaryPath(binaryPath);
+    }
+
+    /**
+     * Indique la version de l'objet binaire de type dissemination (publication).
+     *
+     * @return la version de l'objet binaire
+     */
+    @JsonIgnore
+    public String getDisseminationVersion() {
+        return disseminationDataObject == null ? null : disseminationDataObject.getBinaryVersion();
+    }
+
+    /**
+     * Spécifie la version de l'objet binaire de type dissemination (publication).
+     *
+     * @param binaryVersion la version de l'objet binaire
+     */
+    public void setDisseminationVersion(String binaryVersion) {
+        if (binaryVersion == null || !binaryVersion.startsWith(BinaryDataObject.DISSEMINATION)) {
+            throw new SipException(String.format("Binary version %s does not start with %s", binaryVersion, BinaryDataObject.BINARY_MASTER));
+        }
+        if (disseminationDataObject == null) {
+            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+        }
+        disseminationDataObject.setBinaryVersion(binaryVersion);
+    }
+
+    /**
+     * Indique l'algorithme utilisé pour générer l'empreinte (hash) de l'objet binaire de type dissemination (publication).
+     *
+     * @return l'algorithme utilisé
+     */
+    @JsonIgnore
+    public String getDisseminationDigestAlgorithm() {
+        return disseminationDataObject == null ? null : disseminationDataObject.getDigestAlgorithm();
+    }
+
+    /**
+     * Indique les informations techniques de l'objet binaire de type dissemination (publication).
+     *
+     * @return les informations techniques
+     */
+    @JsonIgnore
+    public FileInfo getDisseminationFileInfo() {
+        return disseminationDataObject == null ? null : disseminationDataObject.getFileInfo();
+    }
+
+    /**
+     * Spécifie les informations techniques de l'objet binaire de type dissemination (publication).
+     *
+     * @param fileInfo les informations techniques
+     */
+    public void setDisseminationFileInfo(FileInfo fileInfo) {
+        if (disseminationDataObject == null) {
+            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+        }
+        disseminationDataObject.setFileInfo(fileInfo);
+    }
+
+    /**
+     * Indique l'identifiant du format de l'objet binaire de type dissemination (publication). Il est fortement conseillé
+     * d'identifier le format de l'objet binaire selon le référentiel Pronom édité par The British National Archives.
+     *
+     * @return l 'identifiant du format de l'objet binaire
+     */
+    @JsonIgnore
+    public String getDisseminationFormatId() {
+        return disseminationDataObject == null ? null : disseminationDataObject.getFormatIdentification().getFormatId();
+    }
+
+    /**
+     * Spécifie l'identifiant du format de l'objet binaire de type dissemination (publication). Il est fortement conseillé
+     * d'identifier le format de l'objet binaire selon le référentiel Pronom édité par The British National Archives.
+     *
+     * @param formatId l'identifiant du format de l'objet binaire
+     */
+    public void setDisseminationFormatId(String formatId) {
+        if (disseminationDataObject == null) {
+            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+        }
+        disseminationDataObject.getFormatIdentification().setFormatId(formatId);
+    }
+
+    /**
+     * Indique le nom du format de l'objet binaire de type dissemination (publication). Il est fortement conseillé
+     * de nommer le format de l'objet binaire selon le référentiel Pronom édité par The British National Archives.
+     *
+     * @return le nom du format de l'objet binaire
+     */
+    @JsonIgnore
+    public String getDisseminationFormatName() {
+        return disseminationDataObject == null ? null : disseminationDataObject.getFormatIdentification().getFormatName();
+    }
+
+    /**
+     * Spécifie le nom du format de l'objet binaire de type dissemination (publication). Il est fortement conseillé
+     * de nommer le format de l'objet binaire selon le référentiel Pronom édite par The British National Archives.
+     *
+     * @param formatName le nom du format de l'objet binaire
+     */
+    public void setDisseminationFormatName(String formatName) {
+        if (disseminationDataObject == null) {
+            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+        }
+        disseminationDataObject.getFormatIdentification().setFormatName(formatName);
+    }
+
+    /**
+     * Indique le type MIME (Multipurpose Internet Mail Extensions) de l'objet binaire de type dissemination (publication).
+     *
+     * @return le type MIME
+     */
+    @JsonIgnore
+    public String getDisseminationMimeType() {
+        return disseminationDataObject == null ? null : disseminationDataObject.getFormatIdentification().getMimeType();
+    }
+
+    /**
+     * Spécifie le type MIME (Multipurpose Internet Mail Extensions) de l'objet binaire de type dissemination (publication).
+     *
+     * @param mimeType le type MIME
+     */
+    public void setDisseminationMimeType(String mimeType) {
+        if (disseminationDataObject == null) {
+            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+        }
+        disseminationDataObject.getFormatIdentification().setMimeType(mimeType);
+    }
+
+    /**
+     * Indique le fournisseur du path de l'objet binaire de type thumbnail (vignette).
+     *
+     * @return le fournisseur du path de l'objet binaire
+     */
+    @JsonIgnore
+    public Supplier<Path> getThumbnailPathSupplier() {
+        return thumbnailDataObject == null ? null : thumbnailDataObject.getBinaryPathSupplier();
+    }
+
+    /**
+     * Spécifie le fournisseur du path de l'objet binaire de type thumbnail (vignette).
+     *
+     * @param binaryPathSupplier le fournisseur du path de l'objet binaire
+     */
+    public void setThumbnailPathSupplier(Supplier<Path> binaryPathSupplier) {
+        if (thumbnailDataObject == null) {
+            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+        }
+        thumbnailDataObject.setBinaryPathSupplier(binaryPathSupplier);
+    }
+
+    /**
+     * Indique le path de l'objet binaire de type thumbnail (vignette).
+     *
+     * @return le path de l'objet binaire
+     */
+    @JsonIgnore
+    public Path getThumbnailPath() {
+        return thumbnailDataObject == null ? null : thumbnailDataObject.getBinaryPath();
+    }
+
+    /**
+     * Spécifie le path de l'objet binaire de type thumbnail (vignette).
+     *
+     * @param binaryPath le path de l'objet binaire
+     */
+    public void setThumbnailPath(Path binaryPath) {
+        if (thumbnailDataObject == null) {
+            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+        }
+        thumbnailDataObject.setBinaryPath(binaryPath);
+    }
+
+    /**
+     * Indique la version de l'objet binaire de type thumbnail (vignette).
+     *
+     * @return la version de l'objet binaire
+     */
+    @JsonIgnore
+    public String getThumbnailVersion() {
+        return thumbnailDataObject == null ? null : thumbnailDataObject.getBinaryVersion();
+    }
+
+    /**
+     * Spécifie la version de l'objet binaire de type thumbnail (vignette).
+     *
+     * @param binaryVersion la version de l'objet binaire
+     */
+    public void setThumbnailVersion(String binaryVersion) {
+        if (binaryVersion == null || !binaryVersion.startsWith(BinaryDataObject.THUMBNAIL)) {
+            throw new SipException(String.format("Binary version %s does not start with %s", binaryVersion, BinaryDataObject.BINARY_MASTER));
+        }
+        if (thumbnailDataObject == null) {
+            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+        }
+        thumbnailDataObject.setBinaryVersion(binaryVersion);
+    }
+
+    /**
+     * Indique l'algorithme utilisé pour générer l'empreinte (hash) de l'objet binaire de type thumbnail (vignette).
+     *
+     * @return l'algorithme utilisé
+     */
+    @JsonIgnore
+    public String getThumbnailDigestAlgorithm() {
+        return thumbnailDataObject == null ? null : thumbnailDataObject.getDigestAlgorithm();
+    }
+
+    /**
+     * Indique les informations techniques de l'objet binaire de type thumbnail (vignette).
+     *
+     * @return les informations techniques
+     */
+    @JsonIgnore
+    public FileInfo getThumbnailFileInfo() {
+        return thumbnailDataObject == null ? null : thumbnailDataObject.getFileInfo();
+    }
+
+    /**
+     * Spécifie les informations techniques de l'objet binaire de type thumbnail (vignette).
+     *
+     * @param fileInfo les informations techniques
+     */
+    public void setThumbnailFileInfo(FileInfo fileInfo) {
+        if (thumbnailDataObject == null) {
+            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+        }
+        thumbnailDataObject.setFileInfo(fileInfo);
+    }
+
+    /**
+     * Indique l'identifiant du format de l'objet binaire de type thumbnail (vignette). Il est fortement conseillé
+     * d'identifier le format de l'objet binaire selon le référentiel Pronom édité par The British National Archives.
+     *
+     * @return l 'identifiant du format de l'objet binaire
+     */
+    @JsonIgnore
+    public String getThumbnailFormatId() {
+        return thumbnailDataObject == null ? null : thumbnailDataObject.getFormatIdentification().getFormatId();
+    }
+
+    /**
+     * Spécifie l'identifiant du format de l'objet binaire de type thumbnail (vignette). Il est fortement conseillé
+     * d'identifier le format de l'objet binaire selon le référentiel Pronom édité par The British National Archives.
+     *
+     * @param formatId l'identifiant du format de l'objet binaire
+     */
+    public void setThumbnailFormatId(String formatId) {
+        if (thumbnailDataObject == null) {
+            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+        }
+        thumbnailDataObject.getFormatIdentification().setFormatId(formatId);
+    }
+
+    /**
+     * Indique le nom du format de l'objet binaire  de type thumbnail (vignette). Il est fortement conseillé
+     * de nommer le format de l'objet binaire selon le référentiel Pronom édité par The British National Archives.
+     *
+     * @return le nom du format de l'objet binaire
+     */
+    @JsonIgnore
+    public String getThumbnailFormatName() {
+        return thumbnailDataObject == null ? null : thumbnailDataObject.getFormatIdentification().getFormatName();
+    }
+
+    /**
+     * Spécifie le nom du format de l'objet binaire  de type thumbnail (vignette). Il est fortement conseillé
+     * de nommer le format de l'objet binaire selon le référentiel Pronom édite par The British National Archives.
+     *
+     * @param formatName le nom du format de l'objet binaire
+     */
+    public void setThumbnailFormatName(String formatName) {
+        if (thumbnailDataObject == null) {
+            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+        }
+        thumbnailDataObject.getFormatIdentification().setFormatName(formatName);
+    }
+
+    /**
+     * Indique le type MIME (Multipurpose Internet Mail Extensions) de l'objet binaire de type thumbnail (vignette).
+     *
+     * @return le type MIME
+     */
+    @JsonIgnore
+    public String getThumbnailMimeType() {
+        return thumbnailDataObject == null ? null : thumbnailDataObject.getFormatIdentification().getMimeType();
+    }
+
+    /**
+     * Spécifie le type MIME (Multipurpose Internet Mail Extensions) de l'objet binaire de type thumbnail (vignette).
+     *
+     * @param mimeType le type MIME
+     */
+    public void setThumbnailMimeType(String mimeType) {
+        if (thumbnailDataObject == null) {
+            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+        }
+        thumbnailDataObject.getFormatIdentification().setMimeType(mimeType);
+    }
+
+    /**
+     * Indique le fournisseur du path de l'objet binaire de type text content (contenu texte).
+     *
+     * @return le fournisseur du path de l'objet binaire
+     */
+    @JsonIgnore
+    public Supplier<Path> getTextContentPathSupplier() {
+        return textContentDataObject == null ? null : textContentDataObject.getBinaryPathSupplier();
+    }
+
+    /**
+     * Spécifie le fournisseur du path de l'objet binaire de type text content (contenu texte).
+     *
+     * @param binaryPathSupplier le fournisseur du path de l'objet binaire
+     */
+    public void setTextContentPathSupplier(Supplier<Path> binaryPathSupplier) {
+        if (textContentDataObject == null) {
+            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+        }
+        textContentDataObject.setBinaryPathSupplier(binaryPathSupplier);
+    }
+
+    /**
+     * Indique le path de l'objet binaire de type text content (contenu texte).
+     *
+     * @return le path de l'objet binaire
+     */
+    @JsonIgnore
+    public Path getTextContentPath() {
+        return textContentDataObject == null ? null : textContentDataObject.getBinaryPath();
+    }
+
+    /**
+     * Spécifie le path de l'objet binaire de type text content (contenu texte).
+     *
+     * @param binaryPath le path de l'objet binaire
+     */
+    public void setTextContentPath(Path binaryPath) {
+        if (textContentDataObject == null) {
+            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+        }
+        textContentDataObject.setBinaryPath(binaryPath);
+    }
+
+    /**
+     * Indique la version de l'objet binaire de type text content (contenu texte).
+     *
+     * @return la version de l'objet binaire
+     */
+    @JsonIgnore
+    public String getTextContentVersion() {
+        return textContentDataObject == null ? null : textContentDataObject.getBinaryVersion();
+    }
+
+    /**
+     * Spécifie la version de l'objet binaire de type text content (contenu texte).
+     *
+     * @param binaryVersion la version de l'objet binaire
+     */
+    public void setTextContentVersion(String binaryVersion) {
+        if (binaryVersion == null || !binaryVersion.startsWith(BinaryDataObject.TEXT_CONTENT)) {
+            throw new SipException(String.format("Binary version %s does not start with %s", binaryVersion, BinaryDataObject.BINARY_MASTER));
+        }
+        if (textContentDataObject == null) {
+            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+        }
+        textContentDataObject.setBinaryVersion(binaryVersion);
+    }
+
+    /**
+     * Indique l'algorithme utilisé pour générer l'empreinte (hash) de l'objet binaire de type text content (contenu texte).
+     *
+     * @return l'algorithme utilisé
+     */
+    @JsonIgnore
+    public String getTextContentDigestAlgorithm() {
+        return textContentDataObject == null ? null : textContentDataObject.getDigestAlgorithm();
+    }
+
+    /**
+     * Indique les informations techniques de l'objet binaire de type text content (contenu texte).
+     *
+     * @return les informations techniques
+     */
+    @JsonIgnore
+    public FileInfo getTextContentFileInfo() {
+        return textContentDataObject == null ? null : textContentDataObject.getFileInfo();
+    }
+
+    /**
+     * Spécifie les informations techniques de l'objet binaire de type text content (contenu texte).
+     *
+     * @param fileInfo les informations techniques
+     */
+    public void setTextContentFileInfo(FileInfo fileInfo) {
+        if (textContentDataObject == null) {
+            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+        }
+        textContentDataObject.setFileInfo(fileInfo);
+    }
+
+    /**
+     * Indique l'identifiant du format de l'objet binaire de type text content (contenu texte). Il est fortement conseillé
+     * d'identifier le format de l'objet binaire selon le référentiel Pronom édité par The British National Archives.
+     *
+     * @return l 'identifiant du format de l'objet binaire
+     */
+    @JsonIgnore
+    public String getTextContentFormatId() {
+        return textContentDataObject == null ? null : textContentDataObject.getFormatIdentification().getFormatId();
+    }
+
+    /**
+     * Spécifie l'identifiant du format de l'objet binaire de type text content (contenu texte). Il est fortement conseillé
+     * d'identifier le format de l'objet binaire selon le référentiel Pronom édité par The British National Archives.
+     *
+     * @param formatId l'identifiant du format de l'objet binaire
+     */
+    public void setTextContentFormatId(String formatId) {
+        if (textContentDataObject == null) {
+            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+        }
+        textContentDataObject.getFormatIdentification().setFormatId(formatId);
+    }
+
+    /**
+     * Indique le nom du format de l'objet binaire de type text content (contenu texte). Il est fortement conseillé
+     * de nommer le format de l'objet binaire selon le référentiel Pronom édité par The British National Archives.
+     *
+     * @return le nom du format de l'objet binaire
+     */
+    @JsonIgnore
+    public String getTextContentFormatName() {
+        return textContentDataObject == null ? null : textContentDataObject.getFormatIdentification().getFormatName();
+    }
+
+    /**
+     * Spécifie le nom du format de l'objet binaire de type text content (contenu texte). Il est fortement conseillé
+     * de nommer le format de l'objet binaire selon le référentiel Pronom édite par The British National Archives.
+     *
+     * @param formatName le nom du format de l'objet binaire
+     */
+    public void setTextContentFormatName(String formatName) {
+        if (textContentDataObject == null) {
+            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+        }
+        textContentDataObject.getFormatIdentification().setFormatName(formatName);
+    }
+
+    /**
+     * Indique le type MIME (Multipurpose Internet Mail Extensions) de l'objet binaire de type text content (contenu texte).
+     *
+     * @return le type MIME
+     */
+    @JsonIgnore
+    public String getTextContentMimeType() {
+        return textContentDataObject == null ? null : textContentDataObject.getFormatIdentification().getMimeType();
+    }
+
+    /**
+     * Spécifie le type MIME (Multipurpose Internet Mail Extensions) de l'objet binaire de type text content (contenu texte).
+     *
+     * @param mimeType le type MIME
+     */
+    public void setTextContentMimeType(String mimeType) {
+        if (textContentDataObject == null) {
+            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+        }
+        textContentDataObject.getFormatIdentification().setMimeType(mimeType);
     }
 
     /**
@@ -481,81 +1135,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
         this.physicalVersion = physicalVersion;
     }
 
-    /**
-     * Indique l'identifiant du format de l'objet binaire. Il est fortement conseillé d'identifier le format de l'objet
-     * binaire selon le référentiel Pronom édité par The British National Archives.
-     *
-     * @return l 'identifiant du format de l'objet binaire
-     */
-    public String getFormatId() {
-        return formatId;
-    }
-
-    /**
-     * Spécifie l'identifiant du format de l'objet binaire. Il est fortement conseillé d'identifier le format de l'objet
-     * binaire selon le référentiel Pronom édité par The British National Archives.
-     *
-     * @param formatId l'identifiant du format de l'objet binaire
-     */
-    public void setFormatId(String formatId) {
-        this.formatId = formatId;
-    }
-
-    /**
-     * Indique le nom du format de l'objet binaire. Il est fortement conseillé de nommer le format de l'objet binaire
-     * selon le référentiel Pronom édité par The British National Archives.
-     *
-     * @return le nom du format de l'objet binaire
-     */
-    public String getFormatName() {
-        return formatName;
-    }
-
-    /**
-     * Spécifie le nom du format de l'objet binaire. Il est fortement conseillé de nommer le format de l'objet binaire
-     * selon le référentiel Pronom édite par The British National Archives.
-     *
-     * @param formatName le nom du format de l'objet binaire
-     */
-    public void setFormatName(String formatName) {
-        this.formatName = formatName;
-    }
-
-    /**
-     * Indique le type MIME (Multipurpose Internet Mail Extensions) de l'objet binaire.
-     *
-     * @return le type MIME
-     */
-    public String getMimeType() {
-        return mimeType;
-    }
-
-    /**
-     * Spécifie le type MIME (Multipurpose Internet Mail Extensions) de l'objet binaire.
-     *
-     * @param mimeType le type MIME
-     */
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
-    }
-
-    /**
-     * Indique les informations techniques de l'objet binaire.
-     *
-     * @return les informations techniques
-     */
-    public FileInfo getFileInfo() {
-        return fileInfo;
-    }
-
-    /**
-     * Spécifie les informations techniques de l'objet binaire.
-     *
-     * @param fileInfo les informations techniques
-     */
-    public void setFileInfo(FileInfo fileInfo) {
-        this.fileInfo = fileInfo;
-    }
 
     /**
      * Indique le statut de la signature de l'objet binaire.
@@ -573,15 +1152,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setSignatureStatus(String signatureStatus) {
         this.signatureStatus = signatureStatus;
-    }
-
-    /**
-     * Indique l'algorithme utilisé pour générer l'empreinte (hash) de l'objet binaire.
-     *
-     * @return l'algorithme utilisé
-     */
-    public String getDigestAlgorithm() {
-        return digestAlgorithm;
     }
 
     /**
@@ -2019,7 +2589,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void addReference(ArchiveUnitRef reference) {
         Validate.notNull(reference, SipUtils.NOT_NULL, "reference");
-	    references.add(reference);
+        references.add(reference);
     }
 
     /**
@@ -2041,7 +2611,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     public List<ArchiveUnitRef> getReferences() {
         return new ArrayList<>(references);
     }
-    
+
     /**
      * Ajoute l'élément à la liste des éléments étendus qui n'appartiennent pas à l'ontolgie standard.
      *

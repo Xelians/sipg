@@ -72,6 +72,12 @@ public class FileInfo {
 
     /**
      * Instancie la classe.
+     */
+    public FileInfo() {
+    }
+
+    /**
+     * Instancie la classe.
      *
      * @param filename                   le nom du fichier d'origine
      * @param creatingApplicationName    le nom de l'application utilisée pour créer le fichier
