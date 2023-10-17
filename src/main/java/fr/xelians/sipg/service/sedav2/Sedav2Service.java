@@ -24,8 +24,8 @@ import fr.xelians.sipg.service.common.ProgressEvent;
 import fr.xelians.sipg.service.common.ProgressListener;
 import fr.xelians.sipg.service.common.ProgressState;
 import fr.xelians.sipg.utils.ByteArrayInOutStream;
-import fr.xelians.sipg.utils.SipUtils;
 import fr.xelians.sipg.utils.SipException;
+import fr.xelians.sipg.utils.SipUtils;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -70,10 +70,11 @@ import static fr.xelians.sipg.service.common.ProgressState.SUCCESS;
  */
 public class Sedav2Service {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Sedav2Service.class);
-
-    private static final Sedav2Service INSTANCE = new Sedav2Service();
     private static final String HTTP_WWW_W3_ORG_XML_XML_SCHEMA_V1_1 = "http://www.w3.org/XML/XMLSchema/v1.1";
+    public static final String HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Sedav2Service.class);
+    private static final Sedav2Service INSTANCE = new Sedav2Service();
 
     private final JAXBContext sedaContext;
     private final Schema sedaSchema;
@@ -91,7 +92,7 @@ public class Sedav2Service {
              InputStream is3 = SipUtils.resourceAsStream("xlink.xsd")) {
 
             SchemaFactory sf = SchemaFactory.newInstance(HTTP_WWW_W3_ORG_XML_XML_SCHEMA_V1_1);
-            sf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true); // Avoid XXE
+            sf.setFeature(HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL, true); // Avoid XXE
             sf.setResourceResolver(new Sedav2Resolver(is2, is3));
             sedaSchema = sf.newSchema(new StreamSource(is1));
             sedaContext = JAXBContext.newInstance(fr.gouv.culture.archivesdefrance.seda.v2.ObjectFactory.class);
@@ -374,7 +375,7 @@ public class Sedav2Service {
 
         try {
             Validator sedaValidator = sedaSchema.newValidator();
-            sedaValidator.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            sedaValidator.setFeature(HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL, true);
             sedaValidator.validate(source);
         } catch (IOException | SAXException ex) {
             throw new SipException("Unable to validate " + source, ex);
@@ -422,7 +423,7 @@ public class Sedav2Service {
             try {
                 Files.copy(manifestPath, manifest);
                 Validator sedaValidator = sedaSchema.newValidator();
-                sedaValidator.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                sedaValidator.setFeature(HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL, true);
                 sedaValidator.validate(new StreamSource(manifest.getInputStream()));
             } catch (IOException | SAXException ex) {
                 String msg = "Unable to validate manifest: " + zipPath;

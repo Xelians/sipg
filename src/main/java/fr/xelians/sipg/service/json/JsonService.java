@@ -24,8 +24,8 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import fr.xelians.sipg.model.ArchiveTransfer;
-import fr.xelians.sipg.utils.SipUtils;
 import fr.xelians.sipg.utils.SipException;
+import fr.xelians.sipg.utils.SipUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.io.IOException;

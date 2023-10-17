@@ -40,7 +40,7 @@ public abstract class RelationRef<T> {
      *
      * @param reference la référence
      */
-    public RelationRef(T reference) {
+    protected RelationRef(T reference) {
         Validate.notNull(reference, SipUtils.NOT_NULL, "reference");
         this.reference = reference;
     }

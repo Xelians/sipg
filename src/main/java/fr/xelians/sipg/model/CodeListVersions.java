@@ -131,6 +131,7 @@ public class CodeListVersions {
      * Instancie l'objet.
      */
     public CodeListVersions() {
+        // Nothing to do here
     }
 
     /**

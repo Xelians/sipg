@@ -483,7 +483,7 @@ class Sedav2Converter {
                 ArchiveUnit au = ref.getReference();
                 ArchiveUnitType reference = archiveMap.get(au);
                 if (reference == null) {
-                    throw new SipException("The related referenced archive unit does not exist in this archive");
+                    throw new SipException("The related referenced archive unit does not exist in the sip");
                 }
                 ArchiveUnitType referenceArchiveUnitType = new ArchiveUnitType();
 
@@ -540,7 +540,7 @@ class Sedav2Converter {
                 ArchiveUnit au = (ArchiveUnit) relationRef.getReference();
                 ArchiveUnitType aut = archiveMap.get(au);
                 if (aut == null) {
-                    throw new SipException("The related referenced archive unit does not exist in this archive");
+                    throw new SipException("The related referenced archive unit does not exist in the sip");
                 }
                 dooaurt.setArchiveUnitRefId(aut);
             });
@@ -549,7 +549,7 @@ class Sedav2Converter {
                 ArchiveUnit au = (ArchiveUnit) relationRef.getReference();
                 ArchiveUnitType aut = archiveMap.get(au);
                 if (aut == null) {
-                    throw new SipException("The related referenced archive unit does not exist in this archive");
+                    throw new SipException("The related referenced archive unit does not exist in the sip");
                 }
                 List<Object> objs = aut.getArchiveUnitOrDataObjectReferenceOrDataObjectGroup();
                 Optional<DataObjectRefType> opt = objs.stream().filter(DataObjectRefType.class::isInstance).map(e -> (DataObjectRefType) e).findFirst();

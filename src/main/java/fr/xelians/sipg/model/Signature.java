@@ -61,6 +61,7 @@ public class Signature {
      * Instancie la classe.
      */
     public Signature() {
+        // Do nothing here
     }
 
     /**

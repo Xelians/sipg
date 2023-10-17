@@ -23,8 +23,8 @@ import fr.xelians.sipg.service.common.ProgressEvent;
 import fr.xelians.sipg.service.common.ProgressListener;
 import fr.xelians.sipg.service.common.ProgressState;
 import fr.xelians.sipg.utils.ByteArrayInOutStream;
-import fr.xelians.sipg.utils.SipUtils;
 import fr.xelians.sipg.utils.SipException;
+import fr.xelians.sipg.utils.SipUtils;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -70,8 +70,9 @@ import java.util.concurrent.ExecutionException;
  */
 public class Fntcv4Service {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Fntcv4Service.class);
+    public static final String HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Fntcv4Service.class);
     private static final Fntcv4Service INSTANCE = new Fntcv4Service();
 
     private final JAXBContext fntcContext;
@@ -86,7 +87,7 @@ public class Fntcv4Service {
              InputStream is4 = SipUtils.resourceAsStream("xlink.xsd")) {
 
             SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            sf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true); // Avoid XXE
+            sf.setFeature(HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL, true); // Avoid XXE
             sf.setResourceResolver(new Fntcv4Resolver(is2, is3, is4));
             fntcSchema = sf.newSchema(new StreamSource(is1));
             fntcContext = JAXBContext.newInstance(org.afnor.medona.v1.ObjectFactory.class,
@@ -369,7 +370,7 @@ public class Fntcv4Service {
 
         try {
             Validator fntcValidator = fntcSchema.newValidator();
-            fntcValidator.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            fntcValidator.setFeature(HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL, true);
             fntcValidator.validate(source);
         } catch (IOException | SAXException ex) {
             throw new SipException("Unable to validate " + source, ex);
@@ -417,7 +418,7 @@ public class Fntcv4Service {
             try {
                 Files.copy(manifestPath, manifest);
                 Validator fntcValidator = fntcSchema.newValidator();
-                fntcValidator.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                fntcValidator.setFeature(HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL, true);
                 fntcValidator.validate(new StreamSource(manifest.getInputStream()));
             } catch (IOException | SAXException ex) {
                 String msg = "Unable to validate manifest for " + zipPath;

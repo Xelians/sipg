@@ -19,9 +19,6 @@
 
 package fr.xelians.sipg.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.xelians.sipg.utils.SipException;
 import org.apache.commons.lang3.Validate;
 
 import java.nio.file.Path;
@@ -29,16 +26,15 @@ import java.util.function.Supplier;
 
 import static fr.xelians.sipg.utils.SipUtils.NOT_NULL;
 
-public class BinaryDataObject {
+public abstract  class BinaryDataObject {
 
     public static final String BINARY_MASTER = "BinaryMaster";
     public static final String DISSEMINATION = "Dissemination";
     public static final String THUMBNAIL = "Thumbnail";
     public static final String TEXT_CONTENT = "TextContent";
+
     //    @JsonIgnore
     protected String xmlId;
-
-    protected Long binaryId;
 
     /**
      * Le path de l'objet binaire.
@@ -53,8 +49,6 @@ public class BinaryDataObject {
     protected String binaryVersion;
 
     protected FormatIdentification formatIdentification = new FormatIdentification();
-
-    protected String messageDigest;
 
     protected long size;
 
@@ -74,13 +68,7 @@ public class BinaryDataObject {
      *
      * @param qualifier the qualifier
      */
-    @JsonCreator
-    public BinaryDataObject(@JsonProperty("binaryVersion") String qualifier) {
-        Validate.notNull(qualifier, NOT_NULL, "qualifier");
-        if (!qualifier.startsWith(BINARY_MASTER) && !qualifier.startsWith(DISSEMINATION)
-                && !qualifier.startsWith(THUMBNAIL) && !qualifier.startsWith(TEXT_CONTENT)) {
-            throw new SipException(String.format("Invalid qualifier %s", qualifier));
-        }
+    protected BinaryDataObject(String qualifier) {
         this.binaryVersion = qualifier;
     }
 
@@ -134,12 +122,7 @@ public class BinaryDataObject {
      *
      * @param objectVersion la version de l'objet binaire
      */
-    public void setBinaryVersion(String objectVersion) {
-        if (objectVersion == null || objectVersion.length() < 5 || !objectVersion.substring(0, 4).equals(binaryVersion.substring(0, 4))) {
-            throw new SipException(String.format("The qualifier of type %s cannot be modified to %s", binaryVersion, objectVersion));
-        }
-        this.binaryVersion = objectVersion;
-    }
+    public abstract void setBinaryVersion(String objectVersion) ;
 
     /**
      * Indique l'algorithme utilisé pour générer l'empreinte (hash) de l'objet binaire.

@@ -20,8 +20,8 @@ package fr.xelians.sipg.service.fntcv4;
 
 import fr.xelians.sipg.model.*;
 import fr.xelians.sipg.utils.DroidUtils;
-import fr.xelians.sipg.utils.SipUtils;
 import fr.xelians.sipg.utils.SipException;
+import fr.xelians.sipg.utils.SipUtils;
 import org.afnor.medona.v1.*;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FilenameUtils;

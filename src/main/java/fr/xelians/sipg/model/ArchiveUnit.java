@@ -21,7 +21,6 @@ package fr.xelians.sipg.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -144,22 +143,22 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * L'objet binaire de type binary master.
      */
-    protected BinaryDataObject binaryMasterDataObject;
+    protected MasterDataObject binaryMasterDataObject;
 
     /**
      * L'objet binaire de type dissemination (publication).
      */
-    protected BinaryDataObject disseminationDataObject;
+    protected DisseminationDataObject disseminationDataObject;
 
     /**
      * L'objet binaire de type thumbnail (vignette).
      */
-    protected BinaryDataObject thumbnailDataObject;
+    protected ThumbnailDataObject thumbnailDataObject;
 
     /**
      * L'objet binaire de type text content (contenu texte).
      */
-    protected BinaryDataObject textContentDataObject;
+    protected TextContentDataObject textContentDataObject;
 
     /**
      * Le statut de la signature de l'objet binaire.
@@ -282,7 +281,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * La référence à un objet faisant ou ne faisant pas partie du présent paquet d'information.
      */
-// TODO: implement deserialization for RelatedObjectRef (serialization is done)
+    // TODO: implement deserialization for RelatedObjectRef (serialization is done)
     @JsonIgnore
     protected RelatedObjectRef relation;
     /**
@@ -359,6 +358,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * Instancie la classe.
      */
     public ArchiveUnit() {
+        // Do nothing here
     }
 
     /**
@@ -450,7 +450,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setBinaryPathSupplier(Supplier<Path> binaryPathSupplier) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+            binaryMasterDataObject = new MasterDataObject();
         }
         binaryMasterDataObject.setBinaryPathSupplier(binaryPathSupplier);
     }
@@ -472,7 +472,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setBinaryPath(Path binaryPath) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+            binaryMasterDataObject = new MasterDataObject();
         }
         binaryMasterDataObject.setBinaryPath(binaryPath);
     }
@@ -493,11 +493,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryVersion la version de l'objet binaire
      */
     public void setBinaryVersion(String binaryVersion) {
-        if (binaryVersion == null || !binaryVersion.startsWith(BinaryDataObject.BINARY_MASTER)) {
-            throw new SipException(String.format("Binary version %s does not start with %s", binaryVersion, BinaryDataObject.BINARY_MASTER));
-        }
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+            binaryMasterDataObject = new MasterDataObject();
         }
         binaryMasterDataObject.setBinaryVersion(binaryVersion);
     }
@@ -529,7 +526,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setFileInfo(FileInfo fileInfo) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+            binaryMasterDataObject = new MasterDataObject();
         }
         binaryMasterDataObject.setFileInfo(fileInfo);
     }
@@ -553,7 +550,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setFormatId(String formatId) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+            binaryMasterDataObject = new MasterDataObject();
         }
         binaryMasterDataObject.getFormatIdentification().setFormatId(formatId);
     }
@@ -577,7 +574,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setFormatName(String formatName) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+            binaryMasterDataObject = new MasterDataObject();
         }
         binaryMasterDataObject.getFormatIdentification().setFormatName(formatName);
     }
@@ -599,7 +596,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setMimeType(String mimeType) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryDataObject(BinaryDataObject.BINARY_MASTER);
+            binaryMasterDataObject = new MasterDataObject();
         }
         binaryMasterDataObject.getFormatIdentification().setMimeType(mimeType);
     }
@@ -621,7 +618,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setDisseminationPathSupplier(Supplier<Path> binaryPathSupplier) {
         if (disseminationDataObject == null) {
-            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+            disseminationDataObject = new DisseminationDataObject();
         }
         disseminationDataObject.setBinaryPathSupplier(binaryPathSupplier);
     }
@@ -643,7 +640,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setDisseminationPath(Path binaryPath) {
         if (disseminationDataObject == null) {
-            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+            disseminationDataObject = new DisseminationDataObject();
         }
         disseminationDataObject.setBinaryPath(binaryPath);
     }
@@ -664,11 +661,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryVersion la version de l'objet binaire
      */
     public void setDisseminationVersion(String binaryVersion) {
-        if (binaryVersion == null || !binaryVersion.startsWith(BinaryDataObject.DISSEMINATION)) {
-            throw new SipException(String.format("Binary version %s does not start with %s", binaryVersion, BinaryDataObject.BINARY_MASTER));
-        }
         if (disseminationDataObject == null) {
-            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+            disseminationDataObject = new DisseminationDataObject();
         }
         disseminationDataObject.setBinaryVersion(binaryVersion);
     }
@@ -700,7 +694,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setDisseminationFileInfo(FileInfo fileInfo) {
         if (disseminationDataObject == null) {
-            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+            disseminationDataObject = new DisseminationDataObject();
         }
         disseminationDataObject.setFileInfo(fileInfo);
     }
@@ -724,7 +718,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setDisseminationFormatId(String formatId) {
         if (disseminationDataObject == null) {
-            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+            disseminationDataObject = new DisseminationDataObject();
         }
         disseminationDataObject.getFormatIdentification().setFormatId(formatId);
     }
@@ -748,7 +742,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setDisseminationFormatName(String formatName) {
         if (disseminationDataObject == null) {
-            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+            disseminationDataObject = new DisseminationDataObject();
         }
         disseminationDataObject.getFormatIdentification().setFormatName(formatName);
     }
@@ -770,7 +764,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setDisseminationMimeType(String mimeType) {
         if (disseminationDataObject == null) {
-            disseminationDataObject = new BinaryDataObject(BinaryDataObject.DISSEMINATION);
+            disseminationDataObject = new DisseminationDataObject();
         }
         disseminationDataObject.getFormatIdentification().setMimeType(mimeType);
     }
@@ -792,7 +786,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setThumbnailPathSupplier(Supplier<Path> binaryPathSupplier) {
         if (thumbnailDataObject == null) {
-            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+            thumbnailDataObject = new ThumbnailDataObject();
         }
         thumbnailDataObject.setBinaryPathSupplier(binaryPathSupplier);
     }
@@ -814,7 +808,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setThumbnailPath(Path binaryPath) {
         if (thumbnailDataObject == null) {
-            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+            thumbnailDataObject = new ThumbnailDataObject();
         }
         thumbnailDataObject.setBinaryPath(binaryPath);
     }
@@ -835,11 +829,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryVersion la version de l'objet binaire
      */
     public void setThumbnailVersion(String binaryVersion) {
-        if (binaryVersion == null || !binaryVersion.startsWith(BinaryDataObject.THUMBNAIL)) {
-            throw new SipException(String.format("Binary version %s does not start with %s", binaryVersion, BinaryDataObject.BINARY_MASTER));
-        }
         if (thumbnailDataObject == null) {
-            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+            thumbnailDataObject = new ThumbnailDataObject();
         }
         thumbnailDataObject.setBinaryVersion(binaryVersion);
     }
@@ -871,7 +862,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setThumbnailFileInfo(FileInfo fileInfo) {
         if (thumbnailDataObject == null) {
-            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+            thumbnailDataObject = new ThumbnailDataObject();
         }
         thumbnailDataObject.setFileInfo(fileInfo);
     }
@@ -895,7 +886,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setThumbnailFormatId(String formatId) {
         if (thumbnailDataObject == null) {
-            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+            thumbnailDataObject = new ThumbnailDataObject();
         }
         thumbnailDataObject.getFormatIdentification().setFormatId(formatId);
     }
@@ -919,7 +910,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setThumbnailFormatName(String formatName) {
         if (thumbnailDataObject == null) {
-            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+            thumbnailDataObject = new ThumbnailDataObject();
         }
         thumbnailDataObject.getFormatIdentification().setFormatName(formatName);
     }
@@ -941,7 +932,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setThumbnailMimeType(String mimeType) {
         if (thumbnailDataObject == null) {
-            thumbnailDataObject = new BinaryDataObject(BinaryDataObject.THUMBNAIL);
+            thumbnailDataObject = new ThumbnailDataObject();
         }
         thumbnailDataObject.getFormatIdentification().setMimeType(mimeType);
     }
@@ -963,7 +954,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setTextContentPathSupplier(Supplier<Path> binaryPathSupplier) {
         if (textContentDataObject == null) {
-            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+            textContentDataObject = new TextContentDataObject();
         }
         textContentDataObject.setBinaryPathSupplier(binaryPathSupplier);
     }
@@ -985,7 +976,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setTextContentPath(Path binaryPath) {
         if (textContentDataObject == null) {
-            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+            textContentDataObject = new TextContentDataObject();
         }
         textContentDataObject.setBinaryPath(binaryPath);
     }
@@ -1006,11 +997,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryVersion la version de l'objet binaire
      */
     public void setTextContentVersion(String binaryVersion) {
-        if (binaryVersion == null || !binaryVersion.startsWith(BinaryDataObject.TEXT_CONTENT)) {
-            throw new SipException(String.format("Binary version %s does not start with %s", binaryVersion, BinaryDataObject.BINARY_MASTER));
-        }
         if (textContentDataObject == null) {
-            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+            textContentDataObject = new TextContentDataObject();
         }
         textContentDataObject.setBinaryVersion(binaryVersion);
     }
@@ -1042,7 +1030,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setTextContentFileInfo(FileInfo fileInfo) {
         if (textContentDataObject == null) {
-            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+            textContentDataObject = new TextContentDataObject();
         }
         textContentDataObject.setFileInfo(fileInfo);
     }
@@ -1066,7 +1054,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setTextContentFormatId(String formatId) {
         if (textContentDataObject == null) {
-            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+            textContentDataObject = new TextContentDataObject();
         }
         textContentDataObject.getFormatIdentification().setFormatId(formatId);
     }
@@ -1090,7 +1078,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setTextContentFormatName(String formatName) {
         if (textContentDataObject == null) {
-            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+            textContentDataObject = new TextContentDataObject();
         }
         textContentDataObject.getFormatIdentification().setFormatName(formatName);
     }
@@ -1112,7 +1100,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setTextContentMimeType(String mimeType) {
         if (textContentDataObject == null) {
-            textContentDataObject = new BinaryDataObject(BinaryDataObject.TEXT_CONTENT);
+            textContentDataObject = new TextContentDataObject();
         }
         textContentDataObject.getFormatIdentification().setMimeType(mimeType);
     }
