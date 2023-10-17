@@ -21,6 +21,7 @@ package fr.xelians.sipg.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -434,6 +435,21 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
+     * Fournit l'objet binaire de type qualifier. Si l'objet n'existe pas, il est alors créé.
+     *
+     * @return l'objet binaire
+     */
+    public BinaryDataObject provideBinaryDataObject(String qualifier) {
+        return switch (qualifier) {
+            case BinaryDataObject.BINARY_MASTER -> provideBinaryMasterDataObject();
+            case BinaryDataObject.DISSEMINATION -> provideDisseminationDataObject();
+            case BinaryDataObject.THUMBNAIL -> provideThumbnailDataObject();
+            case BinaryDataObject.TEXT_CONTENT -> provideTextContentDataObject();
+            default -> throw new SipException(String.format("Unknown qualifier %s", qualifier));
+        };
+    }
+
+    /**
      * Indique le fournisseur du path de l'objet binaire de type binary master.
      *
      * @return le fournisseur du path de l'objet binaire
@@ -443,16 +459,20 @@ public class ArchiveUnit implements ArchiveUnitContainer {
         return binaryMasterDataObject == null ? null : binaryMasterDataObject.getBinaryPathSupplier();
     }
 
+    private BinaryMasterDataObject provideBinaryMasterDataObject() {
+        if (binaryMasterDataObject == null) {
+            binaryMasterDataObject = new BinaryMasterDataObject();
+        }
+        return binaryMasterDataObject;
+    }
+
     /**
      * Spécifie le fournisseur du path de l'objet binaire de type binary master.
      *
      * @param binaryPathSupplier le fournisseur du path de l'objet binaire
      */
     public void setBinaryPathSupplier(Supplier<Path> binaryPathSupplier) {
-        if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryMasterDataObject();
-        }
-        binaryMasterDataObject.setBinaryPathSupplier(binaryPathSupplier);
+        provideBinaryMasterDataObject().setBinaryPathSupplier(binaryPathSupplier);
     }
 
     /**
@@ -471,10 +491,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryPath le path de l'objet binaire
      */
     public void setBinaryPath(Path binaryPath) {
-        if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryMasterDataObject();
-        }
-        binaryMasterDataObject.setBinaryPath(binaryPath);
+        provideBinaryMasterDataObject().setBinaryPath(binaryPath);
     }
 
     /**
@@ -493,10 +510,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryVersion la version de l'objet binaire
      */
     public void setBinaryVersion(String binaryVersion) {
-        if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryMasterDataObject();
-        }
-        binaryMasterDataObject.setBinaryVersion(binaryVersion);
+        provideBinaryMasterDataObject().setBinaryVersion(binaryVersion);
     }
 
     /**
@@ -525,10 +539,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param fileInfo les informations techniques
      */
     public void setFileInfo(FileInfo fileInfo) {
-        if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryMasterDataObject();
-        }
-        binaryMasterDataObject.setFileInfo(fileInfo);
+        provideBinaryMasterDataObject().setFileInfo(fileInfo);
     }
 
     /**
@@ -549,10 +560,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param formatId l'identifiant du format de l'objet binaire
      */
     public void setFormatId(String formatId) {
-        if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryMasterDataObject();
-        }
-        binaryMasterDataObject.getFormatIdentification().setFormatId(formatId);
+        provideBinaryMasterDataObject().getFormatIdentification().setFormatId(formatId);
     }
 
     /**
@@ -573,10 +581,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param formatName le nom du format de l'objet binaire
      */
     public void setFormatName(String formatName) {
-        if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryMasterDataObject();
-        }
-        binaryMasterDataObject.getFormatIdentification().setFormatName(formatName);
+        provideBinaryMasterDataObject().getFormatIdentification().setFormatName(formatName);
     }
 
     /**
@@ -595,10 +600,14 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param mimeType le type MIME
      */
     public void setMimeType(String mimeType) {
-        if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new BinaryMasterDataObject();
+        provideBinaryMasterDataObject().getFormatIdentification().setMimeType(mimeType);
+    }
+
+    private DisseminationDataObject provideDisseminationDataObject() {
+        if (disseminationDataObject == null) {
+            disseminationDataObject = new DisseminationDataObject();
         }
-        binaryMasterDataObject.getFormatIdentification().setMimeType(mimeType);
+        return disseminationDataObject;
     }
 
     /**
@@ -617,10 +626,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryPathSupplier le fournisseur du path de l'objet binaire
      */
     public void setDisseminationPathSupplier(Supplier<Path> binaryPathSupplier) {
-        if (disseminationDataObject == null) {
-            disseminationDataObject = new DisseminationDataObject();
-        }
-        disseminationDataObject.setBinaryPathSupplier(binaryPathSupplier);
+        provideDisseminationDataObject().setBinaryPathSupplier(binaryPathSupplier);
     }
 
     /**
@@ -639,10 +645,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryPath le path de l'objet binaire
      */
     public void setDisseminationPath(Path binaryPath) {
-        if (disseminationDataObject == null) {
-            disseminationDataObject = new DisseminationDataObject();
-        }
-        disseminationDataObject.setBinaryPath(binaryPath);
+        provideDisseminationDataObject().setBinaryPath(binaryPath);
     }
 
     /**
@@ -661,10 +664,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryVersion la version de l'objet binaire
      */
     public void setDisseminationVersion(String binaryVersion) {
-        if (disseminationDataObject == null) {
-            disseminationDataObject = new DisseminationDataObject();
-        }
-        disseminationDataObject.setBinaryVersion(binaryVersion);
+        provideDisseminationDataObject().setBinaryVersion(binaryVersion);
     }
 
     /**
@@ -693,10 +693,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param fileInfo les informations techniques
      */
     public void setDisseminationFileInfo(FileInfo fileInfo) {
-        if (disseminationDataObject == null) {
-            disseminationDataObject = new DisseminationDataObject();
-        }
-        disseminationDataObject.setFileInfo(fileInfo);
+        provideDisseminationDataObject().setFileInfo(fileInfo);
     }
 
     /**
@@ -717,10 +714,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param formatId l'identifiant du format de l'objet binaire
      */
     public void setDisseminationFormatId(String formatId) {
-        if (disseminationDataObject == null) {
-            disseminationDataObject = new DisseminationDataObject();
-        }
-        disseminationDataObject.getFormatIdentification().setFormatId(formatId);
+        provideDisseminationDataObject().getFormatIdentification().setFormatId(formatId);
     }
 
     /**
@@ -741,10 +735,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param formatName le nom du format de l'objet binaire
      */
     public void setDisseminationFormatName(String formatName) {
-        if (disseminationDataObject == null) {
-            disseminationDataObject = new DisseminationDataObject();
-        }
-        disseminationDataObject.getFormatIdentification().setFormatName(formatName);
+        provideDisseminationDataObject().getFormatIdentification().setFormatName(formatName);
     }
 
     /**
@@ -763,10 +754,14 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param mimeType le type MIME
      */
     public void setDisseminationMimeType(String mimeType) {
-        if (disseminationDataObject == null) {
-            disseminationDataObject = new DisseminationDataObject();
+        provideDisseminationDataObject().getFormatIdentification().setMimeType(mimeType);
+    }
+
+    private ThumbnailDataObject provideThumbnailDataObject() {
+        if (thumbnailDataObject == null) {
+            thumbnailDataObject = new ThumbnailDataObject();
         }
-        disseminationDataObject.getFormatIdentification().setMimeType(mimeType);
+        return thumbnailDataObject;
     }
 
     /**
@@ -785,10 +780,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryPathSupplier le fournisseur du path de l'objet binaire
      */
     public void setThumbnailPathSupplier(Supplier<Path> binaryPathSupplier) {
-        if (thumbnailDataObject == null) {
-            thumbnailDataObject = new ThumbnailDataObject();
-        }
-        thumbnailDataObject.setBinaryPathSupplier(binaryPathSupplier);
+        provideThumbnailDataObject().setBinaryPathSupplier(binaryPathSupplier);
     }
 
     /**
@@ -807,10 +799,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryPath le path de l'objet binaire
      */
     public void setThumbnailPath(Path binaryPath) {
-        if (thumbnailDataObject == null) {
-            thumbnailDataObject = new ThumbnailDataObject();
-        }
-        thumbnailDataObject.setBinaryPath(binaryPath);
+        provideThumbnailDataObject().setBinaryPath(binaryPath);
     }
 
     /**
@@ -829,10 +818,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryVersion la version de l'objet binaire
      */
     public void setThumbnailVersion(String binaryVersion) {
-        if (thumbnailDataObject == null) {
-            thumbnailDataObject = new ThumbnailDataObject();
-        }
-        thumbnailDataObject.setBinaryVersion(binaryVersion);
+        provideThumbnailDataObject().setBinaryVersion(binaryVersion);
     }
 
     /**
@@ -861,10 +847,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param fileInfo les informations techniques
      */
     public void setThumbnailFileInfo(FileInfo fileInfo) {
-        if (thumbnailDataObject == null) {
-            thumbnailDataObject = new ThumbnailDataObject();
-        }
-        thumbnailDataObject.setFileInfo(fileInfo);
+        provideThumbnailDataObject().setFileInfo(fileInfo);
     }
 
     /**
@@ -885,10 +868,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param formatId l'identifiant du format de l'objet binaire
      */
     public void setThumbnailFormatId(String formatId) {
-        if (thumbnailDataObject == null) {
-            thumbnailDataObject = new ThumbnailDataObject();
-        }
-        thumbnailDataObject.getFormatIdentification().setFormatId(formatId);
+        provideThumbnailDataObject().getFormatIdentification().setFormatId(formatId);
     }
 
     /**
@@ -909,10 +889,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param formatName le nom du format de l'objet binaire
      */
     public void setThumbnailFormatName(String formatName) {
-        if (thumbnailDataObject == null) {
-            thumbnailDataObject = new ThumbnailDataObject();
-        }
-        thumbnailDataObject.getFormatIdentification().setFormatName(formatName);
+        provideThumbnailDataObject().getFormatIdentification().setFormatName(formatName);
     }
 
     /**
@@ -931,10 +908,14 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param mimeType le type MIME
      */
     public void setThumbnailMimeType(String mimeType) {
-        if (thumbnailDataObject == null) {
-            thumbnailDataObject = new ThumbnailDataObject();
+        provideThumbnailDataObject().getFormatIdentification().setMimeType(mimeType);
+    }
+
+    private TextContentDataObject provideTextContentDataObject() {
+        if (textContentDataObject == null) {
+            textContentDataObject = new TextContentDataObject();
         }
-        thumbnailDataObject.getFormatIdentification().setMimeType(mimeType);
+        return textContentDataObject;
     }
 
     /**
@@ -953,10 +934,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryPathSupplier le fournisseur du path de l'objet binaire
      */
     public void setTextContentPathSupplier(Supplier<Path> binaryPathSupplier) {
-        if (textContentDataObject == null) {
-            textContentDataObject = new TextContentDataObject();
-        }
-        textContentDataObject.setBinaryPathSupplier(binaryPathSupplier);
+        provideTextContentDataObject().setBinaryPathSupplier(binaryPathSupplier);
     }
 
     /**
@@ -975,10 +953,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryPath le path de l'objet binaire
      */
     public void setTextContentPath(Path binaryPath) {
-        if (textContentDataObject == null) {
-            textContentDataObject = new TextContentDataObject();
-        }
-        textContentDataObject.setBinaryPath(binaryPath);
+        provideTextContentDataObject().setBinaryPath(binaryPath);
     }
 
     /**
@@ -997,10 +972,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param binaryVersion la version de l'objet binaire
      */
     public void setTextContentVersion(String binaryVersion) {
-        if (textContentDataObject == null) {
-            textContentDataObject = new TextContentDataObject();
-        }
-        textContentDataObject.setBinaryVersion(binaryVersion);
+        provideTextContentDataObject().setBinaryVersion(binaryVersion);
     }
 
     /**
@@ -1029,10 +1001,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param fileInfo les informations techniques
      */
     public void setTextContentFileInfo(FileInfo fileInfo) {
-        if (textContentDataObject == null) {
-            textContentDataObject = new TextContentDataObject();
-        }
-        textContentDataObject.setFileInfo(fileInfo);
+        provideTextContentDataObject().setFileInfo(fileInfo);
     }
 
     /**
@@ -1053,10 +1022,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param formatId l'identifiant du format de l'objet binaire
      */
     public void setTextContentFormatId(String formatId) {
-        if (textContentDataObject == null) {
-            textContentDataObject = new TextContentDataObject();
-        }
-        textContentDataObject.getFormatIdentification().setFormatId(formatId);
+        provideTextContentDataObject().getFormatIdentification().setFormatId(formatId);
     }
 
     /**
@@ -1077,10 +1043,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param formatName le nom du format de l'objet binaire
      */
     public void setTextContentFormatName(String formatName) {
-        if (textContentDataObject == null) {
-            textContentDataObject = new TextContentDataObject();
-        }
-        textContentDataObject.getFormatIdentification().setFormatName(formatName);
+        provideTextContentDataObject().getFormatIdentification().setFormatName(formatName);
     }
 
     /**
@@ -1099,10 +1062,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      * @param mimeType le type MIME
      */
     public void setTextContentMimeType(String mimeType) {
-        if (textContentDataObject == null) {
-            textContentDataObject = new TextContentDataObject();
-        }
-        textContentDataObject.getFormatIdentification().setMimeType(mimeType);
+        provideTextContentDataObject().getFormatIdentification().setMimeType(mimeType);
     }
 
     /**
