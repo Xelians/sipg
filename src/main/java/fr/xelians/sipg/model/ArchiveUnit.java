@@ -143,7 +143,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * L'objet binaire de type binary master.
      */
-    protected MasterDataObject binaryMasterDataObject;
+    protected BinaryMasterDataObject binaryMasterDataObject;
 
     /**
      * L'objet binaire de type dissemination (publication).
@@ -450,7 +450,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setBinaryPathSupplier(Supplier<Path> binaryPathSupplier) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new MasterDataObject();
+            binaryMasterDataObject = new BinaryMasterDataObject();
         }
         binaryMasterDataObject.setBinaryPathSupplier(binaryPathSupplier);
     }
@@ -472,7 +472,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setBinaryPath(Path binaryPath) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new MasterDataObject();
+            binaryMasterDataObject = new BinaryMasterDataObject();
         }
         binaryMasterDataObject.setBinaryPath(binaryPath);
     }
@@ -494,7 +494,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setBinaryVersion(String binaryVersion) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new MasterDataObject();
+            binaryMasterDataObject = new BinaryMasterDataObject();
         }
         binaryMasterDataObject.setBinaryVersion(binaryVersion);
     }
@@ -526,7 +526,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setFileInfo(FileInfo fileInfo) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new MasterDataObject();
+            binaryMasterDataObject = new BinaryMasterDataObject();
         }
         binaryMasterDataObject.setFileInfo(fileInfo);
     }
@@ -550,7 +550,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setFormatId(String formatId) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new MasterDataObject();
+            binaryMasterDataObject = new BinaryMasterDataObject();
         }
         binaryMasterDataObject.getFormatIdentification().setFormatId(formatId);
     }
@@ -574,7 +574,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setFormatName(String formatName) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new MasterDataObject();
+            binaryMasterDataObject = new BinaryMasterDataObject();
         }
         binaryMasterDataObject.getFormatIdentification().setFormatName(formatName);
     }
@@ -596,7 +596,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setMimeType(String mimeType) {
         if (binaryMasterDataObject == null) {
-            binaryMasterDataObject = new MasterDataObject();
+            binaryMasterDataObject = new BinaryMasterDataObject();
         }
         binaryMasterDataObject.getFormatIdentification().setMimeType(mimeType);
     }
