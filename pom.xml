@@ -12,6 +12,13 @@
         <name>Xelians / Mintika</name>
     </organization>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+         
     <!-- Project Information -->
     <name>sipg</name>
     <url>https://github.com/Xelians/sipg</url>
