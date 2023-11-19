@@ -219,31 +219,31 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     /**
      * La position de l’unité d'archive dans le plan de classement du service producteur.
      */
-    protected String filePlanPosition;
+    protected List<String> filePlanPositions = new ArrayList<>();
     /**
      * L'identifiant attribué aux objets. Il est attribué par le SAE et correspond à un identifiant interne.
      */
-    protected String systemId;
+    protected List<String> systemIds = new ArrayList<>();
     /**
      * L'identifiant attribué aux objets de données. Il est attribué par le SAE et correspond à un identifiant interne.
      */
-    protected String dataObjectSystemId;
+    protected List<String> dataObjectSystemIds = new ArrayList<>();
     /**
      * L'identifiant système attribué à l’ArchiveUnit par l’application du service producteur.
      */
-    protected String originatingSystemId;
+    protected List<String> originatingSystemIds = new ArrayList<>();
     /**
      * L'identifiant métier attribué à l'unité d'archive par le service d'archives. Peut être comparé à une cote.
      */
-    protected String archivalAgencyArchiveUnitIdentifier;
+    protected List<String> archivalAgencyArchiveUnitIdentifiers = new ArrayList<>();
     /**
      * L'identifiant métier attribué à l’ArchiveUnit par le service producteur.
      */
-    protected String originatingAgencyArchiveUnitIdentifier;
+    protected List<String> originatingAgencyArchiveUnitIdentifiers = new ArrayList<>();
     /**
      * L'identifiant attribué à l'ArchiveUnit par le service versant.
      */
-    protected String transferringAgencyArchiveUnitIdentifier;
+    protected List<String> transferringAgencyArchiveUnitIdentifiers = new ArrayList<>();
     /**
      * Le type d’information au sens de l’OAIS (information de représentation, information de pérennisation, etc.).
      */
@@ -1540,132 +1540,214 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique la position de l’unité d'archive dans le plan de classement du service producteur.
+     * Indique les positions de l’unité d'archive dans le plan de classement du service producteur.
      *
      * @return la position
      */
-    public String getFilePlanPosition() {
-        return filePlanPosition;
+    public List<String> getFilePlanPositions() {
+        return new ArrayList<>(filePlanPositions);
     }
 
     /**
-     * Spécifie la position de l’unité d'archive dans le plan de classement du service producteur.
+     * Ajoute la position de l’unité d'archive dans le plan de classement du service producteur.
      *
-     * @param filePlanPosition la position
+     * @param filePlanPosition la position à ajouter
      */
-    public void setFilePlanPosition(String filePlanPosition) {
-        this.filePlanPosition = filePlanPosition;
+    public void addFilePlanPosition(String filePlanPosition) {
+        Validate.notNull(filePlanPosition, SipUtils.NOT_NULL, "filePlanPosition");
+        this.filePlanPositions.add(filePlanPosition);
     }
 
     /**
-     * Indique l'identifiant attribué aux objets. Il est attribué par le SAE et correspond à un identifiant interne.
+     * Supprime la position de l’unité d'archive.
+     *
+     * @param filePlanPosition la position à supprimer
+     * @return true si la suppression a été réalisée avec succès, sinon false
+     */
+    public boolean removeFilePlanPosition(String filePlanPosition) {
+        Validate.notNull(filePlanPosition, SipUtils.NOT_NULL, "filePlanPosition");
+        return filePlanPositions.remove(filePlanPosition);
+    }
+
+    /**
+     * Indique les identifiants attribués à l'archive. Il est attribué par le SAE et correspond à un identifiant interne.
      *
      * @return l 'identifiant
      */
-    public String getSystemId() {
-        return systemId;
+    public List<String> getSystemIds() {
+        return new ArrayList<>(systemIds);
     }
 
     /**
-     * Spécifie l'identifiant attribué aux objets. Il est attribué par le SAE et correspond à un identifiant interne.
+     * Ajoute l'identifiant.
      *
-     * @param systemId l'identifiant
+     * @param systemId la position à ajouter
      */
-    public void setSystemId(String systemId) {
-        this.systemId = systemId;
+    public void addSystemId(String systemId) {
+        Validate.notNull(systemId, SipUtils.NOT_NULL, "systemId");
+        this.systemIds.add(systemId);
     }
 
     /**
-     * Indique l'identifiant attribué aux objets de données. Il est attribué par le SAE et correspond à un identifiant
+     * Supprime l'identifiant.
+     *
+     * @param systemId la position à supprimer
+     * @return true si la suppression a été réalisée avec succès, sinon false
+     */
+    public boolean removeSystemId(String systemId) {
+        Validate.notNull(systemId, SipUtils.NOT_NULL, "systemId");
+        return systemIds.remove(systemId);
+    }
+
+    /**
+     * Indique les identifiants attribués aux objets de données. Il est attribué par le SAE et correspond à un identifiant
      * interne.
      *
      * @return l 'identifiant
      */
-    public String getDataObjectSystemId() {
-        return dataObjectSystemId;
+    public List<String> getDataObjectSystemIds() {
+        return dataObjectSystemIds;
     }
 
     /**
-     * Spécifie l'identifiant attribué aux objets de données. Il est attribué par le SAE et correspond à un identifiant
-     * interne.
+     * Ajoute l'identifiant.
      *
-     * @param dataObjectSystemId l'identifiant
+     * @param dataObjectSystemId la position à ajouter
      */
-    public void setDataObjectSystemId(String dataObjectSystemId) {
-        this.dataObjectSystemId = dataObjectSystemId;
+    public void addDataObjectSystemId(String dataObjectSystemId) {
+        Validate.notNull(dataObjectSystemId, SipUtils.NOT_NULL, "dataObjectSystemId");
+        this.dataObjectSystemIds.add(dataObjectSystemId);
     }
 
     /**
-     * Indique l'identifiant système attribué à l’ArchiveUnit par l’application du service producteur.
+     * Supprime l'identifiant.
      *
-     * @return l 'identifiant
+     * @param dataObjectSystemId la position à supprimer
+     * @return true si la suppression a été réalisée avec succès, sinon false
      */
-    public String getOriginatingSystemId() {
-        return originatingSystemId;
+    public boolean removeDataObjectSystemId(String dataObjectSystemId) {
+        Validate.notNull(dataObjectSystemId, SipUtils.NOT_NULL, "dataObjectSystemId");
+        return dataObjectSystemIds.remove(dataObjectSystemId);
     }
 
     /**
-     * Spécifie l'identifiant système attribué à l’ArchiveUnit par l’application du service producteur.
-     *
-     * @param originatingSystemId l'identifiant
-     */
-    public void setOriginatingSystemId(String originatingSystemId) {
-        this.originatingSystemId = originatingSystemId;
-    }
-
-    /**
-     * Indique l'identifiant métier attribué à l'unité d'archive par le service d'archives. Peut être comparé à une cote.
+     * Indique les identifiants système attribué à l’ArchiveUnit par l’application du service producteur.
      *
      * @return l 'identifiant
      */
-    public String getArchivalAgencyArchiveUnitIdentifier() {
-        return archivalAgencyArchiveUnitIdentifier;
+    public List<String> getOriginatingSystemIds() {
+        return new ArrayList<>(originatingSystemIds);
     }
 
     /**
-     * Spécifie l'identifiant métier attribué à l'unité d'archive par le service d'archives. Peut être comparé à une
-     * cote.
+     * Ajoute l'identifiant système attribué à l’ArchiveUnit par l’application du service producteur.
      *
-     * @param archivalAgencyArchiveUnitIdentifier l'identifiant
+     * @param originatingSystemId l'identifiant à ajouter
      */
-    public void setArchivalAgencyArchiveUnitIdentifier(String archivalAgencyArchiveUnitIdentifier) {
-        this.archivalAgencyArchiveUnitIdentifier = archivalAgencyArchiveUnitIdentifier;
+    public void addOriginatingSystemId(String originatingSystemId) {
+        Validate.notNull(originatingSystemId, SipUtils.NOT_NULL, "originatingSystemId");
+        this.originatingSystemIds.add(originatingSystemId);
     }
 
     /**
-     * Indique l'identifiant métier attribué à l’ArchiveUnit par le service producteur.
+     * Supprime l'identifiant système à la liste.
      *
-     * @return l 'identifiant
+     * @param originatingSystemId l'identifiant à supprimer
+     * @return true si la suppression a été réalisée avec succès, sinon false
      */
-    public String getOriginatingAgencyArchiveUnitIdentifier() {
-        return originatingAgencyArchiveUnitIdentifier;
+    public boolean removeOriginatingSystemId(String originatingSystemId) {
+        Validate.notNull(originatingSystemId, SipUtils.NOT_NULL, "originatingSystemId");
+        return originatingSystemIds.remove(originatingSystemId);
     }
 
     /**
-     * Spécifie l'identifiant métier attribué à l’ArchiveUnit par le service producteur.
-     *
-     * @param originatingAgencyArchiveUnitIdentifier l'identifiant
-     */
-    public void setOriginatingAgencyArchiveUnitIdentifier(String originatingAgencyArchiveUnitIdentifier) {
-        this.originatingAgencyArchiveUnitIdentifier = originatingAgencyArchiveUnitIdentifier;
-    }
-
-    /**
-     * Indique l'identifiant attribué à l'ArchiveUnit par le service versant.
+     * Indique les identifiants métier attribué à l'unité d'archive par le service d'archives. Peut être comparé à une cote.
      *
      * @return l 'identifiant
      */
-    public String getTransferringAgencyArchiveUnitIdentifier() {
-        return transferringAgencyArchiveUnitIdentifier;
+    public List<String> getArchivalAgencyArchiveUnitIdentifiers() {
+        return new ArrayList<>(archivalAgencyArchiveUnitIdentifiers);
     }
 
     /**
-     * Spécifie l'identifiant attribué à l'ArchiveUnit par le service versant.
+     * Ajoute l'identifiant métier attribué à l’ArchiveUnit par l’application du service producteur.
      *
-     * @param transferringAgencyArchiveUnitIdentifier l'identifiant
+     * @param archivalAgencyArchiveUnitIdentifier l'identifiant à ajouter
      */
-    public void setTransferringAgencyArchiveUnitIdentifier(String transferringAgencyArchiveUnitIdentifier) {
-        this.transferringAgencyArchiveUnitIdentifier = transferringAgencyArchiveUnitIdentifier;
+    public void addArchivalAgencyArchiveUnitIdentifier(String archivalAgencyArchiveUnitIdentifier) {
+        Validate.notNull(archivalAgencyArchiveUnitIdentifier, SipUtils.NOT_NULL, "archivalAgencyArchiveUnitIdentifier");
+        this.archivalAgencyArchiveUnitIdentifiers.add(archivalAgencyArchiveUnitIdentifier);
+    }
+
+    /**
+     * Supprime l'identifiant métier à la liste.
+     *
+     * @param archivalAgencyArchiveUnitIdentifier l'identifiant à supprimer
+     * @return true si la suppression a été réalisée avec succès, sinon false
+     */
+    public boolean removeArchivalAgencyArchiveUnitIdentifier(String archivalAgencyArchiveUnitIdentifier) {
+        Validate.notNull(archivalAgencyArchiveUnitIdentifier, SipUtils.NOT_NULL, "archivalAgencyArchiveUnitIdentifier");
+        return archivalAgencyArchiveUnitIdentifiers.remove(archivalAgencyArchiveUnitIdentifier);
+    }
+
+    /**
+     * Indique les identifiants métier attribué à l’ArchiveUnit par le service producteur.
+     *
+     * @return l 'identifiant
+     */
+    public List<String> getOriginatingAgencyArchiveUnitIdentifiers() {
+        return new ArrayList<>(originatingAgencyArchiveUnitIdentifiers);
+    }
+
+    /**
+     * Ajoute l'identifiant métier attribué à l’ArchiveUnit par l’application du service producteur.
+     *
+     * @param originatingAgencyArchiveUnitIdentifier l'identifiant à ajouter
+     */
+    public void addOriginatingAgencyArchiveUnitIdentifier(String originatingAgencyArchiveUnitIdentifier) {
+        Validate.notNull(originatingAgencyArchiveUnitIdentifier, SipUtils.NOT_NULL, "originatingAgencyArchiveUnitIdentifier");
+        this.originatingAgencyArchiveUnitIdentifiers.add(originatingAgencyArchiveUnitIdentifier);
+    }
+
+    /**
+     * Supprime l'identifiant métier à la liste des langues du contenu des objets binaires ou physiques.
+     *
+     * @param originatingAgencyArchiveUnitIdentifier l'identifiant à supprimer
+     * @return true si la suppression a été réalisée avec succès, sinon false
+     */
+    public boolean removeOriginatingAgencyArchiveUnitIdentifier(String originatingAgencyArchiveUnitIdentifier) {
+        Validate.notNull(originatingAgencyArchiveUnitIdentifier, SipUtils.NOT_NULL, "archivalAgencyArchiveUnitIdentifier");
+        return originatingAgencyArchiveUnitIdentifiers.remove(originatingAgencyArchiveUnitIdentifier);
+    }
+
+    /**
+     * Indique les identifiants attribués à l'ArchiveUnit par le service versant.
+     *
+     * @return l 'identifiant
+     */
+    public List<String> getTransferringAgencyArchiveUnitIdentifiers() {
+        return new ArrayList<>(transferringAgencyArchiveUnitIdentifiers);
+    }
+
+    /**
+     * Ajoute l'identifiant attribué à l’ArchiveUnit par le service versant.
+     *
+     * @param transferringAgencyArchiveUnitIdentifier l'identifiant à ajouter
+     */
+    public void addTransferringAgencyArchiveUnitIdentifier(String transferringAgencyArchiveUnitIdentifier) {
+        Validate.notNull(transferringAgencyArchiveUnitIdentifier, SipUtils.NOT_NULL, "transferringAgencyArchiveUnitIdentifier");
+        this.transferringAgencyArchiveUnitIdentifiers.add(transferringAgencyArchiveUnitIdentifier);
+    }
+
+    /**
+     * Supprime l'identifiant métier à la liste.
+     *
+     * @param transferringAgencyArchiveUnitIdentifier l'identifiant à supprimer
+     * @return true si la suppression a été réalisée avec succès, sinon false
+     */
+    public boolean removeTransferringAgencyArchiveUnitIdentifier(String transferringAgencyArchiveUnitIdentifier) {
+        Validate.notNull(transferringAgencyArchiveUnitIdentifier, SipUtils.NOT_NULL, "transferringAgencyArchiveUnitIdentifier");
+        return transferringAgencyArchiveUnitIdentifiers.remove(transferringAgencyArchiveUnitIdentifier);
     }
 
     /**

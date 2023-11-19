@@ -57,6 +57,8 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static fr.xelians.sipg.utils.SipUtils.ifNotNull;
+
 /**
  * La classe Fntcv4Converter contient les informations et fonctions nécessaires à la conversion d'une archive au format
  * FNTC v4. Cette classe ne peut être instanciée qu'à travers les méthodes statiques convert(...). Note. la classe
@@ -119,8 +121,7 @@ class Fntcv4Converter {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, Fntcv4Config config)
-            throws ExecutionException, InterruptedException {
+    static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, Fntcv4Config config) throws ExecutionException, InterruptedException {
         return convert(archiveTransfer, null, config);
     }
 
@@ -134,8 +135,7 @@ class Fntcv4Converter {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, FileSystem zipArchive)
-            throws ExecutionException, InterruptedException {
+    static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, FileSystem zipArchive) throws ExecutionException, InterruptedException {
         return convert(archiveTransfer, zipArchive, Fntcv4Config.DEFAULT);
     }
 
@@ -150,8 +150,7 @@ class Fntcv4Converter {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, FileSystem zipArchive, Fntcv4Config config)
-            throws ExecutionException, InterruptedException {
+    static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, FileSystem zipArchive, Fntcv4Config config) throws ExecutionException, InterruptedException {
         Validate.notNull(archiveTransfer, SipUtils.NOT_NULL, "archiveTransfer");
         Validate.notNull(config, SipUtils.NOT_NULL, "config");
 
@@ -172,8 +171,7 @@ class Fntcv4Converter {
     private ArchiveTransferType toArchiveTransferType(ArchiveTransfer transfer) {
         ArchiveTransferType att = medonaFactory.createArchiveTransferType();
 
-        String mi = SipUtils.getIfBlank(transfer.getMessageIdentifier(),
-                RandomStringUtils.randomAlphabetic(32).toLowerCase());
+        String mi = SipUtils.getIfBlank(transfer.getMessageIdentifier(), RandomStringUtils.randomAlphabetic(32).toLowerCase());
         att.setMessageIdentifier(toIdentifierType(mi));
 
         LocalDateTime gcd = SipUtils.getIfNull(transfer.getDate(), LocalDateTime.now());
@@ -182,11 +180,11 @@ class Fntcv4Converter {
         CodeListVersions clv = SipUtils.getIfNull(transfer.getCodeListVersions(), new CodeListVersions());
         att.setCodeListVersions(toCodeListVersionsType(clv));
 
-        SipUtils.ifNotNull(transfer.getComment(), e -> att.getComment().add(toMedonaTextType(e)));
-        SipUtils.ifNotNull(transfer.getSignature(), e -> att.setSignature(toSignatureType(e)));
-        SipUtils.ifNotNull(transfer.getArchivalAgreement(), e -> att.setArchivalAgreement(toIdentifierType(e)));
-        SipUtils.ifNotNull(transfer.getArchivalAgency(), e -> att.setArchivalAgency(toOrganizationType(e)));
-        SipUtils.ifNotNull(transfer.getTransferringAgency(), e -> att.setTransferringAgency(toOrganizationType(e)));
+        ifNotNull(transfer.getComment(), e -> att.getComment().add(toMedonaTextType(e)));
+        ifNotNull(transfer.getSignature(), e -> att.setSignature(toSignatureType(e)));
+        ifNotNull(transfer.getArchivalAgreement(), e -> att.setArchivalAgreement(toIdentifierType(e)));
+        ifNotNull(transfer.getArchivalAgency(), e -> att.setArchivalAgency(toOrganizationType(e)));
+        ifNotNull(transfer.getTransferringAgency(), e -> att.setTransferringAgency(toOrganizationType(e)));
 
         DataObjectPackageType dopt = medonaFactory.createDataObjectPackageType();
 
@@ -195,8 +193,8 @@ class Fntcv4Converter {
         dopt.setDescriptiveMetadata(dmt);
 
         ManagementMetadataType mmt = medonaFactory.createManagementMetadataType();
-        SipUtils.ifNotNull(transfer.getArchivalProfile(), e -> mmt.setArchivalProfile(toIdentifierType(e)));
-        SipUtils.ifNotNull(transfer.getServiceLevel(), e -> mmt.setServiceLevel(toIdentifierType(e)));
+        ifNotNull(transfer.getArchivalProfile(), e -> mmt.setArchivalProfile(toIdentifierType(e)));
+        ifNotNull(transfer.getServiceLevel(), e -> mmt.setServiceLevel(toIdentifierType(e)));
         dopt.setManagementMetadata(mmt);
 
         att.setDataObjectPackage(dopt);
@@ -229,8 +227,7 @@ class Fntcv4Converter {
             pdot.setSize(toMeasureType(unit.getMeasure()));
 
             ArchiveUnitType.DataObjectReference dor = fntcv4Factory.createArchiveUnitTypeDataObjectReference();
-            dor.getDataObjectReferenceId()
-                    .add(fntcv4Factory.createArchiveUnitTypeDataObjectReferenceDataObjectReferenceId(pdot));
+            dor.getDataObjectReferenceId().add(fntcv4Factory.createArchiveUnitTypeDataObjectReferenceDataObjectReferenceId(pdot));
             aut.setDataObjectReference(dor);
 
             dopt.getBinaryDataObjectOrPhysicalDataObject().add(pdot);
@@ -267,8 +264,7 @@ class Fntcv4Converter {
             if (dor == null) {
                 dor = fntcv4Factory.createArchiveUnitTypeDataObjectReference();
             }
-            dor.getDataObjectReferenceId()
-                    .add(fntcv4Factory.createArchiveUnitTypeDataObjectReferenceDataObjectReferenceId(bdot));
+            dor.getDataObjectReferenceId().add(fntcv4Factory.createArchiveUnitTypeDataObjectReferenceDataObjectReferenceId(bdot));
             aut.setDataObjectReference(dor);
 
             dopt.getBinaryDataObjectOrPhysicalDataObject().add(bdot);
@@ -317,27 +313,24 @@ class Fntcv4Converter {
         ExtendedType emt = fntcv4Factory.createExtendedType();
 
         // ArchiveUnitProfile
-        SipUtils.ifNotNull(unit.getArchiveUnitProfile(),
-                e -> emt.getAny().add(toNode(new Element("ArchiveUnitProfile", e))));
+        ifNotNull(unit.getArchiveUnitProfile(), e -> emt.getAny().add(toNode(new Element("ArchiveUnitProfile", e))));
 
         // LevelGroup
-        SipUtils.ifNotNull(unit.getDescriptionLevel(), e -> dmct.setDescriptionLevel(toTextType(e)));
+        ifNotNull(unit.getDescriptionLevel(), e -> dmct.setDescriptionLevel(toTextType(e)));
 
         // Title Group
         unit.getTitles().forEach(t -> dmct.getTitle().add(toTextType(t)));
 
         // Content IdentifierGroup
-        SipUtils.ifNotNull(unit.getPhysicalId(), e -> dmct.getPhysicalId().add(toTextType(e)));
-        SipUtils.ifNotNull(unit.getFilePlanPosition(), e -> dmct.getFilePlanPosition().add(toTextType(e)));
-        SipUtils.ifNotNull(unit.getSystemId(), e -> dmct.getSystemId().add(toTextType(e)));
-        SipUtils.ifNotNull(unit.getDataObjectSystemId(), e -> dmct.getDataObjectSystemId().add(toTextType(e)));
-        SipUtils.ifNotNull(unit.getOriginatingSystemId(), e -> dmct.getOriginatingSystemId().add(toTextType(e)));
-        SipUtils.ifNotNull(unit.getOriginatingAgencyArchiveUnitIdentifier(),
-                e -> dmct.getOriginatingAgencyArchiveUnitIdentifier().add(toTextType(e)));
-        SipUtils.ifNotNull(unit.getArchivalAgencyArchiveUnitIdentifier(),
-                e -> dmct.getArchivalAgencyArchiveUnitIdentifier().add(toTextType(e)));
-        SipUtils.ifNotNull(unit.getTransferringAgencyArchiveUnitIdentifier(),
-                e -> dmct.getTransferringAgencyArchiveUnitIdentifier().add(toTextType(e)));
+        ifNotNull(unit.getPhysicalId(), e -> dmct.getPhysicalId().add(toTextType(e)));
+
+        unit.getFilePlanPositions().forEach(e -> dmct.getFilePlanPosition().add(toTextType(e)));
+        unit.getSystemIds().forEach(e -> dmct.getSystemId().add(toTextType(e)));
+        unit.getDataObjectSystemIds().forEach(e -> dmct.getDataObjectSystemId().add(toTextType(e)));
+        unit.getOriginatingSystemIds().forEach(e -> dmct.getOriginatingSystemId().add(toTextType(e)));
+        unit.getOriginatingAgencyArchiveUnitIdentifiers().forEach(e -> dmct.getOriginatingAgencyArchiveUnitIdentifier().add(toTextType(e)));
+        unit.getArchivalAgencyArchiveUnitIdentifiers().forEach(e -> dmct.getArchivalAgencyArchiveUnitIdentifier().add(toTextType(e)));
+        unit.getTransferringAgencyArchiveUnitIdentifiers().forEach(e -> dmct.getTransferringAgencyArchiveUnitIdentifier().add(toTextType(e)));
 
         // Description Group
         unit.getDescriptions().forEach(d -> dmct.getDescription().add(toTextType(d)));
@@ -348,29 +341,26 @@ class Fntcv4Converter {
         }
 
         // Type Group
-        SipUtils.ifNotNull(unit.getType(), e -> emt.getAny().add(toNode(new Element("Type", e))));
-        SipUtils.ifNotNull(unit.getDocumentType(), e -> dmct.setDocumentType(toTextType(e)));
+        ifNotNull(unit.getType(), e -> emt.getAny().add(toNode(new Element("Type", e))));
+        ifNotNull(unit.getDocumentType(), e -> dmct.setDocumentType(toTextType(e)));
 
         // Language Group
         unit.getLanguages().forEach(e -> emt.getAny().add(toNode(new Element("Language", e))));
-        SipUtils.ifNotNull(unit.getDescriptionLanguage(),
-                e -> emt.getAny().add(toNode(new Element("DescriptionLanguage", e))));
+        ifNotNull(unit.getDescriptionLanguage(), e -> emt.getAny().add(toNode(new Element("DescriptionLanguage", e))));
 
         // Status Group
-        SipUtils.ifNotNull(unit.getStatus(), e -> dmct.setStatus(toTextType(e)));
+        ifNotNull(unit.getStatus(), e -> dmct.setStatus(toTextType(e)));
 
         // Version Group
-        SipUtils.ifNotNull(unit.getVersion(), e -> emt.getAny().add(toNode(new Element("Version", e))));
+        ifNotNull(unit.getVersion(), e -> emt.getAny().add(toNode(new Element("Version", e))));
 
         // Keyword Group
         unit.getTags().forEach(tag -> dmct.getTag().add(toTagType(tag)));
 
         // Coverage Group
         // Originating & Submission Agency Group
-        SipUtils.ifNotNull(unit.getOriginatingAgency(),
-                e -> emt.getAny().add(toNode(toOrganizationElement(e, "OriginatingAgency"))));
-        SipUtils.ifNotNull(unit.getSubmissionAgency(),
-                e -> emt.getAny().add(toNode(toOrganizationElement(e, "SubmissionAgency"))));
+        ifNotNull(unit.getOriginatingAgency(), e -> emt.getAny().add(toNode(toOrganizationElement(e, "OriginatingAgency"))));
+        ifNotNull(unit.getSubmissionAgency(), e -> emt.getAny().add(toNode(toOrganizationElement(e, "SubmissionAgency"))));
 
         // Authorized Agent & writing Group
         unit.getAuthorizedAgents().forEach(agent -> emt.getAny().add(toNode(toAgentElement(agent, "AuthorizedAgent"))));
@@ -383,37 +373,34 @@ class Fntcv4Converter {
         unit.getSenders().forEach(sender -> emt.getAny().add(toNode(toAgentElement(sender, "Sender"))));
 
         // Source Group
-        SipUtils.ifNotNull(unit.getSource(), e -> emt.getAny().add(toNode(new Element("Source", e))));
+        ifNotNull(unit.getSource(), e -> emt.getAny().add(toNode(new Element("Source", e))));
 
         // TODO Relation Group
         // TODO Signature Group
         // GPS Group
-        if (unit.getGpsVersionID() != null || unit.getGpsDateStamp() != null
-                || unit.getGpsAltitude() != null || unit.getGpsAltitudeRef() != null
-                || unit.getGpsLatitude() != null || unit.getGpsLatitudeRef() != null
-                || unit.getGpsLongitude() != null || unit.getGpsLongitudeRef() != null) {
+        if (unit.getGpsVersionID() != null || unit.getGpsDateStamp() != null || unit.getGpsAltitude() != null || unit.getGpsAltitudeRef() != null || unit.getGpsLatitude() != null || unit.getGpsLatitudeRef() != null || unit.getGpsLongitude() != null || unit.getGpsLongitudeRef() != null) {
 
             final Element gps = new Element("Gps");
-            SipUtils.ifNotNull(unit.getGpsVersionID(), s -> gps.addElement("GpsVersionID", s));
-            SipUtils.ifNotNull(unit.getGpsAltitude(), s -> gps.addElement("GpsAltitude", s));
-            SipUtils.ifNotNull(unit.getGpsAltitudeRef(), s -> gps.addElement("GpsAltitudeRef", s));
-            SipUtils.ifNotNull(unit.getGpsDateStamp(), s -> gps.addElement("GpsDateStamp", s));
-            SipUtils.ifNotNull(unit.getGpsLatitude(), s -> gps.addElement("GpsLatitude", s));
-            SipUtils.ifNotNull(unit.getGpsLatitudeRef(), s -> gps.addElement("GpsLatitudeRef", s));
-            SipUtils.ifNotNull(unit.getGpsLongitude(), s -> gps.addElement("GpsLongitude", s));
-            SipUtils.ifNotNull(unit.getGpsLongitudeRef(), s -> gps.addElement("GpsLongitudeRef", s));
+            ifNotNull(unit.getGpsVersionID(), s -> gps.addElement("GpsVersionID", s));
+            ifNotNull(unit.getGpsAltitude(), s -> gps.addElement("GpsAltitude", s));
+            ifNotNull(unit.getGpsAltitudeRef(), s -> gps.addElement("GpsAltitudeRef", s));
+            ifNotNull(unit.getGpsDateStamp(), s -> gps.addElement("GpsDateStamp", s));
+            ifNotNull(unit.getGpsLatitude(), s -> gps.addElement("GpsLatitude", s));
+            ifNotNull(unit.getGpsLatitudeRef(), s -> gps.addElement("GpsLatitudeRef", s));
+            ifNotNull(unit.getGpsLongitude(), s -> gps.addElement("GpsLongitude", s));
+            ifNotNull(unit.getGpsLongitudeRef(), s -> gps.addElement("GpsLongitudeRef", s));
             emt.getAny().add(toNode(gps));
         }
 
         // DateGroup
-        SipUtils.ifNotNull(unit.getCreatedDate(), d -> dmct.setCreatedDate(SipUtils.toXmlDate(d).toString()));
-        SipUtils.ifNotNull(unit.getTransactedDate(), d -> dmct.setTransactedDate(SipUtils.toXmlDate(d).toString()));
-        SipUtils.ifNotNull(unit.getAcquiredDate(), d -> dmct.setAcquiredDate(SipUtils.toXmlDate(d).toString()));
-        SipUtils.ifNotNull(unit.getSentDate(), d -> dmct.setSentDate(SipUtils.toXmlDate(d).toString()));
-        SipUtils.ifNotNull(unit.getReceivedDate(), d -> dmct.setReceivedDate(SipUtils.toXmlDate(d).toString()));
-        SipUtils.ifNotNull(unit.getRegisteredDate(), d -> dmct.setRegisteredDate(SipUtils.toXmlDate(d).toString()));
-        SipUtils.ifNotNull(unit.getStartDate(), d -> dmct.setStartDate(SipUtils.toXmlDate(d).toString()));
-        SipUtils.ifNotNull(unit.getEndDate(), d -> dmct.setEndDate(SipUtils.toXmlDate(d).toString()));
+        ifNotNull(unit.getCreatedDate(), d -> dmct.setCreatedDate(SipUtils.toXmlDate(d).toString()));
+        ifNotNull(unit.getTransactedDate(), d -> dmct.setTransactedDate(SipUtils.toXmlDate(d).toString()));
+        ifNotNull(unit.getAcquiredDate(), d -> dmct.setAcquiredDate(SipUtils.toXmlDate(d).toString()));
+        ifNotNull(unit.getSentDate(), d -> dmct.setSentDate(SipUtils.toXmlDate(d).toString()));
+        ifNotNull(unit.getReceivedDate(), d -> dmct.setReceivedDate(SipUtils.toXmlDate(d).toString()));
+        ifNotNull(unit.getRegisteredDate(), d -> dmct.setRegisteredDate(SipUtils.toXmlDate(d).toString()));
+        ifNotNull(unit.getStartDate(), d -> dmct.setStartDate(SipUtils.toXmlDate(d).toString()));
+        ifNotNull(unit.getEndDate(), d -> dmct.setEndDate(SipUtils.toXmlDate(d).toString()));
 
         // Extended Metadata
         for (Object e : unit.getElements()) {
@@ -444,11 +431,11 @@ class Fntcv4Converter {
         SipUtils.ifNotBlank(agent.getGender(), e -> ae.addElement("Gender", e));
         SipUtils.ifNotBlank(agent.getCorpName(), e -> ae.addElement("CorpName", e));
 
-        SipUtils.ifNotNull(agent.getBirthDate(), e -> ae.addElement("BirthDate", SipUtils.toXmlDate(e).toString()));
-        SipUtils.ifNotNull(agent.getDeathDate(), e -> ae.addElement("DeathDate", SipUtils.toXmlDate(e).toString()));
+        ifNotNull(agent.getBirthDate(), e -> ae.addElement("BirthDate", SipUtils.toXmlDate(e).toString()));
+        ifNotNull(agent.getDeathDate(), e -> ae.addElement("DeathDate", SipUtils.toXmlDate(e).toString()));
 
-        SipUtils.ifNotNull(agent.getBirthPlace(), e -> ae.addElement(toPlaceElement(e, "BirthPlace")));
-        SipUtils.ifNotNull(agent.getDeathPlace(), e -> ae.addElement(toPlaceElement(e, "DeathPlace")));
+        ifNotNull(agent.getBirthPlace(), e -> ae.addElement(toPlaceElement(e, "BirthPlace")));
+        ifNotNull(agent.getDeathPlace(), e -> ae.addElement(toPlaceElement(e, "DeathPlace")));
 
         agent.getNationalities().forEach(e -> ae.addElement("Nationality", e));
         agent.getIdentifiers().forEach(e -> ae.addElement("Identifier", e));
@@ -503,7 +490,7 @@ class Fntcv4Converter {
     private AccessRuleType toAccessRuleType(AccessRules accessRule) {
         AccessRuleType art = fntcv4Factory.createAccessRuleType();
         SipUtils.ifNotBlank(accessRule.getRuleName(), art::setRule);
-        SipUtils.ifNotNull(accessRule.getStartDate(), e -> art.setStartDate(SipUtils.toXmlDate(e)));
+        ifNotNull(accessRule.getStartDate(), e -> art.setStartDate(SipUtils.toXmlDate(e)));
         return art;
     }
 
@@ -511,21 +498,21 @@ class Fntcv4Converter {
         AppraisalRuleType art = fntcv4Factory.createAppraisalRuleType();
         SipUtils.ifNotBlank(appraisalRule.getRuleName(), art::setAppraisalCode);
         SipUtils.ifNotBlank(appraisalRule.getDuration(), e -> art.setDuration(SipUtils.toDuration(e)));
-        SipUtils.ifNotNull(appraisalRule.getStartDate(), e -> art.setStartDate(SipUtils.toXmlDate(e)));
+        ifNotNull(appraisalRule.getStartDate(), e -> art.setStartDate(SipUtils.toXmlDate(e)));
         return art;
     }
 
     private EventType toEventType(Event event) {
         EventType et = fntcv4Factory.createEventType();
-        SipUtils.ifNotNull(event.getIdentifier(), e -> et.setEventIdentifier(toTextType(e)));
-        SipUtils.ifNotNull(event.getDateTime(), e -> et.setEventDateTime(SipUtils.toXmlDateTime(e)));
-        SipUtils.ifNotNull(event.getDetail(), e -> et.setEventDetail(toTextType(e)));
-        SipUtils.ifNotNull(event.getDetailData(), e -> et.setEventDetailData(toTextType(e)));
-        SipUtils.ifNotNull(event.getOutcome(), e -> et.setOutcome(toTextType(e)));
-        SipUtils.ifNotNull(event.getOutcomeDetail(), e -> et.setOutcomeDetail(toTextType(e)));
-        SipUtils.ifNotNull(event.getOutcomeDetailMessage(), e -> et.setOutcomeDetailMessage(toTextType(e)));
-        SipUtils.ifNotNull(event.getType(), e -> et.setEventType(toTextType(e)));
-        SipUtils.ifNotNull(event.getTypeCode(), e -> et.setEventTypeCode(toTextType(e)));
+        ifNotNull(event.getIdentifier(), e -> et.setEventIdentifier(toTextType(e)));
+        ifNotNull(event.getDateTime(), e -> et.setEventDateTime(SipUtils.toXmlDateTime(e)));
+        ifNotNull(event.getDetail(), e -> et.setEventDetail(toTextType(e)));
+        ifNotNull(event.getDetailData(), e -> et.setEventDetailData(toTextType(e)));
+        ifNotNull(event.getOutcome(), e -> et.setOutcome(toTextType(e)));
+        ifNotNull(event.getOutcomeDetail(), e -> et.setOutcomeDetail(toTextType(e)));
+        ifNotNull(event.getOutcomeDetailMessage(), e -> et.setOutcomeDetailMessage(toTextType(e)));
+        ifNotNull(event.getType(), e -> et.setEventType(toTextType(e)));
+        ifNotNull(event.getTypeCode(), e -> et.setEventTypeCode(toTextType(e)));
         return et;
     }
 
@@ -569,19 +556,13 @@ class Fntcv4Converter {
             }
         }
 
-        SipUtils.ifNotBlank(code.getAuthorizationReasonCodeListVersion(),
-                e -> clvt.setAuthorizationReasonCodeListVersion(toCodeType(e)));
-        SipUtils.ifNotBlank(code.getFileEncodingCodeListVersion(),
-                e -> clvt.setFileEncodingCodeListVersion(toCodeType(e)));
-        SipUtils.ifNotBlank(code.getFileFormatCodeListVersion(),
-                e -> clvt.setFileFormatCodeListVersion(toCodeType(e)));
-        SipUtils.ifNotBlank(code.getMessageDigestAlgorithmCodeListVersion(),
-                e -> clvt.setMessageDigestAlgorithmCodeListVersion(toCodeType(e)));
-        SipUtils.ifNotBlank(code.getRelationshipCodeListVersion(),
-                e -> clvt.setRelationshipCodeListVersion(toCodeType(e)));
+        SipUtils.ifNotBlank(code.getAuthorizationReasonCodeListVersion(), e -> clvt.setAuthorizationReasonCodeListVersion(toCodeType(e)));
+        SipUtils.ifNotBlank(code.getFileEncodingCodeListVersion(), e -> clvt.setFileEncodingCodeListVersion(toCodeType(e)));
+        SipUtils.ifNotBlank(code.getFileFormatCodeListVersion(), e -> clvt.setFileFormatCodeListVersion(toCodeType(e)));
+        SipUtils.ifNotBlank(code.getMessageDigestAlgorithmCodeListVersion(), e -> clvt.setMessageDigestAlgorithmCodeListVersion(toCodeType(e)));
+        SipUtils.ifNotBlank(code.getRelationshipCodeListVersion(), e -> clvt.setRelationshipCodeListVersion(toCodeType(e)));
         SipUtils.ifNotBlank(code.getReplyCodeListVersion(), e -> clvt.setReplyCodeListVersion(toCodeType(e)));
-        SipUtils.ifNotBlank(code.getSignatureStatusCodeListVersion(),
-                e -> clvt.setSignatureStatusCodeListVersion(toCodeType(e)));
+        SipUtils.ifNotBlank(code.getSignatureStatusCodeListVersion(), e -> clvt.setSignatureStatusCodeListVersion(toCodeType(e)));
         return clvt;
     }
 
@@ -723,17 +704,13 @@ class Fntcv4Converter {
 
                 // Add binary file to zip
                 if (zipArchive != null) {
-                    Path zipEntry = zip(binaryPath,
-                            Hex.encodeHexString(d) + "_" + Files.getLastModifiedTime(binaryPath).toMillis() + "_"
-                                    + binaryPath.getFileName());
+                    Path zipEntry = zip(binaryPath, Hex.encodeHexString(d) + "_" + Files.getLastModifiedTime(binaryPath).toMillis() + "_" + binaryPath.getFileName());
                     long size = (long) Files.getAttribute(zipEntry, "zip:size");
                     bdot.setSize(new BigDecimal(size));
                     bdot.getAttachment().setUri(zipEntry.toString());
                 } else {
                     bdot.setSize(new BigDecimal(Files.size(binaryPath)));
-                    bdot.getAttachment().setUri(
-                            "Content/" + Hex.encodeHexString(d) + "_" + Files.getLastModifiedTime(binaryPath).toMillis() + "_"
-                                    + binaryPath.getFileName());
+                    bdot.getAttachment().setUri("Content/" + Hex.encodeHexString(d) + "_" + Files.getLastModifiedTime(binaryPath).toMillis() + "_" + binaryPath.getFileName());
                 }
 
                 // Note. The Signature Identifier does not fully support NIO2 (ie. does not work with jimfs)

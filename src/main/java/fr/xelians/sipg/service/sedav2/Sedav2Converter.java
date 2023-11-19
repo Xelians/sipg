@@ -360,15 +360,15 @@ class Sedav2Converter {
         unit.getTitles().forEach(t -> dmct.getTitle().add(toTextType(t)));
 
         // Identifier Group
-        ifNotNull(unit.getFilePlanPosition(), e -> dmct.getFilePlanPosition().add(e));
-        ifNotNull(unit.getSystemId(), e -> dmct.getSystemId().add(e));
-        ifNotNull(unit.getOriginatingSystemId(), e -> dmct.getOriginatingSystemId().add(e));
-        ifNotNull(unit.getOriginatingAgencyArchiveUnitIdentifier(), e -> dmct.getOriginatingAgencyArchiveUnitIdentifier().add(e));
-        ifNotNull(unit.getArchivalAgencyArchiveUnitIdentifier(), e -> dmct.getArchivalAgencyArchiveUnitIdentifier().add(e));
-        ifNotNull(unit.getTransferringAgencyArchiveUnitIdentifier(), e -> dmct.getTransferringAgencyArchiveUnitIdentifier().add(e));
+        unit.getFilePlanPositions().forEach( e -> dmct.getFilePlanPosition().add(e));
+        unit.getSystemIds().forEach( e -> dmct.getSystemId().add(e));
+        unit.getOriginatingSystemIds().forEach( e -> dmct.getOriginatingSystemId().add(e));
+        unit.getOriginatingAgencyArchiveUnitIdentifiers().forEach( e -> dmct.getOriginatingAgencyArchiveUnitIdentifier().add(e));
+        unit.getArchivalAgencyArchiveUnitIdentifiers().forEach( e -> dmct.getArchivalAgencyArchiveUnitIdentifier().add(e));
+        unit.getTransferringAgencyArchiveUnitIdentifiers().forEach( e -> dmct.getTransferringAgencyArchiveUnitIdentifier().add(e));
         //  acceptIfNotNull(unit.getPhysicalId(), e -> dmct.getPhysicalId().add(toTextType(e)));
 
-        if (isStrict && unit.getDataObjectSystemId() != null) {
+        if (isStrict &&  !unit.getDataObjectSystemIds().isEmpty() ) {
             throw new SipException("SEDA 2.1 does not support DataObjectSystemId");
         }
 

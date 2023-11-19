@@ -276,7 +276,7 @@ public class SipFactory {
     unit1.setDocumentType("DocType");
     unit1.addTag("cle", "valeur");
     unit1.addTag("juste de l'indexation");
-    unit1.setSystemId("SystemId");
+    unit1.addSystemId("SystemId");
 
     //Règles de gestion
     //unit1.setAccessRule("AR038", today);
@@ -449,7 +449,7 @@ public class SipFactory {
     unit1.addCustodialItem("My Message1", todaytime);
     unit1.addCustodialItem("My Message2", todaytime);
 
-    unit1.setSystemId("000001");
+    unit1.addSystemId("000001");
     unit1.addTitle("MyTitle1");
     unit1.addTag("MyKey11", "MyValue11");
     unit1.addTag("MyKey12", "MyValue12");
@@ -479,20 +479,20 @@ public class SipFactory {
 
     unit2.setBinaryPath(binaryPath1);
     unit2.setVersion("BinaryMaster_1");
-    unit2.setFormatId("pdf");
+    unit2.setFormatId("fmt/18");
     unit2.setFormatName("Portable Document Format");
     unit2.setFileInfo(FileInfoBuilder.builder().withFilename("MyFile.pdf").withLastModified(todaytime)
                                      .withCreatingApplicationName("PdfBox").build());
 
     unit2.setDisseminationPath(binaryPath2);
-    unit2.setDisseminationFormatId("pdf");
+    unit2.setDisseminationFormatId("fmt/18");
     unit2.setDisseminationFormatName("Portable Document Format");
     unit2.setDisseminationFileInfo(FileInfoBuilder.builder().withFilename("MyFile.pdf").withLastModified(todaytime)
                                      .withCreatingApplicationName("PdfBoxDissemination").build());
 
     unit2.setThumbnailPath(binaryPath2);
     unit2.setThumbnailVersion("Thumbnail_2");
-    unit2.setThumbnailFormatId("pdf");
+    unit2.setThumbnailFormatId("fmt/18");
     unit2.setThumbnailFormatName("Portable Document Format");
     unit2.setThumbnailFileInfo(FileInfoBuilder.builder().withFilename("MyFile.pdf").withLastModified(todaytime)
                                      .withCreatingApplicationName("PdfBoxThumbnail").build());
@@ -533,7 +533,7 @@ public class SipFactory {
 
     unit2.setArchiveUnitProfile("My Archive Unit Profile 2");
     unit2.setDocumentType("DOC002");
-    unit2.setSystemId("000002");
+    unit2.addSystemId("000002");
     unit2.addTitle("MyTitle2");
     unit2.addTag("MyKey21", "MyValue21");
     unit2.addTag("MyKey22", "MyValue22");
@@ -616,7 +616,7 @@ public class SipFactory {
     unit3.setFormatId("pdf");
     unit3.setSignatureStatus("No Signature");
     unit3.setDocumentType("DOC003");
-    unit3.setSystemId("000003");
+    unit3.addSystemId("000003");
     unit3.addTitle("MyTitle3");
     unit3.addTag("MyKey11", "MyValue11");
     unit3.addTag("MyValue13");
@@ -711,7 +711,7 @@ public class SipFactory {
       unit.getAppraisalRules().setFinalAction("Destroy");
 
       unit.setDocumentType("DOC00" + i);
-      unit.setSystemId(String.valueOf(i));
+      unit.addSystemId(String.valueOf(i));
       unit.addTitle("MyTitle " + i);
       unit.addTag("MyKey1", "MyValue1_" + i);
       unit.addTag("MyKey1", "MyValue1_" + i);
@@ -756,7 +756,7 @@ public class SipFactory {
       unit.getAppraisalRules().setFinalAction("Keep");
 
       unit.setDocumentType("DOC00" + i);
-      unit.setSystemId(String.valueOf(i));
+      unit.addSystemId(String.valueOf(i));
       unit.addTitle("MyTitle " + i);
       unit.addTag("MyKey1", "MyValue1_" + i);
 
