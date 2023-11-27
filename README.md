@@ -182,7 +182,7 @@ L'objet archiveTransfer, issu de la désérialisation, peut ainsi être utilisé
 4. Pusher la branche (git push origin newFeature)
 5. Créer une pull request
 
-## Ajouter une nouvelle release
+## Ajouter et déployer une nouvelle release
 
 Après avoir testé la nouvelle release:
 * Modifier la version dans le fichier pom.xml
@@ -192,6 +192,10 @@ Après avoir testé la nouvelle release:
 git tag -a v1.4 -m "Sipg version 1.4"
 git push origin v1.4 or git push origin --tags
 ```
+* Exécuter le workflow 
+* Se connecter sur le serveur Sonatype
+  - https://s01.oss.sonatype.org/
+* Passer les étapes de déploiement (staging, close, etc.)
 
 ## Licences
 
