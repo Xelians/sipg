@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.xelians</groupId>
     <artifactId>sipg</artifactId>
-    <version>1.25</version>
+    <version>1.26</version>
     <packaging>jar</packaging>
 
     <organization>
@@ -234,6 +234,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -251,6 +252,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <!-- Unit tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -296,8 +298,8 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin> 
-                 
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
@@ -363,8 +365,31 @@
 
     <profiles>
         <profile>
-            <!-- Use "mvn verify -Pall" to run package in one big jar -->
+            <!-- Use "mvn verify -Pgithub" to run package in one big jar -->
             <id>github</id>
+            <build>
+                <plugins>
+                    <!-- Sign artefact -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <!-- Use "mvn verify -Pall" to run package in one big jar -->
+            <id>all</id>
             <build>
                 <plugins>
                     <plugin>
