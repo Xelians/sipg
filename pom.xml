@@ -235,24 +235,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${javadoc.source.version}</version>
-                <configuration>
-                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
-                    <excludePackageNames>org.*:uk.*:fr.gouv.*</excludePackageNames>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Unit tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -279,22 +261,6 @@
                         <id>default-report</id>
                         <goals>
                             <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Sign artefact -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -365,10 +331,28 @@
 
     <profiles>
         <profile>
-            <!-- Use "mvn verify -Pgithub" to run package in one big jar -->
-            <id>github</id>
+            <!-- Use "mvn verify -Pcentral" to run package in one big jar -->
+            <id>central</id>
             <build>
                 <plugins>
+                    <!-- Generate Javadoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${javadoc.source.version}</version>
+                        <configuration>
+                            <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                            <excludePackageNames>org.*:uk.*:fr.gouv.*</excludePackageNames>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <!-- Sign artefact -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -387,9 +371,10 @@
                 </plugins>
             </build>
         </profile>
+
         <profile>
-            <!-- Use "mvn verify -Pall" to run package in one big jar -->
-            <id>all</id>
+            <!-- Use "mvn verify -Pgithub" to run package in one big jar -->
+            <id>github</id>
             <build>
                 <plugins>
                     <plugin>
