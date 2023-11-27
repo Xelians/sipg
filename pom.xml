@@ -9,7 +9,8 @@
     <packaging>jar</packaging>
 
     <organization>
-        <name>Xelians / Mintika</name>
+        <name>Xelians</name>
+        <name>Mintika</name>
     </organization>
 
     <licenses>
