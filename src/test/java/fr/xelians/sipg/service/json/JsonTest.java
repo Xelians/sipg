@@ -18,8 +18,6 @@
  */
 package fr.xelians.sipg.service.json;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 import com.google.common.jimfs.Jimfs;
 import fr.xelians.sipg.SipFactory;
 import fr.xelians.sipg.TestInit;
@@ -33,6 +31,8 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The JSON integration test.
@@ -56,8 +56,15 @@ class JsonTest {
   void testCreateMiniJson(TestInfo testInfo) {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
     try {
+      Path jsonPath = Paths.get(TestInit.TEST_RESULTS + "minisip_serial.json");
       ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "minisip_serial.json"), jsonConfig);
+      jsonService.write(archiveTransfer, jsonPath, jsonConfig);
+
+      ArchiveTransfer newArchiveTransfer = jsonService.read(jsonPath);
+      String str = archiveTransfer.getArchiveUnits().get(0).getBinaryPath().toString();
+      String newStr = newArchiveTransfer.getArchiveUnits().get(0).getBinaryPath().toString();
+
+      assertTrue(newStr.contains(str));
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);

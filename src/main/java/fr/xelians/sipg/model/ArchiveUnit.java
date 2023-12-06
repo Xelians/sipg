@@ -480,7 +480,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return le path de l'objet binaire
      */
-    @JsonIgnore
     public Path getBinaryPath() {
         return binaryMasterDataObject == null ? null : binaryMasterDataObject.getBinaryPath();
     }
@@ -499,7 +498,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return la version de l'objet binaire
      */
-    @JsonIgnore
     public String getBinaryVersion() {
         return binaryMasterDataObject == null ? null : binaryMasterDataObject.getBinaryVersion();
     }
@@ -518,7 +516,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return l'algorithme utilisé
      */
-    @JsonIgnore
     public String getDigestAlgorithm() {
         return binaryMasterDataObject == null ? null : binaryMasterDataObject.getDigestAlgorithm();
     }
@@ -528,7 +525,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return les informations techniques
      */
-    @JsonIgnore
     public FileInfo getFileInfo() {
         return binaryMasterDataObject == null ? null : binaryMasterDataObject.getFileInfo();
     }
@@ -548,7 +544,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return l 'identifiant du format de l'objet binaire
      */
-    @JsonIgnore
     public String getFormatId() {
         return binaryMasterDataObject == null ? null : binaryMasterDataObject.getFormatIdentification().getFormatId();
     }
@@ -569,7 +564,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return le nom du format de l'objet binaire
      */
-    @JsonIgnore
     public String getFormatName() {
         return binaryMasterDataObject == null ? null : binaryMasterDataObject.getFormatIdentification().getFormatName();
     }
@@ -589,7 +583,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return le type MIME
      */
-    @JsonIgnore
     public String getMimeType() {
         return binaryMasterDataObject == null ? null : binaryMasterDataObject.getFormatIdentification().getMimeType();
     }
@@ -634,7 +627,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return le path de l'objet binaire
      */
-    @JsonIgnore
     public Path getDisseminationPath() {
         return disseminationDataObject == null ? null : disseminationDataObject.getBinaryPath();
     }
@@ -653,7 +645,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return la version de l'objet binaire
      */
-    @JsonIgnore
     public String getDisseminationVersion() {
         return disseminationDataObject == null ? null : disseminationDataObject.getBinaryVersion();
     }
@@ -672,7 +663,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return l'algorithme utilisé
      */
-    @JsonIgnore
     public String getDisseminationDigestAlgorithm() {
         return disseminationDataObject == null ? null : disseminationDataObject.getDigestAlgorithm();
     }
@@ -682,7 +672,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return les informations techniques
      */
-    @JsonIgnore
     public FileInfo getDisseminationFileInfo() {
         return disseminationDataObject == null ? null : disseminationDataObject.getFileInfo();
     }
@@ -702,7 +691,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return l 'identifiant du format de l'objet binaire
      */
-    @JsonIgnore
     public String getDisseminationFormatId() {
         return disseminationDataObject == null ? null : disseminationDataObject.getFormatIdentification().getFormatId();
     }
@@ -723,7 +711,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return le nom du format de l'objet binaire
      */
-    @JsonIgnore
     public String getDisseminationFormatName() {
         return disseminationDataObject == null ? null : disseminationDataObject.getFormatIdentification().getFormatName();
     }
@@ -743,7 +730,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return le type MIME
      */
-    @JsonIgnore
     public String getDisseminationMimeType() {
         return disseminationDataObject == null ? null : disseminationDataObject.getFormatIdentification().getMimeType();
     }
@@ -788,7 +774,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return le path de l'objet binaire
      */
-    @JsonIgnore
     public Path getThumbnailPath() {
         return thumbnailDataObject == null ? null : thumbnailDataObject.getBinaryPath();
     }
@@ -807,7 +792,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return la version de l'objet binaire
      */
-    @JsonIgnore
     public String getThumbnailVersion() {
         return thumbnailDataObject == null ? null : thumbnailDataObject.getBinaryVersion();
     }
@@ -826,7 +810,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return l'algorithme utilisé
      */
-    @JsonIgnore
     public String getThumbnailDigestAlgorithm() {
         return thumbnailDataObject == null ? null : thumbnailDataObject.getDigestAlgorithm();
     }
@@ -836,7 +819,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return les informations techniques
      */
-    @JsonIgnore
     public FileInfo getThumbnailFileInfo() {
         return thumbnailDataObject == null ? null : thumbnailDataObject.getFileInfo();
     }
@@ -856,7 +838,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return l 'identifiant du format de l'objet binaire
      */
-    @JsonIgnore
     public String getThumbnailFormatId() {
         return thumbnailDataObject == null ? null : thumbnailDataObject.getFormatIdentification().getFormatId();
     }
@@ -877,7 +858,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return le nom du format de l'objet binaire
      */
-    @JsonIgnore
     public String getThumbnailFormatName() {
         return thumbnailDataObject == null ? null : thumbnailDataObject.getFormatIdentification().getFormatName();
     }
@@ -897,7 +877,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return le type MIME
      */
-    @JsonIgnore
     public String getThumbnailMimeType() {
         return thumbnailDataObject == null ? null : thumbnailDataObject.getFormatIdentification().getMimeType();
     }
@@ -942,7 +921,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return le path de l'objet binaire
      */
-    @JsonIgnore
     public Path getTextContentPath() {
         return textContentDataObject == null ? null : textContentDataObject.getBinaryPath();
     }
@@ -961,7 +939,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return la version de l'objet binaire
      */
-    @JsonIgnore
     public String getTextContentVersion() {
         return textContentDataObject == null ? null : textContentDataObject.getBinaryVersion();
     }
@@ -980,7 +957,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return l'algorithme utilisé
      */
-    @JsonIgnore
     public String getTextContentDigestAlgorithm() {
         return textContentDataObject == null ? null : textContentDataObject.getDigestAlgorithm();
     }
@@ -990,7 +966,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return les informations techniques
      */
-    @JsonIgnore
     public FileInfo getTextContentFileInfo() {
         return textContentDataObject == null ? null : textContentDataObject.getFileInfo();
     }
@@ -1010,7 +985,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return l 'identifiant du format de l'objet binaire
      */
-    @JsonIgnore
     public String getTextContentFormatId() {
         return textContentDataObject == null ? null : textContentDataObject.getFormatIdentification().getFormatId();
     }
@@ -1031,7 +1005,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return le nom du format de l'objet binaire
      */
-    @JsonIgnore
     public String getTextContentFormatName() {
         return textContentDataObject == null ? null : textContentDataObject.getFormatIdentification().getFormatName();
     }
@@ -1051,7 +1024,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      *
      * @return le type MIME
      */
-    @JsonIgnore
     public String getTextContentMimeType() {
         return textContentDataObject == null ? null : textContentDataObject.getFormatIdentification().getMimeType();
     }
