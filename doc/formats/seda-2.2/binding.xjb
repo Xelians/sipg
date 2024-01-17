@@ -1,0 +1,69 @@
+<jxb:bindings version="3.0"
+      xmlns:jxb="https://jakarta.ee/xml/ns/jaxb"
+      xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+
+    <jxb:bindings schemaLocation="http://www.w3.org/1999/xlink.xsd" node="/xs:schema">
+
+        <jxb:bindings node="//xs:attributeGroup[@name='locatorAttrs']">
+            <jxb:bindings node=".//xs:attribute[@ref='xlink:title']">
+                <jxb:property name="title1"/>
+            </jxb:bindings>
+        </jxb:bindings>
+
+        <jxb:bindings node="//xs:attributeGroup[@name='arcAttrs']">
+            <jxb:bindings node=".//xs:attribute[@ref='xlink:title']">
+                <jxb:property name="title2"/>
+            </jxb:bindings>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="seda-vitam-types.xsd">
+        <jxb:bindings node="//xs:element[@name='DataObjectReferenceId']">
+            <jxb:property>
+                <jxb:baseType>
+                    <jxb:javaType name="java.lang.String"></jxb:javaType>
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+        <jxb:bindings node="//xs:element[@name='DataObjectGroupReferenceId']">
+            <jxb:property>
+                <jxb:baseType>
+                    <jxb:javaType name="java.lang.String"></jxb:javaType>
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="seda-vitam-technical.xsd">
+        <jxb:bindings node="//xs:element[@name='DataObjectGroupReferenceId']">
+            <jxb:property>
+                <jxb:baseType>
+                    <jxb:javaType name="java.lang.String"></jxb:javaType>
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="seda-vitam-ontology.xsd">
+        <jxb:bindings node="//xs:element[@name='SignedObjectId']">
+            <jxb:property>
+                <jxb:baseType>
+                    <jxb:javaType name="java.lang.String"></jxb:javaType>
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+        <jxb:bindings node="xs:complexType[@name='DataObjectOrArchiveUnitReferenceType']">
+            <jxb:bindings node="//xs:element[@name='ArchiveUnitRefId']">
+                <jxb:property>
+                    <jxb:baseType>
+                        <jxb:javaType name="java.lang.String"></jxb:javaType>
+                    </jxb:baseType>
+                </jxb:property>
+            </jxb:bindings>
+        </jxb:bindings>
+
+    </jxb:bindings>
+
+
+</jxb:bindings>
+
