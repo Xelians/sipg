@@ -48,11 +48,13 @@ import static org.junit.jupiter.api.Assertions.fail;
 @ExtendWith(TestInit.class)
 public class Sedav22Test {
 
+  public static final String SEDA22 = TestInit. TEST_RESOURCES + "seda-2.2/";
+
   private static final Logger LOGGER = LoggerFactory.getLogger(Sedav22Test.class);
 
   private final Sedav2Config sedaConfig = Sedav2ConfigBuilder.builder().format(true).validate(true).strict(false)
       .build();
-  private final Sedav2Service sedaService = Sedav2Service.getInstance();
+  private final Sedav2Service sedaService = Sedav2Service.getV22Instance();
 
   /**
    * Test validate xml.
@@ -64,8 +66,8 @@ public class Sedav22Test {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
     try {
-      Path path = Paths.get(TestInit.TEST_RESOURCES + "seda_small.xml");
-      sedaService.validate(path);
+      Path path = Paths.get(SEDA22 + "seda_small.xml");
+      sedaService.validate(path, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -108,7 +110,7 @@ public class Sedav22Test {
       ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
       Path output = Paths.get(TestInit.TEST_RESULTS + "largesip2_seda.zip");
       sedaService.write(archiveTransfer, output, sedaConfig);
-      sedaService.validate(output);
+      sedaService.validate(output, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -146,7 +148,7 @@ public class Sedav22Test {
 
     ArchiveTransfer archiveTransfer = SipFactory.createWithoutAgencySip();
     Path outputPath = Paths.get(TestInit.TEST_RESULTS + "fail_seda.zip");
-    assertThrows(SipException.class, () -> sedaService.write(archiveTransfer, outputPath));
+    assertThrows(SipException.class, () -> sedaService.write(archiveTransfer, outputPath, sedaConfig));
   }
 
   /**
@@ -179,7 +181,7 @@ public class Sedav22Test {
     try {
       String jsonString = SipFactory.createJsonString();
       ArchiveTransfer archiveTransfer = JsonService.getInstance().read(jsonString);
-      Sedav2Service.getInstance().write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "freemarker_seda.zip"));
+      Sedav2Service.getInstance().write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "freemarker_seda.zip"), sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -276,7 +278,7 @@ public class Sedav22Test {
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createMiniSipVitam();
       Path zipPath = Paths.get(TestInit.TEST_RESULTS + "MiniSipVitam_seda.zip");
-      Path rngPath = Paths.get(TestInit.TEST_RESOURCES, "Profil_VITAM_base.rng");
+      Path rngPath = Paths.get(SEDA22, "Profil_VITAM_base.rng");
       Validator rngValidator = Validators.getRngValidator(rngPath);
       sedaService.write(archiveTransfer, zipPath, rngValidator, sedaConfig);
     } catch (Exception ex) {
@@ -297,9 +299,9 @@ public class Sedav22Test {
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createMiniSipVitam();
-      Path rngPath = Paths.get(TestInit.TEST_RESOURCES, "Profil_VITAM_base.rng");
+      Path rngPath = Paths.get(SEDA22, "Profil_VITAM_base.rng");
       Validator rngValidator = Validators.getRngValidator(rngPath);
-      sedaService.validate(archiveTransfer, rngValidator);
+      sedaService.validate(archiveTransfer, rngValidator, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);

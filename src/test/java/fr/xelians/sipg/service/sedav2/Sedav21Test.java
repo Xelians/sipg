@@ -47,9 +47,11 @@ import org.slf4j.LoggerFactory;
  * @author Emmanuel Deviller
  */
 @ExtendWith(TestInit.class)
-public class Sedav2Test {
+class Sedav21Test {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Sedav2Test.class);
+  public static final String SEDA21 = TestInit. TEST_RESOURCES + "seda-2.1/";
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(Sedav21Test.class);
 
   private final Sedav2Config sedaConfig = Sedav2ConfigBuilder.builder().format(true).validate(true).strict(false)
       .build();
@@ -65,7 +67,7 @@ public class Sedav2Test {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
     try {
-      Path path = Paths.get(TestInit.TEST_RESOURCES + "seda_small.xml");
+      Path path = Paths.get(SEDA21 + "seda_small.xml");
       sedaService.validate(path);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
@@ -277,7 +279,7 @@ public class Sedav2Test {
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createMiniSipVitam();
       Path zipPath = Paths.get(TestInit.TEST_RESULTS + "MiniSipVitam_seda.zip");
-      Path rngPath = Paths.get(TestInit.TEST_RESOURCES, "Profil_VITAM_base.rng");
+      Path rngPath = Paths.get(SEDA21, "Profil_VITAM_base.rng");
       Validator rngValidator = Validators.getRngValidator(rngPath);
       sedaService.write(archiveTransfer, zipPath, rngValidator, sedaConfig);
     } catch (Exception ex) {
@@ -298,7 +300,7 @@ public class Sedav2Test {
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createMiniSipVitam();
-      Path rngPath = Paths.get(TestInit.TEST_RESOURCES, "Profil_VITAM_base.rng");
+      Path rngPath = Paths.get(SEDA21, "Profil_VITAM_base.rng");
       Validator rngValidator = Validators.getRngValidator(rngPath);
       sedaService.validate(archiveTransfer, rngValidator);
     } catch (Exception ex) {

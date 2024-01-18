@@ -18,7 +18,6 @@
  */
 package fr.xelians.sipg.service.sedav2;
 
-import fr.gouv.culture.archivesdefrance.seda.v2.ArchiveTransferType;
 import fr.xelians.sipg.model.ArchiveTransfer;
 import fr.xelians.sipg.service.common.ProgressEvent;
 import fr.xelians.sipg.service.common.ProgressListener;
@@ -26,13 +25,8 @@ import fr.xelians.sipg.service.common.ProgressState;
 import fr.xelians.sipg.utils.ByteArrayInOutStream;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
-import jakarta.xml.bind.util.JAXBSource;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.Validate;
-import org.glassfish.jaxb.runtime.marshaller.NamespacePrefixMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -40,12 +34,9 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -53,7 +44,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
 
 import static fr.xelians.sipg.service.common.ProgressState.FAIL;
 import static fr.xelians.sipg.service.common.ProgressState.SUCCESS;
@@ -70,44 +60,36 @@ import static fr.xelians.sipg.service.common.ProgressState.SUCCESS;
  */
 public class Sedav2Service {
 
-    private static final String HTTP_WWW_W3_ORG_XML_XML_SCHEMA_V1_1 = "http://www.w3.org/XML/XMLSchema/v1.1";
-    public static final String HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
-
     private static final Logger LOGGER = LoggerFactory.getLogger(Sedav2Service.class);
-    private static final Sedav2Service INSTANCE = new Sedav2Service();
 
-    private final JAXBContext sedaContext;
-    private final Schema sedaSchema;
+    private static final Sedav2Service SEDA_V21 = new Sedav2Service(Sedav2Version.v21);
+    private static final Sedav2Service SEDA_V22 = new Sedav2Service(Sedav2Version.v22);
 
-    private final NamespacePrefixMapper namespaceMapper = new NamespacePrefixMapper() {
-        public String getPreferredPrefix(String namespaceUri, String suggestion, boolean requirePrefix) {
-            return !requirePrefix && "fr:gouv:culture:archivesdefrance:seda:v2.1".equals(namespaceUri) ? "" : "ns";
-        }
-    };
+    private final Sedav2Adapter sedaAdapter;
 
-    private Sedav2Service() {
-        // As the xsd 1.1 validator does not support included schemas, we provide a flattened schema
-        try (InputStream is1 = SipUtils.resourceAsStream("seda-vitam-2.1-full.xsd");
-             InputStream is2 = SipUtils.resourceAsStream("xml.xsd");
-             InputStream is3 = SipUtils.resourceAsStream("xlink.xsd")) {
-
-            SchemaFactory sf = SchemaFactory.newInstance(HTTP_WWW_W3_ORG_XML_XML_SCHEMA_V1_1);
-            sf.setFeature(HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL, true); // Avoid XXE
-            sf.setResourceResolver(new Sedav2Resolver(is2, is3));
-            sedaSchema = sf.newSchema(new StreamSource(is1));
-            sedaContext = JAXBContext.newInstance(fr.gouv.culture.archivesdefrance.seda.v2.ObjectFactory.class);
-        } catch (IOException | JAXBException | SAXException ex) {
-            throw new SipException("Unable to initialize XSD Schemas, JAXBContext and Marshaller", ex);
-        }
+    private Sedav2Service(Sedav2Version version) {
+        this.sedaAdapter = switch (version) {
+            case v21 -> Sedav21Adapter.INSTANCE;
+            case v22 -> Sedav22Adapter.INSTANCE;
+        };
     }
 
     /**
-     * Retourne l'instance singleton de la classe Sedav2Service.
+     * Retourne l'instance singleton de la classe Sedav2Service v2.1.
      *
      * @return l 'instance singleton
      */
     public static Sedav2Service getInstance() {
-        return INSTANCE;
+        return SEDA_V21;
+    }
+
+    /**
+     * Retourne l'instance singleton de la classe Sedav2Service v2.2.
+     *
+     * @return l 'instance singleton
+     */
+    public static Sedav2Service getV22Instance() {
+        return SEDA_V22;
     }
 
     /**
@@ -171,39 +153,7 @@ public class Sedav2Service {
             throw new SipException("Unable to delete file " + zipPath, ex);
         }
 
-        try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath)) {
-            ArchiveTransferType att = Sedav2Converter.convert(archive, zipArchive, config);
-            final Path zipEntryPath = zipArchive.getPath("manifest.xml");
-            try (OutputStream os = Files.newOutputStream(zipEntryPath)) {
-
-                // Set External Validator
-                if (validator != null) {
-                    validator.validate(new JAXBSource(sedaContext, att));
-                }
-
-                Marshaller sedaMarshaller = sedaContext.createMarshaller();
-                sedaMarshaller.setSchema(config.isValidate() ? sedaSchema : null);
-                sedaMarshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", namespaceMapper);
-                sedaMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
-
-                if (LOGGER.isDebugEnabled()) {
-                    sedaMarshaller.setEventHandler(new Sedav2EventHandler());
-                    sedaMarshaller.setListener(new Sedav2Listener());
-                }
-
-                // Marshall & prettyPrint
-                if (config.isFormat()) {
-                    // JAXB_FORMATTED_OUTPUT is buggy and does not format XML with DOM nodes. Hence, this ugly hack...
-                    ByteArrayInOutStream baios = new ByteArrayInOutStream(1024);
-                    sedaMarshaller.marshal(att, baios);
-                    SipUtils.formatXml(baios.getInputStream(), os, config.getIndent());
-                } else {
-                    sedaMarshaller.marshal(att, os);
-                }
-            }
-        } catch (IOException | ExecutionException | InterruptedException | JAXBException | SAXException ex) {
-            throw new SipException("Unable to serialize archive " + zipPath, ex);
-        }
+        sedaAdapter.write(archive, validator, zipPath, config);
     }
 
     /**
@@ -256,18 +206,7 @@ public class Sedav2Service {
         Validate.notNull(archive, SipUtils.NOT_NULL, "archive");
         Validate.notNull(config, SipUtils.NOT_NULL, "config");
 
-        try {
-            ArchiveTransferType att = Sedav2Converter.convert(archive, config);
-            JAXBSource source = new JAXBSource(sedaContext, att);
-            sedaSchema.newValidator().validate(source);
-
-            if (validator != null) {
-                validator.validate(source);
-            }
-        } catch (IOException | ExecutionException | InterruptedException | JAXBException | SAXException ex) {
-            Thread.currentThread().interrupt();
-            throw new SipException("Unable to validate archive", ex);
-        }
+        sedaAdapter.validate(archive, validator, config);
     }
 
     /**
@@ -340,17 +279,17 @@ public class Sedav2Service {
 
         String name = path.toString().toLowerCase();
         if (name.endsWith(".xml")) {
-            validateXml(path, validator);
+            validateXml(path, validator, config);
         } else {
             validateZip(path, validator, config, listener);
         }
     }
 
-    private void validateXml(Path xmlPath, Validator validator) {
+    private void validateXml(Path xmlPath, Validator validator, Sedav2Config config) {
         Validate.notNull(xmlPath, SipUtils.NOT_NULL, "path");
 
         try (InputStream is = Files.newInputStream(xmlPath)) {
-            this.validate(new StreamSource(is));
+            this.validate(new StreamSource(is), config);
         } catch (IOException ex) {
             throw new SipException("Unable to validate " + xmlPath, ex);
         }
@@ -370,16 +309,9 @@ public class Sedav2Service {
      *
      * @param source la source XML à valider
      */
-    private void validate(Source source) {
+    private void validate(Source source, Sedav2Config config) {
         Validate.notNull(source, SipUtils.NOT_NULL, "source");
-
-        try {
-            Validator sedaValidator = sedaSchema.newValidator();
-            sedaValidator.setFeature(HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL, true);
-            sedaValidator.validate(source);
-        } catch (IOException | SAXException ex) {
-            throw new SipException("Unable to validate " + source, ex);
-        }
+        sedaAdapter.validate(source, config);
     }
 
     private void validateZip(Path zipPath, Validator validator, Sedav2Config config,
@@ -420,16 +352,16 @@ public class Sedav2Service {
             ByteArrayInOutStream manifest = new ByteArrayInOutStream(1024);
 
             // Check manifest is valid against xsd
+            Files.copy(manifestPath, manifest);
+
             try {
-                Files.copy(manifestPath, manifest);
-                Validator sedaValidator = sedaSchema.newValidator();
-                sedaValidator.setFeature(HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL, true);
-                sedaValidator.validate(new StreamSource(manifest.getInputStream()));
-            } catch (IOException | SAXException ex) {
+                validate(new StreamSource(manifest.getInputStream()), config);
+            } catch (SipException ex) {
                 String msg = "Unable to validate manifest: " + zipPath;
                 updateListener(listener, id, FAIL, Sedav2Step.MANIFEST_SEDA, msg);
-                throw new SipException(msg, ex);
+                throw ex;
             }
+
             updateListener(listener, id, SUCCESS, Sedav2Step.MANIFEST_SEDA, "Manifest conforms to SEDA");
 
             // Check manifest is valid against rng

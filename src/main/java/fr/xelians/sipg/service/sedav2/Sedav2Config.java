@@ -139,9 +139,15 @@ public class Sedav2Config {
 
     @Override
     public String toString() {
-        return "Sedav2Config{" + "validate=" + validate + ", format=" + format + ", indent=" + indent + ", thread=" + thread
-                + ", strict=" + strict + ", checkBinary=" + checkBinary + ", checkSize=" + checkSize + ", checkDigest="
-                + checkDigest + '}';
+        return "Sedav2Config{" +
+                "validate=" + validate +
+                ", format=" + format +
+                ", indent=" + indent +
+                ", thread=" + thread +
+                ", strict=" + strict +
+                ", checkBinary=" + checkBinary +
+                ", checkSize=" + checkSize +
+                ", checkDigest=" + checkDigest +
+                '}';
     }
-
 }
