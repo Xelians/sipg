@@ -1,13 +1,13 @@
 # SipG
 
 ## Présentation
-* SipG est une bibliothèque pour générer et valider des archives aux formats FNTC v4 et SEDA v2.1.
+* SipG est une bibliothèque pour générer et valider des archives aux formats FNTC v4 et SEDA v2.1 et v2.2.
 
 ## Fonctionnalités
 
 La librairie SipG offre les fonctionnalités suivantes : 
 
-* Génération d’un SIP conforme aux formats FNTC v4 et SEDA v2.1
+* Génération d’un SIP conforme aux formats FNTC v4 et SEDA v2.1 & v2.2
 * Suivi précis des étapes de validation par callback 
 * Validation optionnelle du fichier de description de l'archive par un profil RNG 
 * Application automatique de valeurs par défaut raisonnables
@@ -15,18 +15,18 @@ La librairie SipG offre les fonctionnalités suivantes :
 * Identification des formats des objets binaires (intégration de la librairie Droid)
 * Calcul automatique des empreintes des objets binaires
 * Support des archives numériques et physiques
-* Validation complète d'une archive existante aux formats FNTC v4 ou SEDA v2.1
+* Validation complète d'une archive existante aux formats FNTC v4 ou SEDA v2.1 & v2.2
 * Sérialisation/désérialisation du fichier de description au format JSON
 * Capacité à générer des archives extrêmement volumineuses (plus de 100 000 objets)
 * Support du multi-threads lors de la génération de l'archive
 * Documentation Javadoc exhaustive 
 
-## Format SEDA v2.1
+## Format SEDA v2
 
 Le standard d'échange de données pour l'archivage SEDA modélise les différentes transactions qui peuvent avoir 
 lieu entre des  acteurs dans le cadre de l'archivage de données. 
 
-La documentation complète du SEDA v2.1 est disponible sur le site de [France Archive](https://redirect.francearchives.fr/seda/).
+La documentation complète du SEDA v2 est disponible sur le site de [France Archive](https://redirect.francearchives.fr/seda/).
 
 ## Format FNTC v4
 
@@ -39,7 +39,7 @@ Le standard FNTC v4 a pour principales caractéristiques :
 * Ontologie de description des unités d'archives réduite et simple
 * Extension de l’ontologie autorisée dans un cadre bien défini
 
-Les principales différences entre les formats SEDA v2.1 et FNTC v4 sont [listées ici](https://github.com/Xelians/sipg/blob/master/doc/assets/Diff_SEDA.md). 
+Les principales différences entre les formats SEDA v2 et FNTC v4 sont [listées ici](https://github.com/Xelians/sipg/blob/master/doc/assets/Diff_SEDA.md). 
 
 ## Architecture fonctionnelle
  
@@ -51,7 +51,16 @@ La librairie SipG a pour objectif de faciliter la création et la validation d'a
 
 Le répertoire contenant les tests d'intégration fournit de nombreux exemples d'utilisation de la librairie.
 
-### Création d’une archive SEDA avec SipG
+### Sélection de la version du service SEDA v2
+
+SipG supporte les versions 2.1 et 2.2 de la norme SEDA. 
+
+```
+Sedav2Service service21 = Sedav2Service.getInstance(); // Seda 2.1
+Sedav2Service service22 = Sedav2Service.getV22Instance(); // Seda 2.2
+```
+
+### Création d’une archive SEDA
 
 ```
 ArchiveUnit unit = new ArchiveUnit();                    // Instancie l’unité d’archive
@@ -65,7 +74,9 @@ archiveTransfer.setArchivalAgency("AG001", "");                   // Spécifie l
 archiveTransfer.setTransferringAgency("AG002", "");               // Spécifie le service versant
 archiveTransfer.addArchiveUnit(unit);                             // Ajoute l’unité à l’archive
 
-Sedav2Service.getInstance().write(archiveTransfer, Paths.get("seda.zip"));  // Génère le SIP
+Sedav2Service.getInstance().write(archiveTransfer, Paths.get("seda.zip"));  // Génère le SIP en Seda v2.1
+...
+Sedav2Service.getV22Instance().write(archiveTransfer, Paths.get("seda.zip"));  // Génère le SIP en Seda v2.2
 ```
 
 ### Création d’une archive au format SEDA à partir d'un fichier CSV
@@ -102,7 +113,8 @@ Sedav2Service.getInstance().write(archiveTransfer, Paths.get("seda.zip"));  // G
 
 ```
 Path path = Paths.get("seda_small.xml");               // Le fichier XML à valider
-Sedav2Service.getInstance().validate(path);            // Validation du fichier 
+Sedav2Service.getInstance().validate(path);            // Validation du fichier en Seda v2.1
+Sedav2Service.getV22Instance().validate(path);            // Validation du fichier en Seda v2.2
 ```
 
 ### Validation d'un fichier XML selon un profil RNG

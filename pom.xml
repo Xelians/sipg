@@ -338,7 +338,7 @@
 
     <profiles>
         <profile>
-            <!-- Use "mvn clean generate-sources -Pseda21"  to genrrate jaxb classes -->
+            <!-- Use "mvn clean generate-sources -Pseda21" to generate jaxb classes -->
             <id>seda21</id>
             <build>
                 <plugins>
@@ -391,7 +391,7 @@
         </profile>
 
         <profile>
-            <!-- Use "mvn clean generate-sources -Pseda22"  to genrrate jaxb classes -->
+            <!-- Use "mvn clean generate-sources -Pseda22" to generate jaxb classes -->
             <id>seda22</id>
             <build>
                 <plugins>
