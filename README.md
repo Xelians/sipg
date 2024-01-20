@@ -1,7 +1,7 @@
 # SipG
 
 ## Présentation
-* SipG est une bibliothèque pour générer et valider des archives aux formats FNTC v4 et SEDA v2.1 et v2.2.
+* SipG est une bibliothèque pour générer et valider des archives aux formats FNTC v4 et SEDA v2.1 & v2.2.
 
 ## Fonctionnalités
 
