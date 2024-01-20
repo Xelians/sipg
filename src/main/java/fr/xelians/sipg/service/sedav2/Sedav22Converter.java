@@ -68,7 +68,6 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -679,7 +678,7 @@ class Sedav22Converter {
     private HoldRuleType toHoldRuleType(HoldRules holdRule) {
         HoldRuleType art = sedav2Factory.createHoldRuleType();
 
-        for (HoRule rule : holdRule.getRules()) {
+        for (HoldRule rule : holdRule.getRules()) {
             List<JAXBElement<?>> elts = art.getRuleAndStartDateAndHoldEndDate() ;
 
             QName qrule = new QName(EXT_NS, "Rule") ;

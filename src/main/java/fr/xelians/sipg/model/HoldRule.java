@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class HoRule extends Rule {
+public class HoldRule extends Rule {
 
     protected LocalDate holdEndDate;
 
@@ -38,12 +38,12 @@ public class HoRule extends Rule {
     protected Boolean preventRearrangement;
 
     @JsonCreator
-    public HoRule(@JsonProperty("name") String name, @JsonProperty("startDate") LocalDate startDate,
-                  @JsonProperty("holdEndDate") LocalDate holdEndDate,
-                  @JsonProperty("holdOwner") String holdOwner,
-                  @JsonProperty("holdReason") String holdReason,
-                  @JsonProperty("holdReassessingDate") LocalDate holdReassessingDate,
-                  @JsonProperty("preventRearrangement") Boolean preventRearrangement) {
+    public HoldRule(@JsonProperty("name") String name, @JsonProperty("startDate") LocalDate startDate,
+                    @JsonProperty("holdEndDate") LocalDate holdEndDate,
+                    @JsonProperty("holdOwner") String holdOwner,
+                    @JsonProperty("holdReason") String holdReason,
+                    @JsonProperty("holdReassessingDate") LocalDate holdReassessingDate,
+                    @JsonProperty("preventRearrangement") Boolean preventRearrangement) {
 
         super(name, startDate);
         this.holdOwner = holdOwner;
@@ -78,8 +78,8 @@ public class HoRule extends Rule {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        HoRule hoRule = (HoRule) o;
-        return Objects.equals(getHoldEndDate(), hoRule.getHoldEndDate()) && Objects.equals(getHoldOwner(), hoRule.getHoldOwner()) && Objects.equals(getHoldReason(), hoRule.getHoldReason()) && Objects.equals(getHoldReassessingDate(), hoRule.getHoldReassessingDate()) && Objects.equals(getPreventRearrangement(), hoRule.getPreventRearrangement());
+        HoldRule holdRule = (HoldRule) o;
+        return Objects.equals(getHoldEndDate(), holdRule.getHoldEndDate()) && Objects.equals(getHoldOwner(), holdRule.getHoldOwner()) && Objects.equals(getHoldReason(), holdRule.getHoldReason()) && Objects.equals(getHoldReassessingDate(), holdRule.getHoldReassessingDate()) && Objects.equals(getPreventRearrangement(), holdRule.getPreventRearrangement());
     }
 
     @Override

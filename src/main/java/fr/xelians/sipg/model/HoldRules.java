@@ -50,7 +50,7 @@ public class HoldRules extends AbstractRules {
     /**
      * La liste des règles.
      */
-    protected final List<HoRule> rules = new ArrayList<>();
+    protected final List<HoldRule> rules = new ArrayList<>();
 
     /**
      * Instancie la classe.
@@ -78,7 +78,7 @@ public class HoldRules extends AbstractRules {
      * @param startDate date de départ de calcul de la règle de communicabilité
      */
     public void addRule(String name, LocalDate startDate, LocalDate holdEndDate, String holdOwner, String holdReason, LocalDate holdReassessingDate, Boolean preventRearrangement) {
-        HoRule rule = new HoRule(name, startDate, holdEndDate, holdOwner, holdReason, holdReassessingDate, preventRearrangement);
+        HoldRule rule = new HoldRule(name, startDate, holdEndDate, holdOwner, holdReason, holdReassessingDate, preventRearrangement);
         rules.add(rule);
     }
 
@@ -87,7 +87,7 @@ public class HoldRules extends AbstractRules {
      *
      * @param rule règle de communicabilité
      */
-    public void addRule(HoRule rule) {
+    public void addRule(HoldRule rule) {
         Validate.notNull(rule, SipUtils.NOT_NULL, "rule");
         rules.add(rule);
     }
@@ -98,7 +98,7 @@ public class HoldRules extends AbstractRules {
      * @param rule la règle de communicabilité à supprimer
      * @return true si la suppression de la règle a réalisé avec succès, false sinon
      */
-    public boolean removeRule(HoRule rule) {
+    public boolean removeRule(HoldRule rule) {
         Validate.notNull(rule, SipUtils.NOT_NULL, "rule");
         return rules.remove(rule);
     }
@@ -108,7 +108,7 @@ public class HoldRules extends AbstractRules {
      *
      * @return la liste des règles de gel
      */
-    public List<HoRule> getRules() {
+    public List<HoldRule> getRules() {
         return new ArrayList<>(rules);
     }
 
