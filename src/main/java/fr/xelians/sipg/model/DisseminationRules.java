@@ -31,7 +31,8 @@ import java.time.LocalDate;
  *
  * @author Emmanuel Deviller
  */
-public class DisseminationRules extends AbstractRules {
+public class DisseminationRules extends AbstractSimpleRules {
+
 
     /**
      * Instancie la classe.

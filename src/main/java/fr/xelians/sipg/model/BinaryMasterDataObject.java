@@ -21,7 +21,7 @@ package fr.xelians.sipg.model;
 
 import fr.xelians.sipg.utils.SipException;
 
-public class BinaryMasterDataObject extends BinaryDataObject{
+public class BinaryMasterDataObject extends BinaryDataObject {
 
     public BinaryMasterDataObject() {
         super(BINARY_MASTER);

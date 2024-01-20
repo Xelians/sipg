@@ -38,7 +38,7 @@ import java.time.LocalDate;
  *
  * @author Emmanuel Deviller
  */
-public class ClassificationRules extends AbstractRules {
+public class ClassificationRules extends AbstractSimpleRules {
 
     /**
      * L'audience qui permet de gérer les questions de "diffusion restreinte", de "spécial France" et de "Confidentiel

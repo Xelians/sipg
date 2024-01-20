@@ -31,7 +31,8 @@ import java.time.LocalDate;
  *
  * @author Emmanuel Deviller
  */
-public class AccessRules extends AbstractRules {
+public class AccessRules extends AbstractSimpleRules {
+
 
     /**
      * Instancie la classe.
@@ -49,5 +50,6 @@ public class AccessRules extends AbstractRules {
     public AccessRules(String name, LocalDate startDate) {
         super(name, startDate);
     }
+
 
 }

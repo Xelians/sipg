@@ -423,6 +423,14 @@ public class SipFactory {
     rRule1.addPreventRuleName("RuleName r5");
     unit1.setReuseRules(rRule1);
 
+    HoldRules hRule1 = new HoldRules();
+    hRule1.addRule("RuleName h1", today, today, "MySelf1", "Maybe1", today, false);
+    hRule1.addRule("RuleName h2", today, today, "MySelf2", null, today, false);
+    hRule1.addRule("RuleName h3", today, today, "MySelf3", "Maybe3", null, false);
+    hRule1.addPreventRuleName("RuleName r4");
+    hRule1.addPreventRuleName("RuleName r5");
+    unit1.setHoldRules(hRule1);
+
     LocalDateTime todaytime = LocalDateTime.now();
 
     Event event1 = EventBuilder.builder().withDateTime(todaytime).withDetail("MyDetails1")

@@ -21,7 +21,7 @@ package fr.xelians.sipg.model;
 
 import fr.xelians.sipg.utils.SipException;
 
-public class TextContentDataObject extends BinaryDataObject{
+public class TextContentDataObject extends BinaryDataObject {
     public TextContentDataObject() {
         super(TEXT_CONTENT);
     }

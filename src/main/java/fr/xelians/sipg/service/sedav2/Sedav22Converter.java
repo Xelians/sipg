@@ -42,6 +42,7 @@ import fr.xelians.sipg.model.*;
 import fr.xelians.sipg.utils.DroidUtils;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
+import jakarta.xml.bind.JAXBElement;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,6 +55,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import uk.gov.nationalarchives.droid.core.interfaces.IdentificationResult;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -65,6 +68,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -366,6 +370,10 @@ class Sedav22Converter {
             mt.setClassificationRule(toClassificationRuleType(unit.getClassificationRules()));
         }
 
+        if (unit.getHoldRules() != null) {
+            mt.setHoldRule(toHoldRuleType(unit.getHoldRules()));
+        }
+
         if (mt.getUpdateOperation() != null || mt.getAccessRule() != null || mt.getAppraisalRule() != null || mt.getDisseminationRule() != null || mt.getReuseRule() != null || mt.getStorageRule() != null || mt.getClassificationRule() != null || mt.getLogBook() != null) {
 
             aut.setManagement(mt);
@@ -664,6 +672,55 @@ class Sedav22Converter {
         ifNotNull(classificationRule.getClassificationOwner(), art::setClassificationOwner);
         ifNotNull(classificationRule.getClassificationAudience(), art::setClassificationAudience);
         ifNotNull(classificationRule.getClassificationReassessingDate(), s -> art.setClassificationReassessingDate(SipUtils.toXmlDate(s)));
+        return art;
+    }
+
+    // Note the HoldRuleGroup was "unwrapped" in the HoldRuleType in the xsd
+    private HoldRuleType toHoldRuleType(HoldRules holdRule) {
+        HoldRuleType art = sedav2Factory.createHoldRuleType();
+
+        for (HoRule rule : holdRule.getRules()) {
+            List<JAXBElement<?>> elts = art.getRuleAndStartDateAndHoldEndDate() ;
+
+            QName qrule = new QName(EXT_NS, "Rule") ;
+            String name = rule.getName() ;
+            elts.add(new JAXBElement<>(qrule, String.class, name));
+            if (rule.getStartDate() != null) {
+                QName qstartdate = new QName(EXT_NS,"StartDate") ;
+                XMLGregorianCalendar startDate = SipUtils.toXmlDate(rule.getStartDate()) ;
+                elts.add(new JAXBElement<>(qstartdate, XMLGregorianCalendar.class, startDate));
+            }
+            if (rule.getHoldEndDate() != null) {
+                QName qholdenddate = new QName(EXT_NS,"HoldEndDate") ;
+                XMLGregorianCalendar startDate = SipUtils.toXmlDate(rule.getHoldEndDate()) ;
+                elts.add(new JAXBElement<>(qholdenddate, XMLGregorianCalendar.class, startDate));
+            }
+            if (rule.getHoldOwner() != null) {
+                QName qowner = new QName(EXT_NS,"HoldOwner") ;
+                String owner = rule.getHoldOwner() ;
+                elts.add(new JAXBElement<>(qowner, String.class, owner));
+            }
+            if (rule.getHoldReassessingDate() != null) {
+                QName qreassessingDate = new QName(EXT_NS,"HoldReassessingDate") ;
+                XMLGregorianCalendar reassessingDate = SipUtils.toXmlDate(rule.getHoldReassessingDate()) ;
+                elts.add(new JAXBElement<>(qreassessingDate, XMLGregorianCalendar.class, reassessingDate));
+            }
+            if (rule.getHoldReason() != null) {
+                QName qreason = new QName(EXT_NS,"HoldReason") ;
+                String reason = rule.getHoldOwner() ;
+                elts.add(new JAXBElement<>(qreason, String.class, reason));
+            }
+            if (rule.getPreventRearrangement() != null) {
+                QName qp = new QName(EXT_NS,"PreventRearrangement") ;
+                Boolean p = rule.getPreventRearrangement() ;
+                elts.add(new JAXBElement<>(qp, Boolean.class, p));
+            }
+        }
+
+        // xsd:choice : you cannot set PreventInheritance and PreventRuleNames
+        ifNotNull(holdRule.isPreventInheritance(), art::setPreventInheritance);
+        holdRule.getPreventRuleNames().forEach(e -> art.getRefNonRuleId().add(toRuleIdType(e)));
+
         return art;
     }
 

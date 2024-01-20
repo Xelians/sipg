@@ -207,6 +207,10 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     protected StorageRules storageRules;
     /**
+     * Les règles de gel.
+     */
+    protected HoldRules holdRules;
+    /**
      * L'opération de mise à jour.
      */
     protected UpdateOperation updateOperation;
@@ -1258,6 +1262,34 @@ public class ArchiveUnit implements ArchiveUnitContainer {
      */
     public void setStorageRules(String ruleName, LocalDate startDate) {
         this.storageRules = new StorageRules(ruleName, startDate);
+    }
+
+    /**
+     * Indique les règles de gel.
+     *
+     * @return les règles de gel
+     */
+    public HoldRules getHoldRules() {
+        return holdRules;
+    }
+
+    /**
+     * Spécifie les règles de gel.
+     *
+     * @param holdRules les règles de gel
+     */
+    public void setHoldRules(HoldRules holdRules) {
+        this.holdRules = holdRules;
+    }
+
+    /**
+     * Spécifie les règles de gel.
+     *
+     * @param ruleName  le nom de la règle
+     * @param startDate la date de début
+     */
+    public void setHoldRules(String ruleName, LocalDate startDate, LocalDate holdEndDate, String holdOwner, String holdReason, LocalDate holdReassessingDate, Boolean preventRearrangement) {
+        this.holdRules = new HoldRules(ruleName, startDate, holdEndDate, holdOwner, holdReason, holdReassessingDate, preventRearrangement);
     }
 
     /**

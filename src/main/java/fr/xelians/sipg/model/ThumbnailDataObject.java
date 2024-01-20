@@ -21,7 +21,7 @@ package fr.xelians.sipg.model;
 
 import fr.xelians.sipg.utils.SipException;
 
-public class ThumbnailDataObject extends BinaryDataObject{
+public class ThumbnailDataObject extends BinaryDataObject {
     public ThumbnailDataObject() {
         super(THUMBNAIL);
     }

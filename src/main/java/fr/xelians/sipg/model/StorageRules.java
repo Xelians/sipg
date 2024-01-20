@@ -34,7 +34,7 @@ import java.time.LocalDate;
  *
  * @author Emmanuel Deviller
  */
-public class StorageRules extends AbstractRules {
+public class StorageRules extends AbstractSimpleRules {
 
     /**
      * L'action à réaliser à l'échéance de la durée d’utilité courante.
@@ -55,7 +55,8 @@ public class StorageRules extends AbstractRules {
      * @param startDate date de départ de calcul de la règle d’utilité courante
      */
     public StorageRules(String name, LocalDate startDate) {
-        super(name, startDate);
+        super();
+        addRule(name, startDate);
     }
 
     /**

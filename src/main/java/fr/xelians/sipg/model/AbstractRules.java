@@ -18,11 +18,9 @@
  */
 package fr.xelians.sipg.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.xelians.sipg.utils.SipUtils;
 import org.apache.commons.lang3.Validate;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +31,6 @@ import java.util.List;
  */
 public abstract class AbstractRules {
 
-    /**
-     * La liste des règles.
-     */
-    protected final List<Rule> rules = new ArrayList<>();
 
     /**
      * La liste des identifiants des règles qui pourront être retirées de l'héritage dans ce nœud. Cette propriété est
@@ -56,56 +50,6 @@ public abstract class AbstractRules {
     protected AbstractRules() {
     }
 
-    /**
-     * Instancie la classe avec une règle spécifiée par les paramètres.
-     *
-     * @param name      la référence de la règle communicabilité
-     * @param startDate date de départ de calcul de la règle de communicabilité
-     */
-    protected AbstractRules(String name, LocalDate startDate) {
-        this.rules.add(new Rule(name, startDate));
-    }
-
-    /**
-     * Ajoute une règle de communicabilité.
-     *
-     * @param name      la référence de la règle communicabilité à ajouter
-     * @param startDate date de départ de calcul de la règle de communicabilité
-     */
-    public void addRule(String name, LocalDate startDate) {
-        Rule rule = new Rule(name, startDate);
-        rules.add(rule);
-    }
-
-    /**
-     * Ajoute une règle de communicabilité.
-     *
-     * @param rule règle de communicabilité
-     */
-    public void addRule(Rule rule) {
-        Validate.notNull(rule, SipUtils.NOT_NULL, "rule");
-        rules.add(rule);
-    }
-
-    /**
-     * Supprime une règle de communicabilité.
-     *
-     * @param rule la règle de communicabilité à supprimer
-     * @return true si la suppression de la règle a réalisé avec succès, false sinon
-     */
-    public boolean removeRule(Rule rule) {
-        Validate.notNull(rule, SipUtils.NOT_NULL, "rule");
-        return rules.remove(rule);
-    }
-
-    /**
-     * Fournit la liste des règles de communicabilité.
-     *
-     * @return la liste des règles de communicabilité
-     */
-    public List<Rule> getRules() {
-        return new ArrayList<>(rules);
-    }
 
     /**
      * Ajoute l'identifiant de la règle qui pourra être retirée de l'héritage dans ce nœud.
@@ -137,25 +81,6 @@ public abstract class AbstractRules {
         return new ArrayList<>(preventRuleNames);
     }
 
-    /**
-     * Indique la date de départ de calcul de la première règle de communicabilité.
-     *
-     * @return la date
-     */
-    @JsonIgnore
-    public String getRuleName() {
-        return rules.isEmpty() ? null : rules.get(0).getName();
-    }
-
-    /**
-     * Indique la date de départ de calcul de la première règle de communicabilité.
-     *
-     * @return la date
-     */
-    @JsonIgnore
-    public LocalDate getStartDate() {
-        return rules.isEmpty() ? null : rules.get(0).getStartDate();
-    }
 
     /**
      * Indique si les règles de gestion héritées des unités d'archives parentes doivent être ignorées pour l’unité d'archive

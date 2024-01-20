@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 
 import static fr.xelians.sipg.utils.SipUtils.NOT_NULL;
 
-public abstract  class BinaryDataObject {
+public abstract class BinaryDataObject {
 
     public static final String BINARY_MASTER = "BinaryMaster";
     public static final String DISSEMINATION = "Dissemination";
@@ -122,7 +122,7 @@ public abstract  class BinaryDataObject {
      *
      * @param objectVersion la version de l'objet binaire
      */
-    public abstract void setBinaryVersion(String objectVersion) ;
+    public abstract void setBinaryVersion(String objectVersion);
 
     /**
      * Indique l'algorithme utilisé pour générer l'empreinte (hash) de l'objet binaire.

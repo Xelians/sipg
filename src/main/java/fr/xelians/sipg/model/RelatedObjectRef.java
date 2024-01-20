@@ -23,7 +23,6 @@ import org.apache.commons.lang3.Validate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * La classe RelatedObjectRef représente la référence à un ensemble d'objets faisant ou ne faisant pas partie du présent

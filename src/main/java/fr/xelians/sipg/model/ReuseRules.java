@@ -31,7 +31,7 @@ import java.time.LocalDate;
  *
  * @author Emmanuel Deviller
  */
-public class ReuseRules extends AbstractRules {
+public class ReuseRules extends AbstractSimpleRules {
 
     /**
      * Instancie la classe.
@@ -49,5 +49,4 @@ public class ReuseRules extends AbstractRules {
     public ReuseRules(String name, LocalDate startDate) {
         super(name, startDate);
     }
-
 }

@@ -31,7 +31,8 @@ import java.time.LocalDate;
  *
  * @author Emmanuel Deviller
  */
-public class AppraisalRules extends AbstractRules {
+public class AppraisalRules extends AbstractSimpleRules {
+
 
     /**
      * Action à entreprendre au terme de la durée d’utilité administrative. Cette propriété est ignorée en FNTC v4.

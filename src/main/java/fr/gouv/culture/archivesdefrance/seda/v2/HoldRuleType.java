@@ -20,7 +20,9 @@ import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * La liste d'identifiants de règles à appliquer et à ignorer qui doit être appliquée à partir de cet ArchiveUnit.
+ * La liste d'identifiants de règles à appliquer et à ignorer qui doit
+ *                 être appliquée à partir de cet ArchiveUnit.
+ *             
  * 
  * <p>Java class for HoldRuleType complex type.
  * 
@@ -31,7 +33,15 @@ import jakarta.xml.bind.annotation.XmlType;
  *   <complexContent>
  *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       <sequence>
- *         <group ref="{fr:gouv:culture:archivesdefrance:seda:v2}HoldRuleDefGroup" maxOccurs="unbounded" minOccurs="0"/>
+ *         <sequence maxOccurs="unbounded" minOccurs="0">
+ *           <element name="Rule" type="{fr:gouv:culture:archivesdefrance:seda:v2}RuleIdType"/>
+ *           <element name="StartDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
+ *           <element name="HoldEndDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
+ *           <element name="HoldOwner" type="{fr:gouv:culture:archivesdefrance:seda:v2}NonEmptyTokenType" minOccurs="0"/>
+ *           <element name="HoldReassessingDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
+ *           <element name="HoldReason" type="{fr:gouv:culture:archivesdefrance:seda:v2}NonEmptyTokenType" minOccurs="0"/>
+ *           <element name="PreventRearrangement" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         </sequence>
  *         <choice minOccurs="0">
  *           <group ref="{fr:gouv:culture:archivesdefrance:seda:v2}PreventInheritanceGroup"/>
  *           <element name="RefNonRuleId" type="{fr:gouv:culture:archivesdefrance:seda:v2}RuleIdType" maxOccurs="unbounded"/>
@@ -46,7 +56,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "HoldRuleType", propOrder = {
-    "holdRuleDefGroup",
+    "ruleAndStartDateAndHoldEndDate",
     "preventInheritance",
     "refNonRuleId"
 })
@@ -61,25 +71,25 @@ public class HoldRuleType {
         @XmlElementRef(name = "HoldReason", namespace = "fr:gouv:culture:archivesdefrance:seda:v2", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "PreventRearrangement", namespace = "fr:gouv:culture:archivesdefrance:seda:v2", type = JAXBElement.class, required = false)
     })
-    protected List<JAXBElement<?>> holdRuleDefGroup;
+    protected List<JAXBElement<?>> ruleAndStartDateAndHoldEndDate;
     @XmlElement(name = "PreventInheritance", defaultValue = "false")
     protected Boolean preventInheritance;
     @XmlElement(name = "RefNonRuleId")
     protected List<RuleIdType> refNonRuleId;
 
     /**
-     * Gets the value of the holdRuleDefGroup property.
+     * Gets the value of the ruleAndStartDateAndHoldEndDate property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the Jakarta XML Binding object.
-     * This is why there is not a {@code set} method for the holdRuleDefGroup property.
+     * This is why there is not a {@code set} method for the ruleAndStartDateAndHoldEndDate property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getHoldRuleDefGroup().add(newItem);
+     *    getRuleAndStartDateAndHoldEndDate().add(newItem);
      * </pre>
      * 
      * 
@@ -95,13 +105,13 @@ public class HoldRuleType {
      * 
      * 
      * @return
-     *     The value of the holdRuleDefGroup property.
+     *     The value of the ruleAndStartDateAndHoldEndDate property.
      */
-    public List<JAXBElement<?>> getHoldRuleDefGroup() {
-        if (holdRuleDefGroup == null) {
-            holdRuleDefGroup = new ArrayList<>();
+    public List<JAXBElement<?>> getRuleAndStartDateAndHoldEndDate() {
+        if (ruleAndStartDateAndHoldEndDate == null) {
+            ruleAndStartDateAndHoldEndDate = new ArrayList<>();
         }
-        return this.holdRuleDefGroup;
+        return this.ruleAndStartDateAndHoldEndDate;
     }
 
     /**
