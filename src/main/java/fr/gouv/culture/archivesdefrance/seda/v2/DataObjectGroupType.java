@@ -9,12 +9,10 @@ package fr.gouv.culture.archivesdefrance.seda.v2;
 
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElements;
-import jakarta.xml.bind.annotation.XmlType;
+
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -55,6 +53,10 @@ public class DataObjectGroupType {
     protected List<MinimalDataObjectType> binaryDataObjectOrPhysicalDataObject;
     @XmlElement(name = "LogBook")
     protected LogBookOgType logBook;
+
+
+    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    @XmlID
     @XmlAttribute(name = "id", required = true)
     protected String id;
 

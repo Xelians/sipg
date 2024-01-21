@@ -617,7 +617,7 @@
             </rng:optional>
         </rng:element>
         <rng:optional>
-            <rng:element name="DataObjectReference">
+            <rng:element name="DataObjectRef">
                 <rng:element name="DataObjectGroupReferenceId">
                     <rng:data type="string"/>
                 </rng:element>

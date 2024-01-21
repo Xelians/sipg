@@ -89,6 +89,17 @@ import static fr.xelians.sipg.utils.SipUtils.ifNotNull;
  * @see ArchiveTransfer
  * @see Sedav2Config
  */
+
+/*  Note. Annotate id in DataObjectGroupType class with :
+    class DataObjectGroupType {
+         ...
+        @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+        @XmlID
+        @XmlAttribute(name = "id", required = true)
+        protected String id;
+ */
+ // TODO Generate id annotation in XML Bindings
+
 class Sedav22Converter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Sedav22Converter.class);
@@ -244,8 +255,8 @@ class Sedav22Converter {
         pdot.setPhysicalId(toIdentifierType(unit.getPhysicalId()));
         pdot.setDataObjectVersion(unit.getPhysicalVersion());
 
-        dor.setDataObjectReferenceId(dogt);
-//        dor.setDataObjectGroupReferenceId(dogt);
+//        dor.setDataObjectReferenceId(dogt);
+        dor.setDataObjectGroupReferenceId(dogt);
         dogt.getBinaryDataObjectOrPhysicalDataObject().add(pdot);
     }
 
@@ -266,8 +277,8 @@ class Sedav22Converter {
         }
 
         if (dogt.getBinaryDataObjectOrPhysicalDataObject().size() != size) {
-            dor.setDataObjectReferenceId(dogt);
-//            dor.setDataObjectGroupReferenceId(dogt);
+//            dor.setDataObjectReferenceId(dogt);
+            dor.setDataObjectGroupReferenceId(dogt);
         }
     }
 
@@ -452,7 +463,7 @@ class Sedav22Converter {
         ifNotNull(unit.getSource(), dmct::setSource);
 
         // Relation Group
-        // ifNotNull(unit.getRelation(), ror -> dmct.setRelatedObjectReference(toRelatedObjectReference(ror)));
+        ifNotNull(unit.getRelation(), ror -> dmct.setRelatedObjectReference(toRelatedObjectReference(ror)));
 
         // Date Group
         ifNotNull(unit.getCreatedDate(), d -> dmct.setCreatedDate(SipUtils.toXmlDate(d).toString()));
@@ -472,7 +483,7 @@ class Sedav22Converter {
         }
 
         // Signature Group
-        // unit.getSignatures().forEach(signature -> dmct.getSignature().add(toSignatureType(signature, dogt)));
+        unit.getSignatures().forEach(signature -> dmct.getSignature().add(toSignatureType(signature, dogt)));
 
         // GPS Group
         if (unit.getGpsVersionID() != null || unit.getGpsDateStamp() != null || unit.getGpsAltitude() != null || unit.getGpsAltitudeRef() != null || unit.getGpsLatitude() != null || unit.getGpsLatitudeRef() != null || unit.getGpsLongitude() != null || unit.getGpsLongitudeRef() != null) {
