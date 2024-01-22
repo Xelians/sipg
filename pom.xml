@@ -100,12 +100,6 @@
             <version>2.12.2-xml-schema-1.1</version>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>net.sf.saxon</groupId>-->
-        <!--            <artifactId>Saxon-HE</artifactId>-->
-        <!--            <version>12.3</version>-->
-        <!--        </dependency>-->
-
         <!--  Rng -->
         <dependency>
             <groupId>org.relaxng</groupId>
@@ -173,7 +167,7 @@
         <dependency>
             <groupId>uk.gov.nationalarchives</groupId>
             <artifactId>droid-core</artifactId>
-            <version>6.6.1</version>
+            <version>6.7.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.glassfish.jaxb</groupId>
@@ -190,7 +184,7 @@
         <dependency>
             <groupId>com.google.jimfs</groupId>
             <artifactId>jimfs</artifactId>
-            <version>1.2</version>
+            <version>1.3.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
