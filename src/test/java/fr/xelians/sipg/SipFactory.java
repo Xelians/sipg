@@ -372,7 +372,7 @@ public class SipFactory {
    * @param fs the fs
    * @return the archive transfer
    */
-  public static ArchiveTransfer createSimpleSip(FileSystem fs) {
+  public static ArchiveTransfer createComplexSip(FileSystem fs) {
     Path binaryPath1 = fs.getPath("helloworld_1.pdf");
     TestUtils.createPdf("Hello World 1", binaryPath1);
 
@@ -704,9 +704,9 @@ public class SipFactory {
     archiveTransfer.setArchivalAgency(new Agency("AG001", "My Archive Agency"));
     archiveTransfer.setTransferringAgency(new Agency("AG002", "My Transfer Agency"));
 
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 100; i++) {
       Path binaryPath = fs.getPath("helloworld_" + i + ".pdf");
-      TestUtils.createPdf("Hello World " + i, binaryPath);
+      TestUtils.createPdfWithImage("Hello World " + i, binaryPath);
 
       ArchiveUnit unit = new ArchiveUnit();
       unit.setBinaryPath(binaryPath);

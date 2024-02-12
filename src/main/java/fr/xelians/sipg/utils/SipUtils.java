@@ -88,14 +88,14 @@ public final class SipUtils {
      * @param zipPath le path du zip
      * @return le système de fichier de type Zip
      */
-    public static FileSystem newZipFileSystem(Path zipPath) {
+    public static FileSystem newZipFileSystem(Path zipPath, boolean useMemory) {
         Validate.notNull(zipPath, NOT_NULL, "zipPath");
 
         URI zipURI = SipUtils.createZipURI(zipPath);
-        Map<String, String> zipMap = Map.of("create", "true");
+        Map<String, Object> env = Map.of("create", "true", "useTempFile", !useMemory);
 
         try {
-            return FileSystems.newFileSystem(zipURI, zipMap);
+            return FileSystems.newFileSystem(zipURI, env);
         } catch (IOException ex) {
             throw new SipException("Unable to create  ZipFilesystem " + zipPath, ex);
         }

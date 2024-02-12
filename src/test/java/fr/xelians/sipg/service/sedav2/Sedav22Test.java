@@ -48,420 +48,421 @@ import static org.junit.jupiter.api.Assertions.fail;
 @ExtendWith(TestInit.class)
 public class Sedav22Test {
 
-  public static final String SEDA22 = TestInit. TEST_RESOURCES + "seda-2.2/";
+    public static final String SEDA22 = TestInit.TEST_RESOURCES + "seda-2.2/";
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Sedav22Test.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Sedav22Test.class);
 
-  private final Sedav2Config sedaConfig = Sedav2ConfigBuilder.builder().format(true).validate(true).strict(false)
-      .build();
-  private final Sedav2Service sedaService = Sedav2Service.getV22Instance();
+    private final Sedav2Config sedaConfig = Sedav2ConfigBuilder.builder().format(true).validate(true).strict(false).build();
+    private final Sedav2Service sedaService = Sedav2Service.getV22Instance();
 
-  /**
-   * Test validate xml.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testValidateXml(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test validate xml.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testValidateXml(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try {
-      Path path = Paths.get(SEDA22 + "seda_small.xml");
-      sedaService.validate(path, sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try {
+            Path path = Paths.get(SEDA22 + "seda_small.xml");
+            sedaService.validate(path, sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test validate simple zip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testValidateSimpleZip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test validate simple zip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testValidateSimpleZip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createSimpleSip(fs);
-      Path output = Paths.get(TestInit.TEST_RESULTS + "simplesip2_seda.zip");
-      sedaService.write(archiveTransfer, output, sedaConfig);
+        try (FileSystem fs = Jimfs.newFileSystem()) {
+            ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
+            Path output = Paths.get(TestInit.TEST_RESULTS + "simplesip2_seda.zip");
+            sedaService.write(archiveTransfer, output, sedaConfig);
 
-      sedaService.validate(output, null, sedaConfig, e -> LOGGER.info(e.toString()));
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+            sedaService.validate(output, null, sedaConfig, e -> LOGGER.info(e.toString()));
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test validate large zip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testValidateLargeZip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test validate large zip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testValidateLargeZip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
-      Path output = Paths.get(TestInit.TEST_RESULTS + "largesip2_seda.zip");
-      sedaService.write(archiveTransfer, output, sedaConfig);
-      sedaService.validate(output, sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try (FileSystem fs = Jimfs.newFileSystem()) {
+            ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
+            Path output = Paths.get(TestInit.TEST_RESULTS + "largesip2_seda.zip");
+            sedaService.write(archiveTransfer, output, sedaConfig);
+            sedaService.validate(output, sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test create dir sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testCreateDirSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test create dir sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testCreateDirSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createSipFromDir();
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "dirsip_seda.zip"), sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try {
+            ArchiveTransfer archiveTransfer = SipFactory.createSipFromDir();
+            sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "dirsip_seda.zip"), sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test without agency fail.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testWithoutAgencyFail(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test without agency fail.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testWithoutAgencyFail(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    ArchiveTransfer archiveTransfer = SipFactory.createWithoutAgencySip();
-    Path outputPath = Paths.get(TestInit.TEST_RESULTS + "fail_seda.zip");
-    assertThrows(SipException.class, () -> sedaService.write(archiveTransfer, outputPath, sedaConfig));
-  }
-
-  /**
-   * Test create csv sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testCreateCsvSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
-
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createCsvSip();
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "csvsip_seda.zip"), sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        ArchiveTransfer archiveTransfer = SipFactory.createWithoutAgencySip();
+        Path outputPath = Paths.get(TestInit.TEST_RESULTS + "fail_seda.zip");
+        assertThrows(SipException.class, () -> sedaService.write(archiveTransfer, outputPath, sedaConfig));
     }
-  }
 
-  /**
-   * Test read freemarker json.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testReadFreemarkerJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
-    try {
-      String jsonString = SipFactory.createJsonString();
-      ArchiveTransfer archiveTransfer = JsonService.getInstance().read(jsonString);
-      Sedav2Service.getInstance().write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "freemarker_seda.zip"), sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+    /**
+     * Test create csv sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testCreateCsvSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+
+        try {
+            ArchiveTransfer archiveTransfer = SipFactory.createCsvSip();
+            sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "csvsip_seda.zip"), sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test create full text sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testCreateFullTextSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
-
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createFullTextSip();
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "fulltextsip_seda.zip"), sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+    /**
+     * Test read freemarker json.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testReadFreemarkerJson(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+        try {
+            String jsonString = SipFactory.createJsonString();
+            ArchiveTransfer archiveTransfer = JsonService.getInstance().read(jsonString);
+            Sedav2Service.getInstance().write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "freemarker_seda.zip"), sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test create mini sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testCreateMiniSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test create full text sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testCreateFullTextSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "minisip_seda.zip"), sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try {
+            ArchiveTransfer archiveTransfer = SipFactory.createFullTextSip();
+            sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "fulltextsip_seda.zip"), sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test validate mini sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testValidateMiniSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test create mini sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testCreateMiniSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
-      sedaService.validate(archiveTransfer, sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try {
+            ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
+            sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "minisip_seda.zip"), sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test create sip full vitam.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testCreateSipFullVitam(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test validate mini sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testValidateMiniSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createSipFullVitam();
-      Path zipPath = Paths.get(TestInit.TEST_RESULTS + "sip_vitam_full.zip");
-      sedaService.write(archiveTransfer, zipPath, sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try {
+            ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
+            sedaService.validate(archiveTransfer, sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test create mini sip vitam.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testCreateMiniSipVitam(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test create sip full vitam.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testCreateSipFullVitam(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createMiniSipVitam();
-      Path zipPath = Paths.get(TestInit.TEST_RESULTS + "MiniSipVitam_seda.zip");
-      Path rngPath = Paths.get(SEDA22, "Profil_VITAM_base.rng");
-      Validator rngValidator = Validators.getRngValidator(rngPath);
-      sedaService.write(archiveTransfer, zipPath, rngValidator, sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try {
+            ArchiveTransfer archiveTransfer = SipFactory.createSipFullVitam();
+            Path zipPath = Paths.get(TestInit.TEST_RESULTS + "sip_vitam_full.zip");
+            sedaService.write(archiveTransfer, zipPath, sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test validate mini sip vitam.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testValidateMiniSipVitam(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test create mini sip vitam.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testCreateMiniSipVitam(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createMiniSipVitam();
-      Path rngPath = Paths.get(SEDA22, "Profil_VITAM_base.rng");
-      Validator rngValidator = Validators.getRngValidator(rngPath);
-      sedaService.validate(archiveTransfer, rngValidator, sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try {
+            ArchiveTransfer archiveTransfer = SipFactory.createMiniSipVitam();
+            Path zipPath = Paths.get(TestInit.TEST_RESULTS + "MiniSipVitam_seda.zip");
+            Path rngPath = Paths.get(SEDA22, "Profil_VITAM_base.rng");
+            Validator rngValidator = Validators.getRngValidator(rngPath);
+            sedaService.write(archiveTransfer, zipPath, rngValidator, sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test create simple sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testCreateSimpleSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test validate mini sip vitam.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testValidateMiniSipVitam(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createSimpleSip(fs);
-      Path output = Paths.get(TestInit.TEST_RESULTS + "simplesip_seda.zip");
-      sedaService.write(archiveTransfer, output, sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try {
+            ArchiveTransfer archiveTransfer = SipFactory.createMiniSipVitam();
+            Path rngPath = Paths.get(SEDA22, "Profil_VITAM_base.rng");
+            Validator rngValidator = Validators.getRngValidator(rngPath);
+            sedaService.validate(archiveTransfer, rngValidator, sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test validate simple sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testValidateSimpleSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test create simple sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testCreateSimpleSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createSimpleSip(fs);
-      sedaService.validate(archiveTransfer, sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try (FileSystem fs = Jimfs.newFileSystem()) {
+            ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
+            Path output = Paths.get(TestInit.TEST_RESULTS + "simplesip_seda.zip");
+            sedaService.write(archiveTransfer, output, sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test create small sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testCreateSmallSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test validate simple sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testValidateSimpleSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createSmallSip();
-      Path zipPath = Paths.get(TestInit.TEST_RESULTS + "smallsip_seda.zip");
-      sedaService.write(archiveTransfer, zipPath, sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try (FileSystem fs = Jimfs.newFileSystem()) {
+            ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
+            sedaService.validate(archiveTransfer, sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test validate small sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testValidateSmallSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test create small sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testCreateSmallSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createSmallSip();
-      sedaService.validate(archiveTransfer, sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try {
+            ArchiveTransfer archiveTransfer = SipFactory.createSmallSip();
+            Path zipPath = Paths.get(TestInit.TEST_RESULTS + "smallsip_seda.zip");
+            sedaService.write(archiveTransfer, zipPath, sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
+    /**
+     * Test validate small sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testValidateSmallSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-  /**
-   * Test create large sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testCreateLargeSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
-
-    try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_seda.zip"), sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try {
+            ArchiveTransfer archiveTransfer = SipFactory.createSmallSip();
+            sedaService.validate(archiveTransfer, sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test validate large sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testValidateLargeSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
-      sedaService.validate(archiveTransfer, sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+    /**
+     * Test create large sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testCreateLargeSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+
+        Sedav2Config config = Sedav2ConfigBuilder.builder().useMemory(false).strict(false).build();
+
+        try (FileSystem fs = Jimfs.newFileSystem()) {
+            ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
+            sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_seda.zip"), config);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test create deep sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testCreateDeepSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test validate large sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testValidateLargeSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createDeepSip(fs);
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_seda.zip"), sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try (FileSystem fs = Jimfs.newFileSystem()) {
+            ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
+            sedaService.validate(archiveTransfer, sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
 
-  /**
-   * Test validate deep sip.
-   *
-   * @param testInfo the test info
-   */
-  @Test
-  void testValidateDeepSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    /**
+     * Test create deep sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testCreateDeepSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
-    try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createDeepSip(fs);
-      sedaService.validate(archiveTransfer, sedaConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+        try (FileSystem fs = Jimfs.newFileSystem()) {
+            ArchiveTransfer archiveTransfer = SipFactory.createDeepSip(fs);
+            sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_seda.zip"), sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
     }
-  }
+
+    /**
+     * Test validate deep sip.
+     *
+     * @param testInfo the test info
+     */
+    @Test
+    void testValidateDeepSip(TestInfo testInfo) {
+        LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+
+        try (FileSystem fs = Jimfs.newFileSystem()) {
+            ArchiveTransfer archiveTransfer = SipFactory.createDeepSip(fs);
+            sedaService.validate(archiveTransfer, sedaConfig);
+        } catch (Exception ex) {
+            String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
+            LOGGER.error(msg, ex);
+            fail(msg);
+        }
+    }
 
 }

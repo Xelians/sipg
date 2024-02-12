@@ -30,7 +30,6 @@ import fr.xelians.sipg.service.json.JsonService;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.Validators;
 import java.nio.file.FileSystem;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.xml.validation.Validator;
@@ -86,7 +85,7 @@ class Sedav21Test {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createSimpleSip(fs);
+      ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
       Path output = Paths.get(TestInit.TEST_RESULTS + "simplesip2_seda.zip");
       sedaService.write(archiveTransfer, output, sedaConfig);
 
@@ -320,7 +319,7 @@ class Sedav21Test {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createSimpleSip(fs);
+      ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
       Path output = Paths.get(TestInit.TEST_RESULTS + "simplesip_seda.zip");
       sedaService.write(archiveTransfer, output, sedaConfig);
     } catch (Exception ex) {
@@ -340,7 +339,7 @@ class Sedav21Test {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createSimpleSip(fs);
+      ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
       sedaService.validate(archiveTransfer, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
@@ -398,9 +397,11 @@ class Sedav21Test {
   void testCreateLargeSip(TestInfo testInfo) {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
+    Sedav2Config config = Sedav2ConfigBuilder.builder().useMemory(false).strict(false).build();
+
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_seda.zip"), sedaConfig);
+      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_seda.zip"), config);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);

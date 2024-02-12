@@ -1695,7 +1695,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique les identifiants métier attribué à l’ArchiveUnit par le service producteur.
+     * Indique les identifiants métier attribués à l’ArchiveUnit par le service producteur.
      *
      * @return l 'identifiant
      */

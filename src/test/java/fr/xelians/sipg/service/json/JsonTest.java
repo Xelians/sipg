@@ -120,7 +120,7 @@ class JsonTest {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createSimpleSip(fs);
+      ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
       jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "simplesip_serial.json"), jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
@@ -157,7 +157,7 @@ class JsonTest {
   void testCreateReadSimpleJson(TestInfo testInfo) {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
     try (FileSystem fs = Jimfs.newFileSystem()) {
-      String serialized = jsonService.write(SipFactory.createSimpleSip(fs), jsonConfig);
+      String serialized = jsonService.write(SipFactory.createComplexSip(fs), jsonConfig);
       ArchiveTransfer archiveTransfer = jsonService.read(serialized);
       jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "simplesip_serial_deserial.json"),
           jsonConfig);

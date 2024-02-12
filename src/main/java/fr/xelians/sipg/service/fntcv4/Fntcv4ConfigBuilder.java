@@ -18,6 +18,8 @@
  */
 package fr.xelians.sipg.service.fntcv4;
 
+import fr.xelians.sipg.service.sedav2.Sedav2ConfigBuilder;
+
 /**
  * La classe Fntcv4ConfigBuilder facilite la création d'un objet Fntcv4Config en suivant le principe de conception du
  * pattern builder.
@@ -35,6 +37,7 @@ public class Fntcv4ConfigBuilder {
     private boolean checkBinary = true;
     private boolean checkSize = true;
     private boolean checkDigest = true;
+    private boolean useMemory = false;
 
     private Fntcv4ConfigBuilder() {
     }
@@ -137,11 +140,25 @@ public class Fntcv4ConfigBuilder {
     }
 
     /**
+     * Spécifie si la génération du sip utilise la mémoire ou le disque. La génération en mémoire
+     * peut s'avérer légèrement plus rapide, mais peut entrainer un dépassement de la mémoire
+     * de la machine virtuelle. Il est fortement conseiller de s'assurer de connaitre la capacité
+     * mémoire de la machine virtuelle et des sip à générer avant d'utiliser cette option.
+     *
+     * @param useMemory si la genération du sip doit se faire en mémoire
+     * @return le builder
+     */
+    public Fntcv4ConfigBuilder useMemory(boolean useMemory) {
+        this.useMemory = useMemory;
+        return this;
+    }
+
+    /**
      * Instancie la classe Fntcv4Config selon les paramètres précédemment spécifiés dans le builder.
      *
      * @return la configuration FNTC v4
      */
     public Fntcv4Config build() {
-        return new Fntcv4Config(validate, format, indent, thread, strict, checkBinary, checkSize, checkDigest);
+        return new Fntcv4Config(validate, format, indent, thread, strict, checkBinary, checkSize, checkDigest, useMemory);
     }
 }

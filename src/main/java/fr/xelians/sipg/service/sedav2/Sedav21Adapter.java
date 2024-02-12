@@ -83,7 +83,7 @@ public class Sedav21Adapter implements Sedav2Adapter {
     @Override
     public void write(ArchiveTransfer archive, Validator validator, Path zipPath, Sedav2Config config) {
 
-        try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath)) {
+        try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath, config.useMemory())) {
             ArchiveTransferType att = Sedav21Converter.convert(archive, zipArchive, config);
             final Path zipEntryPath = zipArchive.getPath("manifest.xml");
             try (OutputStream os = Files.newOutputStream(zipEntryPath)) {

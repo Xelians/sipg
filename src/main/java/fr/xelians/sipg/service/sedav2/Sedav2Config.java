@@ -40,6 +40,7 @@ public class Sedav2Config {
     private final boolean checkBinary;
     private final boolean checkSize;
     private final boolean checkDigest;
+    private final boolean useMemory;
 
     /**
      * Instancie la classe.
@@ -52,9 +53,10 @@ public class Sedav2Config {
      * @param checkBinary spécifie si la validation vérifie les objets binaires
      * @param checkSize   spécifie si la validation la taille des objets binaires
      * @param checkDigest spécifie si la validation vérifie l'empreinte des objets binaires
+     * @param useMemory   spécifie si la génération du sip utilise la mémoire ou le disque
      */
     public Sedav2Config(boolean validate, boolean format, int indent, int thread, boolean strict, boolean checkBinary,
-                        boolean checkSize, boolean checkDigest) {
+                        boolean checkSize, boolean checkDigest, boolean useMemory) {
         this.validate = validate;
         this.format = format;
         this.indent = indent;
@@ -63,6 +65,7 @@ public class Sedav2Config {
         this.checkBinary = checkBinary;
         this.checkSize = checkSize;
         this.checkDigest = checkDigest;
+        this.useMemory = useMemory;
     }
 
     /**
@@ -137,6 +140,15 @@ public class Sedav2Config {
         return checkDigest;
     }
 
+    /**
+     * Indique si la génération du sip utilise la mémoire ou le disque
+     *
+     * @return si la génération du sip utilise la mémoire ou le disque
+     */
+    public boolean useMemory() {
+        return useMemory;
+    }
+
     @Override
     public String toString() {
         return "Sedav2Config{" +
@@ -148,6 +160,7 @@ public class Sedav2Config {
                 ", checkBinary=" + checkBinary +
                 ", checkSize=" + checkSize +
                 ", checkDigest=" + checkDigest +
+                ", useMemory=" + useMemory +
                 '}';
     }
 }

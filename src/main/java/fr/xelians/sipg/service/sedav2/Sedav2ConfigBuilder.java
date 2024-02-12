@@ -35,6 +35,7 @@ public class Sedav2ConfigBuilder {
     private boolean checkBinary = true;
     private boolean checkSize = true;
     private boolean checkDigest = true;
+    private boolean useMemory = false;
 
     private Sedav2ConfigBuilder() {
     }
@@ -137,11 +138,25 @@ public class Sedav2ConfigBuilder {
     }
 
     /**
+     * Spécifie si la génération du sip utilise la mémoire ou le disque. La génération en mémoire
+     * peut s'avérer légèrement plus rapide, mais peut entrainer un dépassement de la mémoire
+     * de la machine virtuelle. Il est fortement conseiller de s'assurer de connaitre la capacité
+     * mémoire de la machine virtuelle et des sip à générer avant d'utiliser cette option.
+     *
+     * @param useMemory si la genération du sip doit se faire en mémoire
+     * @return le builder
+     */
+    public Sedav2ConfigBuilder useMemory(boolean useMemory) {
+        this.useMemory = useMemory;
+        return this;
+    }
+
+    /**
      * Instancie la classe Sedav2Config selon les paramètres précédemment spécifiés dans le builder.
      *
      * @return la configuration SEDA v2
      */
     public Sedav2Config build() {
-        return new Sedav2Config(validate, format, indent, thread, strict, checkBinary, checkSize, checkDigest);
+        return new Sedav2Config(validate, format, indent, thread, strict, checkBinary, checkSize, checkDigest, useMemory);
     }
 }

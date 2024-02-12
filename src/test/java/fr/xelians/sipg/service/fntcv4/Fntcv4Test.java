@@ -27,6 +27,8 @@ import fr.xelians.sipg.TestInit;
 import fr.xelians.sipg.TestUtils;
 import fr.xelians.sipg.model.ArchiveTransfer;
 import fr.xelians.sipg.service.json.JsonService;
+import fr.xelians.sipg.service.sedav2.Sedav2Config;
+import fr.xelians.sipg.service.sedav2.Sedav2ConfigBuilder;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.Validators;
 import java.nio.file.FileSystem;
@@ -87,7 +89,7 @@ class Fntcv4Test {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createSimpleSip(fs);
+      ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
       Path output = Paths.get(TestInit.TEST_RESULTS + "simplesip2_fntc.zip");
       fntcService.write(archiveTransfer, output, fntcConfig);
 
@@ -239,7 +241,7 @@ class Fntcv4Test {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createSimpleSip(fs);
+      ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
       fntcService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "simplesip_fntc.zip"), fntcConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
@@ -258,7 +260,7 @@ class Fntcv4Test {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createSimpleSip(fs);
+      ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
       fntcService.validate(archiveTransfer, fntcConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
@@ -320,9 +322,11 @@ class Fntcv4Test {
   void testCreateLargeSip(TestInfo testInfo) {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
 
+    Fntcv4Config config = Fntcv4ConfigBuilder.builder().useMemory(false).strict(false).build();
+
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
-      fntcService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_fntc.zip"), fntcConfig);
+      fntcService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_fntc.zip"), config);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);

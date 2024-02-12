@@ -169,7 +169,7 @@ public class Fntcv4Service {
             throw new SipException(ex);
         }
 
-        try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath)) {
+        try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath, config.useMemory())) {
             ArchiveTransferType att = Fntcv4Converter.convert(archive, zipArchive, config);
             final Path zipEntryPath = zipArchive.getPath("manifest.xml");
             try (OutputStream os = Files.newOutputStream(zipEntryPath);

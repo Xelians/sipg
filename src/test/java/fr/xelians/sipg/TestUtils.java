@@ -19,17 +19,21 @@
 package fr.xelians.sipg;
 
 import fr.xelians.sipg.utils.SipException;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import javax.xml.validation.SchemaFactory;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.TestInfo;
 import org.slf4j.Logger;
@@ -51,7 +55,8 @@ public class TestUtils {
    */
   public static final String FAIL = "Fail to complete ";
   private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
-  private static SchemaFactory rngSchemaFactory;
+
+  private static final byte[] img100k = loadImage("100k.jpg") ;
 
   private TestUtils() {
   }
@@ -73,6 +78,14 @@ public class TestUtils {
    * @param path    the path
    */
   public static void createPdf(String message, Path path) {
+    createPdf(message, path, false);
+  }
+
+  public static void createPdfWithImage(String message, Path path) {
+    createPdf(message, path, true);
+  }
+
+  private static void createPdf(String message, Path path, boolean withImage) {
 
     try (PDDocument doc = new PDDocument()) {
       PDPage page = new PDPage();
@@ -85,6 +98,12 @@ public class TestUtils {
         content.newLineAtOffset(100, 700);
         content.showText(message);
         content.endText();
+        if (withImage) {
+          PDImageXObject pdfImage = PDImageXObject.createFromByteArray(doc, img100k, "image");
+          float w = page.getMediaBox().getWidth() - 40;
+          float h = pdfImage.getHeight() * w / pdfImage.getWidth();
+          content.drawImage(pdfImage, 20, 20, w, h);
+        }
       }
 
       try (OutputStream os = Files.newOutputStream(path)) {
@@ -115,5 +134,20 @@ public class TestUtils {
     }
   }
 
+  /**
+   * Load image byte [ ].
+   *
+   * @param image the image
+   * @return the byte [ ]
+   */
+  public static byte[] loadImage(String image) {
+    try (InputStream is = ClassLoader.getSystemResourceAsStream(image)) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        IOUtils.copy(is, baos);
+        return baos.toByteArray();
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+  }
 
 }
