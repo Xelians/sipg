@@ -49,7 +49,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <maven.compiler.release>17</maven.compiler.release>
         <maven.source.version>3.2.1</maven.source.version>
         <javadoc.source.version>3.6.0</javadoc.source.version>
     </properties>
@@ -439,7 +438,7 @@
         </profile>
 
         <profile>
-            <!-- Use "mvn verify -Pcentral" to run package in one big jar -->
+            <!-- Use "mvn verify -Pcentral" to add javadoc and signature -->
             <id>central</id>
             <build>
                 <plugins>
@@ -481,7 +480,7 @@
         </profile>
 
         <profile>
-            <!-- Use "mvn verify -Pgithub" to run package in one big jar -->
+            <!-- Use "mvn verify -Pgithub" to package in one big jar -->
             <id>github</id>
             <build>
                 <plugins>
