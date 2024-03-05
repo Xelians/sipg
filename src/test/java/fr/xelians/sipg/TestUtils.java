@@ -28,11 +28,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.io.RandomAccessRead;
+import org.apache.pdfbox.io.RandomAccessReadBuffer;
+import org.apache.pdfbox.io.RandomAccessReadBufferedFile;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.TestInfo;
@@ -87,10 +92,11 @@ public class TestUtils {
 
   private static void createPdf(String message, Path path, boolean withImage) {
 
+    PDType1Font font = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
+
     try (PDDocument doc = new PDDocument()) {
       PDPage page = new PDPage();
       doc.addPage(page);
-      PDFont font = PDType1Font.HELVETICA_BOLD;
 
       try (PDPageContentStream content = new PDPageContentStream(doc, page)) {
         content.beginText();
@@ -125,7 +131,8 @@ public class TestUtils {
   public static String extractTextFromPDF(Path path) {
 
     try (InputStream is = Files.newInputStream(path);
-        PDDocument document = PDDocument.load(is)) {
+         RandomAccessRead rar = new RandomAccessReadBuffer(is);
+         PDDocument document = Loader.loadPDF(rar)) {
       return new PDFTextStripper().getText(document);
     } catch (IOException ex) {
       String msg = String.format("Unable to extract text from PDF %s", path);
