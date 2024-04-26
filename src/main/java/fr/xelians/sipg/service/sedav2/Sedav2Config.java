@@ -41,6 +41,7 @@ public class Sedav2Config {
     private final boolean checkSize;
     private final boolean checkDigest;
     private final boolean useMemory;
+    private final boolean identifyFileFormat;
 
     /**
      * Instancie la classe.
@@ -56,7 +57,7 @@ public class Sedav2Config {
      * @param useMemory   spécifie si la génération du sip utilise la mémoire ou le disque
      */
     public Sedav2Config(boolean validate, boolean format, int indent, int thread, boolean strict, boolean checkBinary,
-                        boolean checkSize, boolean checkDigest, boolean useMemory) {
+                        boolean checkSize, boolean checkDigest, boolean useMemory,  boolean identifyFileFormat) {
         this.validate = validate;
         this.format = format;
         this.indent = indent;
@@ -66,6 +67,7 @@ public class Sedav2Config {
         this.checkSize = checkSize;
         this.checkDigest = checkDigest;
         this.useMemory = useMemory;
+        this.identifyFileFormat=identifyFileFormat;
     }
 
     /**
@@ -149,6 +151,15 @@ public class Sedav2Config {
         return useMemory;
     }
 
+    /**
+     * Indique si le format des fichiers binaires doit etre identifié.
+     *
+     * @return si le format des fichiers binaires doit etre identifié
+     */
+    public boolean identifyFileFormat() {
+        return identifyFileFormat;
+    }
+
     @Override
     public String toString() {
         return "Sedav2Config{" +
@@ -161,6 +172,7 @@ public class Sedav2Config {
                 ", checkSize=" + checkSize +
                 ", checkDigest=" + checkDigest +
                 ", useMemory=" + useMemory +
+                ", identifyFileFormat=" + identifyFileFormat +
                 '}';
     }
 }

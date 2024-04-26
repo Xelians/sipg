@@ -110,6 +110,7 @@ class Sedav22Converter {
     private final DocumentBuilder documentBuilder;
     private final FileSystem zipArchive;
     private final boolean isStrict;
+    private final boolean identifyFileFormat;
 
     private final HashMap<ArchiveUnit, ArchiveUnitType> archiveMap = new HashMap<>();
     private final ArrayList<Runnable> postProcessors = new ArrayList<>();
@@ -117,6 +118,7 @@ class Sedav22Converter {
     private Sedav22Converter(FileSystem zipArchive, Sedav2Config config) {
         this.zipArchive = zipArchive;
         this.isStrict = config.isStrict();
+        this.identifyFileFormat=config.identifyFileFormat();
 
         try {
             documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -313,7 +315,7 @@ class Sedav22Converter {
         }
 
         dogt.getBinaryDataObjectOrPhysicalDataObject().add(bdot);
-        tasks.add(new ZipTask(binaryPath, removePath, bdot));
+        tasks.add(new ZipTask(binaryPath, removePath, this.identifyFileFormat, bdot));
     }
 
     private ArchiveUnitType toArchiveUnitType(ArchiveUnit unit, DataObjectPackageType dopt) {
@@ -1053,6 +1055,7 @@ class Sedav22Converter {
         private final Path binaryPath;
         private final boolean removePath;
         private final BinaryDataObjectType bdot;
+        private final boolean identifyFileFormat;
 
         /**
          * Instantiates a new Zip task.
@@ -1060,9 +1063,10 @@ class Sedav22Converter {
          * @param binaryPath the binary path
          * @param bdot       the bdot
          */
-        public ZipTask(Path binaryPath, boolean removePath, BinaryDataObjectType bdot) {
+        public ZipTask(Path binaryPath, boolean removePath, boolean identifyFileFormat, BinaryDataObjectType bdot) {
             this.binaryPath = binaryPath;
             this.removePath = removePath;
+            this.identifyFileFormat=identifyFileFormat;
             this.bdot = bdot;
         }
 
@@ -1111,19 +1115,9 @@ class Sedav22Converter {
                     bdot.setUri("Content/" + digest + "_" + Files.getLastModifiedTime(binaryPath).toMillis() + "_" + binaryPath.getFileName());
                 }
 
-                // Note. The Signature Identifier does not fully support NIO2 (ie. does not work with jimfs)
                 FormatIdentificationType fit = bdot.getFormatIdentification();
                 if (fit == null || StringUtils.isBlank(fit.getFormatId())) {
-                    String ext = FilenameUtils.getExtension(binaryPath.getFileName().toString());
-                    List<IdentificationResult> results = DroidUtils.matchBinarySignatures(binaryPath, ext);
-                    if (results.isEmpty()) {
-                        bdot.setFormatIdentification(toFormatIdentificationType("Unknown", null, null));
-                    } else {
-                        IdentificationResult r = results.get(0);
-                        String name = StringUtils.isAllBlank(r.getName(), r.getVersion()) ? null : StringUtils.trim(r.getName() + " " + r.getVersion());
-                        String mimeType = StringUtils.isBlank(r.getMimeType()) ? null : r.getMimeType();
-                        bdot.setFormatIdentification(toFormatIdentificationType(r.getPuid(), name, mimeType));
-                    }
+                    processFileFormatIdentification();
                 }
 
                 if (removePath) Files.delete(binaryPath);
@@ -1140,6 +1134,25 @@ class Sedav22Converter {
 
             // Void
             return null;
+        }
+
+        private void processFileFormatIdentification() {
+            if (identifyFileFormat) {
+                // Note. The Signature Identifier does not fully support NIO2 (ie. does not work with jimfs)
+                String ext = FilenameUtils.getExtension(binaryPath.getFileName().toString());
+                List<IdentificationResult> results = DroidUtils.matchBinarySignatures(binaryPath, ext);
+                if (results.isEmpty()) {
+                    bdot.setFormatIdentification(toFormatIdentificationType("Unknown", null, null));
+                } else {
+                    IdentificationResult r = results.get(0);
+                    String name = StringUtils.isAllBlank(r.getName(), r.getVersion()) ? null : StringUtils.trim(r.getName() + " " + r.getVersion());
+                    String mimeType = StringUtils.isBlank(r.getMimeType()) ? null : r.getMimeType();
+                    bdot.setFormatIdentification(toFormatIdentificationType(r.getPuid(), name, mimeType));
+                }
+
+            } else {
+                bdot.setFormatIdentification(new FormatIdentificationType());
+            }
         }
     }
 
