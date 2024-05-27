@@ -36,6 +36,7 @@ public class Sedav2ConfigBuilder {
     private boolean checkSize = true;
     private boolean checkDigest = true;
     private boolean useMemory = false;
+    private boolean identifyFileFormat=true;
 
     private Sedav2ConfigBuilder() {
     }
@@ -152,11 +153,22 @@ public class Sedav2ConfigBuilder {
     }
 
     /**
+     * Spécifie si le format de fichier des objets binaires doit etre identifié.
+     *
+     * @param identifyFileFormat si le format de fichier des objets binaires doit etre identifié.
+     * @return le builder
+     */
+    public Sedav2ConfigBuilder identifyFileFormat(boolean identifyFileFormat) {
+        this.identifyFileFormat = identifyFileFormat;
+        return this;
+    }
+
+    /**
      * Instancie la classe Sedav2Config selon les paramètres précédemment spécifiés dans le builder.
      *
      * @return la configuration SEDA v2
      */
     public Sedav2Config build() {
-        return new Sedav2Config(validate, format, indent, thread, strict, checkBinary, checkSize, checkDigest, useMemory);
+        return new Sedav2Config(validate, format, indent, thread, strict, checkBinary, checkSize, checkDigest, useMemory, identifyFileFormat);
     }
 }
