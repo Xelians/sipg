@@ -204,7 +204,7 @@ Après avoir testé la nouvelle release:
 git tag -a v1.4 -m "Sipg version 1.4"
 git push origin v1.4 or git push origin --tags
 ```
-* Exécuter le workflow 
+* Exécuter le workflow "Deploy on Maven central sur github"
 * Se connecter sur le serveur Sonatype
   - https://s01.oss.sonatype.org/
 * Passer les étapes de déploiement (staging, close, etc.)
