@@ -1293,42 +1293,6 @@ public class ArchiveUnit implements ArchiveUnitContainer {
     }
 
     /**
-     * Indique l'identifiant du service producteur.
-     *
-     * @return l'identifiant du service producteur
-     */
-    public String getOriginatingAgencyIdentifier() {
-        return originatingAgencyIdentifier;
-    }
-
-    /**
-     * Spécifie l'identifiant du service producteur.
-     *
-     * @param originatingAgencyIdentifier l'identifiant du service producteur
-     */
-    public void setOriginatingAgencyIdentifier(String originatingAgencyIdentifier) {
-        this.originatingAgencyIdentifier = originatingAgencyIdentifier;
-    }
-
-    /**
-     * Indique l'identifiant du service versant.
-     *
-     * @return l'identifiant du service versant
-     */
-    public String getSubmissionAgencyIdentifier() {
-        return submissionAgencyIdentifier;
-    }
-
-    /**
-     * Spécifie l'identifiant du service versant.
-     *
-     * @param submissionAgencyIdentifier l'identifiant du service versant
-     */
-    public void setSubmissionAgencyIdentifier(String submissionAgencyIdentifier) {
-        this.submissionAgencyIdentifier = submissionAgencyIdentifier;
-    }
-
-    /**
      * Indique si une autorisation humaine est nécessaire pour vérifier ou valider les opérations de gestion des
      * ArchiveUnit.
      *

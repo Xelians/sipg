@@ -54,6 +54,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import uk.gov.nationalarchives.droid.core.interfaces.IdentificationResult;
 
+import javax.print.DocFlavor;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
