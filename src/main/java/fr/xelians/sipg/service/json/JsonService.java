@@ -103,7 +103,7 @@ public class JsonService {
       throw new SipException("Unable to delete file " + jsonPath, ex);
     }
 
-    ObjectWriter writer = config.isFormat() ? indentWriter : objectWriter;
+    ObjectWriter writer = config.format() ? indentWriter : objectWriter;
 
     try (OutputStream os = Files.newOutputStream(jsonPath)) {
       writer.writeValue(os, archive);
@@ -133,7 +133,7 @@ public class JsonService {
     Validate.notNull(archive, SipUtils.NOT_NULL, "archive");
     Validate.notNull(config, SipUtils.NOT_NULL, "config");
 
-    ObjectWriter writer = config.isFormat() ? indentWriter : objectWriter;
+    ObjectWriter writer = config.format() ? indentWriter : objectWriter;
 
     try {
       return writer.writeValueAsString(archive);

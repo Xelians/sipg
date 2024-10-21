@@ -79,7 +79,7 @@ import uk.gov.nationalarchives.droid.core.interfaces.IdentificationResult;
 /**
  * La classe Sedav2Converter contient les informations et fonctions nécessaires à la conversion
  * d'une archive au format SEDA v2.1. Cette classe ne peut être instanciée qu'à travers les méthodes
- * statiques convert(...). Note. la classe n'est pas thread safe et un nouvel objet est
+ * statiques convert(...). Note. La classe n'est pas thread safe et un nouvel objet est
  * systématiquement créé à chaque conversion.
  *
  * @author Emmanuel Deviller
@@ -103,7 +103,7 @@ class Sedav21Converter {
 
   private Sedav21Converter(FileSystem zipArchive, Sedav2Config config) {
     this.zipArchive = zipArchive;
-    this.isStrict = config.isStrict();
+    this.isStrict = config.strict();
     this.identifyFileFormat = config.identifyFileFormat();
 
     try {
@@ -210,7 +210,7 @@ class Sedav21Converter {
       throws ExecutionException, InterruptedException {
     if (!converter.tasks.isEmpty()) {
       ExecutorService executor =
-          Executors.newFixedThreadPool(SipUtils.getPoolSize(config.getThread()));
+          Executors.newFixedThreadPool(SipUtils.getPoolSize(config.thread()));
       try {
         List<Future<Void>> futures = executor.invokeAll(converter.tasks);
         // Join all threads and throw an exception if one task has failed
@@ -260,7 +260,9 @@ class Sedav21Converter {
     dopt.setDescriptiveMetadata(dmt);
 
     ManagementMetadataType mmt = sedav2Factory.createManagementMetadataType();
-    ifNotNull(delivery.getArchivalAgency(), e -> mmt.setOriginatingAgencyIdentifier(toIdentifierType(e.getIdentifier())));
+    ifNotNull(
+        delivery.getOriginatingAgencyIdentifier(),
+        e -> mmt.setOriginatingAgencyIdentifier(toIdentifierType(e)));
     dopt.setManagementMetadata(mmt);
 
     del.setDataObjectPackage(dopt);
@@ -529,8 +531,8 @@ class Sedav21Converter {
     unit.getTags()
         .forEach(
             tag -> {
-              if (StringUtils.isBlank(tag.getKey())) {
-                dmct.getTag().add(tag.getValue());
+              if (StringUtils.isBlank(tag.key())) {
+                dmct.getTag().add(tag.value());
               } else {
                 dmct.getKeyword().add(toKeywordType(tag));
               }
@@ -1163,8 +1165,8 @@ class Sedav21Converter {
 
   private KeywordsType toKeywordType(Tag tag) {
     KeywordsType kt = sedav2Factory.createKeywordsType();
-    kt.setKeywordReference(toIdentifierType(tag.getKey()));
-    kt.setKeywordContent(toTextType(tag.getValue()));
+    kt.setKeywordReference(toIdentifierType(tag.key()));
+    kt.setKeywordContent(toTextType(tag.value()));
     return kt;
   }
 
@@ -1273,7 +1275,8 @@ class Sedav21Converter {
 
     private void processFileFormatIdentification() {
       if (identifyFileFormat) {
-        // Note. The Signature Identifier does not fully support NIO2 (ie. does not work with jimfs)
+        // Note. The Signature Identifier does not fully support NIO2 (i.e. does not work with
+        // jimfs)
         String ext = FilenameUtils.getExtension(binaryPath.getFileName().toString());
         List<IdentificationResult> results = DroidUtils.matchBinarySignatures(binaryPath, ext);
         if (results.isEmpty()) {

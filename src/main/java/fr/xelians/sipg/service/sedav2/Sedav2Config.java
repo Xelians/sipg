@@ -22,174 +22,30 @@ package fr.xelians.sipg.service.sedav2;
  * La classe Sedav2Config représente la configuration utilisée lors de la conversion d'une archive
  * au format SEDA v2.1. Les valeurs par défaut sont définies dans la classe Sedav2ConfigBuilder.
  *
+ * @param validate spécifie si une validation doit être réalisée lors de la conversion
+ * @param format spécifie si le fichier de description doit être formaté (pretty-print)
+ * @param indent spécifie la valeur de l'indentation lors du formatage
+ * @param thread spécifie le nombre de threads à utiliser lors de la conversion
+ * @param strict spécifie si la conversion doit être stricte
+ * @param checkBinary spécifie si la validation vérifie les objets binaires
+ * @param checkSize spécifie si la validation la taille des objets binaires
+ * @param checkDigest spécifie si la validation vérifie l'empreinte des objets binaires
+ * @param useMemory spécifie si la génération du sip utilise la mémoire ou le disque
  * @author Emmanuel Deviller
  * @see Sedav2ConfigBuilder
  */
-public class Sedav2Config {
+public record Sedav2Config(
+    boolean validate,
+    boolean format,
+    int indent,
+    int thread,
+    boolean strict,
+    boolean checkBinary,
+    boolean checkSize,
+    boolean checkDigest,
+    boolean useMemory,
+    boolean identifyFileFormat) {
 
   /** The constant DEFAULT. */
   public static final Sedav2Config DEFAULT = Sedav2ConfigBuilder.builder().build();
-
-  private final boolean validate;
-  private final boolean format;
-  private final int indent;
-  private final int thread;
-  private final boolean strict;
-  private final boolean checkBinary;
-  private final boolean checkSize;
-  private final boolean checkDigest;
-  private final boolean useMemory;
-  private final boolean identifyFileFormat;
-
-  /**
-   * Instancie la classe.
-   *
-   * @param validate spécifie si une validation doit être réalisée lors de la conversion
-   * @param format spécifie si le fichier de description doit être formaté (pretty-print)
-   * @param indent spécifie la valeur de l'indentation lors du formatage
-   * @param thread spécifie le nombre de threads à utiliser lors de la conversion
-   * @param strict spécifie si la conversion doit être stricte
-   * @param checkBinary spécifie si la validation vérifie les objets binaires
-   * @param checkSize spécifie si la validation la taille des objets binaires
-   * @param checkDigest spécifie si la validation vérifie l'empreinte des objets binaires
-   * @param useMemory spécifie si la génération du sip utilise la mémoire ou le disque
-   */
-  public Sedav2Config(
-      boolean validate,
-      boolean format,
-      int indent,
-      int thread,
-      boolean strict,
-      boolean checkBinary,
-      boolean checkSize,
-      boolean checkDigest,
-      boolean useMemory,
-      boolean identifyFileFormat) {
-    this.validate = validate;
-    this.format = format;
-    this.indent = indent;
-    this.thread = thread;
-    this.strict = strict;
-    this.checkBinary = checkBinary;
-    this.checkSize = checkSize;
-    this.checkDigest = checkDigest;
-    this.useMemory = useMemory;
-    this.identifyFileFormat = identifyFileFormat;
-  }
-
-  /**
-   * Indique si une validation doit être réalisée lors de la conversion.
-   *
-   * @return si une validation doit être réalisée
-   */
-  public boolean isValidate() {
-    return validate;
-  }
-
-  /**
-   * Indique si le fichier de description doit être formaté (pretty-print) lors de la conversion.
-   *
-   * @return si le fichier de description doit être formaté
-   */
-  public boolean isFormat() {
-    return format;
-  }
-
-  /**
-   * Indique la valeur de l'indentation lors du formatage.
-   *
-   * @return la valeur de l'indentation lors du formatage
-   */
-  public int getIndent() {
-    return indent;
-  }
-
-  /**
-   * Indique le nombre de threads à utiliser lors de la conversion.
-   *
-   * @return le nombre de threads
-   */
-  public int getThread() {
-    return thread;
-  }
-
-  /**
-   * Indique si la conversion doit être stricte.
-   *
-   * @return si la conversion doit être stricte
-   */
-  public boolean isStrict() {
-    return strict;
-  }
-
-  /**
-   * Indique si la validation vérifie les objets binaires.
-   *
-   * @return si la validation vérifie les objets binaires
-   */
-  public boolean checkBinary() {
-    return checkBinary;
-  }
-
-  /**
-   * Indique si la validation vérifie la taille des objets binaires.
-   *
-   * @return si la validation vérifie la taille des objets binaires
-   */
-  public boolean checkSize() {
-    return checkSize;
-  }
-
-  /**
-   * Indique si la validation vérifie l'empreinte des objets binaires.
-   *
-   * @return si la validation vérifie l'empreinte des objets binaires
-   */
-  public boolean checkDigest() {
-    return checkDigest;
-  }
-
-  /**
-   * Indique si la génération du sip utilise la mémoire ou le disque
-   *
-   * @return si la génération du sip utilise la mémoire ou le disque
-   */
-  public boolean useMemory() {
-    return useMemory;
-  }
-
-  /**
-   * Indique si le format des fichiers binaires doit etre identifié.
-   *
-   * @return si le format des fichiers binaires doit etre identifié
-   */
-  public boolean identifyFileFormat() {
-    return identifyFileFormat;
-  }
-
-  @Override
-  public String toString() {
-    return "Sedav2Config{"
-        + "validate="
-        + validate
-        + ", format="
-        + format
-        + ", indent="
-        + indent
-        + ", thread="
-        + thread
-        + ", strict="
-        + strict
-        + ", checkBinary="
-        + checkBinary
-        + ", checkSize="
-        + checkSize
-        + ", checkDigest="
-        + checkDigest
-        + ", useMemory="
-        + useMemory
-        + ", identifyFileFormat="
-        + identifyFileFormat
-        + '}';
-  }
 }

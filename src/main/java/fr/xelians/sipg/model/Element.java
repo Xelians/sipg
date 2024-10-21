@@ -75,7 +75,7 @@ public class Element {
   }
 
   /**
-   * Instancie la classe avec le nom, la valeur et un ensemble d'attributs..
+   * Instancie la classe avec le nom, la valeur et un ensemble d'attributs.
    *
    * @param name le nom
    * @param value la valeur

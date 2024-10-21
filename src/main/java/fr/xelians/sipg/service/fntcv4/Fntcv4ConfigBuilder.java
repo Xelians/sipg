@@ -71,7 +71,7 @@ public class Fntcv4ConfigBuilder {
   }
 
   /**
-   * Spécifie la valeur de l'indentation lors du formatage. 3 par défaut.
+   * Spécifie la valeur de l'indentation lors du formatage. Par défaut 3.
    *
    * @param indent la valeur de l'indentation
    * @return le builder

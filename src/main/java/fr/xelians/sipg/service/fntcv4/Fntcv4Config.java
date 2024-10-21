@@ -26,20 +26,19 @@ package fr.xelians.sipg.service.fntcv4;
  * @author Emmanuel Deviller
  * @see Fntcv4ConfigBuilder
  */
-public class Fntcv4Config {
+public record Fntcv4Config(
+    boolean validate,
+    boolean format,
+    int indent,
+    int thread,
+    boolean strict,
+    boolean checkBinary,
+    boolean checkSize,
+    boolean checkDigest,
+    boolean useMemory) {
 
   /** The constant DEFAULT. */
   public static final Fntcv4Config DEFAULT = Fntcv4ConfigBuilder.builder().build();
-
-  private final boolean validate;
-  private final boolean format;
-  private final int indent;
-  private final int thread;
-  private final boolean strict;
-  private final boolean checkBinary;
-  private final boolean checkSize;
-  private final boolean checkDigest;
-  private final boolean useMemory;
 
   /**
    * Instancie la classe.
@@ -54,33 +53,15 @@ public class Fntcv4Config {
    * @param checkDigest spécifie si la validation vérifie l'empreinte des objets binaires
    * @param useMemory spécifie si la génération du sip utilise la mémoire ou le disque
    */
-  public Fntcv4Config(
-      boolean validate,
-      boolean format,
-      int indent,
-      int thread,
-      boolean strict,
-      boolean checkBinary,
-      boolean checkSize,
-      boolean checkDigest,
-      boolean useMemory) {
-    this.validate = validate;
-    this.format = format;
-    this.indent = indent;
-    this.thread = thread;
-    this.strict = strict;
-    this.checkBinary = checkBinary;
-    this.checkSize = checkSize;
-    this.checkDigest = checkDigest;
-    this.useMemory = useMemory;
-  }
+  public Fntcv4Config {}
 
   /**
    * Indique si une validation doit être réalisée lors de la conversion.
    *
    * @return si une validation doit être réalisée
    */
-  public boolean isValidate() {
+  @Override
+  public boolean validate() {
     return validate;
   }
 
@@ -89,7 +70,8 @@ public class Fntcv4Config {
    *
    * @return si le fichier de description doit être formaté
    */
-  public boolean isFormat() {
+  @Override
+  public boolean format() {
     return format;
   }
 
@@ -98,7 +80,8 @@ public class Fntcv4Config {
    *
    * @return la valeur de l'indentation lors du formatage
    */
-  public int getIndent() {
+  @Override
+  public int indent() {
     return indent;
   }
 
@@ -107,7 +90,8 @@ public class Fntcv4Config {
    *
    * @return le nombre de threads
    */
-  public int getThread() {
+  @Override
+  public int thread() {
     return thread;
   }
 
@@ -116,7 +100,8 @@ public class Fntcv4Config {
    *
    * @return si la conversion doit être stricte
    */
-  public boolean isStrict() {
+  @Override
+  public boolean strict() {
     return strict;
   }
 
@@ -125,6 +110,7 @@ public class Fntcv4Config {
    *
    * @return si la validation vérifie les objets binaires
    */
+  @Override
   public boolean checkBinary() {
     return checkBinary;
   }
@@ -134,6 +120,7 @@ public class Fntcv4Config {
    *
    * @return si la validation vérifie la taille des objets binaires
    */
+  @Override
   public boolean checkSize() {
     return checkSize;
   }
@@ -143,6 +130,7 @@ public class Fntcv4Config {
    *
    * @return si la validation vérifie l'empreinte des objets binaires
    */
+  @Override
   public boolean checkDigest() {
     return checkDigest;
   }
@@ -152,6 +140,7 @@ public class Fntcv4Config {
    *
    * @return si la génération du sip utilise la mémoire ou le disque
    */
+  @Override
   public boolean useMemory() {
     return useMemory;
   }

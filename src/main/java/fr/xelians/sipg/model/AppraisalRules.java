@@ -35,7 +35,7 @@ public class AppraisalRules extends AbstractSimpleRules {
    */
   protected String finalAction;
 
-  /** La durée de d’utilité administrative. Cette propriété est ignorée en SEDA v2.1. */
+  /** La durée d’utilité administrative. Cette propriété est ignorée en SEDA v2.1. */
   protected String duration;
 
   /** Instancie la classe. */
@@ -72,18 +72,18 @@ public class AppraisalRules extends AbstractSimpleRules {
   }
 
   /**
-   * Indique la durée de d’utilité administrative.
+   * Indique la durée d’utilité administrative.
    *
-   * @return la durée de d’utilité administrative
+   * @return la durée d’utilité administrative
    */
   public String getDuration() {
     return duration;
   }
 
   /**
-   * Spécifie la durée de d’utilité administrative.
+   * Spécifie la durée d’utilité administrative.
    *
-   * @param duration la durée de d’utilité administrative
+   * @param duration la durée d’utilité administrative
    */
   public void setDuration(String duration) {
     this.duration = duration;

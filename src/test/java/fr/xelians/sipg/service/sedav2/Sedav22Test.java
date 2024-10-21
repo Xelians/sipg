@@ -477,7 +477,7 @@ public class Sedav22Test {
   }
 
   /**
-   * Test create simple sip.
+   * Test create simple dip.
    *
    * @param testInfo the test info
    */
@@ -497,7 +497,7 @@ public class Sedav22Test {
   }
 
   /**
-   * Test create large sip.
+   * Test create large dip.
    *
    * @param testInfo the test info
    */

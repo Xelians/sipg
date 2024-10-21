@@ -21,7 +21,7 @@ package fr.xelians.sipg.service.fntcv4;
 import java.util.Objects;
 
 /**
- * La classe Fntcv4BinaryObject représente un objet binaire (ie. un fichier PDF, JPEG, MPEG, etc.) .
+ * La classe Fntcv4BinaryObject représente un objet binaire (ie. un fichier PDF, JPEG, MPEG, etc.).
  *
  * @author Emmanuel Deviller
  */
@@ -127,7 +127,7 @@ class Fntcv4BinaryObject {
   public int hashCode() {
     int hash = 3;
     hash = 41 * hash + Objects.hashCode(this.uri);
-    hash = 41 * hash + (int) (this.size ^ (this.size >>> 32));
+    hash = 41 * hash + Long.hashCode(this.size);
     hash = 41 * hash + Objects.hashCode(this.digest);
     hash = 41 * hash + Objects.hashCode(this.algorithm);
     hash = 41 * hash + Objects.hashCode(this.format);

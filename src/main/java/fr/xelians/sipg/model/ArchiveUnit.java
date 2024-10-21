@@ -69,7 +69,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    */
   protected final List<CustodialItem> custodialItems = new ArrayList<>();
 
-  /** La liste des langues du contenu des objets binaires ou physique. */
+  /** La liste des langues du contenu des objets binaires ou physiques. */
   protected final List<String> languages = new ArrayList<>();
 
   /** La liste de mots-clés de description. */
@@ -185,34 +185,34 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   protected String descriptionLevel;
 
   /** La position de l’unité d'archive dans le plan de classement du service producteur. */
-  protected List<String> filePlanPositions = new ArrayList<>();
+  protected final List<String> filePlanPositions = new ArrayList<>();
 
   /**
    * L'identifiant attribué aux objets. Il est attribué par le SAE et correspond à un identifiant
    * interne.
    */
-  protected List<String> systemIds = new ArrayList<>();
+  protected final List<String> systemIds = new ArrayList<>();
 
   /**
    * L'identifiant attribué aux objets de données. Il est attribué par le SAE et correspond à un
    * identifiant interne.
    */
-  protected List<String> dataObjectSystemIds = new ArrayList<>();
+  protected final List<String> dataObjectSystemIds = new ArrayList<>();
 
   /** L'identifiant système attribué à l’ArchiveUnit par l’application du service producteur. */
-  protected List<String> originatingSystemIds = new ArrayList<>();
+  protected final List<String> originatingSystemIds = new ArrayList<>();
 
   /**
    * L'identifiant métier attribué à l'unité d'archive par le service d'archives. Peut être comparé
    * à une cote.
    */
-  protected List<String> archivalAgencyArchiveUnitIdentifiers = new ArrayList<>();
+  protected final List<String> archivalAgencyArchiveUnitIdentifiers = new ArrayList<>();
 
   /** L'identifiant métier attribué à l’ArchiveUnit par le service producteur. */
-  protected List<String> originatingAgencyArchiveUnitIdentifiers = new ArrayList<>();
+  protected final List<String> originatingAgencyArchiveUnitIdentifiers = new ArrayList<>();
 
   /** L'identifiant attribué à l'ArchiveUnit par le service versant. */
-  protected List<String> transferringAgencyArchiveUnitIdentifiers = new ArrayList<>();
+  protected final List<String> transferringAgencyArchiveUnitIdentifiers = new ArrayList<>();
 
   /**
    * Le type d’information au sens de l’OAIS (information de représentation, information de
@@ -263,15 +263,15 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   /**
    * L'altitude utilisée comme altitude de référence. Si l'altitude est au-dessus du niveau de la
    * mer, la valeur 0 est normalement donnée. Si l'altitude est au-dessous du niveau de la mer, la
-   * valeur 1 est normalement donnée.
+   * valeur 1 est donnée.
    */
   protected String gpsAltitudeRef;
 
   /**
    * La latitude qui peut être exprimée de deux manières différentes : degrés, décimaux ou degrés,
    * minutes et secondes. Si la latitude est exprimée en degrés, décimaux, le format type est dd,
-   * dd. Par ex: "45.3130339". Si la latitude est exprimée en degrés, minutes et secondes, le format
-   * type est dd, mm, ss. Par ex: "45 18 46.922".
+   * dd. Par exemple : "45.3130339". Si la latitude est exprimée en degrés, minutes et secondes, le
+   * format type est dd, mm, ss. Par exemple : "45 18 46.922".
    */
   protected String gpsLatitude;
 
@@ -289,8 +289,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   protected String gpsLongitude;
 
   /**
-   * Indique la longitude. La valeur 'E' indique la longitude Est, et 'W' indique la longitude
-   * Ouest.
+   * Indique la longitude. La valeur 'E' indique la longitude EST, et 'W' indique la longitude
+   * OUEST.
    */
   protected String gpsLongitudeRef;
 
@@ -399,7 +399,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   }
 
   /**
-   * Fournit l'objet binaire de type qualifier. Si l'objet n'existe pas, il est alors créé.
+   * Fournit l'objet binaire de type "qualifier". Si l'objet n'existe pas, il est alors créé.
    *
    * @return l'objet binaire
    */
@@ -1511,7 +1511,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    * Spécifie l'attribut ID identifiant l'archive unit. Il est de la responsabilité du développeur
    * de s'assurer que l'attribut spécifié est unique dans le document. Pour éviter d'éventuels
    * conflits avec les attributs générés automatiquement, il est conseillé de préfixer l'attribut
-   * une valeur différente de "ID" qui est celle utilisé par le générateur.
+   * une valeur différente de "ID" qui est celle utilisée par le générateur.
    *
    * <p>Note. Les attributs de type ID permettent d'identifier de manière unique un élément dans le
    * document. La valeur d'un attribut de type ID doit donc être unique parmi toutes les valeurs de
@@ -2288,7 +2288,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   /**
    * Indique l'altitude utilisée comme altitude de référence. Si l'altitude est au-dessus du niveau
    * de la mer, la valeur 0 est normalement donnée. Si l'altitude est au-dessous du niveau de la
-   * mer, la valeur 1 est normalement donnée.
+   * mer, la valeur 1 est donnée.
    *
    * @return l'altitude de référence
    */
@@ -2299,7 +2299,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   /**
    * Spécifie l'altitude utilisée comme altitude de référence. Si l'altitude est au-dessus du niveau
    * de la mer, la valeur 0 est normalement donnée. Si l'altitude est au-dessous du niveau de la
-   * mer, la valeur 1 est normalement donnée.
+   * mer, la valeur 1 est donnée.
    *
    * @param gpsAltitudeRef l'altitude de référence
    */
@@ -2310,8 +2310,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   /**
    * Indique la latitude. La latitude qui peut être exprimée de deux manières différentes : degrés,
    * décimaux ou degrés, minutes et secondes. Si la latitude est exprimée en degrés, décimaux, le
-   * format type est dd, dd. Par ex: "45.3130339". Si la latitude est exprimée en degrés, minutes et
-   * secondes, le format type est dd, mm, ss. Par ex: "45 18 46.922".
+   * format type est dd, dd. Par exemple : "45.3130339". Si la latitude est exprimée en degrés,
+   * minutes et secondes, le format type est dd, mm, ss. Par exemple : "45 18 46.922".
    *
    * @return la latitude
    */
@@ -2322,8 +2322,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   /**
    * Spécifie la latitude. La latitude qui peut être exprimée de deux manières différentes : degrés,
    * décimaux ou degrés, minutes et secondes. Si la latitude est exprimée en degrés, décimaux, le
-   * format type est dd, dd. Par ex: "45.3130339". Si la latitude est exprimée en degrés, minutes et
-   * secondes, le format type est dd, mm, ss. Par ex: "45 18 46.922".
+   * format type est dd, dd. Par exemple : "45.3130339". Si la latitude est exprimée en degrés,
+   * minutes et secondes, le format type est dd, mm, ss. Par exemple : "45 18 46.922".
    *
    * @param gpsLatitude la latitude
    */
@@ -2353,7 +2353,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    * Indique la longitude. La longitude peut être exprimée de deux manières différentes : degrés,
    * décimaux ou degrés, minutes et secondes. Si la longitude est exprimée en degrés, décimaux, le
    * format type est dd, dd. Par exemple : "5.392285833333334". Si la longitude est exprimée en
-   * degrés, minutes et secondes, le format type est dd, mm, ss. Par ex: "5 23 32.229".
+   * degrés, minutes et secondes, le format type est dd, mm, ss. Par exemple : "5 23 32.229".
    *
    * @return la longitude
    */
@@ -2365,7 +2365,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    * Spécifie la longitude. La longitude peut être exprimée de deux manières différentes : degrés,
    * décimaux ou degrés, minutes et secondes. Si la longitude est exprimée en degrés, décimaux, le
    * format type est dd, dd. Par exemple : "5.392285833333334". Si la longitude est exprimée en
-   * degrés, minutes et secondes, le format type est dd, mm, ss. Par ex: "5 23 32.229".
+   * degrés, minutes et secondes, le format type est dd, mm, ss. Par exemple : "5 23 32.229".
    *
    * @param gpsLongitude la longitude
    */
@@ -2374,8 +2374,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   }
 
   /**
-   * Indique la longitude. La valeur 'E' indique la longitude Est, et 'W' indique la longitude
-   * Ouest.
+   * Indique la longitude. La valeur 'E' indique la longitude EST, et 'W' indique la longitude
+   * OUEST.
    *
    * @return la longitude de référence
    */
@@ -2384,8 +2384,8 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   }
 
   /**
-   * Spécifie la longitude. La valeur 'E' indique la longitude Est, et 'W' indique la longitude
-   * Ouest.
+   * Spécifie la longitude. La valeur 'E' indique la longitude EST, et 'W' indique la longitude
+   * OUEST.
    *
    * @param gpsLongitudeRef la longitude de référence
    */

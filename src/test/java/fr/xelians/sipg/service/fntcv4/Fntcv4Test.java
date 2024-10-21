@@ -60,7 +60,7 @@ class Fntcv4Test {
    */
   @Test
   void testValidateXml(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try {
       Path path = Paths.get(TestInit.TEST_RESOURCES + "fntc_small.xml");
@@ -83,7 +83,7 @@ class Fntcv4Test {
    */
   @Test
   void testValidateSimpleZip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
@@ -105,7 +105,7 @@ class Fntcv4Test {
    */
   @Test
   void testValidateLargeZip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
@@ -126,7 +126,7 @@ class Fntcv4Test {
    */
   @Test
   void testCreateFullTextSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createFullTextSip();
@@ -146,7 +146,7 @@ class Fntcv4Test {
    */
   @Test
   void testCreateDirSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createSipFromDir();
@@ -166,7 +166,7 @@ class Fntcv4Test {
    */
   @Test
   void testWithoutAgencyFail(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     ArchiveTransfer archiveTransfer = SipFactory.createWithoutAgencySip();
     Path outputPath = Paths.get(TestInit.TEST_RESULTS + "fail_fntc.zip");
@@ -180,7 +180,7 @@ class Fntcv4Test {
    */
   @Test
   void testCreateCsvSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createCsvSip();
@@ -200,7 +200,7 @@ class Fntcv4Test {
    */
   @Test
   void testReadFreemarkerJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try {
       String jsonString = SipFactory.createJsonString();
       ArchiveTransfer archiveTransfer = JsonService.getInstance().read(jsonString);
@@ -220,7 +220,7 @@ class Fntcv4Test {
    */
   @Test
   void testCreateMiniSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
@@ -240,7 +240,7 @@ class Fntcv4Test {
    */
   @Test
   void testCreateSimpleSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
@@ -260,7 +260,7 @@ class Fntcv4Test {
    */
   @Test
   void testValidateSimpleSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
@@ -279,7 +279,7 @@ class Fntcv4Test {
    */
   @Test
   void testCreateSmallSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createSmallSip();
@@ -301,7 +301,7 @@ class Fntcv4Test {
    */
   @Test
   void testValidateSmallSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createSmallSip();
@@ -323,7 +323,7 @@ class Fntcv4Test {
    */
   @Test
   void testCreateLargeSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     Fntcv4Config config = Fntcv4ConfigBuilder.builder().useMemory(false).strict(false).build();
 
@@ -345,7 +345,7 @@ class Fntcv4Test {
    */
   @Test
   void testValidateRngSmallSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createSmallSip();
@@ -364,7 +364,7 @@ class Fntcv4Test {
    */
   @Test
   void testCreateDeepSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createDeepSip(fs);
@@ -384,7 +384,7 @@ class Fntcv4Test {
    */
   @Test
   void testValidateDeepSip(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createDeepSip(fs);

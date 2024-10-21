@@ -61,7 +61,7 @@ import uk.gov.nationalarchives.droid.core.interfaces.IdentificationResult;
 /**
  * La classe Fntcv4Converter contient les informations et fonctions nécessaires à la conversion
  * d'une archive au format FNTC v4. Cette classe ne peut être instanciée qu'à travers les méthodes
- * statiques convert(...). Note. la classe n'est pas thread-safe et un nouvel objet est
+ * statiques convert(...). Note. La classe n'est pas thread-safe et un nouvel objet est
  * systématiquement créé à chaque conversion.
  *
  * @author Emmanuel Deviller
@@ -88,8 +88,8 @@ class Fntcv4Converter {
 
   private Fntcv4Converter(FileSystem zipArchive, Fntcv4Config config) {
     this.zipArchive = zipArchive;
-    this.executor = Executors.newFixedThreadPool(SipUtils.getPoolSize(config.getThread()));
-    this.isStrict = config.isStrict();
+    this.executor = Executors.newFixedThreadPool(SipUtils.getPoolSize(config.thread()));
+    this.isStrict = config.strict();
 
     try {
       this.documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -702,11 +702,11 @@ class Fntcv4Converter {
 
   private TagType toTagType(Tag tag) {
     TagType tt = fntcv4Factory.createTagType();
-    if (StringUtils.isNotBlank(tag.getKey())) {
-      tt.setKey(tag.getKey());
+    if (StringUtils.isNotBlank(tag.key())) {
+      tt.setKey(tag.key());
     }
 
-    tt.setValue(tag.getValue());
+    tt.setValue(tag.value());
     return tt;
   }
 
@@ -787,7 +787,8 @@ class Fntcv4Converter {
                       + binaryPath.getFileName());
         }
 
-        // Note. The Signature Identifier does not fully support NIO2 (ie. does not work with jimfs)
+        // Note. The Signature Identifier does not fully support NIO2 (i.e. does not work with
+        // jimfs)
         if (StringUtils.isBlank(bdot.getFormat())) {
           String ext = FilenameUtils.getExtension(binaryPath.getFileName().toString());
           List<IdentificationResult> results = DroidUtils.matchBinarySignatures(binaryPath, ext);

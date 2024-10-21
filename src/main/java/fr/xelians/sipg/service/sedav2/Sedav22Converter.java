@@ -82,7 +82,7 @@ import uk.gov.nationalarchives.droid.core.interfaces.IdentificationResult;
 /**
  * La classe Sedav2Converter contient les informations et fonctions nécessaires à la conversion
  * d'une archive au format SEDA v2.2. Cette classe ne peut être instanciée qu'à travers les méthodes
- * statiques convert(...). Note. la classe n'est pas thread safe et un nouvel objet est
+ * statiques convert(...). Note. La classe n'est pas thread safe et un nouvel objet est
  * systématiquement créé à chaque conversion.
  *
  * @author Emmanuel Deviller
@@ -117,7 +117,7 @@ class Sedav22Converter {
 
   private Sedav22Converter(FileSystem zipArchive, Sedav2Config config) {
     this.zipArchive = zipArchive;
-    this.isStrict = config.isStrict();
+    this.isStrict = config.strict();
     this.identifyFileFormat = config.identifyFileFormat();
 
     try {
@@ -226,7 +226,7 @@ class Sedav22Converter {
       throws ExecutionException, InterruptedException {
     if (!converter.tasks.isEmpty()) {
       ExecutorService executor =
-          Executors.newFixedThreadPool(SipUtils.getPoolSize(config.getThread()));
+          Executors.newFixedThreadPool(SipUtils.getPoolSize(config.thread()));
       try {
         List<Future<Void>> futures = executor.invokeAll(converter.tasks);
         // Join all threads and throw an exception if one task has failed
@@ -237,54 +237,6 @@ class Sedav22Converter {
         executor.shutdownNow();
       }
     }
-  }
-
-  private ArchiveDeliveryRequestReplyType toArchiveDeliveryRequestReplyType(
-      ArchiveDeliveryRequestReply delivery) {
-    ArchiveDeliveryRequestReplyType del = sedav2Factory.createArchiveDeliveryRequestReplyType();
-
-    String mi =
-        SipUtils.getIfBlank(
-            delivery.getMessageIdentifier(), RandomStringUtils.randomAlphabetic(32).toLowerCase());
-    del.setMessageIdentifier(mi);
-
-    LocalDateTime gcd = SipUtils.getIfNull(delivery.getDate(), LocalDateTime.now());
-    del.setDate(SipUtils.toXmlDateTime(gcd));
-
-    CodeListVersions clv =
-        SipUtils.getIfNull(delivery.getCodeListVersions(), new CodeListVersions());
-    del.setCodeListVersions(toCodeListVersionsType(clv));
-
-    ifNotNull(delivery.getComment(), e -> del.getComment().add(toTextType(e)));
-    ifNotNull(delivery.getArchivalAgreement(), e -> del.setArchivalAgreement(toIdentifierType(e)));
-    ifNotNull(
-        delivery.getArchivalAgency(), e -> del.setArchivalAgency(toOrganizationWithIdType(e)));
-
-    ifNotNull(delivery.getReplyCode(), del::setReplyCode);
-    ifNotNull(
-        delivery.getMessageRequestIdentifier(),
-        e -> del.setMessageRequestIdentifier(toIdentifierType(e)));
-    ifNotNull(delivery.getUnitIdentifier(), e -> del.getUnitIdentifier().add(toIdentifierType(e)));
-    ifNotNull(delivery.getRequester(), e -> del.setRequester(toOrganizationWithIdType(e)));
-
-    DataObjectPackageType dopt = sedav2Factory.createDataObjectPackageType();
-
-    DescriptiveMetadataType dmt = sedav2Factory.createDescriptiveMetadataType();
-    delivery
-        .getArchiveUnits()
-        .forEach(unit -> dmt.getArchiveUnit().add(toArchiveUnitType(unit, dopt)));
-    dopt.setDescriptiveMetadata(dmt);
-
-    ManagementMetadataType mmt = sedav2Factory.createManagementMetadataType();
-    ifNotNull(delivery.getArchivalAgency(), e -> mmt.setOriginatingAgencyIdentifier(toIdentifierType(e.getIdentifier())));
-    dopt.setManagementMetadata(mmt);
-
-    del.setDataObjectPackage(dopt);
-
-    // 2nd pass
-    postProcessors.forEach(Runnable::run);
-
-    return del;
   }
 
   private ArchiveTransferType toArchiveTransferType(ArchiveTransfer transfer) {
@@ -342,6 +294,56 @@ class Sedav22Converter {
     postProcessors.forEach(Runnable::run);
 
     return att;
+  }
+
+  private ArchiveDeliveryRequestReplyType toArchiveDeliveryRequestReplyType(
+      ArchiveDeliveryRequestReply delivery) {
+    ArchiveDeliveryRequestReplyType del = sedav2Factory.createArchiveDeliveryRequestReplyType();
+
+    String mi =
+        SipUtils.getIfBlank(
+            delivery.getMessageIdentifier(), RandomStringUtils.randomAlphabetic(32).toLowerCase());
+    del.setMessageIdentifier(mi);
+
+    LocalDateTime gcd = SipUtils.getIfNull(delivery.getDate(), LocalDateTime.now());
+    del.setDate(SipUtils.toXmlDateTime(gcd));
+
+    CodeListVersions clv =
+        SipUtils.getIfNull(delivery.getCodeListVersions(), new CodeListVersions());
+    del.setCodeListVersions(toCodeListVersionsType(clv));
+
+    ifNotNull(delivery.getComment(), e -> del.getComment().add(toTextType(e)));
+    ifNotNull(delivery.getArchivalAgreement(), e -> del.setArchivalAgreement(toIdentifierType(e)));
+    ifNotNull(
+        delivery.getArchivalAgency(), e -> del.setArchivalAgency(toOrganizationWithIdType(e)));
+
+    ifNotNull(delivery.getReplyCode(), del::setReplyCode);
+    ifNotNull(
+        delivery.getMessageRequestIdentifier(),
+        e -> del.setMessageRequestIdentifier(toIdentifierType(e)));
+    ifNotNull(delivery.getUnitIdentifier(), e -> del.getUnitIdentifier().add(toIdentifierType(e)));
+    ifNotNull(delivery.getRequester(), e -> del.setRequester(toOrganizationWithIdType(e)));
+
+    DataObjectPackageType dopt = sedav2Factory.createDataObjectPackageType();
+
+    DescriptiveMetadataType dmt = sedav2Factory.createDescriptiveMetadataType();
+    delivery
+        .getArchiveUnits()
+        .forEach(unit -> dmt.getArchiveUnit().add(toArchiveUnitType(unit, dopt)));
+    dopt.setDescriptiveMetadata(dmt);
+
+    ManagementMetadataType mmt = sedav2Factory.createManagementMetadataType();
+    ifNotNull(
+        delivery.getOriginatingAgencyIdentifier(),
+        e -> mmt.setOriginatingAgencyIdentifier(toIdentifierType(e)));
+    dopt.setManagementMetadata(mmt);
+
+    del.setDataObjectPackage(dopt);
+
+    // 2nd pass
+    postProcessors.forEach(Runnable::run);
+
+    return del;
   }
 
   private void addPhysicalDataObjectType(
@@ -551,8 +553,8 @@ class Sedav22Converter {
     unit.getTags()
         .forEach(
             tag -> {
-              if (StringUtils.isBlank(tag.getKey())) {
-                dmct.getTag().add(tag.getValue());
+              if (StringUtils.isBlank(tag.key())) {
+                dmct.getTag().add(tag.value());
               } else {
                 dmct.getKeyword().add(toKeywordType(tag));
               }
@@ -1234,8 +1236,8 @@ class Sedav22Converter {
 
   private KeywordsType toKeywordType(Tag tag) {
     KeywordsType kt = sedav2Factory.createKeywordsType();
-    kt.setKeywordReference(toIdentifierType(tag.getKey()));
-    kt.setKeywordContent(toTextType(tag.getValue()));
+    kt.setKeywordReference(toIdentifierType(tag.key()));
+    kt.setKeywordContent(toTextType(tag.value()));
     return kt;
   }
 
@@ -1344,7 +1346,8 @@ class Sedav22Converter {
 
     private void processFileFormatIdentification() {
       if (identifyFileFormat) {
-        // Note. The Signature Identifier does not fully support NIO2 (ie. does not work with jimfs)
+        // Note. The Signature Identifier does not fully support NIO2 (i.e. does not work with
+        // jimfs)
         String ext = FilenameUtils.getExtension(binaryPath.getFileName().toString());
         List<IdentificationResult> results = DroidUtils.matchBinarySignatures(binaryPath, ext);
         if (results.isEmpty()) {

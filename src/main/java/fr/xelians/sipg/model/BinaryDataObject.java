@@ -48,7 +48,7 @@ public abstract class BinaryDataObject {
   protected long size;
 
   /** L'algorithme utilisé pour générer l'empreinte (hash) de l'objet binaire. */
-  protected String digestAlgorithm = "SHA-512";
+  protected final String digestAlgorithm = "SHA-512";
 
   /** Les informations techniques de l'objet binaire. */
   protected FileInfo fileInfo = new FileInfo();

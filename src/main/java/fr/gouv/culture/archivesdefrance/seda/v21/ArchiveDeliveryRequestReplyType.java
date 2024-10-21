@@ -7,10 +7,7 @@
 //
 package fr.gouv.culture.archivesdefrance.seda.v21;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +40,7 @@ import java.util.List;
       "archivalAgency",
       "requester"
     })
+@XmlRootElement(name = "ArchiveDeliveryRequestReply")
 public class ArchiveDeliveryRequestReplyType extends BusinessReplyMessageType {
 
   /** The Authorization request reply identifier. */

@@ -26,15 +26,15 @@ import java.util.Objects;
 
 public class HoldRule extends Rule {
 
-  protected LocalDate holdEndDate;
+  protected final LocalDate holdEndDate;
 
-  protected String holdOwner;
+  protected final String holdOwner;
 
-  protected String holdReason;
+  protected final String holdReason;
 
-  protected LocalDate holdReassessingDate;
+  protected final LocalDate holdReassessingDate;
 
-  protected Boolean preventRearrangement;
+  protected final Boolean preventRearrangement;
 
   @JsonCreator
   public HoldRule(

@@ -82,7 +82,7 @@ public class RelatedObjectRef {
   }
 
   /**
-   * Supprime une référence de la liste des références de type "Est une version de"..
+   * Supprime une référence de la liste des références de type "Est une version de".
    *
    * @param isVersionOf la référence à supprimer
    * @return true si la suppression a été réalisée avec succès, sinon false

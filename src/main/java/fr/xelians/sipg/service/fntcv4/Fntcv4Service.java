@@ -185,16 +185,16 @@ public class Fntcv4Service {
         }
 
         Marshaller fntcMarshaller = fntcContext.createMarshaller();
-        fntcMarshaller.setSchema(config.isValidate() ? fntcSchema : null);
+        fntcMarshaller.setSchema(config.validate() ? fntcSchema : null);
         fntcMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
 
         // Marshall & prettyPrint
-        if (config.isFormat()) {
+        if (config.format()) {
           // JAXB_FORMATTED_OUTPUT is buggy and does not format XML with DOM nodes. Hence, this ugly
           // hack...
           ByteArrayInOutStream baios = new ByteArrayInOutStream(1024);
           fntcMarshaller.marshal(att, baios);
-          SipUtils.formatXml(baios.getInputStream(), bos, config.getIndent());
+          SipUtils.formatXml(baios.getInputStream(), bos, config.indent());
         } else {
           fntcMarshaller.marshal(att, bos);
         }

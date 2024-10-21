@@ -54,7 +54,7 @@ class JsonTest {
    */
   @Test
   void testCreateMiniJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try {
       Path jsonPath = Paths.get(TestInit.TEST_RESULTS + "minisip_serial.json");
       ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
@@ -79,7 +79,7 @@ class JsonTest {
    */
   @Test
   void testReadMiniJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try {
       Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "minisip.json");
       ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
@@ -99,7 +99,7 @@ class JsonTest {
    */
   @Test
   void testCreateFullVitam(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createSipFullVitam();
@@ -119,7 +119,7 @@ class JsonTest {
    */
   @Test
   void testCreateSimpleJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
@@ -139,7 +139,7 @@ class JsonTest {
    */
   @Test
   void testReadSimpleJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try {
       Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "simplesip.json");
       ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
@@ -161,7 +161,7 @@ class JsonTest {
    */
   @Test
   void testCreateReadSimpleJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try (FileSystem fs = Jimfs.newFileSystem()) {
       String serialized = jsonService.write(SipFactory.createComplexSip(fs), jsonConfig);
       ArchiveTransfer archiveTransfer = jsonService.read(serialized);
@@ -183,7 +183,7 @@ class JsonTest {
    */
   @Test
   void testReadFreemarkerJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try {
       String jsonString = SipFactory.createJsonString();
       ArchiveTransfer archiveTransfer = jsonService.read(jsonString);
@@ -205,7 +205,7 @@ class JsonTest {
    */
   @Test
   void testCreateFullTextJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createFullTextSip();
       jsonService.write(
@@ -224,7 +224,7 @@ class JsonTest {
    */
   @Test
   void testReadFullTextJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try {
       String serialized = jsonService.write(SipFactory.createFullTextSip(), jsonConfig);
       ArchiveTransfer archiveTransfer = jsonService.read(serialized);
@@ -244,7 +244,7 @@ class JsonTest {
    */
   @Test
   void testCreateSmallJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createSmallSip();
       Path zipPath = Paths.get(TestInit.TEST_RESULTS + "smallsip_serial.json");
@@ -263,7 +263,7 @@ class JsonTest {
    */
   @Test
   void testReadSmallJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try {
       Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "smallsip.json");
       ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
@@ -283,7 +283,7 @@ class JsonTest {
    */
   @Test
   void testCreateLargeJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
       jsonService.write(
@@ -302,7 +302,7 @@ class JsonTest {
    */
   @Test
   void testReadLargeJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try {
       Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "largesip.json");
       ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
@@ -322,7 +322,7 @@ class JsonTest {
    */
   @Test
   void testCreateDeepJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createDeepSip(fs);
       jsonService.write(
@@ -341,7 +341,7 @@ class JsonTest {
    */
   @Test
   void testReadDeepJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
+    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
     try {
       Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "deepsip.json");
       ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);

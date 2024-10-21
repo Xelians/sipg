@@ -32,7 +32,7 @@ public abstract class AbstractSimpleRules extends AbstractRules {
   protected final List<Rule> rules = new ArrayList<>();
 
   /** Instancie la classe. */
-  public AbstractSimpleRules() {
+  protected AbstractSimpleRules() {
     super();
   }
 
@@ -42,9 +42,8 @@ public abstract class AbstractSimpleRules extends AbstractRules {
    * @param name la référence de la règle communicabilité
    * @param startDate date de départ de calcul de la règle de communicabilité
    */
-  public AbstractSimpleRules(String name, LocalDate startDate) {
+  protected AbstractSimpleRules(String name, LocalDate startDate) {
     super();
-    ;
     addRule(name, startDate);
   }
 

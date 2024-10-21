@@ -140,22 +140,22 @@ public class SipFactory {
 
     try (BufferedReader reader = Files.newBufferedReader(csvPath)) {
       CSVParser parser = CSVFormat.DEFAULT.builder().setDelimiter(';').build().parse(reader);
-      for (CSVRecord record : parser) {
+      for (CSVRecord csvRecord : parser) {
         ArchiveUnit unit = new ArchiveUnit();
-        unit.setBinaryPath(Paths.get(TestInit.TEST_RESOURCES + record.get(2)));
+        unit.setBinaryPath(Paths.get(TestInit.TEST_RESOURCES + csvRecord.get(2)));
         unit.setDescriptionLevel("File");
 
-        unit.addTitle(record.get(3));
-        unit.addTag(record.get(4));
+        unit.addTitle(csvRecord.get(3));
+        unit.addTag(csvRecord.get(4));
 
-        String parentId = record.get(1);
+        String parentId = csvRecord.get(1);
         if (parentId.isEmpty()) {
           archiveTransfer.addArchiveUnit(unit);
         } else {
           ArchiveUnit parentUnit = map.get(parentId);
           parentUnit.addArchiveUnit(unit);
         }
-        map.put(record.get(0), unit);
+        map.put(csvRecord.get(0), unit);
       }
     }
 
@@ -279,7 +279,6 @@ public class SipFactory {
     unit1.addSystemId("SystemId");
 
     // Règles de gestion
-    // unit1.setAccessRule("AR038", today);
     AccessRules accessRule = new AccessRules();
     accessRule.addRule("AR038", today);
     unit1.setAccessRules(accessRule);
@@ -1342,7 +1341,7 @@ public class SipFactory {
     archiveDelivery.setUnitIdentifier("UNKNOWN_UNIT");
     archiveDelivery.setMessageRequestIdentifier("REQ-0001");
     archiveDelivery.setReplyCode("OK");
-    archiveDelivery.setRequester(new Agency("REQUESTER-001", "TheRequester"));
+    archiveDelivery.setRequester(new Agency("REQUESTER-001", null));
 
     for (int i = 0; i < 100; i++) {
       Path binaryPath = fs.getPath("helloworld_" + i + ".pdf");

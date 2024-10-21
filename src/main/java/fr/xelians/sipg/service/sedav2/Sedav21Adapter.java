@@ -91,39 +91,11 @@ public class Sedav21Adapter implements Sedav2Adapter {
 
   @Override
   public void write(
-      ArchiveTransfer archive, Validator validator, Path zipPath, Sedav2Config config) {
+      ArchiveTransfer transfer, Validator validator, Path zipPath, Sedav2Config config) {
 
     try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath, config.useMemory())) {
-      ArchiveTransferType att = Sedav21Converter.convert(archive, zipArchive, config);
-      final Path zipEntryPath = zipArchive.getPath("manifest.xml");
-      try (OutputStream os = Files.newOutputStream(zipEntryPath)) {
-
-        // Set External Validator
-        if (validator != null) {
-          validator.validate(new JAXBSource(sedaContext, att));
-        }
-
-        Marshaller sedaMarshaller = sedaContext.createMarshaller();
-        sedaMarshaller.setSchema(config.isValidate() ? sedaSchema : null);
-        sedaMarshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", namespaceMapper);
-        sedaMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
-
-        if (LOGGER.isDebugEnabled()) {
-          sedaMarshaller.setEventHandler(new Sedav2EventHandler());
-          sedaMarshaller.setListener(new Sedav2Listener());
-        }
-
-        // Marshall & prettyPrint
-        if (config.isFormat()) {
-          // JAXB_FORMATTED_OUTPUT is buggy and does not format XML with DOM nodes. Hence, this ugly
-          // hack...
-          ByteArrayInOutStream baios = new ByteArrayInOutStream(1024);
-          sedaMarshaller.marshal(att, baios);
-          SipUtils.formatXml(baios.getInputStream(), os, config.getIndent());
-        } else {
-          sedaMarshaller.marshal(att, os);
-        }
-      }
+      ArchiveTransferType transferType = Sedav21Converter.convert(transfer, zipArchive, config);
+      doWrite(validator, config, zipArchive, transferType);
     } catch (IOException
         | JAXBException
         | SAXException
@@ -136,39 +108,16 @@ public class Sedav21Adapter implements Sedav2Adapter {
 
   @Override
   public void write(
-      ArchiveDeliveryRequestReply archive, Validator validator, Path zipPath, Sedav2Config config) {
+      ArchiveDeliveryRequestReply deliveryRequestReply,
+      Validator validator,
+      Path zipPath,
+      Sedav2Config config) {
     try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath, config.useMemory())) {
-      ArchiveDeliveryRequestReplyType att =
-          Sedav21Converter.convertToArchiveDeliveryRequestReplyType(archive, zipArchive, config);
-      final Path zipEntryPath = zipArchive.getPath("manifest.xml");
-      try (OutputStream os = Files.newOutputStream(zipEntryPath)) {
+      ArchiveDeliveryRequestReplyType requestReplyType =
+          Sedav21Converter.convertToArchiveDeliveryRequestReplyType(
+              deliveryRequestReply, zipArchive, config);
+      doWrite(validator, config, zipArchive, requestReplyType);
 
-        // Set External Validator
-        if (validator != null) {
-          validator.validate(new JAXBSource(sedaContext, att));
-        }
-
-        Marshaller sedaMarshaller = sedaContext.createMarshaller();
-        sedaMarshaller.setSchema(config.isValidate() ? sedaSchema : null);
-        sedaMarshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", namespaceMapper);
-        sedaMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
-
-        if (LOGGER.isDebugEnabled()) {
-          sedaMarshaller.setEventHandler(new Sedav2EventHandler());
-          sedaMarshaller.setListener(new Sedav2Listener());
-        }
-
-        // Marshall & prettyPrint
-        if (config.isFormat()) {
-          // JAXB_FORMATTED_OUTPUT is buggy and does not format XML with DOM nodes. Hence, this ugly
-          // hack...
-          ByteArrayInOutStream baios = new ByteArrayInOutStream(1024);
-          sedaMarshaller.marshal(att, baios);
-          SipUtils.formatXml(baios.getInputStream(), os, config.getIndent());
-        } else {
-          sedaMarshaller.marshal(att, os);
-        }
-      }
     } catch (IOException
         | JAXBException
         | SAXException
@@ -176,6 +125,40 @@ public class Sedav21Adapter implements Sedav2Adapter {
         | InterruptedException ex) {
       Thread.currentThread().interrupt();
       throw new SipException("Failed to write archive to " + zipPath, ex);
+    }
+  }
+
+  private static void doWrite(
+      Validator validator, Sedav2Config config, FileSystem zipArchive, Object content)
+      throws IOException, SAXException, JAXBException {
+    Path zipEntryPath = zipArchive.getPath("manifest.xml");
+    try (OutputStream os = Files.newOutputStream(zipEntryPath)) {
+
+      // Set External Validator
+      if (validator != null) {
+        validator.validate(new JAXBSource(sedaContext, content));
+      }
+
+      Marshaller sedaMarshaller = sedaContext.createMarshaller();
+      sedaMarshaller.setSchema(config.validate() ? sedaSchema : null);
+      sedaMarshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", namespaceMapper);
+      sedaMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
+
+      if (LOGGER.isDebugEnabled()) {
+        sedaMarshaller.setEventHandler(new Sedav2EventHandler());
+        sedaMarshaller.setListener(new Sedav2Listener());
+      }
+
+      // Marshall & prettyPrint
+      if (config.format()) {
+        // JAXB_FORMATTED_OUTPUT is buggy and does not format XML with DOM nodes. Hence, this ugly
+        // hack...
+        ByteArrayInOutStream baios = new ByteArrayInOutStream(1024);
+        sedaMarshaller.marshal(content, baios);
+        SipUtils.formatXml(baios.getInputStream(), os, config.indent());
+      } else {
+        sedaMarshaller.marshal(content, os);
+      }
     }
   }
 

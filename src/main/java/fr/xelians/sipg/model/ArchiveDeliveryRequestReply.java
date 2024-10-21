@@ -54,6 +54,17 @@ public class ArchiveDeliveryRequestReply extends Message implements ArchiveUnitC
   /** Identifiant de l'archive unit */
   protected String unitIdentifier;
 
+  /** Identifient de l'agence à l'origine du SIP */
+  protected String originatingAgencyIdentifier;
+
+  public String getOriginatingAgencyIdentifier() {
+    return originatingAgencyIdentifier;
+  }
+
+  public void setOriginatingAgencyIdentifier(String originatingAgencyIdentifier) {
+    this.originatingAgencyIdentifier = originatingAgencyIdentifier;
+  }
+
   /** Demandeur */
   protected Agency requester;
 

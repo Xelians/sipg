@@ -71,7 +71,7 @@ public class CodeListVersions {
   /** La version de la liste des codes pour les règles de durée d'utilité courante. */
   protected String storageRuleCodeListVersion;
 
-  /** La version de la liste des codes pour les règles de durée d'utilité administrative.. */
+  /** La version de la liste des codes pour les règles de durée d'utilité administrative. */
   protected String appraisalRuleCodeListVersion;
 
   /** La version de la liste des codes pour les règles de communicabilité. */

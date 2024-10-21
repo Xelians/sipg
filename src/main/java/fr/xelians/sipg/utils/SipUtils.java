@@ -160,7 +160,7 @@ public final class SipUtils {
   }
 
   /**
-   * Retourne la taille du pool de thread. Si n est égal ou inférieur à zéro, la taille correspond
+   * Retourne la taille du pool de thread. S'il est égal ou inférieur à zéro, la taille correspond
    * au nombre de processeurs disponibles.
    *
    * @param n le nombre de thread souhaité

@@ -61,14 +61,14 @@ public class ArchiveTransfer extends Message implements ArchiveUnitContainer {
   protected String legalStatus;
 
   /**
-   * Identifiant du service producteur - information de gestion à ne pas confondre avec
+   * Identifiant du service producteur. Information de gestion à ne pas confondre avec
    * OriginatingAgency dans les métadonnées de description.
    */
   protected String originatingAgencyIdentifier;
 
   /**
-   * Identifiant du service versant - information de gestion à ne pas confondre avec
-   * SubmissionAgency dans les métadonnées de description.
+   * Identifiant du service versant. Information de gestion à ne pas confondre avec SubmissionAgency
+   * dans les métadonnées de description.
    */
   protected String submissionAgencyIdentifier;
 
@@ -275,7 +275,7 @@ public class ArchiveTransfer extends Message implements ArchiveUnitContainer {
   }
 
   /**
-   * Indique l'identifiant du service producteur - information de gestion à ne pas confondre avec
+   * Indique l'identifiant du service producteur. Information de gestion à ne pas confondre avec
    * OriginatingAgency dans les métadonnées de description.
    *
    * @return l'identifiant du service producteur
@@ -285,7 +285,7 @@ public class ArchiveTransfer extends Message implements ArchiveUnitContainer {
   }
 
   /**
-   * Spécifie l'identifiant du service producteur - information de gestion à ne pas confondre avec
+   * Spécifie l'identifiant du service producteur. Iinformation de gestion à ne pas confondre avec
    * OriginatingAgency dans les métadonnées de description.
    *
    * @param originatingAgencyIdentifier l'identifiant du service producteur
@@ -295,7 +295,7 @@ public class ArchiveTransfer extends Message implements ArchiveUnitContainer {
   }
 
   /**
-   * Indique l'identifiant du service versant - information de gestion à ne pas confondre avec
+   * Indique l'identifiant du service versant. Information de gestion à ne pas confondre avec
    * SubmissionAgency dans les métadonnées de description.
    *
    * @return l'identifiant du service versant
@@ -305,7 +305,7 @@ public class ArchiveTransfer extends Message implements ArchiveUnitContainer {
   }
 
   /**
-   * Spécifie l'identifiant du service versant - information de gestion à ne pas confondre avec
+   * Spécifie l'identifiant du service versant. Information de gestion à ne pas confondre avec
    * SubmissionAgency dans les métadonnées de description.
    *
    * @param submissionAgencyIdentifier l'identifiant du service versant
