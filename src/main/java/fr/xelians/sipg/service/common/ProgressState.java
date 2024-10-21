@@ -24,12 +24,8 @@ package fr.xelians.sipg.service.common;
  * @author Emmanuel Deviller
  */
 public enum ProgressState {
-    /**
-     * Success progress state.
-     */
-    SUCCESS,
-    /**
-     * Fail progress state.
-     */
-    FAIL,
+  /** Success progress state. */
+  SUCCESS,
+  /** Fail progress state. */
+  FAIL,
 }

@@ -27,27 +27,26 @@ import java.util.List;
  */
 public interface ArchiveUnitContainer {
 
-    /**
-     * Ajoute une unité d'archive à la liste des unités d'archives.
-     *
-     * @param archiveUnit l'unité d'archive à ajouter
-     */
-    void addArchiveUnit(ArchiveUnit archiveUnit);
+  /**
+   * Ajoute une unité d'archive à la liste des unités d'archives.
+   *
+   * @param archiveUnit l'unité d'archive à ajouter
+   */
+  void addArchiveUnit(ArchiveUnit archiveUnit);
 
-    /**
-     * Supprime une unité d'archive de la liste des unités d'archives.
-     *
-     * @param archiveUnit l'unité d'archive à supprimer
-     * @return true si la suppression a été réalisée avec succès, sinon false
-     */
-    boolean removeArchiveUnit(ArchiveUnit archiveUnit);
+  /**
+   * Supprime une unité d'archive de la liste des unités d'archives.
+   *
+   * @param archiveUnit l'unité d'archive à supprimer
+   * @return true si la suppression a été réalisée avec succès, sinon false
+   */
+  boolean removeArchiveUnit(ArchiveUnit archiveUnit);
 
-    /**
-     * Fournit la liste des unités d'archives. Pour éviter d'exposer les données internes, il est conseillé de réaliser
-     * une copie défensive de la liste.
-     *
-     * @return la liste des unités d'archives
-     */
-    List<ArchiveUnit> getArchiveUnits();
-
+  /**
+   * Fournit la liste des unités d'archives. Pour éviter d'exposer les données internes, il est
+   * conseillé de réaliser une copie défensive de la liste.
+   *
+   * @return la liste des unités d'archives
+   */
+  List<ArchiveUnit> getArchiveUnits();
 }

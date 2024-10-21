@@ -21,35 +21,26 @@ package fr.xelians.sipg.model;
 import java.time.LocalDate;
 
 /**
- * <p>
  * La classe AccessRules représente les règles de communicabilité (accessibilité) des archives.
- * </p>
  *
- * <p>
- * Supporté en SEDA v2.1 et FNTC v4.
- * </p>
+ * <p>Supporté en SEDA v2.1 et FNTC v4.
  *
  * @author Emmanuel Deviller
  */
 public class AccessRules extends AbstractSimpleRules {
 
+  /** Instancie la classe. */
+  public AccessRules() {
+    super();
+  }
 
-    /**
-     * Instancie la classe.
-     */
-    public AccessRules() {
-        super();
-    }
-
-    /**
-     * Instancie la classe avec une règle spécifiée par les paramètres.
-     *
-     * @param name      la référence de la règle communicabilité
-     * @param startDate date de départ de calcul de la règle de communicabilité
-     */
-    public AccessRules(String name, LocalDate startDate) {
-        super(name, startDate);
-    }
-
-
+  /**
+   * Instancie la classe avec une règle spécifiée par les paramètres.
+   *
+   * @param name la référence de la règle communicabilité
+   * @param startDate date de départ de calcul de la règle de communicabilité
+   */
+  public AccessRules(String name, LocalDate startDate) {
+    super(name, startDate);
+  }
 }

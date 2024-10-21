@@ -23,15 +23,17 @@ import fr.xelians.sipg.utils.SipException;
 
 public class BinaryMasterDataObject extends BinaryDataObject {
 
-    public BinaryMasterDataObject() {
-        super(BINARY_MASTER);
-    }
+  public BinaryMasterDataObject() {
+    super(BINARY_MASTER);
+  }
 
-    @Override
-    public void setBinaryVersion(String objectVersion) {
-        if (objectVersion == null || !objectVersion.startsWith(BINARY_MASTER)) {
-            throw new SipException(String.format("The qualifier of type %s cannot be modified to %s", binaryVersion, objectVersion));
-        }
-        this.binaryVersion = objectVersion;
+  @Override
+  public void setBinaryVersion(String objectVersion) {
+    if (objectVersion == null || !objectVersion.startsWith(BINARY_MASTER)) {
+      throw new SipException(
+          String.format(
+              "The qualifier of type %s cannot be modified to %s", binaryVersion, objectVersion));
     }
+    this.binaryVersion = objectVersion;
+  }
 }

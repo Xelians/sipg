@@ -25,7 +25,6 @@ import fr.xelians.sipg.utils.DroidUtils;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -42,9 +41,7 @@ class DroidTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DroidTest.class);
 
-  /**
-   * Test small pdf droid.
-   */
+  /** Test small pdf droid. */
   @Test
   void testSmallPdfDroid() {
     Path path = Paths.get(TestInit.TEST_RESOURCES + "dummy.pdf");
@@ -80,5 +77,4 @@ class DroidTest {
       assertEquals("fmt/19", results.get(0).getPuid());
     }
   }
-
 }

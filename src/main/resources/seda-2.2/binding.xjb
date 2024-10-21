@@ -13,70 +13,87 @@
             </jxb:bindings>
         </jxb:bindings>
 
-        <jxb:bindings node="//xs:attributeGroup[@name='arcAttrs']">           
+        <jxb:bindings node="//xs:attributeGroup[@name='arcAttrs']">
             <jxb:bindings node=".//xs:attribute[@ref='xlink:title']">
                 <jxb:property name="title2"/>
-            </jxb:bindings>            
-        </jxb:bindings>              
+            </jxb:bindings>
+        </jxb:bindings>
+
     </jxb:bindings>
 
     <jxb:bindings schemaLocation="seda-vitam-types.xsd" node="/xs:schema">
-
         <jxb:bindings node="xs:complexType[@name='DataObjectRefType']">
             <annox:annotate>
                 <annox:annotate annox:class="jakarta.xml.bind.annotation.XmlRootElement"
-                                name="DataObjectRef" />
+                                name="DataObjectRef"/>
             </annox:annotate>
         </jxb:bindings>
     </jxb:bindings>
 
     <jxb:bindings schemaLocation="seda-vitam-descriptive.xsd" node="/xs:schema">
-
         <jxb:bindings node="xs:complexType[@name='ArchiveUnitType']">
             <annox:annotate>
                 <annox:annotate annox:class="jakarta.xml.bind.annotation.XmlRootElement"
-                                name="ArchiveUnit" />
+                                name="ArchiveUnit"/>
             </annox:annotate>
         </jxb:bindings>
     </jxb:bindings>
 
     <jxb:bindings schemaLocation="seda-vitam-main.xsd" node="/xs:schema">
-
         <jxb:bindings node="xs:complexType[@name='ArchiveTransferType']">
             <annox:annotate>
                 <annox:annotate annox:class="jakarta.xml.bind.annotation.XmlRootElement"
-                                name="ArchiveTransfer" />
+                                name="ArchiveTransfer"/>
             </annox:annotate>
         </jxb:bindings>
+
         <jxb:bindings node="xs:complexType[@name='DataObjectPackageType']">
             <annox:annotate>
                 <annox:annotate annox:class="jakarta.xml.bind.annotation.XmlRootElement"
-                                name="DataObjectPackage" />
+                                name="DataObjectPackage"/>
             </annox:annotate>
         </jxb:bindings>
+
         <jxb:bindings node="xs:complexType[@name='ArchiveTransferReplyType']">
             <annox:annotate>
                 <annox:annotate annox:class="jakarta.xml.bind.annotation.XmlRootElement"
                                 name="ArchiveTransferReply"/>
             </annox:annotate>
         </jxb:bindings>
+
+        <jxb:bindings node="xs:complexType[@name='ArchiveDeliveryRequestReplyType']">
+            <annox:annotate>
+                <annox:annotate annox:class="jakarta.xml.bind.annotation.XmlRootElement"
+                                name="ArchiveDeliveryRequestReply"/>
+            </annox:annotate>
+        </jxb:bindings>
+
+        <jxb:bindings node="xs:complexType[@name='DataObjectGroupType']">
+            <jxb:bindings node="xs:attribute[@name='id']">
+                <annox:annotate target="field">
+                    <annox:annotate
+                            annox:class="jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter"
+                            value="jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter"/>
+                    <annox:annotate annox:class="jakarta.xml.bind.annotation.XmlID"/>
+                    <annox:annotate annox:class="jakarta.xml.bind.annotation.XmlSchemaType"
+                                    name="ID"/>
+                </annox:annotate>
+            </jxb:bindings>
+        </jxb:bindings>
     </jxb:bindings>
 
     <jxb:bindings schemaLocation="seda-vitam-technical.xsd" node="/xs:schema">
-
         <jxb:bindings node="xs:complexType[@name='BinaryDataObjectType']">
             <annox:annotate>
                 <annox:annotate annox:class="jakarta.xml.bind.annotation.XmlRootElement"
                                 name="BinaryDataObject"/>
             </annox:annotate>
-
         </jxb:bindings>
         <jxb:bindings node="xs:complexType[@name='PhysicalDataObjectType']">
             <annox:annotate>
                 <annox:annotate annox:class="jakarta.xml.bind.annotation.XmlRootElement"
                                 name="PhysicalDataObject"/>
             </annox:annotate>
-
         </jxb:bindings>
     </jxb:bindings>
 

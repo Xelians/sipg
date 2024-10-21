@@ -21,150 +21,159 @@ package fr.xelians.sipg.service.sedav2;
 import java.util.Objects;
 
 /**
- * La classe Sedav2BinaryObject représente un objet binaire (ie. un fichier PDF, JPEG, MPEG, etc.) .
+ * La classe Sedav2BinaryObject représente un objet binaire (ie. un fichier PDF, JPEG, MPEG, etc.).
  *
  * @author Emmanuel Deviller
  */
 class Sedav2BinaryObject {
 
-    private String uri;
-    private long size;
-    private String digest;
-    private String algorithm;
-    private String format;
+  private String uri;
+  private long size;
+  private String digest;
+  private String algorithm;
+  private String format;
 
-    /**
-     * Gets uri.
-     *
-     * @return the uri
-     */
-    public String getUri() {
-        return uri;
+  /**
+   * Gets uri.
+   *
+   * @return the uri
+   */
+  public String getUri() {
+    return uri;
+  }
+
+  /**
+   * Sets uri.
+   *
+   * @param uri the uri
+   */
+  public void setUri(String uri) {
+    this.uri = uri;
+  }
+
+  /**
+   * Gets size.
+   *
+   * @return the size
+   */
+  public long getSize() {
+    return size;
+  }
+
+  /**
+   * Sets size.
+   *
+   * @param size the size
+   */
+  public void setSize(long size) {
+    this.size = size;
+  }
+
+  /**
+   * Gets digest.
+   *
+   * @return the digest
+   */
+  public String getDigest() {
+    return digest;
+  }
+
+  /**
+   * Sets digest.
+   *
+   * @param digest the digest
+   */
+  public void setDigest(String digest) {
+    this.digest = digest;
+  }
+
+  /**
+   * Gets algorithm.
+   *
+   * @return the algorithm
+   */
+  public String getAlgorithm() {
+    return algorithm;
+  }
+
+  /**
+   * Sets algorithm.
+   *
+   * @param algorithm the algorithm
+   */
+  public void setAlgorithm(String algorithm) {
+    this.algorithm = algorithm;
+  }
+
+  /**
+   * Gets format.
+   *
+   * @return the format
+   */
+  public String getFormat() {
+    return format;
+  }
+
+  /**
+   * Sets format.
+   *
+   * @param format the format
+   */
+  public void setFormat(String format) {
+    this.format = format;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 3;
+    hash = 41 * hash + Objects.hashCode(this.uri);
+    hash = 41 * hash + Long.hashCode(this.size);
+    hash = 41 * hash + Objects.hashCode(this.digest);
+    hash = 41 * hash + Objects.hashCode(this.algorithm);
+    hash = 41 * hash + Objects.hashCode(this.format);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-
-    /**
-     * Sets uri.
-     *
-     * @param uri the uri
-     */
-    public void setUri(String uri) {
-        this.uri = uri;
+    if (obj == null) {
+      return false;
     }
-
-    /**
-     * Gets size.
-     *
-     * @return the size
-     */
-    public long getSize() {
-        return size;
+    if (getClass() != obj.getClass()) {
+      return false;
     }
-
-    /**
-     * Sets size.
-     *
-     * @param size the size
-     */
-    public void setSize(long size) {
-        this.size = size;
+    final Sedav2BinaryObject other = (Sedav2BinaryObject) obj;
+    if (this.size != other.size) {
+      return false;
     }
-
-    /**
-     * Gets digest.
-     *
-     * @return the digest
-     */
-    public String getDigest() {
-        return digest;
+    if (!Objects.equals(this.uri, other.uri)) {
+      return false;
     }
-
-    /**
-     * Sets digest.
-     *
-     * @param digest the digest
-     */
-    public void setDigest(String digest) {
-        this.digest = digest;
+    if (!Objects.equals(this.digest, other.digest)) {
+      return false;
     }
-
-    /**
-     * Gets algorithm.
-     *
-     * @return the algorithm
-     */
-    public String getAlgorithm() {
-        return algorithm;
+    if (!Objects.equals(this.algorithm, other.algorithm)) {
+      return false;
     }
+    return Objects.equals(this.format, other.format);
+  }
 
-    /**
-     * Sets algorithm.
-     *
-     * @param algorithm the algorithm
-     */
-    public void setAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
-    }
-
-    /**
-     * Gets format.
-     *
-     * @return the format
-     */
-    public String getFormat() {
-        return format;
-    }
-
-    /**
-     * Sets format.
-     *
-     * @param format the format
-     */
-    public void setFormat(String format) {
-        this.format = format;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 41 * hash + Objects.hashCode(this.uri);
-        hash = 41 * hash + (int) (this.size ^ (this.size >>> 32));
-        hash = 41 * hash + Objects.hashCode(this.digest);
-        hash = 41 * hash + Objects.hashCode(this.algorithm);
-        hash = 41 * hash + Objects.hashCode(this.format);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Sedav2BinaryObject other = (Sedav2BinaryObject) obj;
-        if (this.size != other.size) {
-            return false;
-        }
-        if (!Objects.equals(this.uri, other.uri)) {
-            return false;
-        }
-        if (!Objects.equals(this.digest, other.digest)) {
-            return false;
-        }
-        if (!Objects.equals(this.algorithm, other.algorithm)) {
-            return false;
-        }
-        return Objects.equals(this.format, other.format);
-    }
-
-    @Override
-    public String toString() {
-        return "BinaryData{" + "uri=" + uri + ", size=" + size + ", digest=" + digest + ", algorithm=" + algorithm
-                + ", format=" + format + '}';
-    }
-
+  @Override
+  public String toString() {
+    return "BinaryData{"
+        + "uri="
+        + uri
+        + ", size="
+        + size
+        + ", digest="
+        + digest
+        + ", algorithm="
+        + algorithm
+        + ", format="
+        + format
+        + '}';
+  }
 }

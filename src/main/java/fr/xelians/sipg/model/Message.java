@@ -25,143 +25,135 @@ import java.util.List;
 /**
  * La classe abstraite Message représente le message dans le protocole d'échange FNTC et SEDA.
  *
- * <p>
- * Supporté en SEDA v2.1 et FNTC v4.
- * </p>
+ * <p>Supporté en SEDA v2.1 et FNTC v4.
  *
  * @author Emmanuel Deviller
  * @see ArchiveTransfer
  */
 public abstract class Message {
 
-    /**
-     * La liste des éléments signatures du message.
-     */
-    protected final List<Element> signatureElements = new ArrayList<>();
-    /**
-     * La date du message.
-     */
-    protected LocalDateTime date;
-    /**
-     * L'identifiant du message.
-     */
-    protected String messageIdentifier;
-    /**
-     * Le commentaire sur le message.
-     */
-    protected String comment;
-    /**
-     * La signature du message.
-     */
-    protected String signature;
+  /** La liste des éléments signatures du message. */
+  protected final List<Element> signatureElements = new ArrayList<>();
 
-    /**
-     * Indique la date du message.
-     *
-     * @return la date du message
-     */
-    public LocalDateTime getDate() {
-        return date;
-    }
+  /** La date du message. */
+  protected LocalDateTime date;
 
-    /**
-     * Spécifie la date du message.
-     *
-     * @param date la date du message
-     */
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
+  /** L'identifiant du message. */
+  protected String messageIdentifier;
 
-    /**
-     * Indique l'identifiant du message.
-     *
-     * @return l'identifiant du message
-     */
-    public String getMessageIdentifier() {
-        return messageIdentifier;
-    }
+  /** Le commentaire sur le message. */
+  protected String comment;
 
-    /**
-     * Spécifie l'identifiant du message.
-     *
-     * @param messageIdentifier l'identifiant du message
-     */
-    public void setMessageIdentifier(String messageIdentifier) {
-        this.messageIdentifier = messageIdentifier;
-    }
+  /** La signature du message. */
+  protected String signature;
 
-    /**
-     * Indique le commentaire sur le message.
-     *
-     * @return le commentaire
-     */
-    public String getComment() {
-        return comment;
-    }
+  /**
+   * Indique la date du message.
+   *
+   * @return la date du message
+   */
+  public LocalDateTime getDate() {
+    return date;
+  }
 
-    /**
-     * Spécifie le commentaire sur le message.
-     *
-     * @param comment le commentaire
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
+  /**
+   * Spécifie la date du message.
+   *
+   * @param date la date du message
+   */
+  public void setDate(LocalDateTime date) {
+    this.date = date;
+  }
 
-    /**
-     * Indique la signature du message.
-     *
-     * @return la signature du message
-     */
-    public String getSignature() {
-        return signature;
-    }
+  /**
+   * Indique l'identifiant du message.
+   *
+   * @return l'identifiant du message
+   */
+  public String getMessageIdentifier() {
+    return messageIdentifier;
+  }
 
-    /**
-     * Spécifie la signature du message.
-     *
-     * @param signature la signature du message
-     */
-    public void setSignature(String signature) {
-        this.signature = signature;
-    }
+  /**
+   * Spécifie l'identifiant du message.
+   *
+   * @param messageIdentifier l'identifiant du message
+   */
+  public void setMessageIdentifier(String messageIdentifier) {
+    this.messageIdentifier = messageIdentifier;
+  }
 
-    /**
-     * Ajoute une signature à la liste des signatures du message.
-     *
-     * @param name  le nom de la signature
-     * @param value la valeur de la signature
-     */
-    public void addSignatureElement(String name, String value) {
-        signatureElements.add(new Element(name, value));
-    }
+  /**
+   * Indique le commentaire sur le message.
+   *
+   * @return le commentaire
+   */
+  public String getComment() {
+    return comment;
+  }
 
-    /**
-     * Ajoute une signature à la liste des signatures du message.
-     *
-     * @param element l'élément signature
-     */
-    public void addSignatureElement(Element element) {
-        signatureElements.add(element);
-    }
+  /**
+   * Spécifie le commentaire sur le message.
+   *
+   * @param comment le commentaire
+   */
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
 
-    /**
-     * Supprime une signature de la liste des signatures du message.
-     *
-     * @param element l'élément signature
-     * @return true si la suppression a été réalisée avec succès, sinon false
-     */
-    public boolean removeSignatureElement(Element element) {
-        return signatureElements.remove(element);
-    }
+  /**
+   * Indique la signature du message.
+   *
+   * @return la signature du message
+   */
+  public String getSignature() {
+    return signature;
+  }
 
-    /**
-     * Fournit la liste des signatures du message.
-     *
-     * @return la liste des éléments signatures
-     */
-    public List<Element> getSignatureElements() {
-        return new ArrayList<>(signatureElements);
-    }
+  /**
+   * Spécifie la signature du message.
+   *
+   * @param signature la signature du message
+   */
+  public void setSignature(String signature) {
+    this.signature = signature;
+  }
+
+  /**
+   * Ajoute une signature à la liste des signatures du message.
+   *
+   * @param name le nom de la signature
+   * @param value la valeur de la signature
+   */
+  public void addSignatureElement(String name, String value) {
+    signatureElements.add(new Element(name, value));
+  }
+
+  /**
+   * Ajoute une signature à la liste des signatures du message.
+   *
+   * @param element l'élément signature
+   */
+  public void addSignatureElement(Element element) {
+    signatureElements.add(element);
+  }
+
+  /**
+   * Supprime une signature de la liste des signatures du message.
+   *
+   * @param element l'élément signature
+   * @return true si la suppression a été réalisée avec succès, sinon false
+   */
+  public boolean removeSignatureElement(Element element) {
+    return signatureElements.remove(element);
+  }
+
+  /**
+   * Fournit la liste des signatures du message.
+   *
+   * @return la liste des éléments signatures
+   */
+  public List<Element> getSignatureElements() {
+    return new ArrayList<>(signatureElements);
+  }
 }
