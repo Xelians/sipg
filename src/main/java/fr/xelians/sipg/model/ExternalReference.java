@@ -24,23 +24,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * La classe ExternalReference représente une référence à une entité externe.
  *
- * <p>
- * Supporté en SEDA v2.1.
- * </p>
+ * <p>Supporté en SEDA v2.1.
  *
  * @author Emmanuel Deviller
  * @see RelationRef
  */
 public class ExternalReference extends RelationRef<String> {
 
-    /**
-     * Instancie la classe avec l'argument spécifié.
-     *
-     * @param reference l'entité externe référencée
-     */
-    @JsonCreator
-    public ExternalReference(@JsonProperty("reference") String reference) {
-        super(reference);
-    }
-
+  /**
+   * Instancie la classe avec l'argument spécifié.
+   *
+   * @param reference l'entité externe référencée
+   */
+  @JsonCreator
+  public ExternalReference(@JsonProperty("reference") String reference) {
+    super(reference);
+  }
 }

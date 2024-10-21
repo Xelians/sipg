@@ -19,18 +19,18 @@
 package fr.xelians.sipg.service.common;
 
 /**
- * L'interface ProgressListener représente le contrat nécessaire au suivi de la progression d'un processus.
+ * L'interface ProgressListener représente le contrat nécessaire au suivi de la progression d'un
+ * processus.
  *
  * @param <T> le type de l'étape de l'événement
  * @author Emmanuel Deviller
  */
 public interface ProgressListener<T> {
 
-    /**
-     * Permet de suivre la progression d'un processus.
-     *
-     * @param progressEvent l'événement émis par le processus en progression
-     */
-    void progressChanged(ProgressEvent<T> progressEvent);
-
+  /**
+   * Permet de suivre la progression d'un processus.
+   *
+   * @param progressEvent l'événement émis par le processus en progression
+   */
+  void progressChanged(ProgressEvent<T> progressEvent);
 }

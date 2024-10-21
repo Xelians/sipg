@@ -18,6 +18,8 @@
  */
 package fr.xelians.sipg.service.json;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.google.common.jimfs.Jimfs;
 import fr.xelians.sipg.SipFactory;
 import fr.xelians.sipg.TestInit;
@@ -31,8 +33,6 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The JSON integration test.
@@ -83,7 +83,8 @@ class JsonTest {
     try {
       Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "minisip.json");
       ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "minisip_deserial.json"), jsonConfig);
+      jsonService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "minisip_deserial.json"), jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -102,7 +103,8 @@ class JsonTest {
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createSipFullVitam();
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "sip_vitam_full.json"), jsonConfig);
+      jsonService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "sip_vitam_full.json"), jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -121,7 +123,8 @@ class JsonTest {
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "simplesip_serial.json"), jsonConfig);
+      jsonService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "simplesip_serial.json"), jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -140,7 +143,10 @@ class JsonTest {
     try {
       Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "simplesip.json");
       ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "simplesip_deserial.json"), jsonConfig);
+      jsonService.write(
+          archiveTransfer,
+          Paths.get(TestInit.TEST_RESULTS + "simplesip_deserial.json"),
+          jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -159,7 +165,9 @@ class JsonTest {
     try (FileSystem fs = Jimfs.newFileSystem()) {
       String serialized = jsonService.write(SipFactory.createComplexSip(fs), jsonConfig);
       ArchiveTransfer archiveTransfer = jsonService.read(serialized);
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "simplesip_serial_deserial.json"),
+      jsonService.write(
+          archiveTransfer,
+          Paths.get(TestInit.TEST_RESULTS + "simplesip_serial_deserial.json"),
           jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
@@ -179,7 +187,10 @@ class JsonTest {
     try {
       String jsonString = SipFactory.createJsonString();
       ArchiveTransfer archiveTransfer = jsonService.read(jsonString);
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "freemarker_deserial.json"), jsonConfig);
+      jsonService.write(
+          archiveTransfer,
+          Paths.get(TestInit.TEST_RESULTS + "freemarker_deserial.json"),
+          jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -197,7 +208,8 @@ class JsonTest {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createFullTextSip();
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "full_serial.json"), jsonConfig);
+      jsonService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "full_serial.json"), jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -216,7 +228,8 @@ class JsonTest {
     try {
       String serialized = jsonService.write(SipFactory.createFullTextSip(), jsonConfig);
       ArchiveTransfer archiveTransfer = jsonService.read(serialized);
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "full_deserial.json"), jsonConfig);
+      jsonService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "full_deserial.json"), jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -254,7 +267,8 @@ class JsonTest {
     try {
       Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "smallsip.json");
       ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "smallsip_deserial.json"), jsonConfig);
+      jsonService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "smallsip_deserial.json"), jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -272,7 +286,8 @@ class JsonTest {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_serial.json"), jsonConfig);
+      jsonService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_serial.json"), jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -291,7 +306,8 @@ class JsonTest {
     try {
       Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "largesip.json");
       ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_deserial.json"), jsonConfig);
+      jsonService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_deserial.json"), jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -309,7 +325,8 @@ class JsonTest {
     LOGGER.info(TestUtils.TEST + TestUtils.getMethod(testInfo));
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createDeepSip(fs);
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_serial.json"), jsonConfig);
+      jsonService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_serial.json"), jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -328,7 +345,8 @@ class JsonTest {
     try {
       Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "deepsip.json");
       ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
-      jsonService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_deserial.json"), jsonConfig);
+      jsonService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_deserial.json"), jsonConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);

@@ -19,23 +19,19 @@
 package fr.xelians.sipg;
 
 import fr.xelians.sipg.utils.SipException;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.io.RandomAccessReadBuffer;
-import org.apache.pdfbox.io.RandomAccessReadBufferedFile;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -51,20 +47,17 @@ import org.slf4j.LoggerFactory;
  */
 public class TestUtils {
 
-  /**
-   * The constant TEST.
-   */
-  public static final String TEST = "**************** Testing ";
-  /**
-   * The constant FAIL.
-   */
+  /** The constant TEST. */
+  public static final String TEST = "**************** Testing {}";
+
+  /** The constant FAIL. */
   public static final String FAIL = "Fail to complete ";
+
   private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
 
-  private static final byte[] img100k = loadImage("100k.jpg") ;
+  private static final byte[] img100k = loadImage("100k.jpg");
 
-  private TestUtils() {
-  }
+  private TestUtils() {}
 
   /**
    * Gets method.
@@ -80,7 +73,7 @@ public class TestUtils {
    * Create pdf.
    *
    * @param message the message
-   * @param path    the path
+   * @param path the path
    */
   public static void createPdf(String message, Path path) {
     createPdf(message, path, false);
@@ -131,8 +124,8 @@ public class TestUtils {
   public static String extractTextFromPDF(Path path) {
 
     try (InputStream is = Files.newInputStream(path);
-         RandomAccessRead rar = new RandomAccessReadBuffer(is);
-         PDDocument document = Loader.loadPDF(rar)) {
+        RandomAccessRead rar = new RandomAccessReadBuffer(is);
+        PDDocument document = Loader.loadPDF(rar)) {
       return new PDFTextStripper().getText(document);
     } catch (IOException ex) {
       String msg = String.format("Unable to extract text from PDF %s", path);
@@ -149,12 +142,11 @@ public class TestUtils {
    */
   public static byte[] loadImage(String image) {
     try (InputStream is = ClassLoader.getSystemResourceAsStream(image)) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        IOUtils.copy(is, baos);
-        return baos.toByteArray();
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      IOUtils.copy(is, baos);
+      return baos.toByteArray();
     } catch (IOException e) {
-        throw new RuntimeException(e);
+      throw new RuntimeException(e);
     }
   }
-
 }

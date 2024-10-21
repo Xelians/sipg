@@ -26,65 +26,73 @@ package fr.xelians.sipg.service.common;
  */
 public class ProgressEvent<T> {
 
-    private final String id;
-    private final ProgressState status;
-    private final T step;
-    private final String message;
+  private final String id;
+  private final ProgressState status;
+  private final T step;
+  private final String message;
 
-    /**
-     * Instancie la classe.
-     *
-     * @param id      l'identifiant de l'événement
-     * @param status  le statut de l'événement
-     * @param step    l'étape de l'événement
-     * @param message le message de l'événement
-     */
-    public ProgressEvent(String id, ProgressState status, T step, String message) {
-        this.id = id;
-        this.status = status;
-        this.step = step;
-        this.message = message;
-    }
+  /**
+   * Instancie la classe.
+   *
+   * @param id l'identifiant de l'événement
+   * @param status le statut de l'événement
+   * @param step l'étape de l'événement
+   * @param message le message de l'événement
+   */
+  public ProgressEvent(String id, ProgressState status, T step, String message) {
+    this.id = id;
+    this.status = status;
+    this.step = step;
+    this.message = message;
+  }
 
-    /**
-     * Indique l'identifiant de l'événement.
-     *
-     * @return l'identifiant de l'événement
-     */
-    public String getId() {
-        return id;
-    }
+  /**
+   * Indique l'identifiant de l'événement.
+   *
+   * @return l'identifiant de l'événement
+   */
+  public String getId() {
+    return id;
+  }
 
-    /**
-     * Indique le statut de l'événement.
-     *
-     * @return le statut
-     */
-    public ProgressState getStatus() {
-        return status;
-    }
+  /**
+   * Indique le statut de l'événement.
+   *
+   * @return le statut
+   */
+  public ProgressState getStatus() {
+    return status;
+  }
 
-    /**
-     * Indique l'étape de l'événement.
-     *
-     * @return l'étape
-     */
-    public T getStep() {
-        return step;
-    }
+  /**
+   * Indique l'étape de l'événement.
+   *
+   * @return l'étape
+   */
+  public T getStep() {
+    return step;
+  }
 
-    /**
-     * Indique le message de l'événement.
-     *
-     * @return le message
-     */
-    public String getMessage() {
-        return message;
-    }
+  /**
+   * Indique le message de l'événement.
+   *
+   * @return le message
+   */
+  public String getMessage() {
+    return message;
+  }
 
-    @Override
-    public String toString() {
-        return "ProgressEvent{" + "id=" + id + ", status=" + status + ", step=" + step + ", message=" + message + '}';
-    }
-
+  @Override
+  public String toString() {
+    return "ProgressEvent{"
+        + "id="
+        + id
+        + ", status="
+        + status
+        + ", step="
+        + step
+        + ", message="
+        + message
+        + '}';
+  }
 }

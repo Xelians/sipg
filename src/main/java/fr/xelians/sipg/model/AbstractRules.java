@@ -19,10 +19,9 @@
 package fr.xelians.sipg.model;
 
 import fr.xelians.sipg.utils.SipUtils;
-import org.apache.commons.lang3.Validate;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.Validate;
 
 /**
  * La classe AbstractRules représente la liste des règles des archives.
@@ -31,75 +30,69 @@ import java.util.List;
  */
 public abstract class AbstractRules {
 
+  /**
+   * La liste des identifiants des règles qui pourront être retirées de l'héritage dans ce nœud.
+   * Cette propriété est ignorée en FNTC v4.
+   */
+  protected final List<String> preventRuleNames = new ArrayList<>();
 
-    /**
-     * La liste des identifiants des règles qui pourront être retirées de l'héritage dans ce nœud. Cette propriété est
-     * ignorée en FNTC v4.
-     */
-    protected final List<String> preventRuleNames = new ArrayList<>();
+  /**
+   * Indique si les règles de gestion héritées des unités d'archives parentes doivent être ignorées
+   * pour l’unité d'archive concernée. Cette propriété est ignorée en FNTC v4.
+   */
+  protected Boolean preventInheritance;
 
-    /**
-     * Indique si les règles de gestion héritées des unités d'archives parentes doivent être ignorées pour l’unité d'archive
-     * concernée. Cette propriété est ignorée en FNTC v4.
-     */
-    protected Boolean preventInheritance;
+  /** Instancie la classe. */
+  protected AbstractRules() {}
 
-    /**
-     * Instancie la classe.
-     */
-    protected AbstractRules() {
-    }
+  /**
+   * Ajoute l'identifiant de la règle qui pourra être retirée de l'héritage dans ce nœud.
+   *
+   * @param ruleName l'identifiant de la règle
+   */
+  public void addPreventRuleName(String ruleName) {
+    Validate.notNull(ruleName, SipUtils.NOT_NULL, "ruleName");
+    preventRuleNames.add(ruleName);
+  }
 
+  /**
+   * Supprime l'identifiant de la règle qui pourra être retirée de l'héritage dans ce nœud.
+   *
+   * @param ruleName l'identifiant de la règle
+   * @return true si la suppression de l'identifiant a réalisé avec succès, false sinon
+   */
+  public boolean removePreventRuleName(String ruleName) {
+    Validate.notNull(ruleName, SipUtils.NOT_NULL, "ruleName");
+    return preventRuleNames.remove(ruleName);
+  }
 
-    /**
-     * Ajoute l'identifiant de la règle qui pourra être retirée de l'héritage dans ce nœud.
-     *
-     * @param ruleName l'identifiant de la règle
-     */
-    public void addPreventRuleName(String ruleName) {
-        Validate.notNull(ruleName, SipUtils.NOT_NULL, "ruleName");
-        preventRuleNames.add(ruleName);
-    }
+  /**
+   * Fournit la liste des identifiants des règles qui pourront être retirées de l'héritage dans ce
+   * nœud.
+   *
+   * @return la liste des identifiants
+   */
+  public List<String> getPreventRuleNames() {
+    return new ArrayList<>(preventRuleNames);
+  }
 
-    /**
-     * Supprime l'identifiant de la règle qui pourra être retirée de l'héritage dans ce nœud.
-     *
-     * @param ruleName l'identifiant de la règle
-     * @return true si la suppression de l'identifiant a réalisé avec succès, false sinon
-     */
-    public boolean removePreventRuleName(String ruleName) {
-        Validate.notNull(ruleName, SipUtils.NOT_NULL, "ruleName");
-        return preventRuleNames.remove(ruleName);
-    }
+  /**
+   * Indique si les règles de gestion héritées des unités d'archives parentes doivent être ignorées
+   * pour l’unité d'archive concernée.
+   *
+   * @return l'interdiction d'hériter
+   */
+  public Boolean isPreventInheritance() {
+    return preventInheritance;
+  }
 
-    /**
-     * Fournit la liste des identifiants des règles qui pourront être retirées de l'héritage dans ce nœud.
-     *
-     * @return la liste des identifiants
-     */
-    public List<String> getPreventRuleNames() {
-        return new ArrayList<>(preventRuleNames);
-    }
-
-
-    /**
-     * Indique si les règles de gestion héritées des unités d'archives parentes doivent être ignorées pour l’unité d'archive
-     * concernée.
-     *
-     * @return l'interdiction d'hériter
-     */
-    public Boolean isPreventInheritance() {
-        return preventInheritance;
-    }
-
-    /**
-     * Spécifie si les règles de gestion héritées des unités d'archives parentes doivent être ignorées pour l’unité
-     * d'archive concernée.
-     *
-     * @param preventInheritance interdiction d'hériter
-     */
-    public void setPreventInheritance(Boolean preventInheritance) {
-        this.preventInheritance = preventInheritance;
-    }
-
+  /**
+   * Spécifie si les règles de gestion héritées des unités d'archives parentes doivent être ignorées
+   * pour l’unité d'archive concernée.
+   *
+   * @param preventInheritance interdiction d'hériter
+   */
+  public void setPreventInheritance(Boolean preventInheritance) {
+    this.preventInheritance = preventInheritance;
+  }
 }

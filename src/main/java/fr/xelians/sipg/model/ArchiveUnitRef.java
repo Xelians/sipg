@@ -24,22 +24,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * La classe ArchiveUnitRef représente une référence à une unité d'archive interne.
  *
- * <p>
- * Supporté en SEDA v2.1.
- * </p>
+ * <p>Supporté en SEDA v2.1.
  *
  * @author Emmanuel Deviller
  */
 public class ArchiveUnitRef extends RelationRef<ArchiveUnit> {
 
-    /**
-     * Instancie la classe.
-     *
-     * @param reference l'unité d'archive à référencer
-     */
-    @JsonCreator
-    public ArchiveUnitRef(@JsonProperty("reference") ArchiveUnit reference) {
-        super(reference);
-    }
-
+  /**
+   * Instancie la classe.
+   *
+   * @param reference l'unité d'archive à référencer
+   */
+  @JsonCreator
+  public ArchiveUnitRef(@JsonProperty("reference") ArchiveUnit reference) {
+    super(reference);
+  }
 }

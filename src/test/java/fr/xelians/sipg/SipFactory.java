@@ -103,7 +103,7 @@ public class SipFactory {
    * Create json string.
    *
    * @return the string
-   * @throws IOException       the io exception
+   * @throws IOException the io exception
    * @throws TemplateException the template exception
    */
   public static String createJsonString() throws IOException, TemplateException {
@@ -135,7 +135,7 @@ public class SipFactory {
     archiveTransfer.setArchivalAgency("AG001", "My Archive Agency");
     archiveTransfer.setTransferringAgency("AG002", "My Transfer Agency");
 
-    //association d'une valeur à une autre. clé = String et valeur = ArchiveUnit
+    // association d'une valeur à une autre. clé = String et valeur = ArchiveUnit
     HashMap<String, ArchiveUnit> map = new HashMap<>();
 
     try (BufferedReader reader = Files.newBufferedReader(csvPath)) {
@@ -156,7 +156,6 @@ public class SipFactory {
           parentUnit.addArchiveUnit(unit);
         }
         map.put(record.get(0), unit);
-
       }
     }
 
@@ -177,7 +176,8 @@ public class SipFactory {
     unit.addTitle("Citizen Four", "en");
     unit.addDescription(TestUtils.extractTextFromPDF(binaryPath), "en");
 
-    unit.addWriter(AgentBuilder.builder().withFullName("Marie-Sarah Deviller").addNationality("Fr").build());
+    unit.addWriter(
+        AgentBuilder.builder().withFullName("Marie-Sarah Deviller").addNationality("Fr").build());
 
     unit.addLanguage("en");
     unit.setDescriptionLanguage("en");
@@ -278,8 +278,8 @@ public class SipFactory {
     unit1.addTag("juste de l'indexation");
     unit1.addSystemId("SystemId");
 
-    //Règles de gestion
-    //unit1.setAccessRule("AR038", today);
+    // Règles de gestion
+    // unit1.setAccessRule("AR038", today);
     AccessRules accessRule = new AccessRules();
     accessRule.addRule("AR038", today);
     unit1.setAccessRules(accessRule);
@@ -289,14 +289,18 @@ public class SipFactory {
     appraisalRule.setFinalAction("Destroy");
     unit1.setAppraisalRules(appraisalRule);
 
-    //AgentType
-    unit1.addWriter(AgentBuilder.builder()
-                                .withFirstName("Baptiste").withFullName("Nichele").withBirthDate(LocalDate.ofEpochDay(0))
-                                .addActivity("Consultant").addFunction("Tech")
-                                .withBirthPlace(PlaceBuilder.builder().withCountry("France").withCity("Paris").build())
-                                .build());
+    // AgentType
+    unit1.addWriter(
+        AgentBuilder.builder()
+            .withFirstName("Baptiste")
+            .withFullName("Nichele")
+            .withBirthDate(LocalDate.ofEpochDay(0))
+            .addActivity("Consultant")
+            .addFunction("Tech")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("France").withCity("Paris").build())
+            .build());
 
-    //Extension d'ontologie
+    // Extension d'ontologie
     Element extended = new Element("Extended", "Ontology extend 1");
     extended.addAttribute("Id", "attribute1");
     unit1.addElement(extended);
@@ -315,8 +319,12 @@ public class SipFactory {
     unit3.setFormatName("PDF");
     unit3.setMimeType("application/pdf");
     unit3.setSignatureStatus("True");
-    unit3.setFileInfo(FileInfoBuilder.builder().withFilename("FileName.pdf").withLastModified(todaytime)
-                                     .withCreatingApplicationName("PdfBox").build());
+    unit3.setFileInfo(
+        FileInfoBuilder.builder()
+            .withFilename("FileName.pdf")
+            .withLastModified(todaytime)
+            .withCreatingApplicationName("PdfBox")
+            .build());
     unit3.addTitle("AU binaryObject");
     unit3.setUpdateOperation(new UpdateOperation("mySystemId"));
 
@@ -381,7 +389,8 @@ public class SipFactory {
 
     ArchiveUnit unit1 = new ArchiveUnit();
 
-    UpdateOperation updateOperation = new UpdateOperation("CleDeRattachement", "ValeurDeRattachement");
+    UpdateOperation updateOperation =
+        new UpdateOperation("CleDeRattachement", "ValeurDeRattachement");
     unit1.setUpdateOperation(updateOperation);
 
     unit1.setPhysicalId("physical-0001");
@@ -433,20 +442,41 @@ public class SipFactory {
 
     LocalDateTime todaytime = LocalDateTime.now();
 
-    Event event1 = EventBuilder.builder().withDateTime(todaytime).withDetail("MyDetails1")
-                               .withDetailData("MyDetailsData1").withIdentifier("MyIdentifier1")
-                               .withOutcome("MyOutcome1").withOutcomeDetail("MyOutcomeDetail1").withType("MyType1")
-                               .withTypeCode("MyTypeCode1").build();
+    Event event1 =
+        EventBuilder.builder()
+            .withDateTime(todaytime)
+            .withDetail("MyDetails1")
+            .withDetailData("MyDetailsData1")
+            .withIdentifier("MyIdentifier1")
+            .withOutcome("MyOutcome1")
+            .withOutcomeDetail("MyOutcomeDetail1")
+            .withType("MyType1")
+            .withTypeCode("MyTypeCode1")
+            .build();
 
-    Event event2 = EventBuilder.builder().withDateTime(todaytime).withDetail("MyDetails2")
-                               .withDetailData("MyDetailsData2").withIdentifier("MyIdentifier2")
-                               .withOutcome("MyOutcome2").withOutcomeDetail("MyOutcomeDetail2").withType("MyType2")
-                               .withTypeCode("MyTypeCode2").build();
+    Event event2 =
+        EventBuilder.builder()
+            .withDateTime(todaytime)
+            .withDetail("MyDetails2")
+            .withDetailData("MyDetailsData2")
+            .withIdentifier("MyIdentifier2")
+            .withOutcome("MyOutcome2")
+            .withOutcomeDetail("MyOutcomeDetail2")
+            .withType("MyType2")
+            .withTypeCode("MyTypeCode2")
+            .build();
 
-    Event event3 = EventBuilder.builder().withDateTime(todaytime).withDetail("MyDetails3")
-                               .withDetailData("MyDetailsData3").withIdentifier("MyIdentifier3")
-                               .withOutcome("MyOutcome3").withOutcomeDetail("MyOutcomeDetail3").withType("MyType3")
-                               .withTypeCode("MyTypeCode3").build();
+    Event event3 =
+        EventBuilder.builder()
+            .withDateTime(todaytime)
+            .withDetail("MyDetails3")
+            .withDetailData("MyDetailsData3")
+            .withIdentifier("MyIdentifier3")
+            .withOutcome("MyOutcome3")
+            .withOutcomeDetail("MyOutcomeDetail3")
+            .withType("MyType3")
+            .withTypeCode("MyTypeCode3")
+            .build();
 
     unit1.addLogEvent(event1);
     unit1.addLogEvent(event2);
@@ -469,13 +499,23 @@ public class SipFactory {
     unit1.setOriginatingAgency(oriAgency);
     unit1.setSubmissionAgency(new Agency("AG001", "My Archive Agency"));
 
-    unit1.addAddressee(AgentBuilder.builder()
-                                   .withFirstName("Marc").withFullName("Lavolle").withBirthDate(today)
-                                   .addActivity("Sword").addFunction("Jedi")
-                                   .withBirthPlace(
-                                           PlaceBuilder.builder().withAddress("19 Holliday Street").withGeogName("GEOName").withPostalCode("94300")
-                                                       .withRegion("Oregon").withCountry("USA").withCity("NY").build())
-                                   .build());
+    unit1.addAddressee(
+        AgentBuilder.builder()
+            .withFirstName("Marc")
+            .withFullName("Lavolle")
+            .withBirthDate(today)
+            .addActivity("Sword")
+            .addFunction("Jedi")
+            .withBirthPlace(
+                PlaceBuilder.builder()
+                    .withAddress("19 Holliday Street")
+                    .withGeogName("GEOName")
+                    .withPostalCode("94300")
+                    .withRegion("Oregon")
+                    .withCountry("USA")
+                    .withCity("NY")
+                    .build())
+            .build());
 
     unit1.setSource("My Source1");
 
@@ -489,28 +529,44 @@ public class SipFactory {
     unit2.setVersion("BinaryMaster_1");
     unit2.setFormatId("fmt/18");
     unit2.setFormatName("Portable Document Format");
-    unit2.setFileInfo(FileInfoBuilder.builder().withFilename("MyFile.pdf").withLastModified(todaytime)
-                                     .withCreatingApplicationName("PdfBox").build());
+    unit2.setFileInfo(
+        FileInfoBuilder.builder()
+            .withFilename("MyFile.pdf")
+            .withLastModified(todaytime)
+            .withCreatingApplicationName("PdfBox")
+            .build());
 
     unit2.setDisseminationPath(binaryPath2);
     unit2.setDisseminationFormatId("fmt/18");
     unit2.setDisseminationFormatName("Portable Document Format");
-    unit2.setDisseminationFileInfo(FileInfoBuilder.builder().withFilename("MyFile.pdf").withLastModified(todaytime)
-                                     .withCreatingApplicationName("PdfBoxDissemination").build());
+    unit2.setDisseminationFileInfo(
+        FileInfoBuilder.builder()
+            .withFilename("MyFile.pdf")
+            .withLastModified(todaytime)
+            .withCreatingApplicationName("PdfBoxDissemination")
+            .build());
 
     unit2.setThumbnailPath(binaryPath2);
     unit2.setThumbnailVersion("Thumbnail_2");
     unit2.setThumbnailFormatId("fmt/18");
     unit2.setThumbnailFormatName("Portable Document Format");
-    unit2.setThumbnailFileInfo(FileInfoBuilder.builder().withFilename("MyFile.pdf").withLastModified(todaytime)
-                                     .withCreatingApplicationName("PdfBoxThumbnail").build());
+    unit2.setThumbnailFileInfo(
+        FileInfoBuilder.builder()
+            .withFilename("MyFile.pdf")
+            .withLastModified(todaytime)
+            .withCreatingApplicationName("PdfBoxThumbnail")
+            .build());
 
     unit2.setTextContentPath(binaryPath2);
     unit2.setTextContentVersion("TextContent_1");
     unit2.setTextContentFormatId("pdf");
     unit2.setTextContentFormatName("Portable Document Format");
-    unit2.setTextContentFileInfo(FileInfoBuilder.builder().withFilename("MyFile.pdf").withLastModified(todaytime)
-                                              .withCreatingApplicationName("PdfBoxTextContent").build());
+    unit2.setTextContentFileInfo(
+        FileInfoBuilder.builder()
+            .withFilename("MyFile.pdf")
+            .withLastModified(todaytime)
+            .withCreatingApplicationName("PdfBoxTextContent")
+            .build());
 
     unit2.setSignatureStatus("No Signature");
 
@@ -547,53 +603,104 @@ public class SipFactory {
     unit2.addTag("MyKey22", "MyValue22");
     unit2.addTag("MyValue23");
 
-    unit2.addAuthorizedAgent(AgentBuilder.builder()
-                                         .withFirstName("Jacques").withFullName("Terner").withBirthDate(today)
-                                         .withBirthName("Jacky Ho").withGivenName("Joe").withGender("Male").addIdentifier("JH")
-                                         .withDeathDate(today)
-                                         .addActivity("Controller").addFunction("BOSS").addPosition("High")
-                                         .addNationality("French").addRole("SmallBoss").addMandate("Mandataire")
-                                         .withBirthPlace(PlaceBuilder.builder().withAddress("MyAddress").withGeogName("LND")
-                                                                     .withRegion("Sussex").withPostalCode("98765").withCountry("England").withCity("London").build())
-                                         .withDeathPlace(PlaceBuilder.builder().withAddress("MyAddress").withGeogName("PRS")
-                                                                     .withRegion("Seine").withPostalCode("75012").withCountry("France").withCity("Paris").build())
-                                         .build());
+    unit2.addAuthorizedAgent(
+        AgentBuilder.builder()
+            .withFirstName("Jacques")
+            .withFullName("Terner")
+            .withBirthDate(today)
+            .withBirthName("Jacky Ho")
+            .withGivenName("Joe")
+            .withGender("Male")
+            .addIdentifier("JH")
+            .withDeathDate(today)
+            .addActivity("Controller")
+            .addFunction("BOSS")
+            .addPosition("High")
+            .addNationality("French")
+            .addRole("SmallBoss")
+            .addMandate("Mandataire")
+            .withBirthPlace(
+                PlaceBuilder.builder()
+                    .withAddress("MyAddress")
+                    .withGeogName("LND")
+                    .withRegion("Sussex")
+                    .withPostalCode("98765")
+                    .withCountry("England")
+                    .withCity("London")
+                    .build())
+            .withDeathPlace(
+                PlaceBuilder.builder()
+                    .withAddress("MyAddress")
+                    .withGeogName("PRS")
+                    .withRegion("Seine")
+                    .withPostalCode("75012")
+                    .withCountry("France")
+                    .withCity("Paris")
+                    .build())
+            .build());
 
-    unit2.addWriter(AgentBuilder.builder()
-                                .withFirstName("Emmanuel").withFullName("Deviller").withBirthDate(today)
-                                .addActivity("Developper").addFunction("CTO")
-                                .withBirthPlace(PlaceBuilder.builder().withCountry("France").withCity("Paris").build())
-                                .build());
+    unit2.addWriter(
+        AgentBuilder.builder()
+            .withFirstName("Emmanuel")
+            .withFullName("Deviller")
+            .withBirthDate(today)
+            .addActivity("Developper")
+            .addFunction("CTO")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("France").withCity("Paris").build())
+            .build());
 
-    unit2.addWriter(AgentBuilder.builder()
-                                .withFirstName("Baptiste").withFullName("Nichele").withBirthDate(today)
-                                .addActivity("Consultant").addFunction("Expert")
-                                .withBirthPlace(PlaceBuilder.builder().withCountry("Germany").withCity("Baden-Baden").build())
-                                .build());
+    unit2.addWriter(
+        AgentBuilder.builder()
+            .withFirstName("Baptiste")
+            .withFullName("Nichele")
+            .withBirthDate(today)
+            .addActivity("Consultant")
+            .addFunction("Expert")
+            .withBirthPlace(
+                PlaceBuilder.builder().withCountry("Germany").withCity("Baden-Baden").build())
+            .build());
 
-    unit2.addAddressee(AgentBuilder.builder()
-                                   .withFirstName("Marc").withFullName("Lavolle").withBirthDate(today)
-                                   .addActivity("Sword").addFunction("Jedi")
-                                   .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
-                                   .build());
+    unit2.addAddressee(
+        AgentBuilder.builder()
+            .withFirstName("Marc")
+            .withFullName("Lavolle")
+            .withBirthDate(today)
+            .addActivity("Sword")
+            .addFunction("Jedi")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+            .build());
 
-    unit2.addRecipient(AgentBuilder.builder()
-                                   .withFirstName("Tom").withFullName("Johns").withBirthDate(today)
-                                   .addActivity("Sword").addFunction("Guerrier")
-                                   .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
-                                   .build());
+    unit2.addRecipient(
+        AgentBuilder.builder()
+            .withFirstName("Tom")
+            .withFullName("Johns")
+            .withBirthDate(today)
+            .addActivity("Sword")
+            .addFunction("Guerrier")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+            .build());
 
-    unit2.addTransmitter(AgentBuilder.builder()
-                                     .withFirstName("Jacques").withFullName("Garel").withBirthDate(today)
-                                     .addActivity("Lance").addFunction("Magicien")
-                                     .withBirthPlace(PlaceBuilder.builder().withCountry("Espagne").withCity("Madrid").build())
-                                     .build());
+    unit2.addTransmitter(
+        AgentBuilder.builder()
+            .withFirstName("Jacques")
+            .withFullName("Garel")
+            .withBirthDate(today)
+            .addActivity("Lance")
+            .addFunction("Magicien")
+            .withBirthPlace(
+                PlaceBuilder.builder().withCountry("Espagne").withCity("Madrid").build())
+            .build());
 
-    unit2.addSender(AgentBuilder.builder()
-                                .withFirstName("Ben").withFullName("Targatien").withBirthDate(today)
-                                .addActivity("Dague").addFunction("Voleur")
-                                .withBirthPlace(PlaceBuilder.builder().withCountry("Royaume-Uni").withCity("Londres").build())
-                                .build());
+    unit2.addSender(
+        AgentBuilder.builder()
+            .withFirstName("Ben")
+            .withFullName("Targatien")
+            .withBirthDate(today)
+            .addActivity("Dague")
+            .addFunction("Voleur")
+            .withBirthPlace(
+                PlaceBuilder.builder().withCountry("Royaume-Uni").withCity("Londres").build())
+            .build());
 
     Element e1 = new Element("MyExtTag1", "MyExtValue1");
     e1.addAttribute("attr1", "val1");
@@ -637,17 +744,29 @@ public class SipFactory {
     aRule3.setFinalAction("Keep");
     unit3.setAppraisalRules(aRule3);
 
-    Signer signer = SignerBuilder.builder()
-                                 .withFirstName("Marc").withFullName("Lavolle").withBirthDate(today)
-                                 .addActivity("Sword").addFunction("Jedi").addMandate("Signer")
-                                 .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
-                                 .withSigningTime(todaytime).build();
+    Signer signer =
+        SignerBuilder.builder()
+            .withFirstName("Marc")
+            .withFullName("Lavolle")
+            .withBirthDate(today)
+            .addActivity("Sword")
+            .addFunction("Jedi")
+            .addMandate("Signer")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+            .withSigningTime(todaytime)
+            .build();
 
-    Validator validator = ValidatorBuilder.builder()
-                                          .withFirstName("Marc").withFullName("Lavolle").withBirthDate(today)
-                                          .addActivity("Sword").addFunction("Jedi").addMandate("Validator")
-                                          .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
-                                          .withValidationTime(todaytime).build();
+    Validator validator =
+        ValidatorBuilder.builder()
+            .withFirstName("Marc")
+            .withFullName("Lavolle")
+            .withBirthDate(today)
+            .addActivity("Sword")
+            .addFunction("Jedi")
+            .addMandate("Validator")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+            .withValidationTime(todaytime)
+            .build();
 
     Signature signature = new Signature();
     signature.addSigner(signer);
@@ -772,5 +891,482 @@ public class SipFactory {
       parentUnit = unit;
     }
     return archiveTransfer;
+  }
+
+  /**
+   * Create simple sip archive transfer.
+   *
+   * @param fs the fs
+   * @return the archive transfer
+   */
+  public static ArchiveDeliveryRequestReply createComplexDelivery(FileSystem fs) {
+    Path binaryPath1 = fs.getPath("helloworld_1.pdf");
+    TestUtils.createPdf("Hello World 1", binaryPath1);
+
+    Path binaryPath2 = fs.getPath("helloworld_2.pdf");
+    TestUtils.createPdf("Hello World 2", binaryPath2);
+
+    ArchiveUnit unit1 = new ArchiveUnit();
+
+    UpdateOperation updateOperation =
+        new UpdateOperation("CleDeRattachement", "ValeurDeRattachement");
+    unit1.setUpdateOperation(updateOperation);
+
+    unit1.setPhysicalId("physical-0001");
+    unit1.setPhysicalVersion("PhysicalMaster_1");
+    unit1.setMeasure(26);
+
+    LocalDate today = LocalDate.now();
+    unit1.setAccessRules("AccessRule", today);
+
+    AppraisalRules aRule1 = new AppraisalRules();
+    aRule1.addRule("RuleName a1", today);
+    aRule1.addRule("RuleName a2", today);
+    aRule1.addRule("RuleName a3", today);
+    aRule1.setPreventInheritance(true);
+    aRule1.setFinalAction("Destroy");
+    unit1.setAppraisalRules(aRule1);
+
+    StorageRules sRule1 = new StorageRules();
+    sRule1.addRule("RuleName s1", today);
+    sRule1.addRule("RuleName s2", today);
+    sRule1.addRule("RuleName s3", today);
+    sRule1.setPreventInheritance(false);
+    sRule1.setFinalAction("Copy");
+    unit1.setStorageRules(sRule1);
+
+    DisseminationRules dRule1 = new DisseminationRules();
+    dRule1.addRule("RuleName d1", today);
+    dRule1.addRule("RuleName d2", today);
+    dRule1.addRule("RuleName d3", today);
+    dRule1.addPreventRuleName("RuleName d4");
+    dRule1.addPreventRuleName("RuleName d5");
+    unit1.setDisseminationRules(dRule1);
+
+    ReuseRules rRule1 = new ReuseRules();
+    rRule1.addRule("RuleName r1", today);
+    rRule1.addRule("RuleName r2", today);
+    rRule1.addRule("RuleName r3", today);
+    rRule1.addPreventRuleName("RuleName r4");
+    rRule1.addPreventRuleName("RuleName r5");
+    unit1.setReuseRules(rRule1);
+
+    HoldRules hRule1 = new HoldRules();
+    hRule1.addRule("RuleName h1", today, today, "MySelf1", "Maybe1", today, false);
+    hRule1.addRule("RuleName h2", today, today, "MySelf2", null, today, false);
+    hRule1.addRule("RuleName h3", today, today, "MySelf3", "Maybe3", null, false);
+    hRule1.addPreventRuleName("RuleName r4");
+    hRule1.addPreventRuleName("RuleName r5");
+    unit1.setHoldRules(hRule1);
+
+    LocalDateTime todaytime = LocalDateTime.now();
+
+    Event event1 =
+        EventBuilder.builder()
+            .withDateTime(todaytime)
+            .withDetail("MyDetails1")
+            .withDetailData("MyDetailsData1")
+            .withIdentifier("MyIdentifier1")
+            .withOutcome("MyOutcome1")
+            .withOutcomeDetail("MyOutcomeDetail1")
+            .withType("MyType1")
+            .withTypeCode("MyTypeCode1")
+            .build();
+
+    Event event2 =
+        EventBuilder.builder()
+            .withDateTime(todaytime)
+            .withDetail("MyDetails2")
+            .withDetailData("MyDetailsData2")
+            .withIdentifier("MyIdentifier2")
+            .withOutcome("MyOutcome2")
+            .withOutcomeDetail("MyOutcomeDetail2")
+            .withType("MyType2")
+            .withTypeCode("MyTypeCode2")
+            .build();
+
+    Event event3 =
+        EventBuilder.builder()
+            .withDateTime(todaytime)
+            .withDetail("MyDetails3")
+            .withDetailData("MyDetailsData3")
+            .withIdentifier("MyIdentifier3")
+            .withOutcome("MyOutcome3")
+            .withOutcomeDetail("MyOutcomeDetail3")
+            .withType("MyType3")
+            .withTypeCode("MyTypeCode3")
+            .build();
+
+    unit1.addLogEvent(event1);
+    unit1.addLogEvent(event2);
+    unit1.addLogEvent(event3);
+
+    unit1.setDocumentType("DOC001");
+
+    unit1.addCustodialItem("My Message1", todaytime);
+    unit1.addCustodialItem("My Message2", todaytime);
+
+    unit1.addSystemId("000001");
+    unit1.addTitle("MyTitle1");
+    unit1.addTag("MyKey11", "MyValue11");
+    unit1.addTag("MyKey12", "MyValue12");
+    unit1.addTag("MyValue13");
+
+    Agency oriAgency = new Agency("AG002", "My Transfer Agency");
+    oriAgency.addElement("Address", "Rue de la Jarry - Vincennes");
+
+    unit1.setOriginatingAgency(oriAgency);
+    unit1.setSubmissionAgency(new Agency("AG001", "My Archive Agency"));
+
+    unit1.addAddressee(
+        AgentBuilder.builder()
+            .withFirstName("Marc")
+            .withFullName("Lavolle")
+            .withBirthDate(today)
+            .addActivity("Sword")
+            .addFunction("Jedi")
+            .withBirthPlace(
+                PlaceBuilder.builder()
+                    .withAddress("19 Holliday Street")
+                    .withGeogName("GEOName")
+                    .withPostalCode("94300")
+                    .withRegion("Oregon")
+                    .withCountry("USA")
+                    .withCity("NY")
+                    .build())
+            .build());
+
+    unit1.setSource("My Source1");
+
+    ArchiveUnit unit2 = new ArchiveUnit();
+    unit2.setPhysicalId("physical-0002");
+    unit2.setVersion("Version2");
+    unit2.setPhysicalVersion("PhysicalMaster_1");
+    unit2.setMeasure(236);
+
+    unit2.setBinaryPath(binaryPath1);
+    unit2.setVersion("BinaryMaster_1");
+    unit2.setFormatId("fmt/18");
+    unit2.setFormatName("Portable Document Format");
+    unit2.setFileInfo(
+        FileInfoBuilder.builder()
+            .withFilename("MyFile.pdf")
+            .withLastModified(todaytime)
+            .withCreatingApplicationName("PdfBox")
+            .build());
+
+    unit2.setDisseminationPath(binaryPath2);
+    unit2.setDisseminationFormatId("fmt/18");
+    unit2.setDisseminationFormatName("Portable Document Format");
+    unit2.setDisseminationFileInfo(
+        FileInfoBuilder.builder()
+            .withFilename("MyFile.pdf")
+            .withLastModified(todaytime)
+            .withCreatingApplicationName("PdfBoxDissemination")
+            .build());
+
+    unit2.setThumbnailPath(binaryPath2);
+    unit2.setThumbnailVersion("Thumbnail_2");
+    unit2.setThumbnailFormatId("fmt/18");
+    unit2.setThumbnailFormatName("Portable Document Format");
+    unit2.setThumbnailFileInfo(
+        FileInfoBuilder.builder()
+            .withFilename("MyFile.pdf")
+            .withLastModified(todaytime)
+            .withCreatingApplicationName("PdfBoxThumbnail")
+            .build());
+
+    unit2.setTextContentPath(binaryPath2);
+    unit2.setTextContentVersion("TextContent_1");
+    unit2.setTextContentFormatId("pdf");
+    unit2.setTextContentFormatName("Portable Document Format");
+    unit2.setTextContentFileInfo(
+        FileInfoBuilder.builder()
+            .withFilename("MyFile.pdf")
+            .withLastModified(todaytime)
+            .withCreatingApplicationName("PdfBoxTextContent")
+            .build());
+
+    unit2.setSignatureStatus("No Signature");
+
+    AccessRules aRule2 = new AccessRules();
+    aRule2.addRule("RuleName 1", today);
+    aRule2.addRule("RuleName 2", today);
+    aRule2.addRule("RuleName 3", today);
+    aRule2.addPreventRuleName("RuleName 4");
+    aRule2.addPreventRuleName("RuleName 5");
+    unit2.setAccessRules(aRule2);
+
+    ClassificationRules cRule2 = new ClassificationRules();
+    cRule2.addRule("RuleName 1", today);
+    cRule2.addRule("RuleName 2", today);
+    cRule2.addRule("RuleName 3", today);
+    cRule2.addPreventRuleName("RuleName 4");
+    cRule2.addPreventRuleName("RuleName 5");
+    cRule2.setClassificationAudience("EveryOne");
+    cRule2.setClassificationOwner("Captain Deviller");
+    cRule2.setClassificationLevel("TOP SECRET");
+    cRule2.setClassificationReassessingDate(today);
+    cRule2.setNeedReassessingAuthorization(Boolean.FALSE);
+    unit2.setClassificationRules(cRule2);
+
+    unit2.setGpsAltitude("60");
+    unit2.setGpsLatitude("48.8534");
+    unit2.setGpsLongitude("2.3488");
+
+    unit2.setArchiveUnitProfile("My Archive Unit Profile 2");
+    unit2.setDocumentType("DOC002");
+    unit2.addSystemId("000002");
+    unit2.addTitle("MyTitle2");
+    unit2.addTag("MyKey21", "MyValue21");
+    unit2.addTag("MyKey22", "MyValue22");
+    unit2.addTag("MyValue23");
+
+    unit2.addAuthorizedAgent(
+        AgentBuilder.builder()
+            .withFirstName("Jacques")
+            .withFullName("Terner")
+            .withBirthDate(today)
+            .withBirthName("Jacky Ho")
+            .withGivenName("Joe")
+            .withGender("Male")
+            .addIdentifier("JH")
+            .withDeathDate(today)
+            .addActivity("Controller")
+            .addFunction("BOSS")
+            .addPosition("High")
+            .addNationality("French")
+            .addRole("SmallBoss")
+            .addMandate("Mandataire")
+            .withBirthPlace(
+                PlaceBuilder.builder()
+                    .withAddress("MyAddress")
+                    .withGeogName("LND")
+                    .withRegion("Sussex")
+                    .withPostalCode("98765")
+                    .withCountry("England")
+                    .withCity("London")
+                    .build())
+            .withDeathPlace(
+                PlaceBuilder.builder()
+                    .withAddress("MyAddress")
+                    .withGeogName("PRS")
+                    .withRegion("Seine")
+                    .withPostalCode("75012")
+                    .withCountry("France")
+                    .withCity("Paris")
+                    .build())
+            .build());
+
+    unit2.addWriter(
+        AgentBuilder.builder()
+            .withFirstName("Emmanuel")
+            .withFullName("Deviller")
+            .withBirthDate(today)
+            .addActivity("Developper")
+            .addFunction("CTO")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("France").withCity("Paris").build())
+            .build());
+
+    unit2.addWriter(
+        AgentBuilder.builder()
+            .withFirstName("Baptiste")
+            .withFullName("Nichele")
+            .withBirthDate(today)
+            .addActivity("Consultant")
+            .addFunction("Expert")
+            .withBirthPlace(
+                PlaceBuilder.builder().withCountry("Germany").withCity("Baden-Baden").build())
+            .build());
+
+    unit2.addAddressee(
+        AgentBuilder.builder()
+            .withFirstName("Marc")
+            .withFullName("Lavolle")
+            .withBirthDate(today)
+            .addActivity("Sword")
+            .addFunction("Jedi")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+            .build());
+
+    unit2.addRecipient(
+        AgentBuilder.builder()
+            .withFirstName("Tom")
+            .withFullName("Johns")
+            .withBirthDate(today)
+            .addActivity("Sword")
+            .addFunction("Guerrier")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+            .build());
+
+    unit2.addTransmitter(
+        AgentBuilder.builder()
+            .withFirstName("Jacques")
+            .withFullName("Garel")
+            .withBirthDate(today)
+            .addActivity("Lance")
+            .addFunction("Magicien")
+            .withBirthPlace(
+                PlaceBuilder.builder().withCountry("Espagne").withCity("Madrid").build())
+            .build());
+
+    unit2.addSender(
+        AgentBuilder.builder()
+            .withFirstName("Ben")
+            .withFullName("Targatien")
+            .withBirthDate(today)
+            .addActivity("Dague")
+            .addFunction("Voleur")
+            .withBirthPlace(
+                PlaceBuilder.builder().withCountry("Royaume-Uni").withCity("Londres").build())
+            .build());
+
+    Element e1 = new Element("MyExtTag1", "MyExtValue1");
+    e1.addAttribute("attr1", "val1");
+    e1.addAttribute("attr12", "val12");
+
+    Element e2 = new Element("MyExtTag2");
+    e2.addAttribute("attr2", "val2");
+
+    Element e3 = new Element("MyExtTag3", "MyExtValue3");
+    e2.addElement(e3);
+
+    unit2.addElement(e1);
+    unit2.addElement(e2);
+    unit2.addElement("<MyExtTag4>MyValue</MyExtTag4>");
+
+    RelatedObjectRef ror = new RelatedObjectRef();
+    ror.addVersionOf(new ArchiveUnitRef(unit1));
+    ror.addVersionOf(new DataObjectRef(unit1));
+    ror.addVersionOf(new RepositoryArchiveUnitPID("repo archive pid"));
+    ror.addVersionOf(new RepositoryObjectPID("repo object pid"));
+    ror.addVersionOf(new ExternalReference("Test external ref"));
+    unit2.setRelation(ror);
+
+    unit1.addArchiveUnit(unit2);
+
+    ArchiveUnit unit3 = new ArchiveUnit();
+    unit3.setBinaryPath(binaryPath2);
+    unit3.setFormatId("pdf");
+    unit3.setSignatureStatus("No Signature");
+    unit3.setDocumentType("DOC003");
+    unit3.addSystemId("000003");
+    unit3.addTitle("MyTitle3");
+    unit3.addTag("MyKey11", "MyValue11");
+    unit3.addTag("MyValue13");
+    unit3.setPhysicalId("physical-0001");
+
+    AppraisalRules aRule3 = new AppraisalRules();
+    aRule3.addRule("RuleName 31", today);
+    aRule3.addRule("RuleName 32", today);
+    aRule3.setPreventInheritance(true);
+    aRule3.setFinalAction("Keep");
+    unit3.setAppraisalRules(aRule3);
+
+    Signer signer =
+        SignerBuilder.builder()
+            .withFirstName("Marc")
+            .withFullName("Lavolle")
+            .withBirthDate(today)
+            .addActivity("Sword")
+            .addFunction("Jedi")
+            .addMandate("Signer")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+            .withSigningTime(todaytime)
+            .build();
+
+    Validator validator =
+        ValidatorBuilder.builder()
+            .withFirstName("Marc")
+            .withFullName("Lavolle")
+            .withBirthDate(today)
+            .addActivity("Sword")
+            .addFunction("Jedi")
+            .addMandate("Validator")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+            .withValidationTime(todaytime)
+            .build();
+
+    Signature signature = new Signature();
+    signature.addSigner(signer);
+    signature.setValidator(validator);
+    unit3.addSignature(signature);
+
+    RelatedObjectRef relation = new RelatedObjectRef();
+    relation.addRequire(new ArchiveUnitRef(unit1));
+    relation.addPartOf(new ExternalReference("ExternalRef"));
+    relation.addReference(new RepositoryArchiveUnitPID("RepoArcUnitPid"));
+    relation.addReplace(new DataObjectRef(unit2));
+    unit3.setRelation(relation);
+
+    unit1.addArchiveUnit(unit3);
+
+    CodeListVersions clvs = new CodeListVersions();
+    clvs.setFileFormatCodeListVersion("Pronom Codes");
+    clvs.setReplyCodeListVersion("Reply Codes");
+
+    ArchiveDeliveryRequestReply archiveDelivery = new ArchiveDeliveryRequestReply();
+    archiveDelivery.setMessageIdentifier("MSG001");
+    archiveDelivery.setDate(todaytime);
+    archiveDelivery.setComment("My Archive Transfer");
+    archiveDelivery.setSignature("org.afnor.signformat.PKCS-7");
+    archiveDelivery.setCodeListVersions(clvs);
+    archiveDelivery.setArchivalAgreement("My Archival Agreement");
+    archiveDelivery.setArchivalAgency(new Agency("AG001", "My Archive Agency"));
+    archiveDelivery.setUnitIdentifier("UNKNOWN_UNIT");
+    archiveDelivery.setMessageRequestIdentifier("REQ-0001");
+    archiveDelivery.setReplyCode("OK");
+    archiveDelivery.setRequester(new Agency("REQUESTER-001", "TheRequester"));
+
+    archiveDelivery.addArchiveUnit(unit1);
+    return archiveDelivery;
+  }
+
+  /**
+   * Create large sip archive transfer.
+   *
+   * @param fs the fs
+   * @return the archive transfer
+   */
+  public static ArchiveDeliveryRequestReply createLargeDelivery(FileSystem fs) {
+    LocalDate today = LocalDate.now();
+    LocalDateTime todaytime = LocalDateTime.now();
+
+    ArchiveDeliveryRequestReply archiveDelivery = new ArchiveDeliveryRequestReply();
+    archiveDelivery.setMessageIdentifier("MSG001");
+    archiveDelivery.setDate(todaytime);
+    archiveDelivery.setComment("My Archive Transfer");
+    archiveDelivery.setArchivalAgreement("My Archival Agreement");
+    archiveDelivery.setArchivalAgency(new Agency("AG001", "My Archive Agency"));
+
+    archiveDelivery.setUnitIdentifier("UNKNOWN_UNIT");
+    archiveDelivery.setMessageRequestIdentifier("REQ-0001");
+    archiveDelivery.setReplyCode("OK");
+    archiveDelivery.setRequester(new Agency("REQUESTER-001", "TheRequester"));
+
+    for (int i = 0; i < 100; i++) {
+      Path binaryPath = fs.getPath("helloworld_" + i + ".pdf");
+      TestUtils.createPdfWithImage("Hello World " + i, binaryPath);
+
+      ArchiveUnit unit = new ArchiveUnit();
+      unit.setBinaryPath(binaryPath);
+      unit.setFormatId("pdf");
+      unit.setSignatureStatus("No Signature");
+
+      unit.setAccessRules("AccessRule", today);
+      unit.setAppraisalRules("RuleName", today);
+      unit.getAppraisalRules().setDuration("P2DT12H30M0S");
+      unit.getAppraisalRules().setFinalAction("Destroy");
+
+      unit.setDocumentType("DOC00" + i);
+      unit.addSystemId(String.valueOf(i));
+      unit.addTitle("MyTitle " + i);
+      unit.addTag("MyKey1", "MyValue1_" + i);
+      unit.addTag("MyKey1", "MyValue1_" + i);
+      unit.addTag("MyValue13");
+
+      archiveDelivery.addArchiveUnit(unit);
+    }
+    return archiveDelivery;
   }
 }

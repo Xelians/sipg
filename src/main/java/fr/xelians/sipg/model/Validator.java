@@ -19,7 +19,6 @@
 package fr.xelians.sipg.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -27,9 +26,7 @@ import java.util.Objects;
 /**
  * La classe Validator représente le validateur de la signature.
  *
- * <p>
- * Supporté en SEDA v2.1
- * </p>
+ * <p>Supporté en SEDA v2.1
  *
  * @author Emmanuel Deviller
  * @see Agent
@@ -37,97 +34,112 @@ import java.util.Objects;
 @JsonDeserialize(builder = ValidatorBuilder.class)
 public class Validator extends Agent {
 
-    /**
-     * Date et heure de validation de la signature.
-     */
-    protected LocalDateTime validationTime;
+  /** Date et heure de validation de la signature. */
+  protected LocalDateTime validationTime;
 
-    /**
-     * Instancie la classe.
-     */
-    public Validator() {
-        super();
+  /** Instancie la classe. */
+  public Validator() {
+    super();
+  }
+
+  /**
+   * Instancie la classe avec l'identifiant de l'agent.
+   *
+   * @param validationTime la date et heure de validation
+   */
+  public Validator(LocalDateTime validationTime) {
+    super();
+    this.validationTime = validationTime;
+  }
+
+  /**
+   * Instancie la classe avec l'identifiant de l'agent.
+   *
+   * @param identifier l'identifiant
+   * @param validationTime la date et heure de validation
+   */
+  public Validator(String identifier, LocalDateTime validationTime) {
+    super(identifier);
+    this.validationTime = validationTime;
+  }
+
+  /**
+   * Instancie la classe selon les paramètres indiqués.
+   *
+   * @param firstName le prénom
+   * @param birthName le nom de naissance
+   * @param fullName le nom complet
+   * @param givenName le nom d'usage
+   * @param gender le sexe
+   * @param birthDate la date de naissance
+   * @param birthPlace le lieu de naissance
+   * @param deathDate la date de décès
+   * @param deathPlace le lieu de décès
+   * @param corpName l'entité
+   * @param validationTime la date et heure de validation
+   */
+  public Validator(
+      String firstName,
+      String birthName,
+      String fullName,
+      String givenName,
+      String gender,
+      LocalDate birthDate,
+      Place birthPlace,
+      LocalDate deathDate,
+      Place deathPlace,
+      String corpName,
+      LocalDateTime validationTime) {
+
+    super(
+        firstName,
+        birthName,
+        fullName,
+        givenName,
+        gender,
+        birthDate,
+        birthPlace,
+        deathDate,
+        deathPlace,
+        corpName);
+    this.validationTime = validationTime;
+  }
+
+  /**
+   * Indique la date et l'heure de validation de la signature.
+   *
+   * @return la date et heure de validation
+   */
+  public LocalDateTime getValidationTime() {
+    return validationTime;
+  }
+
+  /**
+   * Spécifie la date et l'heure de validation de la signature.
+   *
+   * @param validationTime la date et heure de validation
+   */
+  public void setValidationTime(LocalDateTime validationTime) {
+    this.validationTime = validationTime;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    /**
-     * Instancie la classe avec l'identifiant de l'agent.
-     *
-     * @param validationTime la date et heure de validation
-     */
-    public Validator(LocalDateTime validationTime) {
-        super();
-        this.validationTime = validationTime;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
-
-    /**
-     * Instancie la classe avec l'identifiant de l'agent.
-     *
-     * @param identifier     l'identifiant
-     * @param validationTime la date et heure de validation
-     */
-    public Validator(String identifier, LocalDateTime validationTime) {
-        super(identifier);
-        this.validationTime = validationTime;
+    if (!super.equals(o)) {
+      return false;
     }
+    Validator validator = (Validator) o;
+    return Objects.equals(validationTime, validator.validationTime);
+  }
 
-    /**
-     * Instancie la classe selon les paramètres indiqués.
-     *
-     * @param firstName      le prénom
-     * @param birthName      le nom de naissance
-     * @param fullName       le nom complet
-     * @param givenName      le nom d'usage
-     * @param gender         le sexe
-     * @param birthDate      la date de naissance
-     * @param birthPlace     le lieu de naissance
-     * @param deathDate      la date de décès
-     * @param deathPlace     le lieu de décès
-     * @param corpName       l'entité
-     * @param validationTime la date et heure de validation
-     */
-    public Validator(String firstName, String birthName, String fullName, String givenName, String gender,
-                     LocalDate birthDate, Place birthPlace, LocalDate deathDate, Place deathPlace, String corpName,
-                     LocalDateTime validationTime) {
-
-        super(firstName, birthName, fullName, givenName, gender, birthDate, birthPlace, deathDate, deathPlace, corpName);
-        this.validationTime = validationTime;
-    }
-
-    /**
-     * Indique la date et l'heure de validation de la signature.
-     *
-     * @return la date et heure de validation
-     */
-    public LocalDateTime getValidationTime() {
-        return validationTime;
-    }
-
-    /**
-     * Spécifie la date et l'heure de validation de la signature.
-     *
-     * @param validationTime la date et heure de validation
-     */
-    public void setValidationTime(LocalDateTime validationTime) {
-        this.validationTime = validationTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-        Validator validator = (Validator) o;
-        return Objects.equals(validationTime, validator.validationTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), validationTime);
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), validationTime);
+  }
 }

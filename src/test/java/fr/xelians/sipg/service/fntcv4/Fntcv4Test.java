@@ -27,15 +27,12 @@ import fr.xelians.sipg.TestInit;
 import fr.xelians.sipg.TestUtils;
 import fr.xelians.sipg.model.ArchiveTransfer;
 import fr.xelians.sipg.service.json.JsonService;
-import fr.xelians.sipg.service.sedav2.Sedav2Config;
-import fr.xelians.sipg.service.sedav2.Sedav2ConfigBuilder;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.Validators;
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.xml.validation.Validator;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,8 +49,8 @@ class Fntcv4Test {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Fntcv4Test.class);
 
-  private final Fntcv4Config fntcConfig = Fntcv4ConfigBuilder.builder().format(true).validate(true).strict(false)
-      .build();
+  private final Fntcv4Config fntcConfig =
+      Fntcv4ConfigBuilder.builder().format(true).validate(true).strict(false).build();
   private final Fntcv4Service fntcService = Fntcv4Service.getInstance();
 
   /**
@@ -133,7 +130,8 @@ class Fntcv4Test {
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createFullTextSip();
-      fntcService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "fulltextsip_fntc.zip"), fntcConfig);
+      fntcService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "fulltextsip_fntc.zip"), fntcConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -152,7 +150,8 @@ class Fntcv4Test {
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createSipFromDir();
-      fntcService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "dirsip_fntc.zip"), fntcConfig);
+      fntcService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "dirsip_fntc.zip"), fntcConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -185,7 +184,8 @@ class Fntcv4Test {
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createCsvSip();
-      fntcService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "csvsip_fntc.zip"), fntcConfig);
+      fntcService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "csvsip_fntc.zip"), fntcConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -204,7 +204,8 @@ class Fntcv4Test {
     try {
       String jsonString = SipFactory.createJsonString();
       ArchiveTransfer archiveTransfer = JsonService.getInstance().read(jsonString);
-      Fntcv4Service.getInstance().write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "freemarker_fntc.zip"));
+      Fntcv4Service.getInstance()
+          .write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "freemarker_fntc.zip"));
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -223,7 +224,8 @@ class Fntcv4Test {
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
-      fntcService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "minisip_fntc.zip"), fntcConfig);
+      fntcService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "minisip_fntc.zip"), fntcConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -242,7 +244,8 @@ class Fntcv4Test {
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
-      fntcService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "simplesip_fntc.zip"), fntcConfig);
+      fntcService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "simplesip_fntc.zip"), fntcConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -326,7 +329,8 @@ class Fntcv4Test {
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
-      fntcService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_fntc.zip"), config);
+      fntcService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_fntc.zip"), config);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -364,7 +368,8 @@ class Fntcv4Test {
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createDeepSip(fs);
-      fntcService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_fntc.zip"), fntcConfig);
+      fntcService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_fntc.zip"), fntcConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);

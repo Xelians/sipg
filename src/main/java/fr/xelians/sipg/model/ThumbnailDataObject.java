@@ -22,15 +22,17 @@ package fr.xelians.sipg.model;
 import fr.xelians.sipg.utils.SipException;
 
 public class ThumbnailDataObject extends BinaryDataObject {
-    public ThumbnailDataObject() {
-        super(THUMBNAIL);
-    }
+  public ThumbnailDataObject() {
+    super(THUMBNAIL);
+  }
 
-    @Override
-    public void setBinaryVersion(String objectVersion) {
-        if (objectVersion == null || !objectVersion.startsWith(THUMBNAIL)) {
-            throw new SipException(String.format("The qualifier of type %s cannot be modified to %s", binaryVersion, objectVersion));
-        }
-        this.binaryVersion = objectVersion;
+  @Override
+  public void setBinaryVersion(String objectVersion) {
+    if (objectVersion == null || !objectVersion.startsWith(THUMBNAIL)) {
+      throw new SipException(
+          String.format(
+              "The qualifier of type %s cannot be modified to %s", binaryVersion, objectVersion));
     }
+    this.binaryVersion = objectVersion;
+  }
 }

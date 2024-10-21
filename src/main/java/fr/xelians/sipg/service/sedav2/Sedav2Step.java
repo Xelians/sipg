@@ -24,56 +24,30 @@ package fr.xelians.sipg.service.sedav2;
  * @author Emmanuel Deviller
  */
 public enum Sedav2Step {
-    /**
-     * Start sedav 2 step.
-     */
-    START,
-    /**
-     * Archive exist sedav 2 step.
-     */
-    ARCHIVE_EXIST,
-    /**
-     * Archive readable sedav 2 step.
-     */
-    ARCHIVE_READABLE,
-    /**
-     * Archive unzip sedav 2 step.
-     */
-    ARCHIVE_UNZIP,
-    /**
-     * Manifest exist sedav 2 step.
-     */
-    MANIFEST_EXIST,
-    /**
-     * Manifest seda sedav 2 step.
-     */
-    MANIFEST_SEDA,
-    /**
-     * Manifest validator sedav 2 step.
-     */
-    MANIFEST_VALIDATOR,
-    /**
-     * Manifest parse sedav 2 step.
-     */
-    MANIFEST_PARSE,
-    /**
-     * Binary exist sedav 2 step.
-     */
-    BINARY_EXIST,
-    /**
-     * Binary folder sedav 2 step.
-     */
-    BINARY_FOLDER,
-    /**
-     * Binary size sedav 2 step.
-     */
-    BINARY_SIZE,
-    /**
-     * Binary digest sedav 2 step.
-     */
-    BINARY_DIGEST,
-    /**
-     * Complete sedav 2 step.
-     */
-    COMPLETE
+  /** Start sedav 2 step. */
+  START,
+  /** Archive exist sedav 2 step. */
+  ARCHIVE_EXIST,
+  /** Archive readable sedav 2 step. */
+  ARCHIVE_READABLE,
+  /** Archive unzip sedav 2 step. */
+  ARCHIVE_UNZIP,
+  /** Manifest exist sedav 2 step. */
+  MANIFEST_EXIST,
+  /** Manifest seda sedav 2 step. */
+  MANIFEST_SEDA,
+  /** Manifest validator sedav 2 step. */
+  MANIFEST_VALIDATOR,
+  /** Manifest parse sedav 2 step. */
+  MANIFEST_PARSE,
+  /** Binary exist sedav 2 step. */
+  BINARY_EXIST,
+  /** Binary folder sedav 2 step. */
+  BINARY_FOLDER,
+  /** Binary size sedav 2 step. */
+  BINARY_SIZE,
+  /** Binary digest sedav 2 step. */
+  BINARY_DIGEST,
+  /** Complete sedav 2 step. */
+  COMPLETE
 }

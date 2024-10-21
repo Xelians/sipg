@@ -33,14 +33,12 @@ import org.slf4j.LoggerFactory;
  */
 public class TestInit implements BeforeAllCallback {
 
-  /**
-   * The constant TEST_RESOURCES.
-   */
+  /** The constant TEST_RESOURCES. */
   public static final String TEST_RESOURCES = "src/test/resources/";
-  /**
-   * The constant TEST_RESULTS.
-   */
+
+  /** The constant TEST_RESULTS. */
   public static final String TEST_RESULTS = "target/test-results/";
+
   private static final Logger LOGGER = LoggerFactory.getLogger(TestInit.class);
 
   @Override
@@ -51,5 +49,4 @@ public class TestInit implements BeforeAllCallback {
       Files.createDirectories(testDir);
     }
   }
-
 }

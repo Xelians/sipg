@@ -33,7 +33,6 @@ import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.xml.validation.Validator;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,12 +47,12 @@ import org.slf4j.LoggerFactory;
 @ExtendWith(TestInit.class)
 class Sedav21Test {
 
-  public static final String SEDA21 = TestInit. TEST_RESOURCES + "seda-2.1/";
+  public static final String SEDA21 = TestInit.TEST_RESOURCES + "seda-2.1/";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Sedav21Test.class);
 
-  private final Sedav2Config sedaConfig = Sedav2ConfigBuilder.builder().format(true).validate(true).strict(false)
-      .build();
+  private final Sedav2Config sedaConfig =
+      Sedav2ConfigBuilder.builder().format(true).validate(true).strict(false).build();
   private final Sedav2Service sedaService = Sedav2Service.getInstance();
 
   /**
@@ -129,7 +128,8 @@ class Sedav21Test {
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createSipFromDir();
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "dirsip_seda.zip"), sedaConfig);
+      sedaService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "dirsip_seda.zip"), sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -162,7 +162,8 @@ class Sedav21Test {
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createCsvSip();
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "csvsip_seda.zip"), sedaConfig);
+      sedaService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "csvsip_seda.zip"), sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -181,7 +182,8 @@ class Sedav21Test {
     try {
       String jsonString = SipFactory.createJsonString();
       ArchiveTransfer archiveTransfer = JsonService.getInstance().read(jsonString);
-      Sedav2Service.getInstance().write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "freemarker_seda.zip"));
+      Sedav2Service.getInstance()
+          .write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "freemarker_seda.zip"));
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -200,7 +202,8 @@ class Sedav21Test {
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createFullTextSip();
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "fulltextsip_seda.zip"), sedaConfig);
+      sedaService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "fulltextsip_seda.zip"), sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -219,7 +222,8 @@ class Sedav21Test {
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "minisip_seda.zip"), sedaConfig);
+      sedaService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "minisip_seda.zip"), sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -387,7 +391,6 @@ class Sedav21Test {
     }
   }
 
-
   /**
    * Test create large sip.
    *
@@ -401,7 +404,8 @@ class Sedav21Test {
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_seda.zip"), config);
+      sedaService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_seda.zip"), config);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -439,7 +443,8 @@ class Sedav21Test {
 
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createDeepSip(fs);
-      sedaService.write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_seda.zip"), sedaConfig);
+      sedaService.write(
+          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_seda.zip"), sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.warn(msg, ex);
@@ -465,5 +470,4 @@ class Sedav21Test {
       fail(msg);
     }
   }
-
 }

@@ -21,14 +21,10 @@ package fr.xelians.sipg.model;
 import java.util.ArrayList;
 
 /**
- * <p>
- * La classe ArchiveTransfer représente une archive à transférer. Elle peut contenir une ou plusieurs unités
- * d'archives.
- * </p>
+ * La classe ArchiveTransfer représente une archive à transférer. Elle peut contenir une ou
+ * plusieurs unités d'archives.
  *
- * <p>
- * Supporté en SEDA v2.1 et FNTC v4.
- * </p>
+ * <p>Supporté en SEDA v2.1 et FNTC v4.
  *
  * @author Emmanuel Deviller
  * @see Message
@@ -37,295 +33,284 @@ import java.util.ArrayList;
 // Note. Add @XmlRootElement(name = "ArchiveTransfer") on ArchiveTransferType
 public class ArchiveTransfer extends Message implements ArchiveUnitContainer {
 
-    /**
-     * Liste des unités d'archives contenues dans l'archive.
-     */
-    protected final ArrayList<ArchiveUnit> archiveUnits;
-    /**
-     * Listes de codes de références utilisés dans le message.
-     */
-    protected CodeListVersions codeListVersions;
-    /**
-     * Accord de service.
-     */
-    protected String archivalAgreement;
-    /**
-     * Service d'archives responsable du transfert.
-     */
-    protected Agency archivalAgency;
-    /**
-     * Service versant chargé de réaliser le transport.
-     */
-    protected Agency transferringAgency;
-    /**
-     * Profil d’archivage applicable aux unités d'archives.
-     */
-    protected String archivalProfile;
-    /**
-     * Niveau de service applicable aux unités d’archives.
-     */
-    protected String serviceLevel;
-    /**
-     * Modalités d'entrée des archives.
-     */
-    protected String acquisitionInformation;
-    /**
-     * Statut légal des archives.
-     */
-    protected String legalStatus;
-    /**
-     * Identifiant du service producteur - information de gestion à ne pas confondre avec OriginatingAgency dans les
-     * métadonnées de description.
-     */
-    protected String originatingAgencyIdentifier;
-    /**
-     * Identifiant du service versant - information de gestion à ne pas confondre avec SubmissionAgency dans les
-     * métadonnées de description.
-     */
-    protected String submissionAgencyIdentifier;
+  /** Liste des unités d'archives contenues dans l'archive. */
+  protected final ArrayList<ArchiveUnit> archiveUnits;
 
-    /**
-     * Instancie la classe.
-     */
-    public ArchiveTransfer() {
-        super();
-        archiveUnits = new ArrayList<>();
-        codeListVersions = new CodeListVersions();
-    }
+  /** Listes de codes de références utilisés dans le message. */
+  protected CodeListVersions codeListVersions;
 
-    /**
-     * Indique les codes de références utilisés dans le message.
-     *
-     * @return les codes de références
-     */
-    public CodeListVersions getCodeListVersions() {
-        return codeListVersions;
-    }
+  /** Accord de service. */
+  protected String archivalAgreement;
 
-    /**
-     * Spécifie les codes de références utilisés dans le message.
-     *
-     * @param codeListVersions les codes de références
-     */
-    public void setCodeListVersions(CodeListVersions codeListVersions) {
-        this.codeListVersions = codeListVersions;
-    }
+  /** Service d'archives responsable du transfert. */
+  protected Agency archivalAgency;
 
-    /**
-     * Indique l'accord de service.
-     *
-     * @return l 'accord de service
-     */
-    public String getArchivalAgreement() {
-        return archivalAgreement;
-    }
+  /** Service versant chargé de réaliser le transport. */
+  protected Agency transferringAgency;
 
-    /**
-     * Spécifie l'accord de service.
-     *
-     * @param archivalAgreement l'accord de service
-     */
-    public void setArchivalAgreement(String archivalAgreement) {
-        this.archivalAgreement = archivalAgreement;
-    }
+  /** Profil d’archivage applicable aux unités d'archives. */
+  protected String archivalProfile;
 
-    /**
-     * Ajoute une unité d'archive à l'archive.
-     *
-     * @param archiveUnit l'unité d'archive
-     */
-    @Override
-    public void addArchiveUnit(ArchiveUnit archiveUnit) {
-        archiveUnits.add(archiveUnit);
-    }
+  /** Niveau de service applicable aux unités d’archives. */
+  protected String serviceLevel;
 
-    /**
-     * Supprime une unité d'archive de l'archive.
-     *
-     * @param archiveUnit l'unité d'archive
-     * @return true si la suppression de l'élément a été réalisée avec succès, false sinon
-     */
-    @Override
-    public boolean removeArchiveUnit(ArchiveUnit archiveUnit) {
-        return archiveUnits.remove(archiveUnit);
-    }
+  /** Modalités d'entrée des archives. */
+  protected String acquisitionInformation;
 
-    /**
-     * Fournit la liste des unités d'archives contenues dans l'archive.
-     *
-     * @return la liste des unités d'archives
-     */
-    @Override
-    public ArrayList<ArchiveUnit> getArchiveUnits() {
-        return new ArrayList<>(archiveUnits);
-    }
+  /** Statut légal des archives. */
+  protected String legalStatus;
 
-    /**
-     * Indique le service d'archives responsable du transfert.
-     *
-     * @return le service d'archives
-     */
-    public Agency getArchivalAgency() {
-        return archivalAgency;
-    }
+  /**
+   * Identifiant du service producteur - information de gestion à ne pas confondre avec
+   * OriginatingAgency dans les métadonnées de description.
+   */
+  protected String originatingAgencyIdentifier;
 
-    /**
-     * Spécifie le service d'archives responsable du transfert.
-     *
-     * @param archivalAgency le service d'archives
-     */
-    public void setArchivalAgency(Agency archivalAgency) {
-        this.archivalAgency = archivalAgency;
-    }
+  /**
+   * Identifiant du service versant - information de gestion à ne pas confondre avec
+   * SubmissionAgency dans les métadonnées de description.
+   */
+  protected String submissionAgencyIdentifier;
 
-    /**
-     * Spécifie le service d'archives responsable du transfert.
-     *
-     * @param agencyIdentifier l'identifiant du service d'archives
-     * @param agencyName       le nom du service d'archives
-     */
-    public void setArchivalAgency(String agencyIdentifier, String agencyName) {
-        this.archivalAgency = new Agency(agencyIdentifier, agencyName);
-    }
+  /** Instancie la classe. */
+  public ArchiveTransfer() {
+    super();
+    archiveUnits = new ArrayList<>();
+    codeListVersions = new CodeListVersions();
+  }
 
-    /**
-     * Indique le service versant chargé de réaliser le transport.
-     *
-     * @return le service versant
-     */
-    public Agency getTransferringAgency() {
-        return transferringAgency;
-    }
+  /**
+   * Indique les codes de références utilisés dans le message.
+   *
+   * @return les codes de références
+   */
+  public CodeListVersions getCodeListVersions() {
+    return codeListVersions;
+  }
 
-    /**
-     * Spécifie le service versant chargé de réaliser le transport.
-     *
-     * @param transferringAgency le service versant
-     */
-    public void setTransferringAgency(Agency transferringAgency) {
-        this.transferringAgency = transferringAgency;
-    }
+  /**
+   * Spécifie les codes de références utilisés dans le message.
+   *
+   * @param codeListVersions les codes de références
+   */
+  public void setCodeListVersions(CodeListVersions codeListVersions) {
+    this.codeListVersions = codeListVersions;
+  }
 
-    /**
-     * Spécifie le service versant chargé de réaliser le transport.
-     *
-     * @param agencyIdentifier l'identifiant du service versant
-     * @param agencyName       le nom du service versant
-     */
-    public void setTransferringAgency(String agencyIdentifier, String agencyName) {
-        this.transferringAgency = new Agency(agencyIdentifier, agencyName);
-    }
+  /**
+   * Indique l'accord de service.
+   *
+   * @return l 'accord de service
+   */
+  public String getArchivalAgreement() {
+    return archivalAgreement;
+  }
 
-    /**
-     * Indique le profil d’archivage applicable aux unités d'archives.
-     *
-     * @return le profil d’archivage
-     */
-    public String getArchivalProfile() {
-        return archivalProfile;
-    }
+  /**
+   * Spécifie l'accord de service.
+   *
+   * @param archivalAgreement l'accord de service
+   */
+  public void setArchivalAgreement(String archivalAgreement) {
+    this.archivalAgreement = archivalAgreement;
+  }
 
-    /**
-     * Spécifie le profil d’archivage applicable aux unités d'archives.
-     *
-     * @param archivalProfile le profil d’archivage
-     */
-    public void setArchivalProfile(String archivalProfile) {
-        this.archivalProfile = archivalProfile;
-    }
+  /**
+   * Ajoute une unité d'archive à l'archive.
+   *
+   * @param archiveUnit l'unité d'archive
+   */
+  @Override
+  public void addArchiveUnit(ArchiveUnit archiveUnit) {
+    archiveUnits.add(archiveUnit);
+  }
 
-    /**
-     * Indique le niveau de service applicable aux unités d’archives.
-     *
-     * @return le niveau de service
-     */
-    public String getServiceLevel() {
-        return serviceLevel;
-    }
+  /**
+   * Supprime une unité d'archive de l'archive.
+   *
+   * @param archiveUnit l'unité d'archive
+   * @return true si la suppression de l'élément a été réalisée avec succès, false sinon
+   */
+  @Override
+  public boolean removeArchiveUnit(ArchiveUnit archiveUnit) {
+    return archiveUnits.remove(archiveUnit);
+  }
 
-    /**
-     * Spécifie le niveau de service applicable aux unités d’archives.
-     *
-     * @param serviceLevel le niveau de service
-     */
-    public void setServiceLevel(String serviceLevel) {
-        this.serviceLevel = serviceLevel;
-    }
+  /**
+   * Fournit la liste des unités d'archives contenues dans l'archive.
+   *
+   * @return la liste des unités d'archives
+   */
+  @Override
+  public ArrayList<ArchiveUnit> getArchiveUnits() {
+    return new ArrayList<>(archiveUnits);
+  }
 
-    /**
-     * Indique les modalités d'entrée des archives.
-     *
-     * @return les modalités d'entrée
-     */
-    public String getAcquisitionInformation() {
-        return acquisitionInformation;
-    }
+  /**
+   * Indique le service d'archives responsable du transfert.
+   *
+   * @return le service d'archives
+   */
+  public Agency getArchivalAgency() {
+    return archivalAgency;
+  }
 
-    /**
-     * Spécifie les modalités d'entrée des archives.
-     *
-     * @param acquisitionInformation les modalités d'entrée
-     */
-    public void setAcquisitionInformation(String acquisitionInformation) {
-        this.acquisitionInformation = acquisitionInformation;
-    }
+  /**
+   * Spécifie le service d'archives responsable du transfert.
+   *
+   * @param archivalAgency le service d'archives
+   */
+  public void setArchivalAgency(Agency archivalAgency) {
+    this.archivalAgency = archivalAgency;
+  }
 
-    /**
-     * Indique le statut légal des archives.
-     *
-     * @return le statut légal
-     */
-    public String getLegalStatus() {
-        return legalStatus;
-    }
+  /**
+   * Spécifie le service d'archives responsable du transfert.
+   *
+   * @param agencyIdentifier l'identifiant du service d'archives
+   * @param agencyName le nom du service d'archives
+   */
+  public void setArchivalAgency(String agencyIdentifier, String agencyName) {
+    this.archivalAgency = new Agency(agencyIdentifier, agencyName);
+  }
 
-    /**
-     * Spécifie le statut légal des archives.
-     *
-     * @param legalStatus le statut des archives
-     */
-    public void setLegalStatus(String legalStatus) {
-        this.legalStatus = legalStatus;
-    }
+  /**
+   * Indique le service versant chargé de réaliser le transport.
+   *
+   * @return le service versant
+   */
+  public Agency getTransferringAgency() {
+    return transferringAgency;
+  }
 
-    /**
-     * Indique l'identifiant du service producteur - information de gestion à ne pas confondre avec OriginatingAgency dans
-     * les métadonnées de description.
-     *
-     * @return l'identifiant du service producteur
-     */
-    public String getOriginatingAgencyIdentifier() {
-        return originatingAgencyIdentifier;
-    }
+  /**
+   * Spécifie le service versant chargé de réaliser le transport.
+   *
+   * @param transferringAgency le service versant
+   */
+  public void setTransferringAgency(Agency transferringAgency) {
+    this.transferringAgency = transferringAgency;
+  }
 
-    /**
-     * Spécifie l'identifiant du service producteur - information de gestion à ne pas confondre avec OriginatingAgency
-     * dans les métadonnées de description.
-     *
-     * @param originatingAgencyIdentifier l'identifiant du service producteur
-     */
-    public void setOriginatingAgencyIdentifier(String originatingAgencyIdentifier) {
-        this.originatingAgencyIdentifier = originatingAgencyIdentifier;
-    }
+  /**
+   * Spécifie le service versant chargé de réaliser le transport.
+   *
+   * @param agencyIdentifier l'identifiant du service versant
+   * @param agencyName le nom du service versant
+   */
+  public void setTransferringAgency(String agencyIdentifier, String agencyName) {
+    this.transferringAgency = new Agency(agencyIdentifier, agencyName);
+  }
 
-    /**
-     * Indique l'identifiant du service versant - information de gestion à ne pas confondre avec SubmissionAgency dans les
-     * métadonnées de description.
-     *
-     * @return l'identifiant du service versant
-     */
-    public String getSubmissionAgencyIdentifier() {
-        return submissionAgencyIdentifier;
-    }
+  /**
+   * Indique le profil d’archivage applicable aux unités d'archives.
+   *
+   * @return le profil d’archivage
+   */
+  public String getArchivalProfile() {
+    return archivalProfile;
+  }
 
-    /**
-     * Spécifie l'identifiant du service versant - information de gestion à ne pas confondre avec SubmissionAgency dans
-     * les métadonnées de description.
-     *
-     * @param submissionAgencyIdentifier l'identifiant du service versant
-     */
-    public void setSubmissionAgencyIdentifier(String submissionAgencyIdentifier) {
-        this.submissionAgencyIdentifier = submissionAgencyIdentifier;
-    }
+  /**
+   * Spécifie le profil d’archivage applicable aux unités d'archives.
+   *
+   * @param archivalProfile le profil d’archivage
+   */
+  public void setArchivalProfile(String archivalProfile) {
+    this.archivalProfile = archivalProfile;
+  }
 
+  /**
+   * Indique le niveau de service applicable aux unités d’archives.
+   *
+   * @return le niveau de service
+   */
+  public String getServiceLevel() {
+    return serviceLevel;
+  }
+
+  /**
+   * Spécifie le niveau de service applicable aux unités d’archives.
+   *
+   * @param serviceLevel le niveau de service
+   */
+  public void setServiceLevel(String serviceLevel) {
+    this.serviceLevel = serviceLevel;
+  }
+
+  /**
+   * Indique les modalités d'entrée des archives.
+   *
+   * @return les modalités d'entrée
+   */
+  public String getAcquisitionInformation() {
+    return acquisitionInformation;
+  }
+
+  /**
+   * Spécifie les modalités d'entrée des archives.
+   *
+   * @param acquisitionInformation les modalités d'entrée
+   */
+  public void setAcquisitionInformation(String acquisitionInformation) {
+    this.acquisitionInformation = acquisitionInformation;
+  }
+
+  /**
+   * Indique le statut légal des archives.
+   *
+   * @return le statut légal
+   */
+  public String getLegalStatus() {
+    return legalStatus;
+  }
+
+  /**
+   * Spécifie le statut légal des archives.
+   *
+   * @param legalStatus le statut des archives
+   */
+  public void setLegalStatus(String legalStatus) {
+    this.legalStatus = legalStatus;
+  }
+
+  /**
+   * Indique l'identifiant du service producteur - information de gestion à ne pas confondre avec
+   * OriginatingAgency dans les métadonnées de description.
+   *
+   * @return l'identifiant du service producteur
+   */
+  public String getOriginatingAgencyIdentifier() {
+    return originatingAgencyIdentifier;
+  }
+
+  /**
+   * Spécifie l'identifiant du service producteur - information de gestion à ne pas confondre avec
+   * OriginatingAgency dans les métadonnées de description.
+   *
+   * @param originatingAgencyIdentifier l'identifiant du service producteur
+   */
+  public void setOriginatingAgencyIdentifier(String originatingAgencyIdentifier) {
+    this.originatingAgencyIdentifier = originatingAgencyIdentifier;
+  }
+
+  /**
+   * Indique l'identifiant du service versant - information de gestion à ne pas confondre avec
+   * SubmissionAgency dans les métadonnées de description.
+   *
+   * @return l'identifiant du service versant
+   */
+  public String getSubmissionAgencyIdentifier() {
+    return submissionAgencyIdentifier;
+  }
+
+  /**
+   * Spécifie l'identifiant du service versant - information de gestion à ne pas confondre avec
+   * SubmissionAgency dans les métadonnées de description.
+   *
+   * @param submissionAgencyIdentifier l'identifiant du service versant
+   */
+  public void setSubmissionAgencyIdentifier(String submissionAgencyIdentifier) {
+    this.submissionAgencyIdentifier = submissionAgencyIdentifier;
+  }
 }
