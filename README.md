@@ -204,10 +204,13 @@ Après avoir testé la nouvelle release:
 git tag -a v1.4 -m "Sipg version 1.4"
 git push origin v1.4 or git push origin --tags
 ```
-* Exécuter le workflow "Deploy on Maven central sur github"
-* Se connecter sur le serveur Sonatype
+* Sur github, exécuter le workflow "Deploy on Maven central" pour copier l'artifact SipG sur le serveur Nexus Sonatype
+  - Note. l'authentification par API sur le serveur Nexus nécessite un token généré depuis l'interface web du serveur Sonatype (Menu profile/User Token)  
+* Puis, se connecter à l'interface web du serveur Sonatype
   - https://s01.oss.sonatype.org/
-* Passer les étapes de déploiement (staging, close, etc.)
+* Aller dans Staging Repositories
+  - Passer les étapes du workflow déploiement (close, etc.)
+  - Chaque étape peut prendre quelques minutes
 
 ## Licences
 
