@@ -267,13 +267,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.11.2</version>
+            <version>5.11.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.11</version>
+            <version>1.5.16</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -419,6 +419,60 @@
                                         <include>binding.xjb</include>
                                     </bindingIncludes>
                                     <catalog>src/main/resources/seda-2.2/seda-vitam.cat</catalog>
+                                    <extension>true</extension>
+                                    <args>
+                                        <arg>-Xinheritance</arg>
+                                        <arg>-Xannotate</arg>
+                                    </args>
+                                    <strict>false</strict>
+                                    <plugins>
+                                        <plugin>
+                                            <groupId>org.jvnet.jaxb</groupId>
+                                            <artifactId>jaxb-plugin-annotate</artifactId>
+                                            <version>4.0.8</version>
+                                        </plugin>
+                                    </plugins>
+                                </configuration>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.jvnet.jaxb</groupId>
+                                <artifactId>jaxb-plugins</artifactId>
+                                <version>3.0.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- Use "mvn clean generate-sources -Pseda23" to generate jaxb classes -->
+            <id>seda23</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jvnet.jaxb</groupId>
+                        <artifactId>jaxb-maven-plugin</artifactId>
+                        <version>4.0.8</version>
+                        <executions>
+                            <execution>
+                                <configuration>
+                                    <generateDirectory>src/main/java/</generateDirectory>
+                                    <schemaDirectory>src/main/resources/seda-2.3/</schemaDirectory>
+                                    <schemaIncludes>
+                                        <include>seda-vitam-main.xsd</include>
+                                    </schemaIncludes>
+                                    <bindingDirectory>src/main/resources/seda-2.3/
+                                    </bindingDirectory>
+                                    <bindingIncludes>
+                                        <include>binding.xjb</include>
+                                    </bindingIncludes>
+                                    <catalog>src/main/resources/seda-2.3/seda-vitam.cat</catalog>
                                     <extension>true</extension>
                                     <args>
                                         <arg>-Xinheritance</arg>
