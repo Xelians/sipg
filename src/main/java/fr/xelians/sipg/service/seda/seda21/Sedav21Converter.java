@@ -249,7 +249,8 @@ class Sedav21Converter {
 
     String mi =
         SipUtils.getIfBlank(
-            delivery.getMessageIdentifier(), RandomStringUtils.randomAlphabetic(32).toLowerCase());
+            delivery.getMessageIdentifier(),
+            RandomStringUtils.secure().nextAlphabetic(32).toLowerCase());
     del.setMessageIdentifier(toIdentifierType(mi));
 
     LocalDateTime gcd = SipUtils.getIfNull(delivery.getDate(), LocalDateTime.now());
@@ -298,7 +299,8 @@ class Sedav21Converter {
 
     String mi =
         SipUtils.getIfBlank(
-            transfer.getMessageIdentifier(), RandomStringUtils.randomAlphabetic(32).toLowerCase());
+            transfer.getMessageIdentifier(),
+            RandomStringUtils.secure().nextAlphabetic(32).toLowerCase());
     att.setMessageIdentifier(toIdentifierType(mi));
 
     LocalDateTime gcd = SipUtils.getIfNull(transfer.getDate(), LocalDateTime.now());
@@ -421,6 +423,21 @@ class Sedav21Converter {
 
   private ArchiveUnitType toArchiveUnitType(ArchiveUnit unit, DataObjectPackageType dopt) {
 
+    if (isStrict) {
+      if (!unit.getDataObjectSystemIds().isEmpty()) {
+        throw new SipException("SEDA 2.1 does not support deprecated DataObjectSystemId.");
+      }
+
+      if (!unit.getAgents().isEmpty()) {
+        throw new SipException("SEDA 2.1 does not support Agent. Use SEDA 2.2 or more.");
+      }
+
+      if (unit.getSigningInformation() != null) {
+        throw new SipException(
+            "SEDA 2.1 does not support SigningInformation. Use SEDA 2.3 or more.");
+      }
+    }
+
     ArchiveUnitType aut = sedav2Factory.createArchiveUnitType();
     // if no archive unit id set we use auto inc ids
     String id = StringUtils.isNotEmpty(unit.getId()) ? unit.getId() : incAndGetCounter();
@@ -516,11 +533,6 @@ class Sedav21Converter {
         .forEach(e -> dmct.getArchivalAgencyArchiveUnitIdentifier().add(e));
     unit.getTransferringAgencyArchiveUnitIdentifiers()
         .forEach(e -> dmct.getTransferringAgencyArchiveUnitIdentifier().add(e));
-    //  acceptIfNotNull(unit.getPhysicalId(), e -> dmct.getPhysicalId().add(toTextType(e)));
-
-    if (isStrict && !unit.getDataObjectSystemIds().isEmpty()) {
-      throw new SipException("SEDA 2.1 does not support DataObjectSystemId");
-    }
 
     // Description Group
     unit.getDescriptions().forEach(d -> dmct.getDescription().add(toTextType(d)));

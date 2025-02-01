@@ -155,8 +155,7 @@ public class SedaService {
    * @param validator le validateur RNG
    * @param config la configuration utilisée lors du processus de sérialisation
    */
-  public void write(
-      ArchiveTransfer archive, Path zipPath, Validator validator, SedaConfig config) {
+  public void write(ArchiveTransfer archive, Path zipPath, Validator validator, SedaConfig config) {
     Validate.notNull(archive, SipUtils.NOT_NULL, "archiveTransfer");
     Validate.notNull(zipPath, SipUtils.NOT_NULL, "zipPath");
     Validate.notNull(config, SipUtils.NOT_NULL, "config");
@@ -359,7 +358,7 @@ public class SedaService {
    * @param listener la méthode de callback pour suivre la progression de la validation
    */
   public void validate(
-          Path path, Validator validator, SedaConfig config, ProgressListener<SedaStep> listener) {
+      Path path, Validator validator, SedaConfig config, ProgressListener<SedaStep> listener) {
     Validate.notNull(path, SipUtils.NOT_NULL, "path");
     Validate.notNull(config, SipUtils.NOT_NULL, "config");
 
@@ -401,10 +400,7 @@ public class SedaService {
   }
 
   private void validateZip(
-      Path zipPath,
-      Validator validator,
-      SedaConfig config,
-      ProgressListener<SedaStep> listener) {
+      Path zipPath, Validator validator, SedaConfig config, ProgressListener<SedaStep> listener) {
 
     String id = FilenameUtils.removeExtension(zipPath.getFileName().toString());
     updateListener(listener, id, SUCCESS, SedaStep.START, "Archive: " + zipPath);
@@ -488,11 +484,7 @@ public class SedaService {
             throw new SipException(msg);
           }
           updateListener(
-              listener,
-              id,
-              SUCCESS,
-              SedaStep.BINARY_EXIST,
-              "Binary object exists: " + binaryPath);
+              listener, id, SUCCESS, SedaStep.BINARY_EXIST, "Binary object exists: " + binaryPath);
 
           // Check binaryPath Directory is "Content"
           Path parentPath = binaryPath.getParent();

@@ -264,7 +264,8 @@ class Sedav22Converter {
 
     String mi =
         SipUtils.getIfBlank(
-            transfer.getMessageIdentifier(), RandomStringUtils.randomAlphabetic(32).toLowerCase());
+            transfer.getMessageIdentifier(),
+            RandomStringUtils.secure().nextAlphabetic(32).toLowerCase());
     att.setMessageIdentifier(mi);
 
     LocalDateTime gcd = SipUtils.getIfNull(transfer.getDate(), LocalDateTime.now());
@@ -322,7 +323,8 @@ class Sedav22Converter {
 
     String mi =
         SipUtils.getIfBlank(
-            delivery.getMessageIdentifier(), RandomStringUtils.randomAlphabetic(32).toLowerCase());
+            delivery.getMessageIdentifier(),
+            RandomStringUtils.secure().nextAlphabetic(32).toLowerCase());
     del.setMessageIdentifier(mi);
 
     LocalDateTime gcd = SipUtils.getIfNull(delivery.getDate(), LocalDateTime.now());
@@ -439,6 +441,16 @@ class Sedav22Converter {
 
   private ArchiveUnitType toArchiveUnitType(ArchiveUnit unit, DataObjectPackageType dopt) {
 
+    if (isStrict) {
+      if (!unit.getDataObjectSystemIds().isEmpty()) {
+        throw new SipException("SEDA 2.2 does not support deprecated DataObjectSystemId.");
+      }
+      if (unit.getSigningInformation() != null) {
+        throw new SipException(
+            "SEDA 2.2 does not support SigningInformation. Use SEDA 2.3 or more.");
+      }
+    }
+
     ArchiveUnitType aut = sedav2Factory.createArchiveUnitType();
     // if no archive unit id set we use auto inc ids
     String id = StringUtils.isNotEmpty(unit.getId()) ? unit.getId() : incAndGetCounter();
@@ -538,11 +550,6 @@ class Sedav22Converter {
         .forEach(e -> dmct.getArchivalAgencyArchiveUnitIdentifier().add(e));
     unit.getTransferringAgencyArchiveUnitIdentifiers()
         .forEach(e -> dmct.getTransferringAgencyArchiveUnitIdentifier().add(e));
-    //  acceptIfNotNull(unit.getPhysicalId(), e -> dmct.getPhysicalId().add(toTextType(e)));
-
-    if (isStrict && !unit.getDataObjectSystemIds().isEmpty()) {
-      throw new SipException("SEDA 2.1 does not support DataObjectSystemId");
-    }
 
     // Description Group
     unit.getDescriptions().forEach(d -> dmct.getDescription().add(toTextType(d)));
@@ -981,7 +988,7 @@ class Sedav22Converter {
 
     if (isStrict) {
       if (appraisalRule.getDuration() != null) {
-        throw new SipException("SEDA 2.1 does not support Duration");
+        throw new SipException("SEDA 2.2 does not support Duration");
       }
     }
     return art;
@@ -1140,10 +1147,10 @@ class Sedav22Converter {
 
     if (isStrict) {
       if (code.getSignatureStatusCodeListVersion() != null) {
-        throw new SipException("SEDA 2.1 does not support SignatureStatusCodeListVersion");
+        throw new SipException("SEDA 2.2 does not support SignatureStatusCodeListVersion");
       }
       if (code.getFileEncodingCodeListVersion() != null) {
-        throw new SipException("SEDA 2.1 does not support FileEncodingCodeListVersion");
+        throw new SipException("SEDA 2.2 does not support FileEncodingCodeListVersion");
       }
     }
 
@@ -1196,7 +1203,7 @@ class Sedav22Converter {
     try {
       return LevelType.fromValue(levelType);
     } catch (IllegalArgumentException iae) {
-      throw new SipException("Seda 2.1 does not support the level type: " + levelType, iae);
+      throw new SipException("SEDA 2.2 does not support the level type: " + levelType, iae);
     }
   }
 
@@ -1205,7 +1212,7 @@ class Sedav22Converter {
       return LegalStatusType.fromValue(legalStatusType);
     } catch (IllegalArgumentException iae) {
       throw new SipException(
-          "Seda 2.1 does not support the legal status : " + legalStatusType, iae);
+          "SEDA 2.2 does not support the legal status : " + legalStatusType, iae);
     }
   }
 

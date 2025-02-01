@@ -26,11 +26,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.file.DirectoryStream;
-import java.nio.file.FileSystem;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -498,6 +494,24 @@ public class SipFactory {
     unit1.setOriginatingAgency(oriAgency);
     unit1.setSubmissionAgency(new Agency("AG001", "My Archive Agency"));
 
+    unit1.addAgent(
+        AgentBuilder.builder()
+            .withFirstName("Bernard")
+            .withFullName("Campagnole")
+            .withBirthDate(today)
+            .addActivity("Actor")
+            .addFunction("Senior")
+            .withBirthPlace(
+                PlaceBuilder.builder()
+                    .withAddress("71 Cinema Street")
+                    .withGeogName("GEOName")
+                    .withPostalCode("91200")
+                    .withRegion("Madrid")
+                    .withCountry("Spain")
+                    .withCity("MA")
+                    .build())
+            .build());
+
     unit1.addAddressee(
         AgentBuilder.builder()
             .withFirstName("Marc")
@@ -517,6 +531,40 @@ public class SipFactory {
             .build());
 
     unit1.setSource("My Source1");
+
+    Signer signer =
+        SignerBuilder.builder()
+            .withFirstName("Luc")
+            .withFullName("Maroille")
+            .withBirthDate(today)
+            .addActivity("Sword")
+            .addFunction("Jedi")
+            .addMandate("Signer")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+            .withSigningTime(todaytime)
+            .build();
+
+    Validator validator =
+        ValidatorBuilder.builder()
+            .withFirstName("Thomas")
+            .withFullName("Pirlouette")
+            .withBirthDate(today)
+            .addActivity("Sword")
+            .addFunction("Jedi")
+            .addMandate("Validator")
+            .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
+            .withValidationTime(todaytime)
+            .build();
+
+    SigningInformation si = new SigningInformation();
+    si.getSigningRoles().add(SigningRole.SIGNED_DOCUMENT);
+    si.getDetachedSigningRoles().add(DetachedSigningRole.SIGNATURE);
+    si.getSignatureDescriptions()
+        .add(new SignatureDescription(signer, validator, "Tampon virtuel"));
+    si.getAdditionalProofInformation().add("Ceci n'est pas une signature forgée");
+    si.getTimestampingInformations().add(new TimestampingInformation(LocalDateTime.now(), null));
+    //        si.getSignedDocumentReferenceIds().add("ID1245") ;
+    unit1.setSigningInformation(si);
 
     ArchiveUnit unit2 = new ArchiveUnit();
     unit2.setPhysicalId("physical-0002");
@@ -743,7 +791,8 @@ public class SipFactory {
     aRule3.setFinalAction("Keep");
     unit3.setAppraisalRules(aRule3);
 
-    Signer signer =
+    Signature signature = new Signature();
+    signature.addSigner(
         SignerBuilder.builder()
             .withFirstName("Marc")
             .withFullName("Lavolle")
@@ -753,9 +802,8 @@ public class SipFactory {
             .addMandate("Signer")
             .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
             .withSigningTime(todaytime)
-            .build();
-
-    Validator validator =
+            .build());
+    signature.setValidator(
         ValidatorBuilder.builder()
             .withFirstName("Marc")
             .withFullName("Lavolle")
@@ -765,11 +813,7 @@ public class SipFactory {
             .addMandate("Validator")
             .withBirthPlace(PlaceBuilder.builder().withCountry("USA").withCity("NY").build())
             .withValidationTime(todaytime)
-            .build();
-
-    Signature signature = new Signature();
-    signature.addSigner(signer);
-    signature.setValidator(validator);
+            .build());
     unit3.addSignature(signature);
 
     RelatedObjectRef relation = new RelatedObjectRef();

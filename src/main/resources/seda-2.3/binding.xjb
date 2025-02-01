@@ -91,4 +91,15 @@
         </jxb:bindings>
     </jxb:bindings>
 
+    <jxb:bindings schemaLocation="seda-vitam-ontology.xsd">
+        <jxb:bindings node="//xs:element[@name='SignedDocumentReferenceId']">
+            <jxb:property>
+                <jxb:baseType>
+                    <jxb:javaType name="java.lang.String"/>
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+    </jxb:bindings>
+
+
 </jxb:bindings>

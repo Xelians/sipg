@@ -149,7 +149,7 @@ public class Sedav21Adapter implements SedaAdapter {
   }
 
   private static void doWrite(
-          Validator validator, SedaConfig config, FileSystem zipArchive, Object content)
+      Validator validator, SedaConfig config, FileSystem zipArchive, Object content)
       throws IOException, SAXException, JAXBException {
     Path zipEntryPath = zipArchive.getPath("manifest.xml");
     try (OutputStream os = Files.newOutputStream(zipEntryPath)) {

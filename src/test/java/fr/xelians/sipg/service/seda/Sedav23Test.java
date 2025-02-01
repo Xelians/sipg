@@ -18,6 +18,9 @@
  */
 package fr.xelians.sipg.service.seda;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.google.common.jimfs.Jimfs;
 import fr.xelians.sipg.SipFactory;
 import fr.xelians.sipg.TestInit;
@@ -27,19 +30,15 @@ import fr.xelians.sipg.model.ArchiveTransfer;
 import fr.xelians.sipg.service.json.JsonService;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.Validators;
+import java.nio.file.FileSystem;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import javax.xml.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.xml.validation.Validator;
-import java.nio.file.FileSystem;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * The SEDA v2 integration test.

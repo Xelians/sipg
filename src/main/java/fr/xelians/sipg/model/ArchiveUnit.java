@@ -324,6 +324,9 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   /** La date de fermeture / Date de fin. */
   protected LocalDate endDate;
 
+  /** Les informations relatives à la signature. */
+  protected SigningInformation signingInformation;
+
   /** Instancie la classe. */
   public ArchiveUnit() {
     // Do nothing here
@@ -2646,6 +2649,24 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    */
   public List<Tag> getTags() {
     return new ArrayList<>(tags);
+  }
+
+  /**
+   * Fournit les informations relatives à la signature.
+   *
+   * @return les informations relatives à la signature
+   */
+  public SigningInformation getSigningInformation() {
+    return signingInformation;
+  }
+
+  /**
+   * Spécifie les informations relatives à la signature.
+   *
+   * @param signingInformation les informations relatives à la signature
+   */
+  public void setSigningInformation(SigningInformation signingInformation) {
+    this.signingInformation = signingInformation;
   }
 
   /**
