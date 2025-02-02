@@ -326,6 +326,7 @@
             </plugin>
         </plugins>
     </reporting>
+
     <repositories>
         <repository>
             <id>maven_central</id>

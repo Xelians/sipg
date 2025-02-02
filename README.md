@@ -205,6 +205,9 @@ Après avoir testé la nouvelle release:
 git tag -a v1.4 -m "Sipg version 1.4"
 git push origin v1.4 or git push origin --tags
 ```
+
+## Deploy on Maven Central
+
 * Sur github, exécuter le workflow "Deploy on Maven central" pour copier l'artifact SipG sur le serveur Nexus Sonatype
   - Note. l'authentification par API sur le serveur Nexus nécessite un token généré depuis l'interface web du serveur Sonatype (Menu profile/User Token)  
 * Puis, se connecter à l'interface web du serveur Sonatype
@@ -212,6 +215,35 @@ git push origin v1.4 or git push origin --tags
 * Aller dans Staging Repositories
   - Passer les étapes du workflow déploiement (close, etc.)
   - Chaque étape peut prendre quelques minutes
+
+## Create s secret key (if needed)
+
+You can generate a new GPG key with a passphrase and export the private key as an ASCII-armored version to your clipboard on Ubuntu:
+
+1. Generate a new GPG key
+```
+gpg --full-generate-key
+```
+You'll be prompted to choose:
+- Key type: Select RSA and RSA
+- Key size: Use 4096 for better security
+- Expiration: Choose as needed (0 for never expiring)
+- Name, email, and comment: Provide your details
+- Passphrase: Enter a strong passphrase
+
+2. List your GPG keys To get the key ID, run:
+```
+gpg --list-secret-keys --keyid-format=long
+```
+Look for the line that looks like this: rsa4096/XXXXXXXXXXXXXXXX 2024-02-02  
+where XXXXXXXXXXXXXXXX is the kEY_ID 
+
+3. Export the private key in ASCII-armored format
+```  
+gpg --export-secret-keys --armor KEY_ID | xclip -selection clipboard
+```
+* Copy the clipboard to the secret gpg key on github
+* Copy the passphrase to the secret gpg passphase on github
 
 ## Licences
 
