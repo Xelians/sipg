@@ -54,7 +54,7 @@ class Sedav21Test {
 
   private final SedaConfig sedaConfig =
       SedaConfigBuilder.builder().format(true).validate(true).strict(false).build();
-  private final SedaService sedaService = SedaService.getInstance();
+  private final Sedav2Service sedaService = Sedav2Service.getInstance();
 
   /**
    * Test validate xml.
@@ -183,7 +183,7 @@ class Sedav21Test {
     try {
       String jsonString = SipFactory.createJsonString();
       ArchiveTransfer archiveTransfer = JsonService.getInstance().read(jsonString);
-      SedaService.getInstance()
+      Sedav2Service.getInstance()
           .write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "freemarker_seda.zip"));
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);

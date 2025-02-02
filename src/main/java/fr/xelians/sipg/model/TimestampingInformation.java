@@ -22,13 +22,20 @@ package fr.xelians.sipg.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-/** The type Timestamping information. */
+/**
+ * La classe TimestampingInformation contient les informations d'horodatage dans un contexte de signature.
+ *
+ * <p>Supporté en SEDA v2.3
+ *
+ * @author Emmanuel Deviller
+ * @see SigningInformation
+ */
 public class TimestampingInformation {
 
-  /** The Time stamp. */
+  /** Horodatage de la signature. */
   protected LocalDateTime timeStamp;
 
-  /** The Additional timestamping information. */
+  /** Information d'horodatage additionnelle. */
   protected String additionalTimestampingInformation;
 
   /** Instancie la classe. */
@@ -37,10 +44,10 @@ public class TimestampingInformation {
   }
 
   /**
-   * Instantiates a new Timestamping information.
+   * Instancie la classe.
    *
-   * @param timeStamp the time stamp
-   * @param additionalTimestampingInformation the additional timestamping information
+   * @param timeStamp l'horodatage de la signature
+   * @param additionalTimestampingInformation l'information d'horodatage additionnelle
    */
   public TimestampingInformation(
       LocalDateTime timeStamp, String additionalTimestampingInformation) {
@@ -49,36 +56,36 @@ public class TimestampingInformation {
   }
 
   /**
-   * Gets time stamp.
+   * Indique l'horodatage de la signature
    *
-   * @return the time stamp
+   * @return l'horodatage de la signature.
    */
   public LocalDateTime getTimeStamp() {
     return timeStamp;
   }
 
   /**
-   * Sets time stamp.
+   * Spécifie l'horodatage de la signature.
    *
-   * @param timeStamp the time stamp
+   * @param timeStamp l'horodatage de la signature
    */
   public void setTimeStamp(LocalDateTime timeStamp) {
     this.timeStamp = timeStamp;
   }
 
   /**
-   * Gets additional timestamping information.
+   * Indique l'information d'horodatage additionnelle.
    *
-   * @return the additional timestamping information
+   * @return l'information d'horodatage additionnelle
    */
   public String getAdditionalTimestampingInformation() {
     return additionalTimestampingInformation;
   }
 
   /**
-   * Sets additional timestamping information.
+   * Spécifie l'information d'horodatage additionnelle.
    *
-   * @param additionalTimestampingInformation the additional timestamping information
+   * @param additionalTimestampingInformation l'information d'horodatage additionnelle
    */
   public void setAdditionalTimestampingInformation(String additionalTimestampingInformation) {
     this.additionalTimestampingInformation = additionalTimestampingInformation;

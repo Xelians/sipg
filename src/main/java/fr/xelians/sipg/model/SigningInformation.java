@@ -22,7 +22,15 @@ package fr.xelians.sipg.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Contient toutes les informations relatives à la signature. */
+/**
+ * La classe SigningInformation contient toutes les informations relatives à la signature.
+ *
+ * <p>Supporté en SEDA v2.3
+ *
+ * @author Emmanuel Deviller
+ * @see Signer
+ * @see Validator
+ */
 public class SigningInformation {
 
   /**
@@ -61,110 +69,57 @@ public class SigningInformation {
   }
 
   /**
-   * Gets signing roles.
+   * Indique la liste des rôles de l'unité d'archives.
    *
-   * @return the signing roles
+   * @return la liste des rôles
    */
   public List<SigningRole> getSigningRoles() {
     return signingRoles;
   }
 
   /**
-   * Sets signing roles.
+   * Indique la liste des références aux rôles des unités d'archives.
    *
-   * @param signingRoles the signing roles
-   */
-  public void setSigningRoles(List<SigningRole> signingRoles) {
-    this.signingRoles = signingRoles;
-  }
-
-  /**
-   * Gets detached signing roles.
-   *
-   * @return the detached signing roles
+   * @return la liste des références aux rôles
    */
   public List<DetachedSigningRole> getDetachedSigningRoles() {
     return detachedSigningRoles;
   }
 
   /**
-   * Sets detached signing roles.
+   * Indique la liste des relations techniques à l'unité d'archives racine décrivant le document signé à partir des unités d'archives encapsulées contenant les autres rôles d'un contexte de signature.
    *
-   * @param detachedSigningRoles the detached signing roles
-   */
-  public void setDetachedSigningRoles(List<DetachedSigningRole> detachedSigningRoles) {
-    this.detachedSigningRoles = detachedSigningRoles;
-  }
-
-  /**
-   * Gets signed document reference ids.
-   *
-   * @return the signed document reference ids
+   * @return la liste des relations techniques
    */
   public List<String> getSignedDocumentReferenceIds() {
     return signedDocumentReferenceIds;
   }
 
   /**
-   * Sets signed document reference ids.
+   * Indique la liste des informations d'horodatage dans un contexte de signature.
    *
-   * @param signedDocumentReferenceIds the signed document reference ids
-   */
-  public void setSignedDocumentReferenceIds(List<String> signedDocumentReferenceIds) {
-    this.signedDocumentReferenceIds = signedDocumentReferenceIds;
-  }
-
-  /**
-   * Gets timestamping informations.
-   *
-   * @return the timestamping informations
+   * @return la liste des informations d'horodatage
    */
   public List<TimestampingInformation> getTimestampingInformations() {
     return timestampingInformations;
   }
 
   /**
-   * Sets timestamping informations.
+   * Indique la liste des informations relatives aux preuves complémentaires archivées dans un contexte de signature.
    *
-   * @param timestampingInformations the timestamping informations
-   */
-  public void setTimestampingInformations(List<TimestampingInformation> timestampingInformations) {
-    this.timestampingInformations = timestampingInformations;
-  }
-
-  /**
-   * Gets additional proof information.
-   *
-   * @return the additional proof information
+   * @return la liste des informations relatives aux preuves complémentaires
    */
   public List<String> getAdditionalProofInformation() {
     return additionalProofInformation;
   }
 
   /**
-   * Sets additional proof information.
+   * Indique la liste permettant de décrire la signature dans un contexte de signature.
    *
-   * @param additionalProofInformation the additional proof information
-   */
-  public void setAdditionalProofInformation(List<String> additionalProofInformation) {
-    this.additionalProofInformation = additionalProofInformation;
-  }
-
-  /**
-   * Gets signature descriptions.
-   *
-   * @return the signature descriptions
+   * @return la liste permettant de décrire la signature
    */
   public List<SignatureDescription> getSignatureDescriptions() {
     return signatureDescriptions;
   }
 
-  /**
-   * Sets signature descriptions.
-   *
-   * @param signatureDescriptions the signature descriptions
-   */
-  public void setSignatureDescriptions(List<SignatureDescription> signatureDescriptions) {
-    this.signatureDescriptions = signatureDescriptions;
-  }
 }

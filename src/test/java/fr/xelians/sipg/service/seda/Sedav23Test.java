@@ -54,7 +54,7 @@ public class Sedav23Test {
 
   private final SedaConfig sedaConfig =
       SedaConfigBuilder.builder().format(true).validate(true).strict(false).build();
-  private final SedaService sedaService = SedaService.getV23Instance();
+  private final Sedav2Service sedaService = Sedav2Service.getV23Instance();
 
   /**
    * Test validate xml.
@@ -184,7 +184,7 @@ public class Sedav23Test {
     try {
       String jsonString = SipFactory.createJsonString();
       ArchiveTransfer archiveTransfer = JsonService.getInstance().read(jsonString);
-      SedaService.getInstance()
+      Sedav2Service.getInstance()
           .write(
               archiveTransfer,
               Paths.get(TestInit.TEST_RESULTS + "freemarker_seda.zip"),

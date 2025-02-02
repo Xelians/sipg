@@ -21,7 +21,14 @@ package fr.xelians.sipg.model;
 
 import java.util.Objects;
 
-/** Le type description de signature. */
+/**
+ * La classe SignatureDescription contient la description de la signature.
+ *
+ * <p>Supporté en SEDA v2.3
+ *
+ * @author Emmanuel Deviller
+ * @see SigningInformation
+ */
 public class SignatureDescription {
 
   /** Le signataire. */
@@ -88,7 +95,7 @@ public class SignatureDescription {
   }
 
   /**
-   * Indique le type de signature.
+   * Indique le type de signature au sens juridique du terme. Par exemple, simple, avancée, qualifiée.
    *
    * @return le type de signature
    */
@@ -97,7 +104,7 @@ public class SignatureDescription {
   }
 
   /**
-   * Spécifie le type de signature.
+   * Spécifie le type de signature au sens juridique du terme. Par exemple, simple, avancée, qualifiée.
    *
    * @param signingType le type de signature
    */

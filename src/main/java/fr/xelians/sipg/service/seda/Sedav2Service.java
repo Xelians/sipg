@@ -59,15 +59,15 @@ import org.xml.sax.SAXException;
  * @see ArchiveTransfer
  * @see SedaConfig
  */
-public class SedaService {
+public class Sedav2Service {
 
-  private static final SedaService SEDA_V21 = new SedaService(SedaVersion.v21);
-  private static final SedaService SEDA_V22 = new SedaService(SedaVersion.v22);
-  private static final SedaService SEDA_V23 = new SedaService(SedaVersion.v23);
+  private static final Sedav2Service SEDA_V21 = new Sedav2Service(SedaVersion.v21);
+  private static final Sedav2Service SEDA_V22 = new Sedav2Service(SedaVersion.v22);
+  private static final Sedav2Service SEDA_V23 = new Sedav2Service(SedaVersion.v23);
 
   private final SedaAdapter sedaAdapter;
 
-  private SedaService(SedaVersion version) {
+  private Sedav2Service(SedaVersion version) {
     this.sedaAdapter =
         switch (version) {
           case v21 -> Sedav21Adapter.INSTANCE;
@@ -81,7 +81,7 @@ public class SedaService {
    *
    * @return l 'instance singleton
    */
-  public static SedaService getInstance() {
+  public static Sedav2Service getInstance() {
     return SEDA_V21;
   }
 
@@ -90,7 +90,7 @@ public class SedaService {
    *
    * @return l 'instance singleton
    */
-  public static SedaService getV22Instance() {
+  public static Sedav2Service getV22Instance() {
     return SEDA_V22;
   }
 
@@ -99,7 +99,7 @@ public class SedaService {
    *
    * @return l 'instance singleton
    */
-  public static SedaService getV23Instance() {
+  public static Sedav2Service getV23Instance() {
     return SEDA_V23;
   }
 

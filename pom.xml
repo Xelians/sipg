@@ -92,7 +92,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>3.5.2</version>
             </plugin>
 
             <!-- Jacoco code coverage -->
@@ -119,10 +119,11 @@
                 </executions>
             </plugin>
 
+            <!-- Site -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.12.0</version>
+                <version>3.21.0</version>
             </plugin>
         </plugins>
     </build>
@@ -186,7 +187,7 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.17.1</version>
+            <version>1.18.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -283,7 +284,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.8.0</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -306,11 +307,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.23.0</version>
+                <version>3.26.0</version>
                 <configuration>
                     <linkXRef>true</linkXRef>
                     <minimumTokens>100</minimumTokens>
-                    <targetJdk>1.8</targetJdk>
+                    <targetJdk>11</targetJdk>
                     <excludes>
                         <exclude>fr/**/*.java</exclude>
                         <exclude>org/**/*.java</exclude>
@@ -321,7 +322,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.11</version>
+                <version>0.8.12</version>
             </plugin>
         </plugins>
     </reporting>
@@ -334,8 +335,8 @@
     </repositories>
 
     <profiles>
+        <!-- Use "mvn clean generate-sources -Pseda21" to generate jaxb classes from SEDA 2.1 -->
         <profile>
-            <!-- Use "mvn clean generate-sources -Pseda21" to generate jaxb classes -->
             <id>seda21</id>
             <build>
                 <plugins>
@@ -387,8 +388,8 @@
             </build>
         </profile>
 
+        <!-- Use "mvn clean generate-sources -Pseda22" to generate jaxb classes from SEDA 2.2 -->
         <profile>
-            <!-- Use "mvn clean generate-sources -Pseda22" to generate jaxb classes -->
             <id>seda22</id>
             <build>
                 <plugins>
@@ -441,8 +442,8 @@
             </build>
         </profile>
 
+        <!-- Use "mvn clean generate-sources -Pseda23" to generate jaxb classes from SEDA 2.3 -->
         <profile>
-            <!-- Use "mvn clean generate-sources -Pseda23" to generate jaxb classes -->
             <id>seda23</id>
             <build>
                 <plugins>
@@ -495,8 +496,8 @@
             </build>
         </profile>
 
+        <!-- Use "mvn verify -Pcentral" to add javadoc and signature -->
         <profile>
-            <!-- Use "mvn verify -Pcentral" to add javadoc and signature -->
             <id>central</id>
             <build>
                 <plugins>
@@ -504,7 +505,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.10.1</version>
+                        <version>3.11.2</version>
                         <configuration>
                             <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                             <excludePackageNames>org.*:uk.*:fr.gouv.*</excludePackageNames>
@@ -537,15 +538,15 @@
             </build>
         </profile>
 
+        <!-- Use "mvn verify -Pgithub" to package the JAR for github -->
         <profile>
-            <!-- Use "mvn verify -Pgithub" to package in one big jar -->
             <id>github</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <version>3.3.0</version>
+                        <version>3.7.1</version>
                         <configuration>
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
