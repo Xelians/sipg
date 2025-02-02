@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package fr.xelians.sipg.service.seda;
+package fr.xelians.sipg.service.sedav2;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -46,15 +46,15 @@ import org.slf4j.LoggerFactory;
  * @author Emmanuel Deviller
  */
 @ExtendWith(TestInit.class)
-public class Sedav23Test {
+class Sedav21Test {
 
-  public static final String SEDA22 = TestInit.TEST_RESOURCES + "seda-2.3/";
+  public static final String SEDA21 = TestInit.TEST_RESOURCES + "seda-2.1/";
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Sedav23Test.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Sedav21Test.class);
 
   private final SedaConfig sedaConfig =
       SedaConfigBuilder.builder().format(true).validate(true).strict(false).build();
-  private final Sedav2Service sedaService = Sedav2Service.getV23Instance();
+  private final Sedav2Service sedaService = Sedav2Service.getInstance();
 
   /**
    * Test validate xml.
@@ -66,11 +66,11 @@ public class Sedav23Test {
     LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
     try {
-      Path path = Paths.get(SEDA22 + "seda_small.xml");
-      sedaService.validate(path, sedaConfig);
+      Path path = Paths.get(SEDA21 + "seda_small.xml");
+      sedaService.validate(path);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -92,7 +92,7 @@ public class Sedav23Test {
       sedaService.validate(output, null, sedaConfig, e -> LOGGER.info(e.toString()));
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -110,10 +110,10 @@ public class Sedav23Test {
       ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
       Path output = Paths.get(TestInit.TEST_RESULTS + "largesip2_seda.zip");
       sedaService.write(archiveTransfer, output, sedaConfig);
-      sedaService.validate(output, sedaConfig);
+      sedaService.validate(output);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -133,7 +133,7 @@ public class Sedav23Test {
           archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "dirsip_seda.zip"), sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -149,8 +149,7 @@ public class Sedav23Test {
 
     ArchiveTransfer archiveTransfer = SipFactory.createWithoutAgencySip();
     Path outputPath = Paths.get(TestInit.TEST_RESULTS + "fail_seda.zip");
-    assertThrows(
-        SipException.class, () -> sedaService.write(archiveTransfer, outputPath, sedaConfig));
+    assertThrows(SipException.class, () -> sedaService.write(archiveTransfer, outputPath));
   }
 
   /**
@@ -168,7 +167,7 @@ public class Sedav23Test {
           archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "csvsip_seda.zip"), sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -185,13 +184,10 @@ public class Sedav23Test {
       String jsonString = SipFactory.createJsonString();
       ArchiveTransfer archiveTransfer = JsonService.getInstance().read(jsonString);
       Sedav2Service.getInstance()
-          .write(
-              archiveTransfer,
-              Paths.get(TestInit.TEST_RESULTS + "freemarker_seda.zip"),
-              sedaConfig);
+          .write(archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "freemarker_seda.zip"));
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -211,7 +207,7 @@ public class Sedav23Test {
           archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "fulltextsip_seda.zip"), sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -231,7 +227,7 @@ public class Sedav23Test {
           archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "minisip_seda.zip"), sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -250,7 +246,7 @@ public class Sedav23Test {
       sedaService.validate(archiveTransfer, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -270,7 +266,7 @@ public class Sedav23Test {
       sedaService.write(archiveTransfer, zipPath, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -287,12 +283,12 @@ public class Sedav23Test {
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createMiniSipVitam();
       Path zipPath = Paths.get(TestInit.TEST_RESULTS + "MiniSipVitam_seda.zip");
-      Path rngPath = Paths.get(SEDA22, "Profil_VITAM_base.rng");
+      Path rngPath = Paths.get(SEDA21, "Profil_VITAM_base.rng");
       Validator rngValidator = Validators.getRngValidator(rngPath);
       sedaService.write(archiveTransfer, zipPath, rngValidator, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -308,12 +304,12 @@ public class Sedav23Test {
 
     try {
       ArchiveTransfer archiveTransfer = SipFactory.createMiniSipVitam();
-      Path rngPath = Paths.get(SEDA22, "Profil_VITAM_base.rng");
+      Path rngPath = Paths.get(SEDA21, "Profil_VITAM_base.rng");
       Validator rngValidator = Validators.getRngValidator(rngPath);
-      sedaService.validate(archiveTransfer, rngValidator, sedaConfig);
+      sedaService.validate(archiveTransfer, rngValidator);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -333,7 +329,7 @@ public class Sedav23Test {
       sedaService.write(archiveTransfer, output, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -352,7 +348,7 @@ public class Sedav23Test {
       sedaService.validate(archiveTransfer, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -372,7 +368,7 @@ public class Sedav23Test {
       sedaService.write(archiveTransfer, zipPath, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -391,7 +387,7 @@ public class Sedav23Test {
       sedaService.validate(archiveTransfer, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -413,7 +409,7 @@ public class Sedav23Test {
           archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_seda.zip"), config);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -432,7 +428,7 @@ public class Sedav23Test {
       sedaService.validate(archiveTransfer, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -452,7 +448,7 @@ public class Sedav23Test {
           archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_seda.zip"), sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }
@@ -471,7 +467,7 @@ public class Sedav23Test {
       sedaService.validate(archiveTransfer, sedaConfig);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.error(msg, ex);
+      LOGGER.warn(msg, ex);
       fail(msg);
     }
   }

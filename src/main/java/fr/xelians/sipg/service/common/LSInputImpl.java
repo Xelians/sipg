@@ -19,7 +19,7 @@
 package fr.xelians.sipg.service.common;
 
 import fr.xelians.sipg.service.fntcv4.Fntcv4Resolver;
-import fr.xelians.sipg.service.seda.SedaResolver;
+import fr.xelians.sipg.service.sedav2.SedaResolver;
 import java.io.InputStream;
 import java.io.Reader;
 import org.w3c.dom.ls.LSInput;

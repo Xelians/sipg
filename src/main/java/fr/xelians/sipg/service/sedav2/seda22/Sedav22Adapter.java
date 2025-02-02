@@ -36,13 +36,32 @@
  * under the License.
  */
 
-package fr.xelians.sipg.service.seda.seda23;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
-import fr.gouv.culture.archivesdefrance.seda.v23.ArchiveDeliveryRequestReplyType;
-import fr.gouv.culture.archivesdefrance.seda.v23.ArchiveTransferType;
+package fr.xelians.sipg.service.sedav2.seda22;
+
+import fr.gouv.culture.archivesdefrance.seda.v22.ArchiveDeliveryRequestReplyType;
+import fr.gouv.culture.archivesdefrance.seda.v22.ArchiveTransferType;
 import fr.xelians.sipg.model.ArchiveDeliveryRequestReply;
 import fr.xelians.sipg.model.ArchiveTransfer;
-import fr.xelians.sipg.service.seda.*;
+import fr.xelians.sipg.service.sedav2.*;
 import fr.xelians.sipg.utils.ByteArrayInOutStream;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
@@ -67,16 +86,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-public class Sedav23Adapter implements SedaAdapter {
+public class Sedav22Adapter implements SedaAdapter {
 
   private static final String HTTP_WWW_W3_ORG_XML_XML_SCHEMA_V1_1 =
       "http://www.w3.org/XML/XMLSchema/v1.1";
   public static final String HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL =
       "http://apache.org/xml/features/disallow-doctype-decl";
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Sedav23Adapter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Sedav22Adapter.class);
 
-  public static final Sedav23Adapter INSTANCE = new Sedav23Adapter();
+  public static final Sedav22Adapter INSTANCE = new Sedav22Adapter();
 
   private static final JAXBContext sedaContext;
   private static final Schema sedaSchema;
@@ -85,7 +104,7 @@ public class Sedav23Adapter implements SedaAdapter {
       new NamespacePrefixMapper() {
         public String getPreferredPrefix(
             String namespaceUri, String suggestion, boolean requirePrefix) {
-          return !requirePrefix && "fr:gouv:culture:archivesdefrance:seda:v2.3".equals(namespaceUri)
+          return !requirePrefix && "fr:gouv:culture:archivesdefrance:seda:v2.2".equals(namespaceUri)
               ? ""
               : "ns";
         }
@@ -93,7 +112,7 @@ public class Sedav23Adapter implements SedaAdapter {
 
   static {
     // Provide flattened schema in resource
-    try (InputStream is1 = SipUtils.resourceAsStream("seda-vitam-2.3-full.xsd");
+    try (InputStream is1 = SipUtils.resourceAsStream("seda-vitam-2.2-full.xsd");
         InputStream is2 = SipUtils.resourceAsStream("xml.xsd");
         InputStream is3 = SipUtils.resourceAsStream("xlink.xsd")) {
       SchemaFactory sf = SchemaFactory.newInstance(HTTP_WWW_W3_ORG_XML_XML_SCHEMA_V1_1);
@@ -101,13 +120,13 @@ public class Sedav23Adapter implements SedaAdapter {
       sf.setResourceResolver(new SedaResolver(is2, is3));
       sedaSchema = sf.newSchema(new StreamSource(is1));
       sedaContext =
-          JAXBContext.newInstance(fr.gouv.culture.archivesdefrance.seda.v23.ObjectFactory.class);
+          JAXBContext.newInstance(fr.gouv.culture.archivesdefrance.seda.v22.ObjectFactory.class);
     } catch (IOException | JAXBException | SAXException ex) {
       throw new SipException("Unable to initialize XSD Schemas, JAXBContext and Marshaller", ex);
     }
   }
 
-  private Sedav23Adapter() {}
+  private Sedav22Adapter() {}
 
   @Override
   public void write(
@@ -115,7 +134,7 @@ public class Sedav23Adapter implements SedaAdapter {
 
     try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath, config.useMemory())) {
       ArchiveTransferType transferType =
-          Sedav23Converter.convertToArchiveTransferType(transfer, zipArchive, config);
+          Sedav22Converter.convertToArchiveTransferType(transfer, zipArchive, config);
       doWrite(validator, config, zipArchive, transferType);
     } catch (IOException
         | JAXBException
@@ -136,7 +155,7 @@ public class Sedav23Adapter implements SedaAdapter {
 
     try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath, config.useMemory())) {
       ArchiveDeliveryRequestReplyType deliveryRequestReplyType =
-          Sedav23Converter.convertToArchiveDeliveryRequestReplyType(
+          Sedav22Converter.convertToArchiveDeliveryRequestReplyType(
               deliveryRequestReply, zipArchive, config);
       doWrite(validator, config, zipArchive, deliveryRequestReplyType);
     } catch (IOException
@@ -186,7 +205,7 @@ public class Sedav23Adapter implements SedaAdapter {
   @Override
   public void validate(ArchiveTransfer archive, Validator validator, SedaConfig config) {
     try {
-      ArchiveTransferType att = Sedav23Converter.convertToArchiveTransferType(archive, config);
+      ArchiveTransferType att = Sedav22Converter.convertToArchiveTransferType(archive, config);
       JAXBSource source = new JAXBSource(sedaContext, att);
 
       Validator sedaValidator = sedaSchema.newValidator();

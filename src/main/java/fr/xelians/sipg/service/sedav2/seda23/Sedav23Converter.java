@@ -35,36 +35,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package fr.xelians.sipg.service.sedav2.seda23;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-package fr.xelians.sipg.service.seda.seda21;
+import static fr.xelians.sipg.utils.SipUtils.*;
 
-import static fr.xelians.sipg.utils.SipUtils.ifNotBlank;
-import static fr.xelians.sipg.utils.SipUtils.ifNotNull;
-
-import fr.gouv.culture.archivesdefrance.seda.v21.*;
+import fr.gouv.culture.archivesdefrance.seda.v23.*;
 import fr.xelians.sipg.model.*;
-import fr.xelians.sipg.service.seda.SedaConfig;
+import fr.xelians.sipg.service.sedav2.SedaConfig;
 import fr.xelians.sipg.utils.DroidUtils;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
+import jakarta.xml.bind.JAXBElement;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
@@ -81,6 +62,8 @@ import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -98,7 +81,7 @@ import uk.gov.nationalarchives.droid.core.interfaces.IdentificationResult;
 
 /**
  * La classe Sedav2Converter contient les informations et fonctions nécessaires à la conversion
- * d'une archive au format SEDA v2.1. Cette classe ne peut être instanciée qu'à travers les méthodes
+ * d'une archive au format SEDA v2.2. Cette classe ne peut être instanciée qu'à travers les méthodes
  * statiques convert(...). Note. La classe n'est pas thread safe et un nouvel objet est
  * systématiquement créé à chaque conversion.
  *
@@ -106,10 +89,11 @@ import uk.gov.nationalarchives.droid.core.interfaces.IdentificationResult;
  * @see ArchiveTransfer
  * @see SedaConfig
  */
-class Sedav21Converter {
+class Sedav23Converter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Sedav21Converter.class);
-  private static final String EXT_NS = "fr:gouv:culture:archivesdefrance:seda:v2.1";
+  private static final Logger LOGGER = LoggerFactory.getLogger(Sedav23Converter.class);
+  private static final String EXT_NS = "fr:gouv:culture:archivesdefrance:seda:v2.3";
+  public static final String XMLNS = "xmlns";
   private final List<Callable<Void>> tasks = new ArrayList<>();
   private final AtomicInteger idCounter = new AtomicInteger();
   private final ObjectFactory sedav2Factory = new ObjectFactory();
@@ -121,7 +105,7 @@ class Sedav21Converter {
   private final HashMap<ArchiveUnit, ArchiveUnitType> archiveMap = new HashMap<>();
   private final ArrayList<Runnable> postProcessors = new ArrayList<>();
 
-  private Sedav21Converter(FileSystem zipArchive, SedaConfig config) {
+  private Sedav23Converter(FileSystem zipArchive, SedaConfig config) {
     this.zipArchive = zipArchive;
     this.isStrict = config.strict();
     this.identifyFileFormat = config.identifyFileFormat();
@@ -134,67 +118,69 @@ class Sedav21Converter {
   }
 
   /**
-   * Convertit une archive en archive SEDA v2.1. Cette fonction permet de s'assurer que la structure
+   * Convertit une archive en archive SEDA v2.2. Cette fonction permet de s'assurer que la structure
    * de l'archive est valide.
    *
    * @param archiveTransfer l'archive à convertir
-   * @return l 'archive au format SEDA v2.1
+   * @return l 'archive au format SEDA v2.2
    * @throws ExecutionException the execution exception
    * @throws InterruptedException the interrupted exception
    */
-  public static ArchiveTransferType convert(ArchiveTransfer archiveTransfer)
+  public static ArchiveTransferType convertToArchiveTransferType(ArchiveTransfer archiveTransfer)
       throws ExecutionException, InterruptedException {
-    return convert(archiveTransfer, null, SedaConfig.DEFAULT);
+    return convertToArchiveTransferType(archiveTransfer, null, SedaConfig.DEFAULT);
   }
 
   /**
-   * Convertit une archive en archive SEDA v2.1. Cette fonction permet de s'assurer que la structure
-   * de l'archive est valide.
+   * Convertit une archive en transfert SEDA v2.2. Cette fonction permet de s'assurer que la
+   * structure de l'archive est valide.
    *
    * @param archiveTransfer l'archive à convertir
    * @param config la configuration utilisée lors de la conversion
-   * @return l 'archive au format SEDA v2.1
+   * @return l 'archive au format SEDA v2.2
    * @throws ExecutionException the execution exception
    * @throws InterruptedException the interrupted exception
    */
-  static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, SedaConfig config)
+  static ArchiveTransferType convertToArchiveTransferType(
+      ArchiveTransfer archiveTransfer, SedaConfig config)
       throws ExecutionException, InterruptedException {
-    return convert(archiveTransfer, null, config);
+    return convertToArchiveTransferType(archiveTransfer, null, config);
   }
 
   /**
-   * Convertit une archive en archive SEDA v2.1. L'archive convertie est créée dans le paquet zip
+   * Convertit une archive en transfert SEDA v2.2. L'archive convertie est créée dans le paquet zip
    * spécifié par le paramètre zipArchive.
    *
    * @param archiveTransfer l'archive à convertir
    * @param zipArchive le paquet zip de destination
-   * @return l 'archive au format SEDA v2.1
+   * @return l 'archive au format SEDA v2.2
    * @throws ExecutionException the execution exception
    * @throws InterruptedException the interrupted exception
    */
-  static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, FileSystem zipArchive)
+  static ArchiveTransferType convertToArchiveTransferType(
+      ArchiveTransfer archiveTransfer, FileSystem zipArchive)
       throws ExecutionException, InterruptedException {
-    return convert(archiveTransfer, zipArchive, SedaConfig.DEFAULT);
+    return convertToArchiveTransferType(archiveTransfer, zipArchive, SedaConfig.DEFAULT);
   }
 
   /**
-   * Convertit une archive en archive SEDA v2.1. L'archive convertie est créée dans le paquet zip
+   * Convertit une archive en transfert SEDA v2.2. L'archive convertie est créée dans le paquet zip
    * spécifié par le paramètre zipArchive.
    *
    * @param archiveTransfer l'archive à convertir
    * @param zipArchive le paquet zip de destination
    * @param config la configuration utilisée lors de la conversion
-   * @return l 'archive au format SEDA v2.1
+   * @return l 'archive au format SEDA v2.2
    * @throws ExecutionException the execution exception
    * @throws InterruptedException the interrupted exception
    */
-  static ArchiveTransferType convert(
+  static ArchiveTransferType convertToArchiveTransferType(
       ArchiveTransfer archiveTransfer, FileSystem zipArchive, SedaConfig config)
       throws ExecutionException, InterruptedException {
     Validate.notNull(archiveTransfer, SipUtils.NOT_NULL, "archiveTransfer");
     Validate.notNull(config, SipUtils.NOT_NULL, "config");
 
-    Sedav21Converter converter = new Sedav21Converter(zipArchive, config);
+    Sedav23Converter converter = new Sedav23Converter(zipArchive, config);
     ArchiveTransferType att = converter.toArchiveTransferType(archiveTransfer);
     executeAndWait(converter, config);
     return att;
@@ -219,14 +205,14 @@ class Sedav21Converter {
     Validate.notNull(archiveDeliveryRequestReply, SipUtils.NOT_NULL, "archiveTransfer");
     Validate.notNull(config, SipUtils.NOT_NULL, "config");
 
-    Sedav21Converter converter = new Sedav21Converter(zipArchive, config);
+    Sedav23Converter converter = new Sedav23Converter(zipArchive, config);
     ArchiveDeliveryRequestReplyType del =
         converter.toArchiveDeliveryRequestReplyType(archiveDeliveryRequestReply);
     executeAndWait(converter, config);
     return del;
   }
 
-  private static void executeAndWait(Sedav21Converter converter, SedaConfig config)
+  private static void executeAndWait(Sedav23Converter converter, SedaConfig config)
       throws ExecutionException, InterruptedException {
     if (!converter.tasks.isEmpty()) {
       ExecutorService executor =
@@ -243,57 +229,6 @@ class Sedav21Converter {
     }
   }
 
-  private ArchiveDeliveryRequestReplyType toArchiveDeliveryRequestReplyType(
-      ArchiveDeliveryRequestReply delivery) {
-    ArchiveDeliveryRequestReplyType del = sedav2Factory.createArchiveDeliveryRequestReplyType();
-
-    String mi =
-        SipUtils.getIfBlank(
-            delivery.getMessageIdentifier(),
-            RandomStringUtils.secure().nextAlphabetic(32).toLowerCase());
-    del.setMessageIdentifier(toIdentifierType(mi));
-
-    LocalDateTime gcd = SipUtils.getIfNull(delivery.getDate(), LocalDateTime.now());
-    del.setDate(SipUtils.toXmlDateTime(gcd));
-
-    CodeListVersions clv =
-        SipUtils.getIfNull(delivery.getCodeListVersions(), new CodeListVersions());
-    del.setCodeListVersions(toCodeListVersionsType(clv));
-
-    ifNotNull(delivery.getComment(), e -> del.getComment().add(toTextType(e)));
-    ifNotNull(delivery.getArchivalAgreement(), e -> del.setArchivalAgreement(toIdentifierType(e)));
-    ifNotNull(
-        delivery.getArchivalAgency(), e -> del.setArchivalAgency(toOrganizationWithIdType(e)));
-
-    ifNotNull(delivery.getReplyCode(), del::setReplyCode);
-    ifNotNull(
-        delivery.getMessageRequestIdentifier(),
-        e -> del.setMessageRequestIdentifier(toIdentifierType(e)));
-    ifNotNull(delivery.getUnitIdentifier(), e -> del.getUnitIdentifier().add(toIdentifierType(e)));
-    ifNotNull(delivery.getRequester(), e -> del.setRequester(toOrganizationWithIdType(e)));
-
-    DataObjectPackageType dopt = sedav2Factory.createDataObjectPackageType();
-
-    DescriptiveMetadataType dmt = sedav2Factory.createDescriptiveMetadataType();
-    delivery
-        .getArchiveUnits()
-        .forEach(unit -> dmt.getArchiveUnit().add(toArchiveUnitType(unit, dopt)));
-    dopt.setDescriptiveMetadata(dmt);
-
-    ManagementMetadataType mmt = sedav2Factory.createManagementMetadataType();
-    ifNotNull(
-        delivery.getOriginatingAgencyIdentifier(),
-        e -> mmt.setOriginatingAgencyIdentifier(toIdentifierType(e)));
-    dopt.setManagementMetadata(mmt);
-
-    del.setDataObjectPackage(dopt);
-
-    // 2nd pass
-    postProcessors.forEach(Runnable::run);
-
-    return del;
-  }
-
   private ArchiveTransferType toArchiveTransferType(ArchiveTransfer transfer) {
     ArchiveTransferType att = sedav2Factory.createArchiveTransferType();
 
@@ -301,7 +236,7 @@ class Sedav21Converter {
         SipUtils.getIfBlank(
             transfer.getMessageIdentifier(),
             RandomStringUtils.secure().nextAlphabetic(32).toLowerCase());
-    att.setMessageIdentifier(toIdentifierType(mi));
+    att.setMessageIdentifier(mi);
 
     LocalDateTime gcd = SipUtils.getIfNull(transfer.getDate(), LocalDateTime.now());
     att.setDate(SipUtils.toXmlDateTime(gcd));
@@ -350,6 +285,57 @@ class Sedav21Converter {
     postProcessors.forEach(Runnable::run);
 
     return att;
+  }
+
+  private ArchiveDeliveryRequestReplyType toArchiveDeliveryRequestReplyType(
+      ArchiveDeliveryRequestReply delivery) {
+    ArchiveDeliveryRequestReplyType del = sedav2Factory.createArchiveDeliveryRequestReplyType();
+
+    String mi =
+        SipUtils.getIfBlank(
+            delivery.getMessageIdentifier(),
+            RandomStringUtils.secure().nextAlphabetic(32).toLowerCase());
+    del.setMessageIdentifier(mi);
+
+    LocalDateTime gcd = SipUtils.getIfNull(delivery.getDate(), LocalDateTime.now());
+    del.setDate(SipUtils.toXmlDateTime(gcd));
+
+    CodeListVersions clv =
+        SipUtils.getIfNull(delivery.getCodeListVersions(), new CodeListVersions());
+    del.setCodeListVersions(toCodeListVersionsType(clv));
+
+    ifNotNull(delivery.getComment(), e -> del.getComment().add(toTextType(e)));
+    ifNotNull(delivery.getArchivalAgreement(), e -> del.setArchivalAgreement(toIdentifierType(e)));
+    ifNotNull(
+        delivery.getArchivalAgency(), e -> del.setArchivalAgency(toOrganizationWithIdType(e)));
+
+    ifNotNull(delivery.getReplyCode(), del::setReplyCode);
+    ifNotNull(
+        delivery.getMessageRequestIdentifier(),
+        e -> del.setMessageRequestIdentifier(toIdentifierType(e)));
+    ifNotNull(delivery.getUnitIdentifier(), e -> del.getUnitIdentifier().add(toIdentifierType(e)));
+    ifNotNull(delivery.getRequester(), e -> del.setRequester(toOrganizationWithIdType(e)));
+
+    DataObjectPackageType dopt = sedav2Factory.createDataObjectPackageType();
+
+    DescriptiveMetadataType dmt = sedav2Factory.createDescriptiveMetadataType();
+    delivery
+        .getArchiveUnits()
+        .forEach(unit -> dmt.getArchiveUnit().add(toArchiveUnitType(unit, dopt)));
+    dopt.setDescriptiveMetadata(dmt);
+
+    ManagementMetadataType mmt = sedav2Factory.createManagementMetadataType();
+    ifNotNull(
+        delivery.getOriginatingAgencyIdentifier(),
+        e -> mmt.setOriginatingAgencyIdentifier(toIdentifierType(e)));
+    dopt.setManagementMetadata(mmt);
+
+    del.setDataObjectPackage(dopt);
+
+    // 2nd pass
+    postProcessors.forEach(Runnable::run);
+
+    return del;
   }
 
   private void addPhysicalDataObjectType(
@@ -425,23 +411,16 @@ class Sedav21Converter {
 
     if (isStrict) {
       if (!unit.getDataObjectSystemIds().isEmpty()) {
-        throw new SipException("SEDA 2.1 does not support deprecated DataObjectSystemId.");
+        throw new SipException("SEDA 2.3 does not support deprecated DataObjectSystemId.");
       }
-
-      if (!unit.getAgents().isEmpty()) {
-        throw new SipException("SEDA 2.1 does not support Agent. Use SEDA 2.2 or more.");
-      }
-
-      if (unit.getSigningInformation() != null) {
-        throw new SipException(
-            "SEDA 2.1 does not support SigningInformation. Use SEDA 2.3 or more.");
+      if (!unit.getSignatures().isEmpty()) {
+        throw new SipException("SEDA 2.3 does not support deprecated Signature element.");
       }
     }
 
     ArchiveUnitType aut = sedav2Factory.createArchiveUnitType();
     // if no archive unit id set we use auto inc ids
-    String id = StringUtils.isNotEmpty(unit.getId()) ? unit.getId() : incAndGetCounter();
-    aut.setId(id);
+    aut.setId(StringUtils.isNotEmpty(unit.getId()) ? unit.getId() : incAndGetCounter());
     archiveMap.put(unit, aut);
 
     DataObjectGroupType dogt = sedav2Factory.createDataObjectGroupType();
@@ -471,7 +450,97 @@ class Sedav21Converter {
         unit.getArchiveUnitProfile(),
         e -> aut.setArchiveUnitProfile(toIdentifierType(unit.getArchiveUnitProfile())));
 
-    // Process Management
+    // Management
+    setManagement(unit, aut);
+
+    // Content
+    DescriptiveMetadataContentType dmct = sedav2Factory.createDescriptiveMetadataContentType();
+
+    // LevelGroup
+    ifNotNull(unit.getDescriptionLevel(), e -> dmct.setDescriptionLevel(toLevelType(e)));
+
+    // Title Group
+    unit.getTitles().forEach(t -> dmct.getTitle().add(toTextType(t)));
+
+    // Identifier Group
+    setIdentifierMetadata(unit, dmct);
+
+    // Description Group
+    unit.getDescriptions().forEach(d -> dmct.getDescription().add(toTextType(d)));
+
+    // CustodialHistory Group
+    setCustodialMetadata(unit, dmct);
+
+    // Type Group
+    ifNotNull(unit.getType(), e -> dmct.setType(toTextType(e)));
+    ifNotNull(unit.getDocumentType(), e -> dmct.setDocumentType(toTextType(e)));
+
+    // Language Group
+    unit.getLanguages().forEach(e -> dmct.getLanguage().add(e));
+    ifNotNull(unit.getDescriptionLanguage(), dmct::setDescriptionLanguage);
+
+    // Status Group
+    ifNotNull(unit.getStatus(), dmct::setStatus);
+
+    // Version Group
+    ifNotNull(unit.getVersion(), dmct::setVersion);
+
+    // Keyword Group
+    unit.getTags()
+        .forEach(
+            tag -> {
+              if (StringUtils.isBlank(tag.key())) {
+                dmct.getTag().add(tag.value());
+              } else {
+                dmct.getKeyword().add(toKeywordType(tag));
+              }
+            });
+
+    // Coverage Group
+
+    // Originating & Submission Agency Group
+    ifNotNull(
+        unit.getOriginatingAgency(), e -> dmct.setOriginatingAgency(toOrganizationWithIdType(e)));
+    ifNotNull(
+        unit.getSubmissionAgency(), e -> dmct.setSubmissionAgency(toOrganizationWithIdType(e)));
+
+    // Agents
+    setAgentMetadata(unit, dmct);
+
+    // Source Group
+    ifNotNull(unit.getSource(), dmct::setSource);
+
+    // Relation Group
+    ifNotNull(
+        unit.getRelation(), ror -> dmct.setRelatedObjectReference(toRelatedObjectReference(ror)));
+
+    // Date Group
+    setDataMetadata(unit, dmct);
+
+    // Event Group
+    // setEventMetadata(unit, dmct);
+
+    // The signature Group was deprecated
+    setSigningMetadata(unit, dmct);
+
+    // GPS Group
+    setGpsMetadata(unit, dmct);
+
+    // Any Metadata
+    setExtendedMetadata(unit, dmct);
+
+    aut.setContent(dmct);
+    unit.getArchiveUnits()
+        .forEach(
+            u ->
+                aut.getArchiveUnitOrDataObjectReferenceOrDataObjectGroup()
+                    .add(toArchiveUnitType(u, dopt)));
+
+    setArchiveUnitReferences(unit, aut);
+    return aut;
+  }
+
+  private void setManagement(ArchiveUnit unit, ArchiveUnitType aut) {
     ManagementType mt = sedav2Factory.createManagementType();
 
     if (unit.getUpdateOperation() != null) {
@@ -502,6 +571,16 @@ class Sedav21Converter {
       mt.setClassificationRule(toClassificationRuleType(unit.getClassificationRules()));
     }
 
+    if (unit.getHoldRules() != null) {
+      mt.setHoldRule(toHoldRuleType(unit.getHoldRules()));
+    }
+
+    if (!unit.getLogEvents().isEmpty()) {
+      LogBookType lbt = sedav2Factory.createLogBookType();
+      unit.getLogEvents().forEach(event -> lbt.getEvent().add(toEventType(event)));
+      mt.setLogBook(lbt);
+    }
+
     if (mt.getUpdateOperation() != null
         || mt.getAccessRule() != null
         || mt.getAppraisalRule() != null
@@ -510,74 +589,13 @@ class Sedav21Converter {
         || mt.getStorageRule() != null
         || mt.getClassificationRule() != null
         || mt.getLogBook() != null) {
-
       aut.setManagement(mt);
     }
+  }
 
-    // Content
-    DescriptiveMetadataContentType dmct = sedav2Factory.createDescriptiveMetadataContentType();
-
-    // LevelGroup
-    ifNotNull(unit.getDescriptionLevel(), e -> dmct.setDescriptionLevel(toLevelType(e)));
-
-    // Title Group
-    unit.getTitles().forEach(t -> dmct.getTitle().add(toTextType(t)));
-
-    // Identifier Group
-    unit.getFilePlanPositions().forEach(e -> dmct.getFilePlanPosition().add(e));
-    unit.getSystemIds().forEach(e -> dmct.getSystemId().add(e));
-    unit.getOriginatingSystemIds().forEach(e -> dmct.getOriginatingSystemId().add(e));
-    unit.getOriginatingAgencyArchiveUnitIdentifiers()
-        .forEach(e -> dmct.getOriginatingAgencyArchiveUnitIdentifier().add(e));
-    unit.getArchivalAgencyArchiveUnitIdentifiers()
-        .forEach(e -> dmct.getArchivalAgencyArchiveUnitIdentifier().add(e));
-    unit.getTransferringAgencyArchiveUnitIdentifiers()
-        .forEach(e -> dmct.getTransferringAgencyArchiveUnitIdentifier().add(e));
-
-    // Description Group
-    unit.getDescriptions().forEach(d -> dmct.getDescription().add(toTextType(d)));
-
-    // CustodialHistory Group
-    if (!unit.getCustodialItems().isEmpty()) {
-      CustodialHistoryType cht = sedav2Factory.createCustodialHistoryType();
-      unit.getCustodialItems()
-          .forEach(e -> cht.getCustodialHistoryItem().add(toCustodialHistoryItemType(e)));
-      dmct.setCustodialHistory(cht);
-    }
-
-    // Type Group
-    ifNotNull(unit.getType(), e -> dmct.setType(toTextType(e)));
-    ifNotNull(unit.getDocumentType(), e -> dmct.setDocumentType(toTextType(e)));
-
-    // Language Group
-    unit.getLanguages().forEach(e -> dmct.getLanguage().add(e));
-    ifNotNull(unit.getDescriptionLanguage(), dmct::setDescriptionLanguage);
-
-    // Status Group
-    ifNotNull(unit.getStatus(), dmct::setStatus);
-
-    // Version Group
-    ifNotNull(unit.getVersion(), dmct::setVersion);
-
-    // Keyword Group
-    unit.getTags()
-        .forEach(
-            tag -> {
-              if (StringUtils.isBlank(tag.key())) {
-                dmct.getTag().add(tag.value());
-              } else {
-                dmct.getKeyword().add(toKeywordType(tag));
-              }
-            });
-
-    // Coverage Group
-    // Originating & Submission Agency Group
-    ifNotNull(
-        unit.getOriginatingAgency(), e -> dmct.setOriginatingAgency(toOrganizationWithIdType(e)));
-    ifNotNull(
-        unit.getSubmissionAgency(), e -> dmct.setSubmissionAgency(toOrganizationWithIdType(e)));
-
+  private void setAgentMetadata(ArchiveUnit unit, DescriptiveMetadataContentType dmct) {
     // Authorized Agent & Writing  Group
+    unit.getAgents().forEach(agent -> dmct.getAgent().add(toAgentType(agent)));
     unit.getAuthorizedAgents().forEach(agent -> dmct.getAuthorizedAgent().add(toAgentType(agent)));
     unit.getWriters().forEach(writer -> dmct.getWriter().add(toAgentType(writer)));
 
@@ -587,15 +605,16 @@ class Sedav21Converter {
     unit.getTransmitters()
         .forEach(transmitter -> dmct.getTransmitter().add(toAgentType(transmitter)));
     unit.getSenders().forEach(sender -> dmct.getSender().add(toAgentType(sender)));
+  }
 
-    // Source Group
-    ifNotNull(unit.getSource(), dmct::setSource);
+  private void setEventMetadata(ArchiveUnit unit, DescriptiveMetadataContentType dmct) {
+    List<Event> events = unit.getLogEvents();
+    if (!events.isEmpty()) {
+      events.forEach(event -> dmct.getEvent().add(toEventType(event)));
+    }
+  }
 
-    // Relation Group
-    ifNotNull(
-        unit.getRelation(), ror -> dmct.setRelatedObjectReference(toRelatedObjectReference(ror)));
-
-    // Date Group
+  private static void setDataMetadata(ArchiveUnit unit, DescriptiveMetadataContentType dmct) {
     ifNotNull(unit.getCreatedDate(), d -> dmct.setCreatedDate(SipUtils.toXmlDate(d).toString()));
     ifNotNull(
         unit.getTransactedDate(), d -> dmct.setTransactedDate(SipUtils.toXmlDate(d).toString()));
@@ -606,19 +625,139 @@ class Sedav21Converter {
         unit.getRegisteredDate(), d -> dmct.setRegisteredDate(SipUtils.toXmlDate(d).toString()));
     ifNotNull(unit.getStartDate(), d -> dmct.setStartDate(SipUtils.toXmlDate(d).toString()));
     ifNotNull(unit.getEndDate(), d -> dmct.setEndDate(SipUtils.toXmlDate(d).toString()));
+  }
 
-    // Event Group
-    if (!unit.getLogEvents().isEmpty()) {
-      LogBookType lbt = sedav2Factory.createLogBookType();
-      unit.getLogEvents().forEach(event -> lbt.getEvent().add(toEventType(event)));
-      mt.setLogBook(lbt);
+  private void setIdentifierMetadata(ArchiveUnit unit, DescriptiveMetadataContentType dmct) {
+    unit.getFilePlanPositions().forEach(e -> dmct.getFilePlanPosition().add(e));
+    unit.getSystemIds().forEach(e -> dmct.getSystemId().add(e));
+    unit.getOriginatingSystemIds().forEach(e -> dmct.getOriginatingSystemId().add(e));
+    unit.getOriginatingAgencyArchiveUnitIdentifiers()
+        .forEach(e -> dmct.getOriginatingAgencyArchiveUnitIdentifier().add(e));
+    unit.getArchivalAgencyArchiveUnitIdentifiers()
+        .forEach(e -> dmct.getArchivalAgencyArchiveUnitIdentifier().add(e));
+    unit.getTransferringAgencyArchiveUnitIdentifiers()
+        .forEach(e -> dmct.getTransferringAgencyArchiveUnitIdentifier().add(e));
+  }
+
+  private void setCustodialMetadata(ArchiveUnit unit, DescriptiveMetadataContentType dmct) {
+    if (!unit.getCustodialItems().isEmpty()) {
+      CustodialHistoryType cht = sedav2Factory.createCustodialHistoryType();
+      unit.getCustodialItems()
+          .forEach(e -> cht.getCustodialHistoryItem().add(toCustodialHistoryItemType(e)));
+      dmct.setCustodialHistory(cht);
     }
+  }
 
-    // Signature Group
-    unit.getSignatures()
-        .forEach(signature -> dmct.getSignature().add(toSignatureType(signature, dogt)));
+  private void setSigningMetadata(ArchiveUnit unit, DescriptiveMetadataContentType dmct) {
 
-    // GPS Group
+    SigningInformation signing = unit.getSigningInformation();
+
+    if (signing != null) {
+
+      SigningInformationType sit = sedav2Factory.createSigningInformationType();
+
+      List<SigningRole> roles = signing.getSigningRoles();
+      roles.forEach(e -> sit.getSigningRole().add(SigningRoleType.valueOf(e.toString())));
+
+      List<DetachedSigningRole> droles = signing.getDetachedSigningRoles();
+      droles.forEach(
+          e -> sit.getDetachedSigningRole().add(DetachedSigningRoleType.valueOf(e.toString())));
+
+      signing
+          .getSignedDocumentReferenceIds()
+          .forEach(e -> sit.getSignedDocumentReferenceId().add(e));
+
+      signing
+          .getTimestampingInformations()
+          .forEach(
+              e -> {
+                TimestampingInformationType tit = sedav2Factory.createTimestampingInformationType();
+                ifNotNull(e.getTimeStamp(), f -> tit.setTimeStamp(toXmlDateTime(f)));
+                ifNotNull(
+                    e.getAdditionalTimestampingInformation(),
+                    tit::setAdditionalTimestampingInformation);
+                sit.getTimestampingInformation().add(tit);
+              });
+
+      if (!signing.getAdditionalProofInformation().isEmpty()) {
+        AdditionalProofType apt = sedav2Factory.createAdditionalProofType();
+        signing
+            .getAdditionalProofInformation()
+            .forEach(e -> apt.getAdditionalProofInformation().add(e));
+        sit.getAdditionalProof().add(apt);
+      }
+
+      signing
+          .getSignatureDescriptions()
+          .forEach(
+              e -> {
+                SignatureDescriptionType sdt = sedav2Factory.createSignatureDescriptionType();
+                ifNotNull(e.getSigningType(), sdt::setSigningType);
+                ifNotNull(e.getSigner(), f -> sdt.setSigner(toSignerType(f)));
+                ifNotNull(e.getValidator(), f -> sdt.setValidator(toValidatorType(f)));
+                sit.getSignatureDescription().add(sdt);
+              });
+
+      if (!sit.getAdditionalProof().isEmpty()
+          || !sit.getSigningRole().isEmpty()
+          || !sit.getSignedDocumentReferenceId().isEmpty()
+          || !sit.getDetachedSigningRole().isEmpty()
+          || !sit.getSignatureDescription().isEmpty()
+          || sit.getTimestampingInformation() != null) {
+        dmct.setSigningInformation(sit);
+      }
+    }
+  }
+
+  private SignerType toSignerType(Signer signer) {
+    SignerType st = sedav2Factory.createSignerType();
+    ifNotBlank(signer.getFirstName(), st::setFirstName);
+    ifNotBlank(signer.getBirthName(), st::setBirthName);
+    ifNotBlank(signer.getFullName(), st::setFullName);
+    ifNotBlank(signer.getGivenName(), st::setGivenName);
+    ifNotBlank(signer.getGender(), st::setGender);
+    ifNotBlank(signer.getCorpName(), st::setCorpname);
+    ifNotNull(signer.getBirthDate(), e -> st.setBirthDate(SipUtils.toXmlDate(e)));
+    ifNotNull(signer.getDeathDate(), e -> st.setDeathDate(SipUtils.toXmlDate(e)));
+    ifNotNull(signer.getBirthPlace(), e -> st.setBirthPlace(toPlaceType(e)));
+    ifNotNull(signer.getDeathPlace(), e -> st.setDeathPlace(toPlaceType(e)));
+    ifNotNull(signer.getSigningTime(), e -> st.setSigningTime(SipUtils.toXmlDateTime(e)));
+
+    st.getNationality().addAll(signer.getNationalities());
+    st.getIdentifier().addAll(signer.getIdentifiers());
+    signer.getFunctions().forEach(e -> st.getFunction().add(toTextType(e)));
+    signer.getActivities().forEach(e -> st.getActivity().add(toTextType(e)));
+    signer.getPositions().forEach(e -> st.getPosition().add(toTextType(e)));
+    signer.getRoles().forEach(e -> st.getRole().add(toTextType(e)));
+    signer.getMandates().forEach(e -> st.getMandate().add(toTextType(e)));
+    return st;
+  }
+
+  private ValidatorType toValidatorType(Validator validator) {
+    ValidatorType vt = sedav2Factory.createValidatorType();
+    ifNotBlank(validator.getFirstName(), vt::setFirstName);
+    ifNotBlank(validator.getBirthName(), vt::setBirthName);
+    ifNotBlank(validator.getFullName(), vt::setFullName);
+    ifNotBlank(validator.getGivenName(), vt::setGivenName);
+    ifNotBlank(validator.getGender(), vt::setGender);
+    ifNotBlank(validator.getCorpName(), vt::setCorpname);
+    ifNotNull(validator.getBirthDate(), e -> vt.setBirthDate(SipUtils.toXmlDate(e)));
+    ifNotNull(validator.getDeathDate(), e -> vt.setDeathDate(SipUtils.toXmlDate(e)));
+    ifNotNull(validator.getBirthPlace(), e -> vt.setBirthPlace(toPlaceType(e)));
+    ifNotNull(validator.getDeathPlace(), e -> vt.setDeathPlace(toPlaceType(e)));
+    ifNotNull(validator.getValidationTime(), e -> vt.setValidationTime(SipUtils.toXmlDateTime(e)));
+
+    vt.getNationality().addAll(validator.getNationalities());
+    vt.getIdentifier().addAll(validator.getIdentifiers());
+    validator.getFunctions().forEach(e -> vt.getFunction().add(toTextType(e)));
+    validator.getActivities().forEach(e -> vt.getActivity().add(toTextType(e)));
+    validator.getPositions().forEach(e -> vt.getPosition().add(toTextType(e)));
+    validator.getRoles().forEach(e -> vt.getRole().add(toTextType(e)));
+    validator.getMandates().forEach(e -> vt.getMandate().add(toTextType(e)));
+    return vt;
+  }
+
+  private void setGpsMetadata(ArchiveUnit unit, DescriptiveMetadataContentType dmct) {
     if (unit.getGpsVersionID() != null
         || unit.getGpsDateStamp() != null
         || unit.getGpsAltitude() != null
@@ -628,7 +767,7 @@ class Sedav21Converter {
         || unit.getGpsLongitude() != null
         || unit.getGpsLongitudeRef() != null) {
 
-      final GpsType gps = new GpsType();
+      GpsType gps = sedav2Factory.createGpsType();
       ifNotNull(unit.getGpsVersionID(), gps::setGpsVersionID);
       ifNotNull(unit.getGpsAltitude(), s -> gps.setGpsAltitude(new BigInteger(s)));
       ifNotNull(unit.getGpsAltitudeRef(), gps::setGpsAltitudeRef);
@@ -639,8 +778,9 @@ class Sedav21Converter {
       ifNotNull(unit.getGpsLongitudeRef(), gps::setGpsLongitudeRef);
       dmct.setGps(gps);
     }
+  }
 
-    // Any Metadata
+  private void setExtendedMetadata(ArchiveUnit unit, DescriptiveMetadataContentType dmct) {
     for (Object e : unit.getElements()) {
       if (e instanceof String str) {
         dmct.getAny().add(toNode(str));
@@ -648,16 +788,6 @@ class Sedav21Converter {
         dmct.getAny().add(toNode(elt));
       }
     }
-
-    aut.setContent(dmct);
-    unit.getArchiveUnits()
-        .forEach(
-            u ->
-                aut.getArchiveUnitOrDataObjectReferenceOrDataObjectGroup()
-                    .add(toArchiveUnitType(u, dopt)));
-
-    setArchiveUnitReferences(unit, aut);
-    return aut;
   }
 
   private void setArchiveUnitReferences(ArchiveUnit unit, ArchiveUnitType aut) {
@@ -689,7 +819,7 @@ class Sedav21Converter {
       Document doc = docBuilder.newDocument();
       org.w3c.dom.Element element =
           docBuilder.parse(new InputSource(new StringReader(fragment))).getDocumentElement();
-      element.setAttribute("xmlns", EXT_NS);
+      element.setAttribute(XMLNS, EXT_NS);
       return doc.importNode(element, true);
     } catch (SAXException | IOException ex) {
       throw new SipException("Unable to create Node from document builder", ex);
@@ -729,7 +859,7 @@ class Sedav21Converter {
   }
 
   private DataObjectOrArchiveUnitReferenceType toDataObjectOrArchiveUnitReferenceType(
-      RelationRef relationRef) {
+      RelationRef<?> relationRef) {
     DataObjectOrArchiveUnitReferenceType dooaurt =
         sedav2Factory.createDataObjectOrArchiveUnitReferenceType();
 
@@ -865,6 +995,55 @@ class Sedav21Converter {
     return art;
   }
 
+  // Note the HoldRuleGroup was "unwrapped" in the HoldRuleType in the xsd
+  private HoldRuleType toHoldRuleType(HoldRules holdRule) {
+    HoldRuleType art = sedav2Factory.createHoldRuleType();
+
+    for (HoldRule rule : holdRule.getRules()) {
+      List<JAXBElement<?>> elts = art.getRuleAndStartDateAndHoldEndDate();
+
+      QName qrule = new QName(EXT_NS, "Rule");
+      String name = rule.getName();
+      elts.add(new JAXBElement<>(qrule, String.class, name));
+      if (rule.getStartDate() != null) {
+        QName qstartdate = new QName(EXT_NS, "StartDate");
+        XMLGregorianCalendar startDate = SipUtils.toXmlDate(rule.getStartDate());
+        elts.add(new JAXBElement<>(qstartdate, XMLGregorianCalendar.class, startDate));
+      }
+      if (rule.getHoldEndDate() != null) {
+        QName qholdenddate = new QName(EXT_NS, "HoldEndDate");
+        XMLGregorianCalendar startDate = SipUtils.toXmlDate(rule.getHoldEndDate());
+        elts.add(new JAXBElement<>(qholdenddate, XMLGregorianCalendar.class, startDate));
+      }
+      if (rule.getHoldOwner() != null) {
+        QName qowner = new QName(EXT_NS, "HoldOwner");
+        String owner = rule.getHoldOwner();
+        elts.add(new JAXBElement<>(qowner, String.class, owner));
+      }
+      if (rule.getHoldReassessingDate() != null) {
+        QName qreassessingDate = new QName(EXT_NS, "HoldReassessingDate");
+        XMLGregorianCalendar reassessingDate = SipUtils.toXmlDate(rule.getHoldReassessingDate());
+        elts.add(new JAXBElement<>(qreassessingDate, XMLGregorianCalendar.class, reassessingDate));
+      }
+      if (rule.getHoldReason() != null) {
+        QName qreason = new QName(EXT_NS, "HoldReason");
+        String reason = rule.getHoldOwner();
+        elts.add(new JAXBElement<>(qreason, String.class, reason));
+      }
+      if (rule.getPreventRearrangement() != null) {
+        QName qp = new QName(EXT_NS, "PreventRearrangement");
+        Boolean p = rule.getPreventRearrangement();
+        elts.add(new JAXBElement<>(qp, Boolean.class, p));
+      }
+    }
+
+    // xsd:choice : you cannot set PreventInheritance and PreventRuleNames
+    ifNotNull(holdRule.isPreventInheritance(), art::setPreventInheritance);
+    holdRule.getPreventRuleNames().forEach(e -> art.getRefNonRuleId().add(toRuleIdType(e)));
+
+    return art;
+  }
+
   private DisseminationRuleType toDisseminationRuleType(DisseminationRules disseminationRule) {
     DisseminationRuleType art = sedav2Factory.createDisseminationRuleType();
 
@@ -921,7 +1100,7 @@ class Sedav21Converter {
 
     if (isStrict) {
       if (appraisalRule.getDuration() != null) {
-        throw new SipException("SEDA 2.1 does not support Duration");
+        throw new SipException("SEDA 2.3 does not support Duration");
       }
     }
     return art;
@@ -995,74 +1174,6 @@ class Sedav21Converter {
     return at;
   }
 
-  private SignatureType toSignatureType(Signature signature, DataObjectGroupType dogt) {
-    ReferencedObjectType rot = sedav2Factory.createReferencedObjectType();
-    if (dogt.getBinaryDataObjectOrPhysicalDataObject().isEmpty()) {
-      throw new SipException("The signed referenced object does not exist in this archive");
-    }
-    rot.setSignedObjectId(dogt);
-
-    MessageDigestBinaryObjectType mdbot = sedav2Factory.createMessageDigestBinaryObjectType();
-    mdbot.setAlgorithm(signature.getDigestAlgorithm());
-    ifNotNull(signature.getDigestValue(), mdbot::setValue);
-    rot.setSignedObjectDigest(mdbot);
-
-    SignatureType st = sedav2Factory.createSignatureType();
-    signature.getSigners().forEach(e -> st.getSigner().add(toSignerType(e)));
-    ifNotNull(signature.getValidator(), e -> st.setValidator(toValidatorType(e)));
-    st.setReferencedObject(rot);
-
-    return st;
-  }
-
-  private SignerType toSignerType(Signer signer) {
-    SignerType st = sedav2Factory.createSignerType();
-    ifNotBlank(signer.getFirstName(), st::setFirstName);
-    ifNotBlank(signer.getBirthName(), st::setBirthName);
-    ifNotBlank(signer.getFullName(), st::setFullName);
-    ifNotBlank(signer.getGivenName(), st::setGivenName);
-    ifNotBlank(signer.getGender(), st::setGender);
-    ifNotBlank(signer.getCorpName(), st::setCorpname);
-    ifNotNull(signer.getBirthDate(), e -> st.setBirthDate(SipUtils.toXmlDate(e)));
-    ifNotNull(signer.getDeathDate(), e -> st.setDeathDate(SipUtils.toXmlDate(e)));
-    ifNotNull(signer.getBirthPlace(), e -> st.setBirthPlace(toPlaceType(e)));
-    ifNotNull(signer.getDeathPlace(), e -> st.setDeathPlace(toPlaceType(e)));
-    ifNotNull(signer.getSigningTime(), e -> st.setSigningTime(SipUtils.toXmlDateTime(e)));
-
-    st.getNationality().addAll(signer.getNationalities());
-    st.getIdentifier().addAll(signer.getIdentifiers());
-    signer.getFunctions().forEach(e -> st.getFunction().add(toTextType(e)));
-    signer.getActivities().forEach(e -> st.getActivity().add(toTextType(e)));
-    signer.getPositions().forEach(e -> st.getPosition().add(toTextType(e)));
-    signer.getRoles().forEach(e -> st.getRole().add(toTextType(e)));
-    signer.getMandates().forEach(e -> st.getMandate().add(toTextType(e)));
-    return st;
-  }
-
-  private ValidatorType toValidatorType(Validator validator) {
-    ValidatorType vt = sedav2Factory.createValidatorType();
-    ifNotBlank(validator.getFirstName(), vt::setFirstName);
-    ifNotBlank(validator.getBirthName(), vt::setBirthName);
-    ifNotBlank(validator.getFullName(), vt::setFullName);
-    ifNotBlank(validator.getGivenName(), vt::setGivenName);
-    ifNotBlank(validator.getGender(), vt::setGender);
-    ifNotBlank(validator.getCorpName(), vt::setCorpname);
-    ifNotNull(validator.getBirthDate(), e -> vt.setBirthDate(SipUtils.toXmlDate(e)));
-    ifNotNull(validator.getDeathDate(), e -> vt.setDeathDate(SipUtils.toXmlDate(e)));
-    ifNotNull(validator.getBirthPlace(), e -> vt.setBirthPlace(toPlaceType(e)));
-    ifNotNull(validator.getDeathPlace(), e -> vt.setDeathPlace(toPlaceType(e)));
-    ifNotNull(validator.getValidationTime(), e -> vt.setValidationTime(SipUtils.toXmlDateTime(e)));
-
-    vt.getNationality().addAll(validator.getNationalities());
-    vt.getIdentifier().addAll(validator.getIdentifiers());
-    validator.getFunctions().forEach(e -> vt.getFunction().add(toTextType(e)));
-    validator.getActivities().forEach(e -> vt.getActivity().add(toTextType(e)));
-    validator.getPositions().forEach(e -> vt.getPosition().add(toTextType(e)));
-    validator.getRoles().forEach(e -> vt.getRole().add(toTextType(e)));
-    validator.getMandates().forEach(e -> vt.getMandate().add(toTextType(e)));
-    return vt;
-  }
-
   private BirthOrDeathPlaceType toPlaceType(Place place) {
     BirthOrDeathPlaceType bodpt = sedav2Factory.createBirthOrDeathPlaceType();
     ifNotBlank(place.getAddress(), bodpt::setAddress);
@@ -1080,10 +1191,10 @@ class Sedav21Converter {
 
     if (isStrict) {
       if (code.getSignatureStatusCodeListVersion() != null) {
-        throw new SipException("SEDA 2.1 does not support SignatureStatusCodeListVersion");
+        throw new SipException("SEDA 2.3 does not support SignatureStatusCodeListVersion");
       }
       if (code.getFileEncodingCodeListVersion() != null) {
-        throw new SipException("SEDA 2.1 does not support FileEncodingCodeListVersion");
+        throw new SipException("SEDA 2.3 does not support FileEncodingCodeListVersion");
       }
     }
 
@@ -1136,7 +1247,7 @@ class Sedav21Converter {
     try {
       return LevelType.fromValue(levelType);
     } catch (IllegalArgumentException iae) {
-      throw new SipException("Seda 2.1 does not support the level type: " + levelType, iae);
+      throw new SipException("SEDA 2.3 does not support the level type: " + levelType, iae);
     }
   }
 
@@ -1145,7 +1256,7 @@ class Sedav21Converter {
       return LegalStatusType.fromValue(legalStatusType);
     } catch (IllegalArgumentException iae) {
       throw new SipException(
-          "Seda 2.1 does not support the legal status : " + legalStatusType, iae);
+          "SEDA 2.3 does not support the legal status : " + legalStatusType, iae);
     }
   }
 
