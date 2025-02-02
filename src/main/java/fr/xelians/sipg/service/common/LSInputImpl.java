@@ -19,7 +19,7 @@
 package fr.xelians.sipg.service.common;
 
 import fr.xelians.sipg.service.fntcv4.Fntcv4Resolver;
-import fr.xelians.sipg.service.sedav2.Sedav2Resolver;
+import fr.xelians.sipg.service.seda.SedaResolver;
 import java.io.InputStream;
 import java.io.Reader;
 import org.w3c.dom.ls.LSInput;
@@ -31,7 +31,7 @@ import org.w3c.dom.ls.LSInput;
  *
  * @author Emmanuel Deviller
  * @see Fntcv4Resolver
- * @see Sedav2Resolver
+ * @see SedaResolver
  */
 public class LSInputImpl implements LSInput {
 

@@ -75,6 +75,9 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   /** La liste de mots-clés de description. */
   protected final List<Tag> tags = new ArrayList<>();
 
+  /** La liste des agents. */
+  protected final List<Agent> agents = new ArrayList<>();
+
   /** La liste des titulaires des droits de propriété intellectuelle. */
   protected final List<Agent> authorizedAgents = new ArrayList<>();
 
@@ -320,6 +323,9 @@ public class ArchiveUnit implements ArchiveUnitContainer {
 
   /** La date de fermeture / Date de fin. */
   protected LocalDate endDate;
+
+  /** Les informations relatives à la signature. */
+  protected SigningInformation signingInformation;
 
   /** Instancie la classe. */
   public ArchiveUnit() {
@@ -1994,6 +2000,36 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   }
 
   /**
+   * Ajoute un agent à la liste des agents.
+   *
+   * @param agent l'agent à ajouter
+   */
+  public void addAgent(Agent agent) {
+    Validate.notNull(agent, SipUtils.NOT_NULL, "agent");
+    agents.add(agent);
+  }
+
+  /**
+   * Supprime un agent de la liste des agents.
+   *
+   * @param agent l'agent à supprimer
+   * @return true si la suppression a été réalisée avec succès, sinon false
+   */
+  public boolean removeAgent(Agent agent) {
+    Validate.notNull(agent, SipUtils.NOT_NULL, "agent");
+    return agents.remove(agent);
+  }
+
+  /**
+   * Fournit la liste agents.
+   *
+   * @return la liste des agents
+   */
+  public List<Agent> getAgents() {
+    return new ArrayList<>(agents);
+  }
+
+  /**
    * Ajoute un titulaire à la liste des titulaires des droits de propriété intellectuelle.
    *
    * @param authorizedAgent le titulaire à ajouter
@@ -2613,6 +2649,24 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    */
   public List<Tag> getTags() {
     return new ArrayList<>(tags);
+  }
+
+  /**
+   * Fournit les informations relatives à la signature.
+   *
+   * @return les informations relatives à la signature
+   */
+  public SigningInformation getSigningInformation() {
+    return signingInformation;
+  }
+
+  /**
+   * Spécifie les informations relatives à la signature.
+   *
+   * @param signingInformation les informations relatives à la signature
+   */
+  public void setSigningInformation(SigningInformation signingInformation) {
+    this.signingInformation = signingInformation;
   }
 
   /**

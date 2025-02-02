@@ -1,0 +1,716 @@
+<?xml version='1.0' encoding='utf-8' standalone='no'?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<rng:grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+             xmlns:rng="http://relaxng.org/ns/structure/1.0"
+             xmlns:seda="fr:gouv:culture:archivesdefrance:seda:v2.3" xmlns:xlink="http://www.w3.org/1999/xlink"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="fr:gouv:culture:archivesdefrance:seda:v2.3"
+             datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+             ns="fr:gouv:culture:archivesdefrance:seda:v2.3" seda:warnings="">
+    <rng:start>
+        <rng:element name="ArchiveTransfer">
+            <xsd:annotation>
+                <xsd:documentation>Profil minimal d'entrée dans VITAM</xsd:documentation>
+            </xsd:annotation>
+            <rng:zeroOrMore>
+                <rng:attribute>
+                    <rng:anyName>
+                        <rng:except>
+                            <rng:nsName/>
+                            <rng:nsName ns=""/>
+                        </rng:except>
+                    </rng:anyName>
+                </rng:attribute>
+            </rng:zeroOrMore>
+            <rng:optional>
+                <rng:attribute name="id">
+                    <rng:data type="ID"/>
+                </rng:attribute>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="Comment">
+                    <rng:data type="string"/>
+                </rng:element>
+            </rng:optional>
+            <rng:element name="Date">
+                <rng:data type="dateTime"/>
+            </rng:element>
+            <rng:element name="MessageIdentifier">
+                <rng:data type="token"/>
+            </rng:element>
+            <rng:element name="ArchivalAgreement">
+                <rng:data type="string"/>
+            </rng:element>
+            <rng:element name="CodeListVersions">
+                <rng:optional>
+                    <rng:attribute name="id">
+                        <rng:data type="ID"/>
+                    </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="ReplyCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="MessageDigestAlgorithmCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="MimeTypeCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="EncodingCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="FileFormatCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="CompressionAlgorithmCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="DataObjectVersionCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="StorageRuleCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="AppraisalRuleCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="AccessRuleCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="DisseminationRuleCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="ReuseRuleCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="ClassificationRuleCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="AuthorizationReasonCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="RelationshipCodeListVersion">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:optional>
+            </rng:element>
+            <rng:optional>
+                <rng:element name="DataObjectPackage">
+                    <rng:optional>
+                        <rng:attribute name="id">
+                            <rng:data type="ID"/>
+                        </rng:attribute>
+                    </rng:optional>
+                    <rng:zeroOrMore>
+                        <rng:element name="DataObjectGroup">
+                            <rng:attribute name="id">
+                                <rng:data type="ID"/>
+                            </rng:attribute>
+                            <rng:oneOrMore>
+                                <rng:element name="BinaryDataObject">
+                                    <xsd:annotation>
+                                        <xsd:documentation>Document (binaire)</xsd:documentation>
+                                    </xsd:annotation>
+                                    <rng:attribute name="id">
+                                        <rng:data type="ID"/>
+                                    </rng:attribute>
+                                    <rng:element name="DataObjectVersion">
+                                        <rng:choice>
+                                            <rng:value>BinaryMaster_1</rng:value>
+                                        </rng:choice>
+                                    </rng:element>
+                                    <rng:choice>
+                                        <rng:element name="Uri">
+                                            <rng:data type="anyURI"/>
+                                        </rng:element>
+                                    </rng:choice>
+                                    <rng:element name="MessageDigest">
+                                        <rng:choice>
+                                            <rng:data type="base64Binary"/>
+                                            <rng:data type="hexBinary"/>
+                                        </rng:choice>
+                                        <rng:attribute name="algorithm">
+                                            <rng:value type="token">SHA-512</rng:value>
+                                        </rng:attribute>
+                                    </rng:element>
+                                    <rng:element name="Size">
+                                        <rng:data type="positiveInteger"/>
+                                    </rng:element>
+                                    <rng:element name="FormatIdentification">
+                                        <rng:optional>
+                                            <rng:element name="FormatLitteral">
+                                                <rng:data type="string"/>
+                                            </rng:element>
+                                        </rng:optional>
+                                        <rng:optional>
+                                            <rng:element name="MimeType">
+                                                <rng:data type="string"/>
+                                            </rng:element>
+                                        </rng:optional>
+                                        <rng:optional>
+                                            <rng:element name="FormatId">
+                                                <rng:data type="string"/>
+                                            </rng:element>
+                                        </rng:optional>
+                                    </rng:element>
+                                    <rng:optional>
+                                        <rng:element name="FileInfo">
+                                            <rng:element name="Filename">
+                                                <rng:data type="string"/>
+                                            </rng:element>
+                                            <rng:optional>
+                                                <rng:element name="LastModified">
+                                                    <rng:data type="string"/>
+                                                </rng:element>
+                                            </rng:optional>
+                                        </rng:element>
+                                    </rng:optional>
+                                </rng:element>
+                            </rng:oneOrMore>
+                        </rng:element>
+                    </rng:zeroOrMore>
+                    <rng:element name="DescriptiveMetadata">
+                        <rng:element name="ArchiveUnit">
+                            <rng:attribute name="id">
+                                <rng:data type="ID"/>
+                            </rng:attribute>
+                            <rng:optional>
+                                <rng:ref name="ManagementType"/>
+                            </rng:optional>
+                            <rng:ref name="ContentType"/>
+                            <!-- Récursivité -->
+                            <rng:zeroOrMore>
+                                <rng:element name="ArchiveUnit">
+                                    <rng:attribute name="id">
+                                        <rng:data type="ID"/>
+                                    </rng:attribute>
+                                    <rng:optional>
+                                        <rng:ref name="ManagementType"/>
+                                    </rng:optional>
+                                    <rng:ref name="ContentType"/>
+                                    <!-- Récursivité -->
+                                    <rng:zeroOrMore>
+                                        <rng:element name="ArchiveUnit">
+                                            <rng:attribute name="id">
+                                                <rng:data type="ID"/>
+                                            </rng:attribute>
+                                            <rng:optional>
+                                                <rng:ref name="ManagementType"/>
+                                            </rng:optional>
+                                            <rng:ref name="ContentType"/>
+                                            <!-- Récursivité -->
+                                            <rng:zeroOrMore>
+                                                <rng:element name="ArchiveUnit">
+                                                    <rng:attribute name="id">
+                                                        <rng:data type="ID"/>
+                                                    </rng:attribute>
+                                                    <rng:optional>
+                                                        <rng:ref name="ManagementType"/>
+                                                    </rng:optional>
+                                                    <rng:ref name="ContentType"/>
+                                                    <!-- Récursivité -->
+                                                    <rng:zeroOrMore>
+                                                        <rng:element name="ArchiveUnit">
+                                                            <rng:attribute name="id">
+                                                                <rng:data type="ID"/>
+                                                            </rng:attribute>
+                                                            <rng:optional>
+                                                                <rng:ref name="ManagementType"/>
+                                                            </rng:optional>
+                                                            <rng:ref name="ContentType"/>
+                                                            <!-- Récursivité -->
+                                                            <rng:zeroOrMore>
+                                                                <rng:element name="ArchiveUnit">
+                                                                    <rng:attribute name="id">
+                                                                        <rng:data type="ID"/>
+                                                                    </rng:attribute>
+                                                                    <rng:optional>
+                                                                        <rng:ref name="ManagementType"/>
+                                                                    </rng:optional>
+                                                                    <rng:ref name="ContentType"/>
+                                                                    <!-- Récursivité -->
+                                                                    <rng:zeroOrMore>
+                                                                        <rng:element name="ArchiveUnit">
+                                                                            <rng:attribute name="id">
+                                                                                <rng:data type="ID"/>
+                                                                            </rng:attribute>
+                                                                            <rng:optional>
+                                                                                <rng:ref name="ManagementType"/>
+                                                                            </rng:optional>
+                                                                            <rng:ref name="ContentType"/>
+                                                                            <!-- Récursivité -->
+                                                                            <rng:zeroOrMore>
+                                                                                <rng:element name="ArchiveUnit">
+                                                                                    <rng:attribute name="id">
+                                                                                        <rng:data type="ID"/>
+                                                                                    </rng:attribute>
+                                                                                    <rng:optional>
+                                                                                        <rng:ref name="ManagementType"/>
+                                                                                    </rng:optional>
+                                                                                    <rng:ref name="ContentType"/>
+                                                                                    <!-- Récursivité -->
+                                                                                    <rng:zeroOrMore>
+                                                                                        <rng:element name="ArchiveUnit">
+                                                                                            <rng:attribute name="id">
+                                                                                                <rng:data type="ID"/>
+                                                                                            </rng:attribute>
+                                                                                            <rng:optional>
+                                                                                                <rng:ref name="ManagementType"/>
+                                                                                            </rng:optional>
+                                                                                            <rng:ref name="ContentType"/>
+                                                                                            <!-- Récursivité -->
+                                                                                            <rng:zeroOrMore>
+                                                                                                <rng:element name="ArchiveUnit">
+                                                                                                    <rng:attribute name="id">
+                                                                                                        <rng:data type="ID"/>
+                                                                                                    </rng:attribute>
+                                                                                                    <rng:optional>
+                                                                                                        <rng:ref name="ManagementType"/>
+                                                                                                    </rng:optional>
+                                                                                                    <rng:ref name="ContentType"/>
+                                                                                                    <!-- Récursivité -->
+                                                                                                    <rng:zeroOrMore>
+                                                                                                        <rng:element name="ArchiveUnit">
+                                                                                                            <rng:attribute name="id">
+                                                                                                                <rng:data type="ID"/>
+                                                                                                            </rng:attribute>
+                                                                                                            <rng:optional>
+                                                                                                                <rng:ref name="ManagementType"/>
+                                                                                                            </rng:optional>
+                                                                                                            <rng:ref name="ContentType"/>
+                                                                                                            <!-- Récursivité -->
+                                                                                                            <rng:zeroOrMore>
+                                                                                                                <rng:element name="ArchiveUnit">
+                                                                                                                    <rng:attribute name="id">
+                                                                                                                        <rng:data type="ID"/>
+                                                                                                                    </rng:attribute>
+                                                                                                                    <rng:optional>
+                                                                                                                        <rng:ref name="ManagementType"/>
+                                                                                                                    </rng:optional>
+                                                                                                                    <rng:ref name="ContentType"/>
+                                                                                                                    <!-- Récursivité -->
+                                                                                                                    <rng:zeroOrMore>
+                                                                                                                        <rng:element name="ArchiveUnit">
+                                                                                                                            <rng:attribute name="id">
+                                                                                                                                <rng:data type="ID"/>
+                                                                                                                            </rng:attribute>
+                                                                                                                            <rng:optional>
+                                                                                                                                <rng:ref name="ManagementType"/>
+                                                                                                                            </rng:optional>
+                                                                                                                            <rng:ref name="ContentType"/>
+                                                                                                                        </rng:element>
+                                                                                                                    </rng:zeroOrMore>
+                                                                                                                </rng:element>
+                                                                                                            </rng:zeroOrMore>
+                                                                                                        </rng:element>
+                                                                                                    </rng:zeroOrMore>
+                                                                                                </rng:element>
+                                                                                            </rng:zeroOrMore>
+                                                                                        </rng:element>
+                                                                                    </rng:zeroOrMore>
+                                                                                </rng:element>
+                                                                            </rng:zeroOrMore>
+                                                                        </rng:element>
+                                                                    </rng:zeroOrMore>
+                                                                </rng:element>
+                                                            </rng:zeroOrMore>
+                                                        </rng:element>
+                                                    </rng:zeroOrMore>
+                                                </rng:element>
+                                            </rng:zeroOrMore>
+                                        </rng:element>
+                                    </rng:zeroOrMore>
+                                </rng:element>
+                            </rng:zeroOrMore>
+                        </rng:element>
+                    </rng:element>
+                    <rng:element name="ManagementMetadata">
+                        <rng:optional>
+                            <rng:attribute name="id">
+                                <rng:data type="ID"/>
+                            </rng:attribute>
+                        </rng:optional>
+                        <rng:optional>
+                            <rng:element name="ArchivalProfile">
+                                <rng:data type="string"/>
+                            </rng:element>
+                        </rng:optional>
+                        <rng:optional>
+                            <rng:element name="ServiceLevel">
+                                <rng:data type="string"/>
+                            </rng:element>
+                        </rng:optional>
+                        <rng:optional>
+                            <rng:element name="LegalStatus">
+                                <rng:choice>
+                                    <rng:value>Public Archive</rng:value>
+                                    <rng:value>Private Archive</rng:value>
+                                    <rng:value>Public and Private Archive</rng:value>
+                                </rng:choice>
+                            </rng:element>
+                        </rng:optional>
+                        <rng:element name="OriginatingAgencyIdentifier">
+                            <rng:data type="string"/>
+                        </rng:element>
+                        <rng:element name="SubmissionAgencyIdentifier">
+                            <rng:data type="string"/>
+                        </rng:element>
+                        <rng:optional>
+                            <rng:element name="AppraisalRule">
+                                <rng:optional>
+                                    <rng:element name="Rule">
+                                        <rng:data type="string"/>
+                                    </rng:element>
+                                </rng:optional>
+                                <rng:optional>
+                                    <rng:element name="StartDate">
+                                        <rng:data type="date"/>
+                                    </rng:element>
+                                </rng:optional>
+                                <rng:element name="FinalAction">
+                                    <rng:choice>
+                                        <rng:value>Keep</rng:value>
+                                        <rng:value>Destroy</rng:value>
+                                    </rng:choice>
+                                </rng:element>
+                            </rng:element>
+                        </rng:optional>
+                        <rng:optional>
+                            <rng:element name="AccessRule">
+                                <rng:optional>
+                                    <rng:element name="Rule">
+                                        <rng:data type="string"/>
+                                    </rng:element>
+                                </rng:optional>
+                                <rng:optional>
+                                    <rng:element name="StartDate">
+                                        <rng:data type="date"/>
+                                    </rng:element>
+                                </rng:optional>
+                            </rng:element>
+                        </rng:optional>
+                    </rng:element>
+                </rng:element>
+            </rng:optional>
+            <rng:element name="ArchivalAgency">
+                <rng:element name="Identifier">
+                    <rng:text/>
+                </rng:element>
+            </rng:element>
+            <rng:element name="TransferringAgency">
+                <rng:element name="Identifier">
+                    <rng:text/>
+                </rng:element>
+            </rng:element>
+        </rng:element>
+    </rng:start>
+    <rng:define name="ContentType">
+        <rng:element name="Content">
+            <rng:optional>
+                <rng:element name="DescriptionLevel">
+                    <rng:choice>
+                        <rng:value>Class</rng:value>
+                        <rng:value>Collection</rng:value>
+                        <rng:value>Series</rng:value>
+                        <rng:value>SubSeries</rng:value>
+                        <rng:value>File</rng:value>
+                        <rng:value>RecordGrp</rng:value>
+                        <rng:value>Item</rng:value>
+                        <rng:value>OtherLevel</rng:value>
+                    </rng:choice>
+                </rng:element>
+            </rng:optional>
+            <rng:element name="Title">
+                <rng:data type="string"/>
+            </rng:element>
+            <rng:optional>
+                <rng:element name="FilePlanPosition">
+                    <rng:data type="string"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="ArchivalAgencyArchiveUnitIdentifier">
+                    <rng:data type="token"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="OriginatingAgencyArchiveUnitIdentifier">
+                    <rng:data type="token"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="TransferringAgencyArchiveUnitIdentifier">
+                    <rng:data type="token"/>
+                </rng:element>
+            </rng:optional>
+            <rng:zeroOrMore>
+                <rng:element name="Description">
+                    <rng:data type="string"/>
+                </rng:element>
+            </rng:zeroOrMore>
+            <rng:optional>
+                <rng:element name="CustodialHistory">
+                    <rng:oneOrMore>
+                        <rng:element name="CustodialHistoryItem">
+                            <rng:data type="string"/>
+                        </rng:element>
+                    </rng:oneOrMore>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="Type">
+                    <rng:data type="string"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="DocumentType">
+                    <rng:data type="string"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="Language">
+                    <rng:choice>
+                        <rng:value>fr-FR</rng:value>
+                        <rng:value>es-ES</rng:value>
+                        <rng:value>en-US</rng:value>
+                    </rng:choice>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="DescriptionLanguage">
+                    <rng:choice>
+                        <rng:value>fr-FR</rng:value>
+                        <rng:value>es-ES</rng:value>
+                        <rng:value>en-US</rng:value>
+                    </rng:choice>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="Status">
+                    <rng:data type="string"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="Version">
+                    <rng:data type="string"/>
+                </rng:element>
+            </rng:optional>
+            <rng:zeroOrMore>
+                <rng:element name="Tag">
+                    <rng:data type="string"/>
+                </rng:element>
+            </rng:zeroOrMore>
+            <rng:optional>
+                <rng:element name="OriginatingAgency">
+                    <rng:element name="Identifier">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="SubmissionAgency">
+                    <rng:element name="Identifier">
+                        <rng:data type="string"/>
+                    </rng:element>
+                </rng:element>
+            </rng:optional>
+            <rng:zeroOrMore>
+                <rng:element name="AuthorizedAgent">
+                    <rng:ref name="AgentType"/>
+                </rng:element>
+            </rng:zeroOrMore>
+            <rng:zeroOrMore>
+                <rng:element name="Writer">
+                    <rng:ref name="AgentType"/>
+                </rng:element>
+            </rng:zeroOrMore>
+            <rng:optional>
+                <rng:element name="Gps">
+                    <rng:ref name="GpsType"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="CreatedDate">
+                    <rng:data type="date"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="TransactedDate">
+                    <rng:data type="date"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="AcquiredDate">
+                    <rng:data type="date"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="SentDate">
+                    <rng:data type="date"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="ReceivedDate">
+                    <rng:data type="date"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="RegisteredDate">
+                    <rng:data type="date"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="StartDate">
+                    <rng:data type="date"/>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="EndDate">
+                    <rng:data type="date"/>
+                </rng:element>
+            </rng:optional>
+        </rng:element>
+        <rng:optional>
+            <rng:element name="DataObjectRef">
+                <rng:element name="DataObjectGroupReferenceId">
+                    <rng:data type="string"/>
+                </rng:element>
+            </rng:element>
+        </rng:optional>
+    </rng:define>
+
+    <rng:define name="GpsType">
+        <rng:optional>
+            <rng:element name="GpsVersionID">
+                <rng:data type="string"/>
+            </rng:element>
+        </rng:optional>
+        <rng:optional>
+            <rng:element name="GpsAltitude">
+                <rng:data type="string"/>
+            </rng:element>
+        </rng:optional>
+        <rng:optional>
+            <rng:element name="GpsLatitude">
+                <rng:data type="string"/>
+            </rng:element>
+        </rng:optional>
+        <rng:optional>
+            <rng:element name="GpsLongitude">
+                <rng:data type="string"/>
+            </rng:element>
+        </rng:optional>
+    </rng:define>
+
+    <rng:define name="AgentType">
+        <rng:optional>
+            <rng:element name="Activity">
+                <rng:data type="string"/>
+            </rng:element>
+        </rng:optional>
+        <rng:optional>
+            <rng:element name="Activity">
+                <rng:data type="string"/>
+            </rng:element>
+            <!-- AgentType -->
+        </rng:optional>
+    </rng:define>
+
+    <rng:define name="ManagementType">
+        <rng:element name="Management">
+            <rng:optional>
+                <rng:element name="AppraisalRule">
+                    <rng:optional>
+                        <rng:element name="Rule">
+                            <rng:data type="string"/>
+                        </rng:element>
+                    </rng:optional>
+                    <rng:optional>
+                        <rng:element name="StartDate">
+                            <rng:data type="date"/>
+                        </rng:element>
+                    </rng:optional>
+                    <rng:element name="FinalAction">
+                        <rng:choice>
+                            <rng:value>Keep</rng:value>
+                            <rng:value>Destroy</rng:value>
+                        </rng:choice>
+                    </rng:element>
+                </rng:element>
+            </rng:optional>
+            <rng:optional>
+                <rng:element name="AccessRule">
+                    <rng:optional>
+                        <rng:element name="Rule">
+                            <rng:data type="string"/>
+                        </rng:element>
+                    </rng:optional>
+                    <rng:optional>
+                        <rng:element name="StartDate">
+                            <rng:data type="date"/>
+                        </rng:element>
+                    </rng:optional>
+                </rng:element>
+            </rng:optional>
+        </rng:element>
+    </rng:define>
+    
+    <rng:define name="OpenType">
+        <rng:zeroOrMore>
+            <rng:element>
+                <rng:anyName/>
+                <rng:zeroOrMore>
+                    <rng:attribute>
+                        <rng:anyName/>
+                    </rng:attribute>
+                </rng:zeroOrMore>
+            </rng:element>
+        </rng:zeroOrMore>
+    </rng:define>
+</rng:grammar>

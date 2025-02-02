@@ -179,7 +179,8 @@ class Fntcv4Converter {
 
     String mi =
         SipUtils.getIfBlank(
-            transfer.getMessageIdentifier(), RandomStringUtils.randomAlphabetic(32).toLowerCase());
+            transfer.getMessageIdentifier(),
+            RandomStringUtils.secure().nextAlphabetic(32).toLowerCase());
     att.setMessageIdentifier(toIdentifierType(mi));
 
     LocalDateTime gcd = SipUtils.getIfNull(transfer.getDate(), LocalDateTime.now());
