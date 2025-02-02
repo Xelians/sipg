@@ -15,7 +15,7 @@ La librairie SipG offre les fonctionnalités suivantes :
 * Identification des formats des objets binaires (intégration de la librairie Droid)
 * Calcul automatique des empreintes des objets binaires
 * Support des archives numériques et physiques
-* Validation complète d'une archive existante aux formats FNTC v4 ou SEDA v2.1 & v2.2
+* Validation complète d'une archive existante aux formats FNTC v4 ou SEDA v2.1, v2.2 & v2.3
 * Sérialisation/désérialisation du fichier de description au format JSON
 * Capacité à générer des archives extrêmement volumineuses (plus de 100 000 objets)
 * Support du multi-threads lors de la génération de l'archive
@@ -53,11 +53,12 @@ Le répertoire contenant les tests d'intégration fournit de nombreux exemples d
 
 ### Sélection de la version du service SEDA v2
 
-SipG supporte les versions 2.1 et 2.2 de la norme SEDA. 
+SipG supporte les versions 2.1, 2.2 et 2.3 de la norme SEDA. 
 
 ```
 Sedav2Service service21 = Sedav2Service.getInstance(); // Seda 2.1
 Sedav2Service service22 = Sedav2Service.getV22Instance(); // Seda 2.2
+Sedav2Service service23 = Sedav2Service.getV23Instance(); // Seda 2.3
 ```
 
 ### Création d’une archive SEDA
@@ -75,8 +76,8 @@ archiveTransfer.setTransferringAgency("AG002", "");               // Spécifie l
 archiveTransfer.addArchiveUnit(unit);                             // Ajoute l’unité à l’archive
 
 Sedav2Service.getInstance().write(archiveTransfer, Paths.get("seda.zip"));  // Génère le SIP en Seda v2.1
-...
 Sedav2Service.getV22Instance().write(archiveTransfer, Paths.get("seda.zip"));  // Génère le SIP en Seda v2.2
+Sedav2Service.getV23Instance().write(archiveTransfer, Paths.get("seda.zip"));  // Génère le SIP en Seda v2.3
 ```
 
 ### Création d’une archive au format SEDA à partir d'un fichier CSV
