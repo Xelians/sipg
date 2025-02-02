@@ -95,7 +95,8 @@ public class SignatureDescription {
   }
 
   /**
-   * Indique le type de signature au sens juridique du terme. Par exemple, simple, avancée, qualifiée.
+   * Indique le type de signature au sens juridique du terme. Par exemple, simple, avancée,
+   * qualifiée.
    *
    * @return le type de signature
    */
@@ -104,7 +105,8 @@ public class SignatureDescription {
   }
 
   /**
-   * Spécifie le type de signature au sens juridique du terme. Par exemple, simple, avancée, qualifiée.
+   * Spécifie le type de signature au sens juridique du terme. Par exemple, simple, avancée,
+   * qualifiée.
    *
    * @param signingType le type de signature
    */

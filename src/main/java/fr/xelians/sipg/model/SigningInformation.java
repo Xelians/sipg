@@ -87,7 +87,9 @@ public class SigningInformation {
   }
 
   /**
-   * Indique la liste des relations techniques à l'unité d'archives racine décrivant le document signé à partir des unités d'archives encapsulées contenant les autres rôles d'un contexte de signature.
+   * Indique la liste des relations techniques à l'unité d'archives racine décrivant le document
+   * signé à partir des unités d'archives encapsulées contenant les autres rôles d'un contexte de
+   * signature.
    *
    * @return la liste des relations techniques
    */
@@ -105,7 +107,8 @@ public class SigningInformation {
   }
 
   /**
-   * Indique la liste des informations relatives aux preuves complémentaires archivées dans un contexte de signature.
+   * Indique la liste des informations relatives aux preuves complémentaires archivées dans un
+   * contexte de signature.
    *
    * @return la liste des informations relatives aux preuves complémentaires
    */
@@ -121,5 +124,4 @@ public class SigningInformation {
   public List<SignatureDescription> getSignatureDescriptions() {
     return signatureDescriptions;
   }
-
 }

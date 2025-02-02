@@ -23,7 +23,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * La classe TimestampingInformation contient les informations d'horodatage dans un contexte de signature.
+ * La classe TimestampingInformation contient les informations d'horodatage dans un contexte de
+ * signature.
  *
  * <p>Supporté en SEDA v2.3
  *
