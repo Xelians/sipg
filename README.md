@@ -206,9 +206,9 @@ git tag -a v1.4 -m "Sipg version 1.4"
 git push origin v1.4 or git push origin --tags
 ```
 
-## Deploy on Maven Central
+## Deployer sur Maven Central
 
-* Sur github, exécuter le workflow "Deploy on Maven central" pour copier l'artifact SipG sur le serveur Nexus Sonatype
+* Sur github, exécuter le workflow "Deploy on Maven central" pour copier l'artefact SipG sur le serveur Nexus Sonatype
   - Note. l'authentification par API sur le serveur Nexus nécessite un token généré depuis l'interface web du serveur Sonatype (Menu profile/User Token)  
 * Puis, se connecter à l'interface web du serveur Sonatype
   - https://s01.oss.sonatype.org/
@@ -216,34 +216,37 @@ git push origin v1.4 or git push origin --tags
   - Passer les étapes du workflow déploiement (close, etc.)
   - Chaque étape peut prendre quelques minutes
 
-## Create s secret key (if needed)
+## Mettre à jour la clé secrète (si nécessaire)
+Vous pouvez générer une nouvelle clé GPG avec une phrase de passe et exporter cette clé privée en version ASCII armor pour l'utiliser sur GitHub :
 
-You can generate a new GPG key with a passphrase and export the private key as an ASCII-armored version to your clipboard on Ubuntu:
-
-1. Generate a new GPG key
+1. Générez une nouvelle clé GPG
 ```
 gpg --full-generate-key
 ```
-You'll be prompted to choose:
-- Key type: Select RSA and RSA
-- Key size: Use 4096 for better security
-- Expiration: Choose as needed (0 for never expiring)
-- Name, email, and comment: Provide your details
-- Passphrase: Enter a strong passphrase
+- Type de clé : Sélectionnez RSA et RSA
+- Taille de la clé : Utilisez 4096 pour une meilleure sécurité
+- Expiration : Choisissez selon vos besoins (0 pour ne jamais expirer)
+- Nom, e-mail et commentaire : Fournissez les informations
+- Passe phrase : Entrez une phrase de passe robuste
 
-2. List your GPG keys To get the key ID, run:
+2. Listez vos clés GPG Pour obtenir l'ID de la clé, exécutez : 
 ```
 gpg --list-secret-keys --keyid-format=long
 ```
-Look for the line that looks like this: rsa4096/XXXXXXXXXXXXXXXX 2024-02-02  
-where XXXXXXXXXXXXXXXX is the kEY_ID 
+Le résultat ressemble à ceci :
+```
+pub   rsa4096 2024-02-02 [SC]
+      XXXXXXXXXXXXXXXX
+uid   ...
+```
+où XXXXXXXXXXXXXXXX est l'ID de la clé privée.
 
-3. Export the private key in ASCII-armored format
-```  
+3. Exportez la clé privée en format ASCII armor
+```
 gpg --export-secret-keys --armor KEY_ID | xclip -selection clipboard
 ```
-* Copy the clipboard to the secret gpg key on github
-* Copy the passphrase to the secret gpg passphase on github
+- Copiez le contenu du presse-papiers dans le secret clé privée GPG sur GitHub
+- Copiez la phrase de passe dans le secret passe phrase GPG sur GitHub
 
 ## Licences
 
