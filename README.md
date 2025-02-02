@@ -7,7 +7,7 @@
 
 La librairie SipG offre les fonctionnalités suivantes : 
 
-* Génération d’un SIP conforme aux formats FNTC v4 et SEDA v2.1 & v2.2
+* Génération d’un SIP conforme aux formats FNTC v4 et SEDA v2.1, v2.2 & v2.3
 * Suivi précis des étapes de validation par callback 
 * Validation optionnelle du fichier de description de l'archive par un profil RNG 
 * Application automatique de valeurs par défaut raisonnables
