@@ -246,7 +246,7 @@ où XXXXXXXXXXXXXXXX est l'ID de la clé privée.
 gpg --export-secret-keys --armor KEY_ID | xclip -selection clipboard
 ```
 - Copiez le contenu du presse-papiers dans le secret clé privée GPG sur GitHub
-- Copiez la phrase de passe dans le secret passe phrase GPG sur GitHub
+- Copiez la passe phrase dans le secret passe phrase GPG sur GitHub
 
 ## Licences
 
