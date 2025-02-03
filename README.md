@@ -248,6 +248,15 @@ gpg --export-secret-keys --armor KEY_ID | xclip -selection clipboard
 - Copiez le contenu du presse-papiers dans le secret clé privée GPG sur GitHub
 - Copiez la passe phrase dans le secret passe phrase GPG sur GitHub
 
+4. Exporter le clé publique sur un des serveurs de clé utilisé par Sonatype
+```
+gpg --keyserver hkp://keyserver.ubuntu.com --send-keys XXXXXXXXXXXXXXXX
+```
+Attendre quelques minutes pour que la clé soit bien enregistrée
+```
+gpg --keyserver hkp://keyserver.ubuntu.com --receive-keys XXXXXXXXXXXXXXXX
+```
+
 ## Licences
 
 La librairie SipG est publiée en Open Source sous [licence libre Apache v2](./doc/license/LICENCE.APACHE_V2).
