@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       # Step that does that actual cache save and restore
-      - uses: actions/cache@v2.1.4
+      - uses: actions/cache@v4
         with:
           path: /github/home/.m2/repository
           key: ${{ runner.os }}-maven-repo-${{ hashFiles('**/pom.xml') }}
