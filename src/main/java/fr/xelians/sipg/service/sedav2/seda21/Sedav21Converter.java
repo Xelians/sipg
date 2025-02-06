@@ -88,15 +88,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.math.BigInteger;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.FileSystem;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -1261,12 +1255,8 @@ class Sedav21Converter {
       }
 
       Path zipEntry = docEntry.resolve(entryName);
-      if (Files.notExists(zipEntry)) {
-        try (OutputStream out = Files.newOutputStream(zipEntry)) {
-          Files.copy(binaryPath, out);
-        } catch (FileAlreadyExistsException ex) {
-          LOGGER.warn("zip: ", ex);
-        }
+      try (OutputStream out = Files.newOutputStream(zipEntry, StandardOpenOption.CREATE_NEW)) {
+        Files.copy(binaryPath, out);
       }
 
       return zipEntry;
@@ -1283,26 +1273,13 @@ class Sedav21Converter {
 
         // Add binary file to zip
         if (zipArchive != null) {
-          Path zipEntry =
-              zip(
-                  binaryPath,
-                  digest
-                      + "_"
-                      + Files.getLastModifiedTime(binaryPath).toMillis()
-                      + "_"
-                      + binaryPath.getFileName());
+          Path zipEntry = zip(binaryPath, UUID.randomUUID() + "_" + binaryPath.getFileName());
           long size = (long) Files.getAttribute(zipEntry, "zip:size");
           bdot.setSize(BigInteger.valueOf(size));
           bdot.setUri(zipEntry.toString());
         } else {
           bdot.setSize(BigInteger.valueOf(Files.size(binaryPath)));
-          bdot.setUri(
-              "Content/"
-                  + digest
-                  + "_"
-                  + Files.getLastModifiedTime(binaryPath).toMillis()
-                  + "_"
-                  + binaryPath.getFileName());
+          bdot.setUri("Content/" + UUID.randomUUID() + "_" + binaryPath.getFileName());
         }
 
         FormatIdentificationType fit = bdot.getFormatIdentification();
