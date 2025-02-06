@@ -1,11 +1,7 @@
 # SipG
 
 ## Présentation
-* SipG est une bibliothèque pour générer et valider des archives aux formats FNTC v4 et SEDA v2.1, v2.2 & v2.3.
-
-## Licences
-
-La librairie SipG est publiée en Open Source sous [licence libre Apache v2](./doc/license/LICENCE.APACHE_V2).
+* SipG est une bibliothèque pour générer et valider des archives aux formats FNTC v4 et SEDA v2.1, v2.2 & v2.3. La librairie SipG est publiée en Open Source sous [licence libre Apache v2](./doc/license/LICENCE.APACHE_V2).
 
 ## Fonctionnalités
 
