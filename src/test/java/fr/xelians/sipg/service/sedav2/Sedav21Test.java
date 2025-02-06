@@ -31,7 +31,6 @@ import fr.xelians.sipg.service.json.JsonService;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.Validators;
 import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.xml.validation.Validator;
@@ -482,9 +481,8 @@ class Sedav21Test {
   void testCreateSimpleDelivery(TestInfo testInfo) {
     LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
-    try {
-      ArchiveDeliveryRequestReply archiveDelivery =
-          SipFactory.createComplexDelivery(FileSystems.getDefault());
+    try (FileSystem fs = Jimfs.newFileSystem()) {
+      ArchiveDeliveryRequestReply archiveDelivery = SipFactory.createComplexDelivery(fs);
       Path output = Paths.get(TestInit.TEST_RESULTS + "simpledelivery_seda.zip");
       sedaService.write(archiveDelivery, output, sedaConfig);
     } catch (Exception ex) {
