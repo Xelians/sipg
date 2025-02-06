@@ -3,28 +3,32 @@
 ## Présentation
 * SipG est une bibliothèque pour générer et valider des archives aux formats FNTC v4 et SEDA v2.1, v2.2 & v2.3.
 
+## Licences
+
+La librairie SipG est publiée en Open Source sous [licence libre Apache v2](./doc/license/LICENCE.APACHE_V2).
+
 ## Fonctionnalités
 
 La librairie SipG offre les fonctionnalités suivantes : 
 
-* Génération d’un SIP conforme aux formats FNTC v4 et SEDA v2.1, v2.2 & v2.3
-* Suivi précis des étapes de validation par callback 
-* Validation optionnelle du fichier de description de l'archive par un profil RNG 
-* Application automatique de valeurs par défaut raisonnables
-* Support des tags et des fragments XML étendus
-* Identification des formats des objets binaires (intégration de la librairie Droid)
+* Conformité aux standards FNTC v4 et SEDA v2.1, v2.2 & v2.3
+* Génération de SIP (ArchiveTransfer) et de DIP (ArchiveDelivery) 
+* Validation optionnelle du SIP ou DIP généré par un profil RNG
 * Calcul automatique des empreintes des objets binaires
+* Support des tags et des fragments XML étendus
+* Identification des formats des objets binaires (via la librairie Droid)
 * Support des archives numériques et physiques
-* Validation complète d'une archive existante aux formats FNTC v4 ou SEDA v2.1, v2.2 & v2.3
-* Sérialisation/désérialisation du fichier de description au format JSON
+* Application automatique de valeurs par défaut raisonnables
+* Validation d'une archive existante aux formats FNTC v4 ou SEDA v2.1, v2.2 & v2.3
+* Suivi précis des étapes de validation par callback
+* Sérialisation/désérialisation du fichier de description (Manifest.xml) au format JSON
 * Capacité à générer des archives extrêmement volumineuses (plus de 100 000 objets)
 * Support du multi-threads lors de la génération de l'archive
 * Documentation Javadoc exhaustive 
 
 ## Format SEDA v2
 
-Le standard d'échange de données pour l'archivage SEDA modélise les différentes transactions qui peuvent avoir 
-lieu entre des  acteurs dans le cadre de l'archivage de données. 
+Le standard d'échange de données pour l'archivage SEDA modélise les différentes transactions qui peuvent avoir lieu entre des acteurs dans le cadre de l'archivage de données. 
 
 La documentation complète du SEDA v2 est disponible sur le site de [France Archive](https://redirect.francearchives.fr/seda/).
 
@@ -40,6 +44,8 @@ Le standard FNTC v4 a pour principales caractéristiques :
 * Extension de l’ontologie autorisée dans un cadre bien défini
 
 Les principales différences entre les formats SEDA v2 et FNTC v4 sont [listées ici](https://github.com/Xelians/sipg/blob/master/doc/assets/Diff_SEDA.md). 
+
+Note. Le standard FNTC v4 est à l'état de draft et n'a pas, à ce jour, été officiellement validé par la FNTC.
 
 ## Architecture fonctionnelle
  
@@ -115,7 +121,7 @@ Sedav2Service.getInstance().write(archiveTransfer, Paths.get("seda.zip"));  // G
 ```
 Path path = Paths.get("seda_small.xml");               // Le fichier XML à valider
 Sedav2Service.getInstance().validate(path);            // Validation du fichier en Seda v2.1
-Sedav2Service.getV22Instance().validate(path);            // Validation du fichier en Seda v2.2
+Sedav2Service.getV22Instance().validate(path);         // Validation du fichier en Seda v2.2
 ```
 
 ### Validation d'un fichier XML selon un profil RNG
@@ -185,8 +191,22 @@ Code :
 Path jsonPath = Paths.get("minisip.json");
 ArchiveTransfer archiveTransfer = JsonService.getInstance().read(jsonPath);
 ```
-
 L'objet archiveTransfer, issu de la désérialisation, peut ainsi être utilisé et modifié pour générer une nouvelle archive. 
+
+### Configuration du service 
+
+Il est possible de modifier le comportement du service génération des SIPs en sélectionnant les options adéquates dans la classe
+SedaConfigBuilder.
+
+Code :
+```
+SedaConfig config = SedaConfigBuilder.builder()
+  .thread(1)          // utilise 1 thread 
+  .useMemory(true)    // génère le SIP en mémoire
+  .strict(false)      // ne vérifie pas le strict respect du SEDA
+  .build();
+...
+```
 
 ## Contribuer au projet
 1. Forker le projet Github
@@ -217,7 +237,8 @@ git push origin v1.4 or git push origin --tags
   - Chaque étape peut prendre quelques minutes
 
 ## Mettre à jour la clé secrète (si nécessaire)
-Vous pouvez générer une nouvelle clé GPG avec une phrase de passe et exporter cette clé privée en version ASCII armor pour l'utiliser sur GitHub :
+
+Il est possible de générer une nouvelle clé GPG avec une phrase de passe et d'exporter cette clé privée en version ASCII armor pour l'utiliser sur GitHub :
 
 1. Générez une nouvelle clé GPG
 ```
@@ -227,9 +248,9 @@ gpg --full-generate-key
 - Taille de la clé : Utilisez 4096 pour une meilleure sécurité
 - Expiration : Choisissez selon vos besoins (0 pour ne jamais expirer)
 - Nom, e-mail et commentaire : Fournissez les informations
-- Passe phrase : Entrez une phrase de passe robuste
+- Passe phrase : Entrez une passe phrase robuste
 
-2. Listez vos clés GPG Pour obtenir l'ID de la clé, exécutez : 
+2. Pour obtenir l'ID de la clé : 
 ```
 gpg --list-secret-keys --keyid-format=long
 ```
@@ -245,10 +266,10 @@ où XXXXXXXXXXXXXXXX est l'ID de la clé privée.
 ```
 gpg --export-secret-keys --armor KEY_ID | xclip -selection clipboard
 ```
-- Copiez le contenu du presse-papiers dans le secret clé privée GPG sur GitHub
-- Copiez la passe phrase dans le secret passe phrase GPG sur GitHub
+- Copiez le contenu du presse-papiers dans le secret idoine sur GitHub
+- Copiez la passe phrase dans le secret idoine sur GitHub
 
-4. Exporter le clé publique sur un des serveurs de clé utilisé par Sonatype
+4. Exporter la clé publique sur un des serveurs de clé utilisé par Sonatype
 ```
 gpg --keyserver hkp://keyserver.ubuntu.com --send-keys XXXXXXXXXXXXXXXX
 ```
@@ -256,9 +277,3 @@ Attendre quelques minutes pour que la clé soit bien enregistrée
 ```
 gpg --keyserver hkp://keyserver.ubuntu.com --receive-keys XXXXXXXXXXXXXXXX
 ```
-
-## Licences
-
-La librairie SipG est publiée en Open Source sous [licence libre Apache v2](./doc/license/LICENCE.APACHE_V2).
-
-La librairie [Droid](https://github.com/digital-preservation/droid) éditée par The British National Archive est disponible sur Github sous [licence BSD](./doc/license/LICENCE.DROID).

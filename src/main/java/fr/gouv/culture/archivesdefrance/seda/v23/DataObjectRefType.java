@@ -45,7 +45,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlType(
     name = "DataObjectRefType",
     propOrder = {"dataObjectReferenceId", "dataObjectGroupReferenceId"})
-@XmlRootElement(name = "DataObjectRef")
+@XmlRootElement(name = "DataObjectReference")
 public class DataObjectRefType {
 
   /** Référence à un objet-données listé dans les métadonnées de transport. */

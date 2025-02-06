@@ -20,7 +20,7 @@
 package fr.xelians.sipg.service.sedav2;
 
 public enum SedaVersion {
-  v21,
-  v22,
-  v23
+  V2_1,
+  V2_2,
+  V2_3
 }

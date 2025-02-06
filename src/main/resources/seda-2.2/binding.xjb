@@ -25,7 +25,7 @@
         <jxb:bindings node="xs:complexType[@name='DataObjectRefType']">
             <annox:annotate>
                 <annox:annotate annox:class="jakarta.xml.bind.annotation.XmlRootElement"
-                                name="DataObjectRef"/>
+                                name="DataObjectReference"/>
             </annox:annotate>
         </jxb:bindings>
     </jxb:bindings>

@@ -80,18 +80,18 @@ import org.xml.sax.SAXException;
  */
 public class Sedav2Service {
 
-  private static final Sedav2Service SEDA_V21 = new Sedav2Service(SedaVersion.v21);
-  private static final Sedav2Service SEDA_V22 = new Sedav2Service(SedaVersion.v22);
-  private static final Sedav2Service SEDA_V23 = new Sedav2Service(SedaVersion.v23);
+  private static final Sedav2Service SEDA_V21 = new Sedav2Service(SedaVersion.V2_1);
+  private static final Sedav2Service SEDA_V22 = new Sedav2Service(SedaVersion.V2_2);
+  private static final Sedav2Service SEDA_V23 = new Sedav2Service(SedaVersion.V2_3);
 
   private final SedaAdapter sedaAdapter;
 
   private Sedav2Service(SedaVersion version) {
     this.sedaAdapter =
         switch (version) {
-          case v21 -> Sedav21Adapter.INSTANCE;
-          case v22 -> Sedav22Adapter.INSTANCE;
-          case v23 -> Sedav23Adapter.INSTANCE;
+          case V2_1 -> Sedav21Adapter.INSTANCE;
+          case V2_2 -> Sedav22Adapter.INSTANCE;
+          case V2_3 -> Sedav23Adapter.INSTANCE;
         };
   }
 
