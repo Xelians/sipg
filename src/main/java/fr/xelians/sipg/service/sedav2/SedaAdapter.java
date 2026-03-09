@@ -21,6 +21,7 @@ package fr.xelians.sipg.service.sedav2;
 
 import fr.xelians.sipg.model.ArchiveDeliveryRequestReply;
 import fr.xelians.sipg.model.ArchiveTransfer;
+import java.io.InputStream;
 import java.nio.file.Path;
 import javax.xml.transform.Source;
 import javax.xml.validation.Validator;
@@ -35,4 +36,8 @@ public interface SedaAdapter {
   void validate(ArchiveTransfer archive, Validator validator, SedaConfig config);
 
   void validate(Source source, SedaConfig config);
+
+  String marshal(ArchiveTransfer archiveTransfer, SedaConfig config);
+
+  <T> T unmarshal(InputStream stream, Class<T> clazz, SedaConfig config);
 }

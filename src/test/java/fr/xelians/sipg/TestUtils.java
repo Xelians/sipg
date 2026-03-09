@@ -19,10 +19,9 @@
 package fr.xelians.sipg;
 
 import fr.xelians.sipg.utils.SipException;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.apache.commons.io.IOUtils;
@@ -149,4 +148,40 @@ public class TestUtils {
       throw new RuntimeException(e);
     }
   }
+
+  /**
+   * Cleans and standardizes the content of a provided XML manifest by replacing specific patterns
+   * such as timestamps, hash digests, and UUIDs with generic placeholders. The method also compresses
+   * excessive whitespace and trims the final output.
+   *
+   * @param xml the XML manifest string to be cleaned
+   * @return the cleaned and standardized XML manifest string
+   */
+  public static String cleanManifest(String xml) {
+    return xml
+            .replaceAll("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}", "TIMESTAMP")
+            .replaceAll("<MessageDigest algorithm=\"SHA-512\">\\s*[a-f0-9]{128}\\s*</MessageDigest>",
+                    "<MessageDigest algorithm=\"SHA-512\">HASH</MessageDigest>")
+            .replaceAll("<Uri>Content/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}_",
+                    "<Uri>Content/UUID_")
+            .replaceAll("\\s+", " ")
+            .replaceAll(">\\s+<", "><")
+            .trim();
+  }
+
+  /**
+   * Reads the content of the given InputStream and returns it as a String. The content is read using UTF-8 encoding
+   * and then cleaned and standardized using the cleanManifest method.
+   *
+   * @param inputStream the InputStream to read the content from
+   * @return the cleaned and standardized content of the InputStream as a String
+   * @throws IOException if an I/O error occurs while reading the InputStream
+   */
+  public static String readAsString(final InputStream inputStream) throws IOException {
+    final StringWriter writer = new StringWriter();
+    final String encoding = StandardCharsets.UTF_8.name();
+    IOUtils.copy(inputStream, writer, encoding);
+    return cleanManifest(writer.toString());
+  }
+
 }

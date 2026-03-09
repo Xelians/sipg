@@ -65,13 +65,12 @@ import fr.xelians.sipg.service.sedav2.*;
 import fr.xelians.sipg.utils.ByteArrayInOutStream;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.*;
 import jakarta.xml.bind.util.JAXBSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -233,6 +232,34 @@ public class Sedav22Adapter implements SedaAdapter {
       sedaValidator.validate(source);
     } catch (SAXException | IOException ex) {
       throw new SipException("Unable to validate archive", ex);
+    }
+  }
+
+  @Override
+  public String marshal(ArchiveTransfer archiveTransfer, SedaConfig config) {
+    try {
+      final var archiveTransferType = Sedav22Converter.convertToArchiveTransferType(archiveTransfer, config);
+      final Marshaller marshaller = sedaContext.createMarshaller();
+      final StringWriter writer = new StringWriter();
+
+      marshaller.marshal(archiveTransferType, writer);
+
+      return writer.toString();
+    }catch (JAXBException | ExecutionException | InterruptedException exception) {
+      Thread.currentThread().interrupt();
+      throw new SipException("Unable to marshal ArchiveTransfer", exception);
+    }
+  }
+
+  @Override
+  public <T> T unmarshal(InputStream stream, Class<T> clazz, SedaConfig config) {
+    try (stream){
+      final Unmarshaller unmarshaller = sedaContext.createUnmarshaller();
+      final JAXBElement<T> element = unmarshaller.unmarshal(new StreamSource(stream), clazz);
+      return element.getValue();
+    } catch (IOException | JAXBException exception) {
+      Thread.currentThread().interrupt();
+      throw new SipException(String.format("Unable to unmarshal stream into %s", clazz.getSimpleName()), exception);
     }
   }
 }
