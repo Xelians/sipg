@@ -199,11 +199,11 @@ public class DescriptiveMetadataContentType {
 
   /** Références : seda.OriginatingAgency */
   @XmlElement(name = "OriginatingAgency")
-  protected OrganizationType originatingAgency;
+  protected OrganizationWithIdType originatingAgency;
 
   /** Références : seda.SubmissionAgency */
   @XmlElement(name = "SubmissionAgency")
-  protected OrganizationType submissionAgency;
+  protected OrganizationWithIdType submissionAgency;
 
   /** Agent générique. */
   @XmlElement(name = "Agent")
@@ -761,38 +761,38 @@ public class DescriptiveMetadataContentType {
   /**
    * Références : seda.OriginatingAgency
    *
-   * @return possible object is {@link OrganizationType }
+   * @return possible object is {@link OrganizationWithIdType }
    */
-  public OrganizationType getOriginatingAgency() {
+  public OrganizationWithIdType getOriginatingAgency() {
     return originatingAgency;
   }
 
   /**
    * Sets the value of the originatingAgency property.
    *
-   * @param value allowed object is {@link OrganizationType }
+   * @param value allowed object is {@link OrganizationWithIdType }
    * @see #getOriginatingAgency()
    */
-  public void setOriginatingAgency(OrganizationType value) {
+  public void setOriginatingAgency(OrganizationWithIdType value) {
     this.originatingAgency = value;
   }
 
   /**
    * Références : seda.SubmissionAgency
    *
-   * @return possible object is {@link OrganizationType }
+   * @return possible object is {@link OrganizationWithIdType }
    */
-  public OrganizationType getSubmissionAgency() {
+  public OrganizationWithIdType getSubmissionAgency() {
     return submissionAgency;
   }
 
   /**
    * Sets the value of the submissionAgency property.
    *
-   * @param value allowed object is {@link OrganizationType }
+   * @param value allowed object is {@link OrganizationWithIdType }
    * @see #getSubmissionAgency()
    */
-  public void setSubmissionAgency(OrganizationType value) {
+  public void setSubmissionAgency(OrganizationWithIdType value) {
     this.submissionAgency = value;
   }
 

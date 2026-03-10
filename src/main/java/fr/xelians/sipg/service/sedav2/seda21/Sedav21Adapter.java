@@ -65,13 +65,10 @@ import fr.xelians.sipg.service.sedav2.*;
 import fr.xelians.sipg.utils.ByteArrayInOutStream;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.*;
 import jakarta.xml.bind.util.JAXBSource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
+import java.io.*;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -133,7 +130,7 @@ public class Sedav21Adapter implements SedaAdapter {
       ArchiveTransfer transfer, Validator validator, Path zipPath, SedaConfig config) {
 
     try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath, config.useMemory())) {
-      ArchiveTransferType transferType = Sedav21Converter.convert(transfer, zipArchive, config);
+      ArchiveTransferType transferType = Sedav21Converter.convertToArchiveTransferType(transfer, zipArchive, config);
       doWrite(validator, config, zipArchive, transferType);
     } catch (IOException
         | JAXBException
@@ -204,7 +201,7 @@ public class Sedav21Adapter implements SedaAdapter {
   @Override
   public void validate(ArchiveTransfer archive, Validator validator, SedaConfig config) {
     try {
-      ArchiveTransferType att = Sedav21Converter.convert(archive, config);
+      ArchiveTransferType att = Sedav21Converter.convertToArchiveTransferType(archive, config);
       JAXBSource source = new JAXBSource(sedaContext, att);
 
       Validator sedaValidator = sedaSchema.newValidator();
@@ -233,5 +230,28 @@ public class Sedav21Adapter implements SedaAdapter {
     } catch (SAXException | IOException ex) {
       throw new SipException("Unable to validate archive", ex);
     }
+  }
+
+  @Override
+  public InputStream marshal(ArchiveTransfer archiveTransfer, SedaConfig config) {
+    try {
+      final ArchiveTransferType archiveTransferType = Sedav21Converter.convertToArchiveTransferType(archiveTransfer, config);
+      final Marshaller marshaller = sedaContext.createMarshaller();
+      final ByteArrayInOutStream outputStream = new ByteArrayInOutStream();
+
+      marshaller.marshal(archiveTransferType, outputStream);
+
+      return outputStream.getInputStream();
+    } catch (ExecutionException | InterruptedException | JAXBException exception) {
+      Thread.currentThread().interrupt();
+      throw new SipException("Unable to marshal ArchiveTransfer", exception);
+    }
+  }
+
+  @Override
+  public <T> T unmarshal(InputStream stream, Class<T> clazz, SedaConfig config) throws JAXBException {
+      final Unmarshaller unmarshaller = sedaContext.createUnmarshaller();
+      final JAXBElement<T> element = unmarshaller.unmarshal(new StreamSource(stream), clazz);
+      return element.getValue();
   }
 }

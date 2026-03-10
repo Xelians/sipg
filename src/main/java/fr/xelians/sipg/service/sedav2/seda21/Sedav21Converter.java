@@ -155,9 +155,9 @@ class Sedav21Converter {
    * @throws ExecutionException the execution exception
    * @throws InterruptedException the interrupted exception
    */
-  public static ArchiveTransferType convert(ArchiveTransfer archiveTransfer)
+  public static ArchiveTransferType convertToArchiveTransferType(ArchiveTransfer archiveTransfer)
       throws ExecutionException, InterruptedException {
-    return convert(archiveTransfer, null, SedaConfig.DEFAULT);
+    return convertToArchiveTransferType(archiveTransfer, null, SedaConfig.DEFAULT);
   }
 
   /**
@@ -170,9 +170,9 @@ class Sedav21Converter {
    * @throws ExecutionException the execution exception
    * @throws InterruptedException the interrupted exception
    */
-  static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, SedaConfig config)
+  static ArchiveTransferType convertToArchiveTransferType(ArchiveTransfer archiveTransfer, SedaConfig config)
       throws ExecutionException, InterruptedException {
-    return convert(archiveTransfer, null, config);
+    return convertToArchiveTransferType(archiveTransfer, null, config);
   }
 
   /**
@@ -185,9 +185,9 @@ class Sedav21Converter {
    * @throws ExecutionException the execution exception
    * @throws InterruptedException the interrupted exception
    */
-  static ArchiveTransferType convert(ArchiveTransfer archiveTransfer, FileSystem zipArchive)
+  static ArchiveTransferType convertToArchiveTransferType(ArchiveTransfer archiveTransfer, FileSystem zipArchive)
       throws ExecutionException, InterruptedException {
-    return convert(archiveTransfer, zipArchive, SedaConfig.DEFAULT);
+    return convertToArchiveTransferType(archiveTransfer, zipArchive, SedaConfig.DEFAULT);
   }
 
   /**
@@ -201,7 +201,7 @@ class Sedav21Converter {
    * @throws ExecutionException the execution exception
    * @throws InterruptedException the interrupted exception
    */
-  static ArchiveTransferType convert(
+  static ArchiveTransferType convertToArchiveTransferType(
       ArchiveTransfer archiveTransfer, FileSystem zipArchive, SedaConfig config)
       throws ExecutionException, InterruptedException {
     Validate.notNull(archiveTransfer, SipUtils.NOT_NULL, "archiveTransfer");

@@ -40,6 +40,7 @@ package fr.xelians.sipg.service.sedav2;
 import static fr.xelians.sipg.service.common.ProgressState.FAIL;
 import static fr.xelians.sipg.service.common.ProgressState.SUCCESS;
 
+import fr.gouv.culture.archivesdefrance.seda.v21.ArchiveTransferReplyType;
 import fr.xelians.sipg.model.ArchiveDeliveryRequestReply;
 import fr.xelians.sipg.model.ArchiveTransfer;
 import fr.xelians.sipg.service.common.ProgressEvent;
@@ -53,6 +54,7 @@ import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -60,10 +62,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Validator;
+
+import jakarta.xml.bind.JAXBException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.Validate;
 import org.xml.sax.SAXException;
@@ -561,4 +566,20 @@ public class Sedav2Service {
       listener.progressChanged(new ProgressEvent<>(id, status, step, message));
     }
   }
+
+  public InputStream marshal(final ArchiveTransfer archiveTransfer, SedaConfig config) {
+    return sedaAdapter.marshal(archiveTransfer, config);
+  }
+
+  public InputStream marshal(final ArchiveTransfer archiveTransfer) {
+    return sedaAdapter.marshal(archiveTransfer, SedaConfig.DEFAULT);
+  }
+
+  public <T> T unmarshal(InputStream stream,Class<T> clazz,SedaConfig config) throws JAXBException {
+    return sedaAdapter.unmarshal(stream,clazz, config);
+  }
+  public <T> T unmarshal(InputStream stream,Class<T> clazz) throws JAXBException {
+    return sedaAdapter.unmarshal(stream,clazz, SedaConfig.DEFAULT);
+  }
+
 }

@@ -183,11 +183,11 @@ public class DescriptiveMetadataContentType {
 
   /** The Originating agency. */
   @XmlElement(name = "OriginatingAgency")
-  protected OrganizationType originatingAgency;
+  protected OrganizationWithIdType originatingAgency;
 
   /** The Submission agency. */
   @XmlElement(name = "SubmissionAgency")
-  protected OrganizationType submissionAgency;
+  protected OrganizationWithIdType submissionAgency;
 
   /** The Agent abstract. */
   @XmlElement(name = "AgentAbstract")
@@ -689,7 +689,7 @@ public class DescriptiveMetadataContentType {
   /**
    * Gets the value of the originatingAgency property.
    *
-   * @return possible object is {@link OrganizationType }
+   * @return possible object is {@link OrganizationWithIdType }
    */
   public OrganizationType getOriginatingAgency() {
     return originatingAgency;
@@ -698,16 +698,16 @@ public class DescriptiveMetadataContentType {
   /**
    * Sets the value of the originatingAgency property.
    *
-   * @param value allowed object is {@link OrganizationType }
+   * @param value allowed object is {@link OrganizationWithIdType }
    */
-  public void setOriginatingAgency(OrganizationType value) {
+  public void setOriginatingAgency(OrganizationWithIdType value) {
     this.originatingAgency = value;
   }
 
   /**
    * Gets the value of the submissionAgency property.
    *
-   * @return possible object is {@link OrganizationType }
+   * @return possible object is {@link OrganizationWithIdType }
    */
   public OrganizationType getSubmissionAgency() {
     return submissionAgency;
@@ -716,9 +716,9 @@ public class DescriptiveMetadataContentType {
   /**
    * Sets the value of the submissionAgency property.
    *
-   * @param value allowed object is {@link OrganizationType }
+   * @param value allowed object is {@link OrganizationWithIdType }
    */
-  public void setSubmissionAgency(OrganizationType value) {
+  public void setSubmissionAgency(OrganizationWithIdType value) {
     this.submissionAgency = value;
   }
 
