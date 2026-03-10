@@ -22,12 +22,7 @@ jobs:
           servers: |
             [
                {
-                  "id":"sonatype-nexus-snapshots",
-                  "username":"${{ secrets.SONATYPE_USER }}",
-                  "password":"${{ secrets.SONATYPE_PASSWORD }}"
-               },
-               {
-                  "id":"sonatype-nexus-staging",
+                  "id":"central",
                   "username":"${{ secrets.SONATYPE_USER }}",
                   "password":"${{ secrets.SONATYPE_PASSWORD }}"
                }
@@ -43,7 +38,4 @@ jobs:
       - name: Build and Deploy
         run: >
           mvn -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
-          -DaltSnapshotDeploymentRepository=sonatype-nexus-snapshots::default::https://s01.oss.sonatype.org/content/repositories/snapshots
-          -DaltReleaseDeploymentRepository=sonatype-nexus-staging::default::https://s01.oss.sonatype.org/service/local/staging/deploy/maven2
-          -DaltDeploymentRepository=sonatype-nexus-staging::default::https://s01.oss.sonatype.org/service/local/staging/deploy/maven2
           -Pcentral clean deploy
