@@ -21,7 +21,10 @@ package fr.xelians.sipg.service.sedav2;
 
 import fr.xelians.sipg.model.ArchiveDeliveryRequestReply;
 import fr.xelians.sipg.model.ArchiveTransfer;
+import jakarta.xml.bind.JAXBException;
+
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import javax.xml.transform.Source;
 import javax.xml.validation.Validator;
@@ -37,7 +40,7 @@ public interface SedaAdapter {
 
   void validate(Source source, SedaConfig config);
 
-  String marshal(ArchiveTransfer archiveTransfer, SedaConfig config);
+  InputStream marshal(ArchiveTransfer archiveTransfer, SedaConfig config);
 
-  <T> T unmarshal(InputStream stream, Class<T> clazz, SedaConfig config);
+  <T> T unmarshal(InputStream stream, Class<T> clazz, SedaConfig config) throws JAXBException;
 }

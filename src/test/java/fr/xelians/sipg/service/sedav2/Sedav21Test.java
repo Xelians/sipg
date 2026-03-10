@@ -29,6 +29,7 @@ import fr.xelians.sipg.service.json.JsonService;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.Validators;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
@@ -524,7 +525,7 @@ class Sedav21Test {
     try (FileSystem fs = Jimfs.newFileSystem(); InputStream complexSedaStream = getClass().getClassLoader().getResourceAsStream("seda-2.1/seda_complex.xml") ) {
       ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
       final var atMarshalled = Sedav2Service.getInstance().marshal(archiveTransfer, sedaConfig);
-      assertEquals(TestUtils.readAsString(complexSedaStream), TestUtils.cleanManifest(atMarshalled));
+      assertEquals(TestUtils.readAsString(complexSedaStream), TestUtils.readAsString(atMarshalled));
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.error(msg, ex);

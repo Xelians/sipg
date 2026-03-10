@@ -178,10 +178,7 @@ public class TestUtils {
    * @throws IOException if an I/O error occurs while reading the InputStream
    */
   public static String readAsString(final InputStream inputStream) throws IOException {
-    final StringWriter writer = new StringWriter();
-    final String encoding = StandardCharsets.UTF_8.name();
-    IOUtils.copy(inputStream, writer, encoding);
-    return cleanManifest(writer.toString());
+    return cleanManifest(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
   }
 
 }

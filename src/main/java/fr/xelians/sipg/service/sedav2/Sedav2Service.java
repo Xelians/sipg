@@ -54,6 +54,7 @@ import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -566,18 +567,18 @@ public class Sedav2Service {
     }
   }
 
-  public String marshal(final ArchiveTransfer archiveTransfer,SedaConfig config) {
+  public InputStream marshal(final ArchiveTransfer archiveTransfer, SedaConfig config) {
     return sedaAdapter.marshal(archiveTransfer, config);
   }
 
-  public String marshal(final ArchiveTransfer archiveTransfer) {
+  public InputStream marshal(final ArchiveTransfer archiveTransfer) {
     return sedaAdapter.marshal(archiveTransfer, SedaConfig.DEFAULT);
   }
 
-  public <T> T unmarshal(InputStream stream,Class<T> clazz,SedaConfig config) {
+  public <T> T unmarshal(InputStream stream,Class<T> clazz,SedaConfig config) throws JAXBException {
     return sedaAdapter.unmarshal(stream,clazz, config);
   }
-  public <T> T unmarshal(InputStream stream,Class<T> clazz) {
+  public <T> T unmarshal(InputStream stream,Class<T> clazz) throws JAXBException {
     return sedaAdapter.unmarshal(stream,clazz, SedaConfig.DEFAULT);
   }
 

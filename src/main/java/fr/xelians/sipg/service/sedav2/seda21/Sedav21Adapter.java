@@ -67,10 +67,8 @@ import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
 import jakarta.xml.bind.*;
 import jakarta.xml.bind.util.JAXBSource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
+
+import java.io.*;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -235,15 +233,15 @@ public class Sedav21Adapter implements SedaAdapter {
   }
 
   @Override
-  public String marshal(ArchiveTransfer archiveTransfer, SedaConfig config) {
+  public InputStream marshal(ArchiveTransfer archiveTransfer, SedaConfig config) {
     try {
       final ArchiveTransferType archiveTransferType = Sedav21Converter.convertToArchiveTransferType(archiveTransfer, config);
       final Marshaller marshaller = sedaContext.createMarshaller();
-      final StringWriter writer = new StringWriter();
+      final ByteArrayInOutStream outputStream = new ByteArrayInOutStream();
 
-      marshaller.marshal(archiveTransferType, writer);
+      marshaller.marshal(archiveTransferType, outputStream);
 
-      return writer.toString();
+      return outputStream.getInputStream();
     } catch (ExecutionException | InterruptedException | JAXBException exception) {
       Thread.currentThread().interrupt();
       throw new SipException("Unable to marshal ArchiveTransfer", exception);
@@ -251,14 +249,9 @@ public class Sedav21Adapter implements SedaAdapter {
   }
 
   @Override
-  public <T> T unmarshal(InputStream stream, Class<T> clazz, SedaConfig config) {
-    try (stream){
+  public <T> T unmarshal(InputStream stream, Class<T> clazz, SedaConfig config) throws JAXBException {
       final Unmarshaller unmarshaller = sedaContext.createUnmarshaller();
       final JAXBElement<T> element = unmarshaller.unmarshal(new StreamSource(stream), clazz);
       return element.getValue();
-    } catch (IOException | JAXBException exception) {
-      Thread.currentThread().interrupt();
-      throw new SipException(String.format("Unable to unmarshal stream into %s", clazz.getSimpleName()), exception);
-    }
   }
 }

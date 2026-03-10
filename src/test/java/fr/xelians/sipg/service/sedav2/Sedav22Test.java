@@ -527,7 +527,7 @@ public class Sedav22Test {
     try (FileSystem fs = Jimfs.newFileSystem(); InputStream complexSedaStream = getClass().getClassLoader().getResourceAsStream("seda-2.2/seda_complex.xml") ) {
       ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
       final var atMarshalled = Sedav2Service.getV22Instance().marshal(archiveTransfer, sedaConfig);
-      assertEquals(TestUtils.readAsString(complexSedaStream), TestUtils.cleanManifest(atMarshalled));
+      assertEquals(TestUtils.readAsString(complexSedaStream), TestUtils.readAsString(atMarshalled));
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
       LOGGER.error(msg, ex);

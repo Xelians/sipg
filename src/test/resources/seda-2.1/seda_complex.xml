@@ -29,7 +29,7 @@
                 <MessageDigest algorithm="SHA-512">
                     cbb315f6644890398239fe1f048fc6b9ee2985852860c93e796af2a884cc680af38ce485cc26c70637159afe20f781722f6b6ee4f1b6a0baaa2012ea1e4940a6
                 </MessageDigest>
-                <Size>756</Size>
+                <Size>819</Size>
                 <FormatIdentification>
                     <FormatLitteral>Portable Document Format</FormatLitteral>
                     <FormatId>fmt/18</FormatId>
@@ -46,7 +46,7 @@
                 <MessageDigest algorithm="SHA-512">
                     e7c80fa8aefc35c00e319727725ae9e1454f43fa60421e15ee9e186a8cc2e0bd95b60a778535aea0183c65ae3788265c376c23e519ae029c4df8c614f8c8d191
                 </MessageDigest>
-                <Size>756</Size>
+                <Size>819</Size>
                 <FormatIdentification>
                     <FormatLitteral>Portable Document Format</FormatLitteral>
                     <FormatId>fmt/18</FormatId>
@@ -63,7 +63,7 @@
                 <MessageDigest algorithm="SHA-512">
                     e7c80fa8aefc35c00e319727725ae9e1454f43fa60421e15ee9e186a8cc2e0bd95b60a778535aea0183c65ae3788265c376c23e519ae029c4df8c614f8c8d191
                 </MessageDigest>
-                <Size>756</Size>
+                <Size>819</Size>
                 <FormatIdentification>
                     <FormatLitteral>Portable Document Format</FormatLitteral>
                     <FormatId>fmt/18</FormatId>
@@ -80,7 +80,7 @@
                 <MessageDigest algorithm="SHA-512">
                     e7c80fa8aefc35c00e319727725ae9e1454f43fa60421e15ee9e186a8cc2e0bd95b60a778535aea0183c65ae3788265c376c23e519ae029c4df8c614f8c8d191
                 </MessageDigest>
-                <Size>756</Size>
+                <Size>819</Size>
                 <FormatIdentification>
                     <FormatLitteral>Portable Document Format</FormatLitteral>
                     <FormatId>pdf</FormatId>
@@ -102,7 +102,7 @@
                 <MessageDigest algorithm="SHA-512">
                     e7c80fa8aefc35c00e319727725ae9e1454f43fa60421e15ee9e186a8cc2e0bd95b60a778535aea0183c65ae3788265c376c23e519ae029c4df8c614f8c8d191
                 </MessageDigest>
-                <Size>756</Size>
+                <Size>819</Size>
                 <FormatIdentification>
                     <FormatId>pdf</FormatId>
                 </FormatIdentification>
