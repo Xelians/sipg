@@ -586,9 +586,9 @@ class Sedav21Converter {
     // Coverage Group
     // Originating & Submission Agency Group
     ifNotNull(
-        unit.getOriginatingAgency(), e -> dmct.setOriginatingAgency(toOrganizationWithIdType(e)));
+        unit.getOriginatingAgency(), e -> dmct.setOriginatingAgency(toOrganizationType(e)));
     ifNotNull(
-        unit.getSubmissionAgency(), e -> dmct.setSubmissionAgency(toOrganizationWithIdType(e)));
+        unit.getSubmissionAgency(), e -> dmct.setSubmissionAgency(toOrganizationType(e)));
 
     // Authorized Agent & Writing  Group
     unit.getAuthorizedAgents().forEach(agent -> dmct.getAuthorizedAgent().add(toAgentType(agent)));
@@ -1166,6 +1166,20 @@ class Sedav21Converter {
     CodeType ct = sedav2Factory.createCodeType();
     ct.setValue(codeType);
     return ct;
+  }
+
+  private OrganizationType toOrganizationType(Agency agency) {
+    OrganizationType ot = sedav2Factory.createOrganizationType();
+    ot.setIdentifier(toIdentifierType(agency.getIdentifier()));
+    if (StringUtils.isNotBlank(agency.getName())) {
+      OrganizationDescriptiveMetadataType odmt =
+          sedav2Factory.createOrganizationDescriptiveMetadataType();
+
+      ifNotNull(agency.getName(), e -> odmt.getAny().add(toNode(new Element("Name", e))));
+      agency.getElements().forEach(e -> odmt.getAny().add(toNode(e)));
+      ot.setOrganizationDescriptiveMetadata(odmt);
+    }
+    return ot;
   }
 
   private OrganizationWithIdType toOrganizationWithIdType(Agency agency) {

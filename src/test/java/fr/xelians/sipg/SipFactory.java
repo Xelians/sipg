@@ -392,7 +392,7 @@ public class SipFactory {
     unit1.setPhysicalVersion("PhysicalMaster_1");
     unit1.setMeasure(26);
 
-    LocalDate today = LocalDate.now();
+    LocalDate today = LocalDate.of(2026,3,10);
     unit1.setAccessRules("AccessRule", today);
 
     AppraisalRules aRule1 = new AppraisalRules();
