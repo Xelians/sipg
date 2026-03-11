@@ -224,13 +224,12 @@ git push origin v1.4 or git push origin --tags
 
 ## Deployer sur Maven Central
 
-* Sur github, exécuter le workflow "Deploy on Maven central" pour copier l'artefact SipG sur le serveur Nexus Sonatype
-  - Note. l'authentification par API sur le serveur Nexus nécessite un token généré depuis l'interface web du serveur Sonatype (Menu profile/User Token)  
-* Puis, se connecter à l'interface web du serveur Sonatype
-  - https://s01.oss.sonatype.org/
-* Aller dans Staging Repositories
-  - Passer les étapes du workflow déploiement (close, etc.)
-  - Chaque étape peut prendre quelques minutes
+* Sur github, exécuter le workflow "Deploy on Maven central" pour déployer automatiquement le package sur Maven Central.
+
+Note.
+* Le script de déploiement nécessite un token généré depuis l'interface web du serveur Central Sonatype
+* Se connecter à l'interface web du serveur https://central.sonatype.com/
+* Aller dans le menu "View User Token" puis "generate user token"  
 
 ## Mettre à jour la clé secrète (si nécessaire)
 
