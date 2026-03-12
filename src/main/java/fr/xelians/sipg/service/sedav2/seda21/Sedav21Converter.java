@@ -16,63 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 package fr.xelians.sipg.service.sedav2.seda21;
 
 import static fr.xelians.sipg.utils.SipUtils.ifNotBlank;
@@ -123,6 +66,8 @@ class Sedav21Converter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Sedav21Converter.class);
   private static final String EXT_NS = "fr:gouv:culture:archivesdefrance:seda:v2.1";
+  public static final String XMLNS = "xmlns";
+
   private final List<Callable<Void>> tasks = new ArrayList<>();
   private final AtomicInteger idCounter = new AtomicInteger();
   private final ObjectFactory sedav2Factory = new ObjectFactory();
@@ -702,7 +647,7 @@ class Sedav21Converter {
       Document doc = docBuilder.newDocument();
       org.w3c.dom.Element element =
           docBuilder.parse(new InputSource(new StringReader(fragment))).getDocumentElement();
-      element.setAttribute("xmlns", EXT_NS);
+      element.setAttribute(XMLNS, EXT_NS);
       return doc.importNode(element, true);
     } catch (SAXException | IOException ex) {
       throw new SipException("Unable to create Node from document builder", ex);

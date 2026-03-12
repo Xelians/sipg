@@ -19,9 +19,22 @@
 
 package fr.xelians.sipg.model;
 
+/**
+ * L'énumération SigningRole définit les rôles possibles d'un objet de signature dans une archive.
+ *
+ * @author Emmanuel Deviller
+ */
 public enum SigningRole {
+
+  /** Le document signé. */
   SIGNED_DOCUMENT,
+
+  /** L'horodatage. */
   TIMESTAMP,
+
+  /** La signature. */
   SIGNATURE,
+
+  /** La preuve complémentaire. */
   ADDITIONAL_PROOF
 }

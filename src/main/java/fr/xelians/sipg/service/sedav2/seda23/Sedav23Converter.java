@@ -88,6 +88,7 @@ class Sedav23Converter {
   private static final Logger LOGGER = LoggerFactory.getLogger(Sedav23Converter.class);
   private static final String EXT_NS = "fr:gouv:culture:archivesdefrance:seda:v2.3";
   public static final String XMLNS = "xmlns";
+
   private final List<Callable<Void>> tasks = new ArrayList<>();
   private final AtomicInteger idCounter = new AtomicInteger();
   private final ObjectFactory sedav2Factory = new ObjectFactory();

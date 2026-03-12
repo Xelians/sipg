@@ -29,18 +29,72 @@ import java.nio.file.Path;
 import javax.xml.transform.Source;
 import javax.xml.validation.Validator;
 
+/**
+ * L'interface SedaAdapter définit les opérations d'écriture, de validation et de
+ * sérialisation/désérialisation d'archives conformes au standard SEDA. Chaque version du standard
+ * (v2.1, v2.2, v2.3) fournit sa propre implémentation.
+ *
+ * @author Emmanuel Deviller
+ * @see Sedav2Service
+ */
 public interface SedaAdapter {
 
+  /**
+   * Écrit l'archive de transfert dans un fichier ZIP au chemin spécifié.
+   *
+   * @param archive l'archive de transfert à écrire
+   * @param validator le validateur XSD/RNG, peut être {@code null}
+   * @param zipPath le chemin du fichier ZIP de destination
+   * @param config la configuration SEDA
+   */
   void write(ArchiveTransfer archive, Validator validator, Path zipPath, SedaConfig config);
 
+  /**
+   * Écrit la réponse de demande de communication dans un fichier ZIP au chemin spécifié.
+   *
+   * @param archive la réponse de demande de communication à écrire
+   * @param validator le validateur XSD/RNG, peut être {@code null}
+   * @param zipPath le chemin du fichier ZIP de destination
+   * @param config la configuration SEDA
+   */
   void write(
       ArchiveDeliveryRequestReply archive, Validator validator, Path zipPath, SedaConfig config);
 
+  /**
+   * Valide l'archive de transfert selon le standard SEDA.
+   *
+   * @param archive l'archive de transfert à valider
+   * @param validator le validateur XSD/RNG, peut être {@code null}
+   * @param config la configuration SEDA
+   */
   void validate(ArchiveTransfer archive, Validator validator, SedaConfig config);
 
+  /**
+   * Valide une source XML selon le standard SEDA.
+   *
+   * @param source la source XML à valider
+   * @param config la configuration SEDA
+   */
   void validate(Source source, SedaConfig config);
 
+  /**
+   * Sérialise l'archive de transfert en un flux XML.
+   *
+   * @param archiveTransfer l'archive de transfert à sérialiser
+   * @param config la configuration SEDA
+   * @return le flux d'entrée contenant le XML généré
+   */
   InputStream marshal(ArchiveTransfer archiveTransfer, SedaConfig config);
 
+  /**
+   * Désérialise un flux XML en un objet du type spécifié.
+   *
+   * @param <T> le type de l'objet à désérialiser
+   * @param stream le flux d'entrée XML
+   * @param clazz la classe cible de la désérialisation
+   * @param config la configuration SEDA
+   * @return l'objet désérialisé
+   * @throws JAXBException en cas d'erreur de désérialisation JAXB
+   */
   <T> T unmarshal(InputStream stream, Class<T> clazz, SedaConfig config) throws JAXBException;
 }

@@ -75,81 +75,97 @@ public class LSInputImpl implements LSInput {
     this.byteStream = byteStream;
   }
 
+  /** {@inheritDoc} */
   @Override
   public InputStream getByteStream() {
     return byteStream;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setByteStream(InputStream byteStream) {
     this.byteStream = byteStream;
   }
 
+  /** {@inheritDoc} */
   @Override
   public Reader getCharacterStream() {
     return charStream;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setCharacterStream(Reader characterStream) {
     charStream = characterStream;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getStringData() {
     return data;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setStringData(String stringData) {
     data = stringData;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getEncoding() {
     return encoding;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setEncoding(String encoding) {
     this.encoding = encoding;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getPublicId() {
     return publicId;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setPublicId(String publicId) {
     this.publicId = publicId;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getSystemId() {
     return systemId;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setSystemId(String systemId) {
     this.systemId = systemId;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getBaseURI() {
     return baseSystemId;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setBaseURI(String baseURI) {
     baseSystemId = baseURI;
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean getCertifiedText() {
     return certifiedText;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setCertifiedText(boolean certifiedText) {
     this.certifiedText = certifiedText;

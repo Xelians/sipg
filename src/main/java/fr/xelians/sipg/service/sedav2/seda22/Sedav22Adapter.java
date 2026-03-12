@@ -238,6 +238,7 @@ public class Sedav22Adapter implements SedaAdapter {
     try {
       final var archiveTransferType = Sedav22Converter.convertToArchiveTransferType(archiveTransfer, config);
       final Marshaller marshaller = sedaContext.createMarshaller();
+      marshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", namespaceMapper);
       final ByteArrayInOutStream outputStream = new ByteArrayInOutStream();
 
       marshaller.marshal(archiveTransferType, outputStream);

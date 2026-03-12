@@ -24,6 +24,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessRead;
@@ -164,9 +166,26 @@ public class TestUtils {
                     "<MessageDigest algorithm=\"SHA-512\">HASH</MessageDigest>")
             .replaceAll("<Uri>Content/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}_",
                     "<Uri>Content/UUID_")
+            .transform(TestUtils::sortXmlnsAttributes)
             .replaceAll("\\s+", " ")
             .replaceAll(">\\s+<", "><")
             .trim();
+  }
+
+  private static final Pattern XMLNS_PAIR =
+          Pattern.compile("(xmlns(?::\\w+)?=\"[^\"]*\")\\s+(xmlns(?::\\w+)?=\"[^\"]*\")");
+
+  private static String sortXmlnsAttributes(String xml) {
+    Matcher m = XMLNS_PAIR.matcher(xml);
+    StringBuilder sb = new StringBuilder();
+    while (m.find()) {
+      String a = m.group(1);
+      String b = m.group(2);
+      String replacement = a.compareTo(b) <= 0 ? a + " " + b : b + " " + a;
+      m.appendReplacement(sb, Matcher.quoteReplacement(replacement));
+    }
+    m.appendTail(sb);
+    return sb.toString();
   }
 
   /**
