@@ -1378,15 +1378,18 @@ class Sedav23Converter {
         String digest = SipUtils.digestHex(binaryPath, mdbot.getAlgorithm());
         mdbot.setValue(digest);
 
+        final var sanitizedFileName = SipUtils.sanitizeFileName(binaryPath.getFileName().toString());
+        final var binaryFileName = UUID.randomUUID() + "_" + sanitizedFileName;
+
         // Add binary file to zip
         if (zipArchive != null) {
-          Path zipEntry = zip(binaryPath, UUID.randomUUID() + "_" + binaryPath.getFileName());
+          Path zipEntry = zip(binaryPath, binaryFileName);
           long size = (long) Files.getAttribute(zipEntry, "zip:size");
           bdot.setSize(BigInteger.valueOf(size));
           bdot.setUri(zipEntry.toString());
         } else {
           bdot.setSize(BigInteger.valueOf(Files.size(binaryPath)));
-          bdot.setUri("Content/" + UUID.randomUUID() + "_" + binaryPath.getFileName());
+          bdot.setUri("Content/" + binaryFileName);
         }
 
         FormatIdentificationType fit = bdot.getFormatIdentification();
