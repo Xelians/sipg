@@ -19,7 +19,6 @@
 package fr.xelians.sipg;
 
 import fr.xelians.sipg.utils.SipException;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -153,27 +152,28 @@ public class TestUtils {
 
   /**
    * Cleans and standardizes the content of a provided XML manifest by replacing specific patterns
-   * such as timestamps, hash digests, and UUIDs with generic placeholders. The method also compresses
-   * excessive whitespace and trims the final output.
+   * such as timestamps, hash digests, and UUIDs with generic placeholders. The method also
+   * compresses excessive whitespace and trims the final output.
    *
    * @param xml the XML manifest string to be cleaned
    * @return the cleaned and standardized XML manifest string
    */
   public static String cleanManifest(String xml) {
-    return xml
-            .replaceAll("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}", "TIMESTAMP")
-            .replaceAll("<MessageDigest algorithm=\"SHA-512\">\\s*[a-f0-9]{128}\\s*</MessageDigest>",
-                    "<MessageDigest algorithm=\"SHA-512\">HASH</MessageDigest>")
-            .replaceAll("<Uri>Content/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}_",
-                    "<Uri>Content/UUID_")
-            .transform(TestUtils::sortXmlnsAttributes)
-            .replaceAll("\\s+", " ")
-            .replaceAll(">\\s+<", "><")
-            .trim();
+    return xml.replaceAll("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}", "TIMESTAMP")
+        .replaceAll(
+            "<MessageDigest algorithm=\"SHA-512\">\\s*[a-f0-9]{128}\\s*</MessageDigest>",
+            "<MessageDigest algorithm=\"SHA-512\">HASH</MessageDigest>")
+        .replaceAll(
+            "<Uri>Content/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}_",
+            "<Uri>Content/UUID_")
+        .transform(TestUtils::sortXmlnsAttributes)
+        .replaceAll("\\s+", " ")
+        .replaceAll(">\\s+<", "><")
+        .trim();
   }
 
   private static final Pattern XMLNS_PAIR =
-          Pattern.compile("(xmlns(?::\\w+)?=\"[^\"]*\")\\s+(xmlns(?::\\w+)?=\"[^\"]*\")");
+      Pattern.compile("(xmlns(?::\\w+)?=\"[^\"]*\")\\s+(xmlns(?::\\w+)?=\"[^\"]*\")");
 
   private static String sortXmlnsAttributes(String xml) {
     Matcher m = XMLNS_PAIR.matcher(xml);
@@ -189,8 +189,8 @@ public class TestUtils {
   }
 
   /**
-   * Reads the content of the given InputStream and returns it as a String. The content is read using UTF-8 encoding
-   * and then cleaned and standardized using the cleanManifest method.
+   * Reads the content of the given InputStream and returns it as a String. The content is read
+   * using UTF-8 encoding and then cleaned and standardized using the cleanManifest method.
    *
    * @param inputStream the InputStream to read the content from
    * @return the cleaned and standardized content of the InputStream as a String
@@ -199,5 +199,4 @@ public class TestUtils {
   public static String readAsString(final InputStream inputStream) throws IOException {
     return cleanManifest(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
   }
-
 }

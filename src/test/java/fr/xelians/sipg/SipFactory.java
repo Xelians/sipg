@@ -392,7 +392,7 @@ public class SipFactory {
     unit1.setPhysicalVersion("PhysicalMaster_1");
     unit1.setMeasure(26);
 
-    LocalDate today = LocalDate.of(2026,3,10);
+    LocalDate today = LocalDate.of(2026, 3, 10);
     unit1.setAccessRules("AccessRule", today);
 
     AppraisalRules aRule1 = new AppraisalRules();
@@ -473,9 +473,9 @@ public class SipFactory {
             .withTypeCode("MyTypeCode3")
             .build();
 
-    unit1.addLogEvent(event1);
-    unit1.addLogEvent(event2);
-    unit1.addLogEvent(event3);
+    unit1.addLogbookEvent(event1);
+    unit1.addLogbookEvent(event2);
+    unit1.addLogbookEvent(event3);
 
     unit1.setDocumentType("DOC001");
 
@@ -1040,9 +1040,9 @@ public class SipFactory {
             .withTypeCode("MyTypeCode3")
             .build();
 
-    unit1.addLogEvent(event1);
-    unit1.addLogEvent(event2);
-    unit1.addLogEvent(event3);
+    unit1.addLogbookEvent(event1);
+    unit1.addLogbookEvent(event2);
+    unit1.addLogbookEvent(event3);
 
     unit1.setDocumentType("DOC001");
 

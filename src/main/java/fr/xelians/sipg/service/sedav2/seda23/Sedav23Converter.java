@@ -481,23 +481,13 @@ class Sedav23Converter {
     ifNotNull(unit.getVersion(), dmct::setVersion);
 
     // Keyword Group
-    unit.getTags()
-        .forEach(
-            tag -> {
-              if (StringUtils.isBlank(tag.key())) {
-                dmct.getTag().add(tag.value());
-              } else {
-                dmct.getKeyword().add(toKeywordType(tag));
-              }
-            });
+    setTagOrKeyword(unit, dmct);
 
     // Coverage Group
 
     // Originating & Submission Agency Group
-    ifNotNull(
-        unit.getOriginatingAgency(), e -> dmct.setOriginatingAgency(toOrganizationType(e)));
-    ifNotNull(
-        unit.getSubmissionAgency(), e -> dmct.setSubmissionAgency(toOrganizationType(e)));
+    ifNotNull(unit.getOriginatingAgency(), e -> dmct.setOriginatingAgency(toOrganizationType(e)));
+    ifNotNull(unit.getSubmissionAgency(), e -> dmct.setSubmissionAgency(toOrganizationType(e)));
 
     // Agents
     setAgentMetadata(unit, dmct);
@@ -513,7 +503,7 @@ class Sedav23Converter {
     setDataMetadata(unit, dmct);
 
     // Event Group
-    // setEventMetadata(unit, dmct);
+    setEventMetadata(unit, dmct);
 
     // The signature Group was deprecated
     setSigningMetadata(unit, dmct);
@@ -570,9 +560,9 @@ class Sedav23Converter {
       mt.setHoldRule(toHoldRuleType(unit.getHoldRules()));
     }
 
-    if (!unit.getLogEvents().isEmpty()) {
+    if (!unit.getLogbookEvents().isEmpty()) {
       LogBookType lbt = sedav2Factory.createLogBookType();
-      unit.getLogEvents().forEach(event -> lbt.getEvent().add(toEventType(event)));
+      unit.getLogbookEvents().forEach(event -> lbt.getEvent().add(toEventType(event)));
       mt.setLogBook(lbt);
     }
 
@@ -603,10 +593,7 @@ class Sedav23Converter {
   }
 
   private void setEventMetadata(ArchiveUnit unit, DescriptiveMetadataContentType dmct) {
-    List<Event> events = unit.getLogEvents();
-    if (!events.isEmpty()) {
-      events.forEach(event -> dmct.getEvent().add(toEventType(event)));
-    }
+    unit.getEvents().forEach(event -> dmct.getEvent().add(toEventType(event)));
   }
 
   private static void setDataMetadata(ArchiveUnit unit, DescriptiveMetadataContentType dmct) {
@@ -641,6 +628,18 @@ class Sedav23Converter {
           .forEach(e -> cht.getCustodialHistoryItem().add(toCustodialHistoryItemType(e)));
       dmct.setCustodialHistory(cht);
     }
+  }
+
+  private void setTagOrKeyword(ArchiveUnit unit, DescriptiveMetadataContentType dmct) {
+    unit.getTags()
+        .forEach(
+            tag -> {
+              if (StringUtils.isBlank(tag.key())) {
+                dmct.getTag().add(tag.value());
+              } else {
+                dmct.getKeyword().add(toKeywordType(tag));
+              }
+            });
   }
 
   private void setSigningMetadata(ArchiveUnit unit, DescriptiveMetadataContentType dmct) {
@@ -1378,7 +1377,8 @@ class Sedav23Converter {
         String digest = SipUtils.digestHex(binaryPath, mdbot.getAlgorithm());
         mdbot.setValue(digest);
 
-        final var sanitizedFileName = SipUtils.sanitizeFileName(binaryPath.getFileName().toString());
+        final var sanitizedFileName =
+            SipUtils.sanitizeFileName(binaryPath.getFileName().toString());
         final var binaryFileName = UUID.randomUUID() + "_" + sanitizedFileName;
 
         // Add binary file to zip

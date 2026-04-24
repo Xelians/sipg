@@ -22,9 +22,7 @@ package fr.xelians.sipg.service.sedav2;
 import fr.xelians.sipg.model.ArchiveDeliveryRequestReply;
 import fr.xelians.sipg.model.ArchiveTransfer;
 import jakarta.xml.bind.JAXBException;
-
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Path;
 import javax.xml.transform.Source;
 import javax.xml.validation.Validator;
