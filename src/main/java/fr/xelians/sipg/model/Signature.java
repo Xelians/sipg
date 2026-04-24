@@ -19,17 +19,14 @@
 package fr.xelians.sipg.model;
 
 import fr.xelians.sipg.utils.SipUtils;
-import org.apache.commons.lang3.Validate;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.Validate;
 
 /**
  * La classe Signature contient les informations relatives à une signature.
  *
- * <p>
- * Supporté en SEDA v2.1
- * </p>
+ * <p>Supporté en SEDA v2.1
  *
  * @author Emmanuel Deviller
  * @see Signer
@@ -37,115 +34,104 @@ import java.util.List;
  */
 public class Signature {
 
-    /**
-     * La liste des signataires.
-     */
-    protected final List<Signer> signers = new ArrayList<>();
+  /** La liste des signataires. */
+  protected final List<Signer> signers = new ArrayList<>();
 
-    /**
-     * La validateur de la signature.
-     */
-    protected Validator validator;
+  /** La validateur de la signature. */
+  protected Validator validator;
 
-    /**
-     * L'algorithme utilisé par la signature.
-     */
-    protected String digestAlgorithm = "SHA-512";
+  /** L'algorithme utilisé par la signature. */
+  protected String digestAlgorithm = "SHA-512";
 
-    /**
-     * La condensat de la signature.
-     */
-    protected String digestValue;
+  /** La condensat de la signature. */
+  protected String digestValue;
 
-    /**
-     * Instancie la classe.
-     */
-    public Signature() {
-        // Do nothing here
-    }
+  /** Instancie la classe. */
+  public Signature() {
+    // Do nothing here
+  }
 
-    /**
-     * Ajoute un signataire à la liste des signataires.
-     *
-     * @param signer le signataire à ajouter
-     */
-    public void addSigner(Signer signer) {
-        Validate.notNull(signer, SipUtils.NOT_NULL, "signer");
-        signers.add(signer);
-    }
+  /**
+   * Ajoute un signataire à la liste des signataires.
+   *
+   * @param signer le signataire à ajouter
+   */
+  public void addSigner(Signer signer) {
+    Validate.notNull(signer, SipUtils.NOT_NULL, "signer");
+    signers.add(signer);
+  }
 
-    /**
-     * Supprime un signataire de la liste des signataires.
-     *
-     * @param signer le signataire à supprimer
-     * @return true si la suppression a été réalisée avec succès, sinon false
-     */
-    public boolean removeSigner(Signer signer) {
-        Validate.notNull(signer, SipUtils.NOT_NULL, "signer");
-        return signers.remove(signer);
-    }
+  /**
+   * Supprime un signataire de la liste des signataires.
+   *
+   * @param signer le signataire à supprimer
+   * @return true si la suppression a été réalisée avec succès, sinon false
+   */
+  public boolean removeSigner(Signer signer) {
+    Validate.notNull(signer, SipUtils.NOT_NULL, "signer");
+    return signers.remove(signer);
+  }
 
-    /**
-     * Fournit les signataires de la signature.
-     *
-     * @return la liste des signataires
-     */
-    public List<Signer> getSigners() {
-        return new ArrayList<>(signers);
-    }
+  /**
+   * Fournit les signataires de la signature.
+   *
+   * @return la liste des signataires
+   */
+  public List<Signer> getSigners() {
+    return new ArrayList<>(signers);
+  }
 
-    /**
-     * Indique le validateur.
-     *
-     * @return le validateur
-     */
-    public Validator getValidator() {
-        return validator;
-    }
+  /**
+   * Indique le validateur.
+   *
+   * @return le validateur
+   */
+  public Validator getValidator() {
+    return validator;
+  }
 
-    /**
-     * Spécifie le validateur.
-     *
-     * @param validator le validateur
-     */
-    public void setValidator(Validator validator) {
-        this.validator = validator;
-    }
+  /**
+   * Spécifie le validateur.
+   *
+   * @param validator le validateur
+   */
+  public void setValidator(Validator validator) {
+    this.validator = validator;
+  }
 
-    /**
-     * Indique l'algorithme utilisé par la signature.
-     *
-     * @return l 'algorithm
-     */
-    public String getDigestAlgorithm() {
-        return digestAlgorithm;
-    }
+  /**
+   * Indique l'algorithme utilisé par la signature.
+   *
+   * @return l 'algorithm
+   */
+  public String getDigestAlgorithm() {
+    return digestAlgorithm;
+  }
 
-    /**
-     * Indique l'algorithme utilisé par la signature.
-     *
-     * @param digestAlgorithm l'algorithme
-     */
-    public void setDigestAlgorithm(String digestAlgorithm) {
-        this.digestAlgorithm = digestAlgorithm;
-    }
+  /**
+   * Indique l'algorithme utilisé par la signature.
+   *
+   * @param digestAlgorithm l'algorithme
+   */
+  public void setDigestAlgorithm(String digestAlgorithm) {
+    this.digestAlgorithm = digestAlgorithm;
+  }
 
-    /**
-     * Indique le condensat de la signature.
-     *
-     * @return le condensat
-     */
-    public String getDigestValue() {
-        return digestValue;
-    }
+  /**
+   * Indique le condensat de la signature.
+   *
+   * @return le condensat
+   */
+  public String getDigestValue() {
+    return digestValue;
+  }
 
-    /**
-     * Spécifie le condensat de la signature.
-     *
-     * @param digestValue le condensat
-     */
-    public void setDigestValue(String digestValue) {
-        this.digestValue = digestValue;
-    }
-
+  /**
+   * Spécifie le condensat de la signature.
+   *
+   * @param digestValue le condensat
+   */
+  public void setDigestValue(String digestValue) {
+    this.digestValue = digestValue;
+  }
 }

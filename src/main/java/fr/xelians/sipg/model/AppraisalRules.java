@@ -21,80 +21,71 @@ package fr.xelians.sipg.model;
 import java.time.LocalDate;
 
 /**
- * <p>
  * La classe AppraisalRules représente les règles de durée d’utilité administrative des archives.
- * </p>
  *
- * <p>
- * Supporté en SEDA v2.1 et FNTC v4.
- * </p>
+ * <p>Supporté en SEDA v2.1 et FNTC v4.
  *
  * @author Emmanuel Deviller
  */
 public class AppraisalRules extends AbstractSimpleRules {
 
+  /**
+   * Action à entreprendre au terme de la durée d’utilité administrative. Cette propriété est
+   * ignorée en FNTC v4.
+   */
+  protected String finalAction;
 
-    /**
-     * Action à entreprendre au terme de la durée d’utilité administrative. Cette propriété est ignorée en FNTC v4.
-     */
-    protected String finalAction;
+  /** La durée d’utilité administrative. Cette propriété est ignorée en SEDA v2.1. */
+  protected String duration;
 
-    /**
-     * La durée de d’utilité administrative. Cette propriété est ignorée en SEDA v2.1.
-     */
-    protected String duration;
+  /** Instancie la classe. */
+  public AppraisalRules() {
+    super();
+  }
 
-    /**
-     * Instancie la classe.
-     */
-    public AppraisalRules() {
-        super();
-    }
+  /**
+   * Instancie la classe avec la règle spécifiée par les paramètres.
+   *
+   * @param name la référence de la règle communicabilité
+   * @param startDate date de départ de calcul de la règle de communicabilité
+   */
+  public AppraisalRules(String name, LocalDate startDate) {
+    super(name, startDate);
+  }
 
-    /**
-     * Instancie la classe avec la règle spécifiée par les paramètres.
-     *
-     * @param name      la référence de la règle communicabilité
-     * @param startDate date de départ de calcul de la règle de communicabilité
-     */
-    public AppraisalRules(String name, LocalDate startDate) {
-        super(name, startDate);
-    }
+  /**
+   * Indique l'action à entreprendre au terme de la durée d’utilité administrative.
+   *
+   * @return l'action à entreprendre
+   */
+  public String getFinalAction() {
+    return finalAction;
+  }
 
-    /**
-     * Indique l'action à entreprendre au terme de la durée d’utilité administrative.
-     *
-     * @return l'action à entreprendre
-     */
-    public String getFinalAction() {
-        return finalAction;
-    }
+  /**
+   * Spécifie l'action à entreprendre au terme de la durée d’utilité administrative.
+   *
+   * @param finalAction l'action à entreprendre
+   */
+  public void setFinalAction(String finalAction) {
+    this.finalAction = finalAction;
+  }
 
-    /**
-     * Spécifie l'action à entreprendre au terme de la durée d’utilité administrative.
-     *
-     * @param finalAction l'action à entreprendre
-     */
-    public void setFinalAction(String finalAction) {
-        this.finalAction = finalAction;
-    }
+  /**
+   * Indique la durée d’utilité administrative.
+   *
+   * @return la durée d’utilité administrative
+   */
+  public String getDuration() {
+    return duration;
+  }
 
-    /**
-     * Indique la durée de d’utilité administrative.
-     *
-     * @return la durée de d’utilité administrative
-     */
-    public String getDuration() {
-        return duration;
-    }
-
-    /**
-     * Spécifie la durée de d’utilité administrative.
-     *
-     * @param duration la durée de d’utilité administrative
-     */
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
+  /**
+   * Spécifie la durée d’utilité administrative.
+   *
+   * @param duration la durée d’utilité administrative
+   */
+  public void setDuration(String duration) {
+    this.duration = duration;
+  }
 }

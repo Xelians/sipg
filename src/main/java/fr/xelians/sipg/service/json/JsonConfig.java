@@ -19,42 +19,14 @@
 package fr.xelians.sipg.service.json;
 
 /**
- * La classe JsonConfig représente la configuration utilisée lors de la sérialisation d'une archive en json. Les valeurs
- * par défaut sont définies dans la classe JsonConfigBuilder.
+ * La classe JsonConfig représente la configuration utilisée lors de la sérialisation d'une archive
+ * en json. Les valeurs par défaut sont définies dans la classe JsonConfigBuilder.
  *
  * @author Emmanuel Deviller
  * @see JsonConfigBuilder
  */
-public class JsonConfig {
+public record JsonConfig(boolean format) {
 
-    /**
-     * The constant DEFAULT.
-     */
-    public static final JsonConfig DEFAULT = JsonConfigBuilder.builder().build();
-
-    private final boolean format;
-
-    /**
-     * Instancie la classe.
-     *
-     * @param format true si le fichier json doit être formaté, false sinon
-     */
-    public JsonConfig(boolean format) {
-        this.format = format;
-    }
-
-    /**
-     * Indique si le fichier json doit être formaté.
-     *
-     * @return true si le fichier json doit être formaté, false sinon.
-     */
-    public boolean isFormat() {
-        return format;
-    }
-
-    @Override
-    public String toString() {
-        return "JsonConfig{" + "format=" + format + "'}'";
-    }
-
+  /** The constant DEFAULT. */
+  public static final JsonConfig DEFAULT = JsonConfigBuilder.builder().build();
 }

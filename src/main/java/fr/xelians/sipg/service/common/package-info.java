@@ -1,7 +1,7 @@
 /**
  * Les classes communes aux services.
- * <p>
- * Il est fortement déconseillé d'utiliser directement ces classes en dehors de la librairie.
+ *
+ * <p>Il est fortement déconseillé d'utiliser directement ces classes en dehors de la librairie.
  *
  * @author Emmanuel Deviller
  */

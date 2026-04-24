@@ -1,30 +1,30 @@
 # SipG
 
 ## Présentation
-* SipG est une bibliothèque pour générer et valider des archives aux formats FNTC v4 et SEDA v2.1 & v2.2.
+* SipG est une bibliothèque pour générer et valider des archives aux formats FNTC v4 et SEDA v2.1, v2.2 & v2.3. La librairie SipG est publiée en Open Source sous [licence libre Apache v2](./doc/license/LICENCE.APACHE_V2).
 
 ## Fonctionnalités
 
 La librairie SipG offre les fonctionnalités suivantes : 
 
-* Génération d’un SIP conforme aux formats FNTC v4 et SEDA v2.1 & v2.2
-* Suivi précis des étapes de validation par callback 
-* Validation optionnelle du fichier de description de l'archive par un profil RNG 
-* Application automatique de valeurs par défaut raisonnables
-* Support des tags et des fragments XML étendus
-* Identification des formats des objets binaires (intégration de la librairie Droid)
+* Conformité aux standards FNTC v4 et SEDA v2.1, v2.2 & v2.3
+* Génération de SIP (ArchiveTransfer) et de DIP (ArchiveDelivery) 
+* Validation optionnelle du SIP ou DIP généré par un profil RNG
 * Calcul automatique des empreintes des objets binaires
+* Support des tags et des fragments XML étendus
+* Identification des formats des objets binaires (via la librairie Droid)
 * Support des archives numériques et physiques
-* Validation complète d'une archive existante aux formats FNTC v4 ou SEDA v2.1 & v2.2
-* Sérialisation/désérialisation du fichier de description au format JSON
+* Application automatique de valeurs par défaut raisonnables
+* Validation d'une archive existante aux formats FNTC v4 ou SEDA v2.1, v2.2 & v2.3
+* Suivi précis des étapes de validation par callback
+* Sérialisation/désérialisation du fichier de description (Manifest.xml) au format JSON
 * Capacité à générer des archives extrêmement volumineuses (plus de 100 000 objets)
 * Support du multi-threads lors de la génération de l'archive
 * Documentation Javadoc exhaustive 
 
 ## Format SEDA v2
 
-Le standard d'échange de données pour l'archivage SEDA modélise les différentes transactions qui peuvent avoir 
-lieu entre des  acteurs dans le cadre de l'archivage de données. 
+Le standard d'échange de données pour l'archivage SEDA modélise les différentes transactions qui peuvent avoir lieu entre des acteurs dans le cadre de l'archivage de données. 
 
 La documentation complète du SEDA v2 est disponible sur le site de [France Archive](https://redirect.francearchives.fr/seda/).
 
@@ -41,6 +41,8 @@ Le standard FNTC v4 a pour principales caractéristiques :
 
 Les principales différences entre les formats SEDA v2 et FNTC v4 sont [listées ici](https://github.com/Xelians/sipg/blob/master/doc/assets/Diff_SEDA.md). 
 
+Note. Le standard FNTC v4 est à l'état de draft et n'a pas, à ce jour, été officiellement validé par la FNTC.
+
 ## Architecture fonctionnelle
  
 La librairie SipG a pour objectif de faciliter la création et la validation d'archives. Dans un premier temps, l'application de traitement des archives récupère et transforme les données métiers, puis grâce à SipG, génère et valide les SIP (Submission Information Package) dans un format compatible avec celui du système d'archivage.
@@ -53,11 +55,12 @@ Le répertoire contenant les tests d'intégration fournit de nombreux exemples d
 
 ### Sélection de la version du service SEDA v2
 
-SipG supporte les versions 2.1 et 2.2 de la norme SEDA. 
+SipG supporte les versions 2.1, 2.2 et 2.3 de la norme SEDA. 
 
 ```
 Sedav2Service service21 = Sedav2Service.getInstance(); // Seda 2.1
 Sedav2Service service22 = Sedav2Service.getV22Instance(); // Seda 2.2
+Sedav2Service service23 = Sedav2Service.getV23Instance(); // Seda 2.3
 ```
 
 ### Création d’une archive SEDA
@@ -75,8 +78,8 @@ archiveTransfer.setTransferringAgency("AG002", "");               // Spécifie l
 archiveTransfer.addArchiveUnit(unit);                             // Ajoute l’unité à l’archive
 
 Sedav2Service.getInstance().write(archiveTransfer, Paths.get("seda.zip"));  // Génère le SIP en Seda v2.1
-...
 Sedav2Service.getV22Instance().write(archiveTransfer, Paths.get("seda.zip"));  // Génère le SIP en Seda v2.2
+Sedav2Service.getV23Instance().write(archiveTransfer, Paths.get("seda.zip"));  // Génère le SIP en Seda v2.3
 ```
 
 ### Création d’une archive au format SEDA à partir d'un fichier CSV
@@ -114,7 +117,7 @@ Sedav2Service.getInstance().write(archiveTransfer, Paths.get("seda.zip"));  // G
 ```
 Path path = Paths.get("seda_small.xml");               // Le fichier XML à valider
 Sedav2Service.getInstance().validate(path);            // Validation du fichier en Seda v2.1
-Sedav2Service.getV22Instance().validate(path);            // Validation du fichier en Seda v2.2
+Sedav2Service.getV22Instance().validate(path);         // Validation du fichier en Seda v2.2
 ```
 
 ### Validation d'un fichier XML selon un profil RNG
@@ -184,8 +187,22 @@ Code :
 Path jsonPath = Paths.get("minisip.json");
 ArchiveTransfer archiveTransfer = JsonService.getInstance().read(jsonPath);
 ```
-
 L'objet archiveTransfer, issu de la désérialisation, peut ainsi être utilisé et modifié pour générer une nouvelle archive. 
+
+### Configuration du service 
+
+Il est possible de modifier le comportement du service génération des SIPs en sélectionnant les options adéquates dans la classe
+SedaConfigBuilder.
+
+Code :
+```
+SedaConfig config = SedaConfigBuilder.builder()
+  .thread(1)          // utilise 1 thread 
+  .useMemory(true)    // génère le SIP en mémoire
+  .strict(false)      // ne vérifie pas le strict respect du SEDA
+  .build();
+...
+```
 
 ## Contribuer au projet
 1. Forker le projet Github
@@ -204,13 +221,54 @@ Après avoir testé la nouvelle release:
 git tag -a v1.4 -m "Sipg version 1.4"
 git push origin v1.4 or git push origin --tags
 ```
-* Exécuter le workflow 
-* Se connecter sur le serveur Sonatype
-  - https://s01.oss.sonatype.org/
-* Passer les étapes de déploiement (staging, close, etc.)
 
-## Licences
+## Deployer sur Maven Central
 
-La librairie SipG est publiée en Open Source sous [licence libre Apache v2](./doc/license/LICENCE.APACHE_V2).
+* Sur github, exécuter le workflow "Deploy on Maven central" pour déployer automatiquement le package sur Maven Central.
 
-La librairie [Droid](https://github.com/digital-preservation/droid) éditée par The British National Archive est disponible sur Github sous [licence BSD](./doc/license/LICENCE.DROID).
+Note.
+* Le script de déploiement nécessite un token généré depuis l'interface web du serveur Central Sonatype
+* Se connecter à l'interface web du serveur https://central.sonatype.com/
+* Aller dans le menu "View User Token" puis "generate user token"  
+
+## Mettre à jour la clé secrète (si nécessaire)
+
+Il est possible de générer une nouvelle clé GPG avec une phrase de passe et d'exporter cette clé privée en version ASCII armor pour l'utiliser sur GitHub :
+
+1. Générez une nouvelle clé GPG
+```
+gpg --full-generate-key
+```
+- Type de clé : Sélectionnez RSA et RSA
+- Taille de la clé : Utilisez 4096 pour une meilleure sécurité
+- Expiration : Choisissez selon vos besoins (0 pour ne jamais expirer)
+- Nom, e-mail et commentaire : Fournissez les informations
+- Passe phrase : Entrez une passe phrase robuste
+
+2. Pour obtenir l'ID de la clé : 
+```
+gpg --list-secret-keys --keyid-format=long
+```
+Le résultat ressemble à ceci :
+```
+pub   rsa4096 2024-02-02 [SC]
+      XXXXXXXXXXXXXXXX
+uid   ...
+```
+où XXXXXXXXXXXXXXXX est l'ID de la clé privée.
+
+3. Exportez la clé privée en format ASCII armor
+```
+gpg --export-secret-keys --armor KEY_ID | xclip -selection clipboard
+```
+- Copiez le contenu du presse-papiers dans le secret idoine sur GitHub
+- Copiez la passe phrase dans le secret idoine sur GitHub
+
+4. Exporter la clé publique sur un des serveurs de clé utilisé par Sonatype
+```
+gpg --keyserver hkp://keyserver.ubuntu.com --send-keys XXXXXXXXXXXXXXXX
+```
+Attendre quelques minutes pour que la clé soit bien enregistrée
+```
+gpg --keyserver hkp://keyserver.ubuntu.com --receive-keys XXXXXXXXXXXXXXXX
+```

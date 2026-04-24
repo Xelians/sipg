@@ -24,56 +24,30 @@ package fr.xelians.sipg.service.fntcv4;
  * @author Emmanuel Deviller
  */
 public enum Fntcv4Step {
-    /**
-     * Start FNTC v4 step.
-     */
-    START,
-    /**
-     * Archive exist FNTC v4 step.
-     */
-    ARCHIVE_EXIST,
-    /**
-     * Archive readable FNTC v4 step.
-     */
-    ARCHIVE_READABLE,
-    /**
-     * Archive unzip FNTC v4 step.
-     */
-    ARCHIVE_UNZIP,
-    /**
-     * Manifest exist FNTC v4 step.
-     */
-    MANIFEST_EXIST,
-    /**
-     * Manifest fntc FNTC v4 step.
-     */
-    MANIFEST_FNTC,
-    /**
-     * Manifest validator FNTC v4 step.
-     */
-    MANIFEST_VALIDATOR,
-    /**
-     * Manifest parse fntc v4 step.
-     */
-    MANIFEST_PARSE,
-    /**
-     * Binary exist FNTC v4 step.
-     */
-    BINARY_EXIST,
-    /**
-     * Binary folder FNTC v4 step.
-     */
-    BINARY_FOLDER,
-    /**
-     * Binary size FNTC v4 step.
-     */
-    BINARY_SIZE,
-    /**
-     * Binary digest FNTC v4 step.
-     */
-    BINARY_DIGEST,
-    /**
-     * Complete FNTC v4 step.
-     */
-    COMPLETE
+  /** Start FNTC v4 step. */
+  START,
+  /** Archive exist FNTC v4 step. */
+  ARCHIVE_EXIST,
+  /** Archive readable FNTC v4 step. */
+  ARCHIVE_READABLE,
+  /** Archive unzip FNTC v4 step. */
+  ARCHIVE_UNZIP,
+  /** Manifest exist FNTC v4 step. */
+  MANIFEST_EXIST,
+  /** Manifest fntc FNTC v4 step. */
+  MANIFEST_FNTC,
+  /** Manifest validator FNTC v4 step. */
+  MANIFEST_VALIDATOR,
+  /** Manifest parse fntc v4 step. */
+  MANIFEST_PARSE,
+  /** Binary exist FNTC v4 step. */
+  BINARY_EXIST,
+  /** Binary folder FNTC v4 step. */
+  BINARY_FOLDER,
+  /** Binary size FNTC v4 step. */
+  BINARY_SIZE,
+  /** Binary digest FNTC v4 step. */
+  BINARY_DIGEST,
+  /** Complete FNTC v4 step. */
+  COMPLETE
 }

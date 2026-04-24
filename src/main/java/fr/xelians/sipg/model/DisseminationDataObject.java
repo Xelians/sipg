@@ -22,16 +22,17 @@ package fr.xelians.sipg.model;
 import fr.xelians.sipg.utils.SipException;
 
 public class DisseminationDataObject extends BinaryDataObject {
-    public DisseminationDataObject() {
-        super(DISSEMINATION);
-    }
+  public DisseminationDataObject() {
+    super(DISSEMINATION);
+  }
 
-    @Override
-    public void setBinaryVersion(String objectVersion) {
-        if (objectVersion == null || !objectVersion.startsWith(DISSEMINATION)) {
-            throw new SipException(String.format("The qualifier of type %s cannot be modified to %s", binaryVersion, objectVersion));
-        }
-        this.binaryVersion = objectVersion;
+  @Override
+  public void setBinaryVersion(String objectVersion) {
+    if (objectVersion == null || !objectVersion.startsWith(DISSEMINATION)) {
+      throw new SipException(
+          String.format(
+              "The qualifier of type %s cannot be modified to %s", binaryVersion, objectVersion));
     }
-
+    this.binaryVersion = objectVersion;
+  }
 }

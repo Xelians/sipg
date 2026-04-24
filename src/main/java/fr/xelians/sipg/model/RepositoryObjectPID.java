@@ -19,25 +19,22 @@
 package fr.xelians.sipg.model;
 
 /**
- * La classe RepositoryObjectPID représente une référence à un objet-données ou à un groupe d'objets-données déjà
- * conservé(s) dans un système d'archivage.
+ * La classe RepositoryObjectPID représente une référence à un objet-données ou à un groupe
+ * d'objets-données déjà conservé(s) dans un système d'archivage.
  *
- * <p>
- * Supporté en SEDA v2.1.
- * </p>
+ * <p>Supporté en SEDA v2.1.
  *
  * @author Emmanuel Deviller
  * @see RelationRef
  */
 public class RepositoryObjectPID extends RelationRef<String> {
 
-    /**
-     * Instancie la classe avec l'argument spécifié.
-     *
-     * @param value l'objet-données référencé
-     */
-    public RepositoryObjectPID(String value) {
-        super(value);
-    }
-
+  /**
+   * Instancie la classe avec l'argument spécifié.
+   *
+   * @param value l'objet-données référencé
+   */
+  public RepositoryObjectPID(String value) {
+    super(value);
+  }
 }

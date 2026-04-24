@@ -20,114 +20,106 @@ package fr.xelians.sipg.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Objects;
 
 /**
  * La classe Text représente un message localisable.
  *
- * <p>
- * Supporté en SEDA v2.1 et FNTC v4.
- * </p>
+ * <p>Supporté en SEDA v2.1 et FNTC v4.
  *
  * @author Emmanuel Deviller
  */
 public class Text {
 
-    /**
-     * Le message
-     */
-    protected final String message;
+  /** Le message */
+  protected final String message;
 
-    /**
-     * La langue du message
-     */
-    protected final String lang;
+  /** La langue du message */
+  protected final String lang;
 
-    /**
-     * Instancie la classe.
-     *
-     * @param message le message
-     */
-    public Text(String message) {
-        this(message, null);
+  /**
+   * Instancie la classe.
+   *
+   * @param message le message
+   */
+  public Text(String message) {
+    this(message, null);
+  }
+
+  /**
+   * Instancie la classe.
+   *
+   * @param message le message
+   * @param lang la langue
+   */
+  @JsonCreator
+  public Text(@JsonProperty("message") String message, @JsonProperty("lang") String lang) {
+    this.message = message;
+    this.lang = lang;
+  }
+
+  /**
+   * Indique le message.
+   *
+   * @return le message
+   */
+  public String getMessage() {
+    return message;
+  }
+
+  /**
+   * Indique la langue du message.
+   *
+   * @return la langue
+   */
+  public String getLang() {
+    return lang;
+  }
+
+  /**
+   * Indique la valeur du hash code de l'objet.
+   *
+   * @return le hash code de l'objet
+   */
+  @Override
+  public int hashCode() {
+    int hash = 3;
+    hash = 67 * hash + Objects.hashCode(this.message);
+    hash = 67 * hash + Objects.hashCode(this.lang);
+    return hash;
+  }
+
+  /**
+   * Indique si un autre objet est égal à celui-ci.
+   *
+   * @param obj l'objet à vérifier
+   * @return true si l'objet est identique, false sinon
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-
-    /**
-     * Instancie la classe.
-     *
-     * @param message le message
-     * @param lang    la langue
-     */
-    @JsonCreator
-    public Text(@JsonProperty("message") String message, @JsonProperty("lang") String lang) {
-        this.message = message;
-        this.lang = lang;
+    if (obj == null) {
+      return false;
     }
-
-    /**
-     * Indique le message.
-     *
-     * @return le message
-     */
-    public String getMessage() {
-        return message;
+    if (getClass() != obj.getClass()) {
+      return false;
     }
-
-    /**
-     * Indique la langue du message.
-     *
-     * @return la langue
-     */
-    public String getLang() {
-        return lang;
+    final Text other = (Text) obj;
+    if (!Objects.equals(this.message, other.message)) {
+      return false;
     }
+    return Objects.equals(this.lang, other.lang);
+  }
 
-    /**
-     * Indique la valeur du hash code de l'objet.
-     *
-     * @return le hash code de l'objet
-     */
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.message);
-        hash = 67 * hash + Objects.hashCode(this.lang);
-        return hash;
-    }
-
-    /**
-     * Indique si un autre objet est égal à celui-ci.
-     *
-     * @param obj l'objet à vérifier
-     * @return true si l'objet est identique, false sinon
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Text other = (Text) obj;
-        if (!Objects.equals(this.message, other.message)) {
-            return false;
-        }
-        return Objects.equals(this.lang, other.lang);
-    }
-
-    /**
-     * Indique la représentation en tant que String de l'objet.
-     *
-     * @return la représentation en tant que String
-     */
-    @Override
-    public String toString() {
-        return "Text{" + "message=" + message + ", lang=" + lang + '}';
-    }
-
+  /**
+   * Indique la représentation en tant que String de l'objet.
+   *
+   * @return la représentation en tant que String
+   */
+  @Override
+  public String toString() {
+    return "Text{" + "message=" + message + ", lang=" + lang + '}';
+  }
 }

@@ -30,17 +30,13 @@ import org.junit.jupiter.api.Test;
  */
 class AgencyTest {
 
-  /**
-   * Test get identifier not null.
-   */
+  /** Test get identifier not null. */
   @Test
   void testGetIdentifierNotNull() {
     assertThrows(NullPointerException.class, () -> new Agency(null, ""));
   }
 
-  /**
-   * Test of getIdentifier method, of class Agency.
-   */
+  /** Test of getIdentifier method, of class Agency. */
   @Test
   void testGetIdentifier() {
     String expResult = "identifier";
@@ -49,9 +45,7 @@ class AgencyTest {
     assertEquals(expResult, result);
   }
 
-  /**
-   * Test of getName method, of class Agency.
-   */
+  /** Test of getName method, of class Agency. */
   @Test
   void testGetName() {
     String expResult = "name";
@@ -59,5 +53,4 @@ class AgencyTest {
     String result = instance.getName();
     assertEquals(expResult, result);
   }
-
 }

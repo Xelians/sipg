@@ -19,43 +19,41 @@
 package fr.xelians.sipg.utils;
 
 /**
- * La classe SipException définit une exception spécifique à la librairie. Note. Il est fortement déconseillé
- * d'utiliser cette classe en dehors de la librairie.
+ * La classe SipException définit une exception spécifique à la librairie. Note. Il est fortement
+ * déconseillé d'utiliser cette classe en dehors de la librairie.
  *
  * @author Emmanuel Deviller
  */
 public class SipException extends RuntimeException {
 
-    /**
-     * The Serial version uid.
-     */
-    static final long serialVersionUID = 6637885103769526334L;
+  /** The Serial version uid. */
+  static final long serialVersionUID = 6637885103769526334L;
 
-    /**
-     * Instancie une nouvelle exception avec un message.
-     *
-     * @param message le message
-     */
-    public SipException(String message) {
-        super(message);
-    }
+  /**
+   * Instancie une nouvelle exception avec un message.
+   *
+   * @param message le message
+   */
+  public SipException(String message) {
+    super(message);
+  }
 
-    /**
-     * Instancie une nouvelle exception avec une cause.
-     *
-     * @param cause la cause
-     */
-    public SipException(Throwable cause) {
-        super(cause);
-    }
+  /**
+   * Instancie une nouvelle exception avec une cause.
+   *
+   * @param cause la cause
+   */
+  public SipException(Throwable cause) {
+    super(cause);
+  }
 
-    /**
-     * Instancie une nouvelle exception avec un message et une cause.
-     *
-     * @param message le message
-     * @param cause   la cause
-     */
-    public SipException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  /**
+   * Instancie une nouvelle exception avec un message et une cause.
+   *
+   * @param message le message
+   * @param cause la cause
+   */
+  public SipException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.xelians</groupId>
     <artifactId>sipg</artifactId>
-    <version>1.34</version>
+    <version>1.43</version>
     <packaging>jar</packaging>
 
     <organization>
@@ -16,7 +16,7 @@
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
 
@@ -47,10 +47,7 @@
     <!-- General Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <maven.source.version>3.2.1</maven.source.version>
-        <javadoc.source.version>3.6.0</javadoc.source.version>
+        <maven.compiler.release>21</maven.compiler.release>
     </properties>
 
     <scm>
@@ -74,156 +71,11 @@
         </site>
     </distributionManagement>
 
-    <dependencies>
-        <!--  Xml -->
-        <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>4.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-core</artifactId>
-            <version>4.0.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>4.0.4</version>
-        </dependency>
-        <!-- We need a non-official Xerces 12 to deal with XSD 1.1. Unfortunately the
-        official Apache Xerces 12.1 is not released on maven central -->
-        <dependency>
-            <groupId>org.ibissource</groupId>
-            <artifactId>ibis-xerces</artifactId>
-            <version>2.12.2-xml-schema-1.1</version>
-        </dependency>
-
-        <!--  Rng -->
-        <dependency>
-            <groupId>org.relaxng</groupId>
-            <artifactId>jing</artifactId>
-            <version>20220510</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>xerces</groupId>
-                    <artifactId>xercesImpl</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!--  Json -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.16.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.16.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.16.1</version>
-        </dependency>
-
-        <!--  Utils -->
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.16.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.14.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>1.25.0</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.15.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.junrar</groupId>
-            <artifactId>junrar</artifactId>
-            <version>7.5.5</version>
-        </dependency>
-
-        <!--  Log -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.9</version>
-        </dependency>
-
-        <dependency>
-            <groupId>uk.gov.nationalarchives</groupId>
-            <artifactId>droid-core</artifactId>
-            <version>6.7.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.glassfish.jaxb</groupId>
-                    <artifactId>jaxb-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-slf4j2-impl</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- Test dependencies -->
-        <dependency>
-            <groupId>com.google.jimfs</groupId>
-            <artifactId>jimfs</artifactId>
-            <version>1.3.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.32</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox</artifactId>
-            <version>3.0.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-csv</artifactId>
-            <version>1.10.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.10.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.5.2</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>${maven.source.version}</version>
+                <version>3.3.1</version>
                 <executions>
                     <execution>
                         <id>attach-source</id>
@@ -239,7 +91,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>3.5.2</version>
             </plugin>
 
             <!-- Jacoco code coverage -->
@@ -266,13 +118,164 @@
                 </executions>
             </plugin>
 
+            <!-- Site -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.12.0</version>
+                <version>3.21.0</version>
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <!--  Xml -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>4.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>4.0.6</version>
+        </dependency>
+        <!-- We need a non-official Xerces 12 to deal with XSD 1.1. Unfortunately the
+        official Apache Xerces 12.1 is not released on maven central -->
+        <dependency>
+            <groupId>org.ibissource</groupId>
+            <artifactId>ibis-xerces</artifactId>
+            <version>2.12.2-xml-schema-1.1</version>
+        </dependency>
+
+        <!--  Rng -->
+        <dependency>
+            <groupId>org.relaxng</groupId>
+            <artifactId>jing</artifactId>
+            <version>20241231</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!--  Json -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.21.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.21.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.21.1</version>
+        </dependency>
+
+        <!--  Utils -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.28.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.21.0</version>
+        </dependency>
+
+        <!--  Log -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.16</version>
+        </dependency>
+
+        <!--  File Format -->
+        <dependency>
+            <groupId>uk.gov.nationalarchives</groupId>
+            <artifactId>droid-core</artifactId>
+            <version>6.9.12</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.glassfish.jaxb</groupId>
+                    <artifactId>jaxb-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j2-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-ext-jdk15on</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>1.83</version>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>com.google.jimfs</groupId>
+            <artifactId>jimfs</artifactId>
+            <version>1.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.34</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.14.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.11.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.32</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <!-- Use "mvn site" to activate reporting -->
     <reporting>
@@ -280,7 +283,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.8.0</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -301,19 +304,13 @@
                 </reportSets>
             </plugin>
             <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>9.0.6</version>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.21.2</version>
+                <version>3.26.0</version>
                 <configuration>
                     <linkXRef>true</linkXRef>
-                    <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
                     <minimumTokens>100</minimumTokens>
-                    <targetJdk>1.8</targetJdk>
+                    <targetJdk>11</targetJdk>
                     <excludes>
                         <exclude>fr/**/*.java</exclude>
                         <exclude>org/**/*.java</exclude>
@@ -324,14 +321,22 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.11</version>
+                <version>0.8.12</version>
             </plugin>
         </plugins>
     </reporting>
 
+    <repositories>
+        <repository>
+            <id>maven_central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
+
     <profiles>
+        <!-- Use "mvn clean generate-sources -Pseda21" to generate jaxb classes from SEDA 2.1 -->
         <profile>
-            <!-- Use "mvn clean generate-sources -Pseda21" to generate jaxb classes -->
             <id>seda21</id>
             <build>
                 <plugins>
@@ -383,15 +388,15 @@
             </build>
         </profile>
 
+        <!-- Use "mvn clean generate-sources -Pseda22" to generate jaxb classes from SEDA 2.2 -->
         <profile>
-            <!-- Use "mvn clean generate-sources -Pseda22" to generate jaxb classes -->
             <id>seda22</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.jvnet.jaxb</groupId>
                         <artifactId>jaxb-maven-plugin</artifactId>
-                        <version>4.0.0</version>
+                        <version>4.0.8</version>
                         <executions>
                             <execution>
                                 <configuration>
@@ -406,6 +411,7 @@
                                         <include>binding.xjb</include>
                                     </bindingIncludes>
                                     <catalog>src/main/resources/seda-2.2/seda-vitam.cat</catalog>
+                                    <extension>true</extension>
                                     <args>
                                         <arg>-Xinheritance</arg>
                                         <arg>-Xannotate</arg>
@@ -415,9 +421,8 @@
                                         <plugin>
                                             <groupId>org.jvnet.jaxb</groupId>
                                             <artifactId>jaxb-plugin-annotate</artifactId>
-                                            <version>3.0.1</version>
+                                            <version>4.0.8</version>
                                         </plugin>
-
                                     </plugins>
                                 </configuration>
                                 <goals>
@@ -437,8 +442,62 @@
             </build>
         </profile>
 
+        <!-- Use "mvn clean generate-sources -Pseda23" to generate jaxb classes from SEDA 2.3 -->
         <profile>
-            <!-- Use "mvn verify -Pcentral" to add javadoc and signature -->
+            <id>seda23</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jvnet.jaxb</groupId>
+                        <artifactId>jaxb-maven-plugin</artifactId>
+                        <version>4.0.8</version>
+                        <executions>
+                            <execution>
+                                <configuration>
+                                    <generateDirectory>src/main/java/</generateDirectory>
+                                    <schemaDirectory>src/main/resources/seda-2.3/</schemaDirectory>
+                                    <schemaIncludes>
+                                        <include>seda-vitam-main.xsd</include>
+                                    </schemaIncludes>
+                                    <bindingDirectory>src/main/resources/seda-2.3/
+                                    </bindingDirectory>
+                                    <bindingIncludes>
+                                        <include>binding.xjb</include>
+                                    </bindingIncludes>
+                                    <catalog>src/main/resources/seda-2.3/seda-vitam.cat</catalog>
+                                    <extension>true</extension>
+                                    <args>
+                                        <arg>-Xinheritance</arg>
+                                        <arg>-Xannotate</arg>
+                                    </args>
+                                    <strict>false</strict>
+                                    <plugins>
+                                        <plugin>
+                                            <groupId>org.jvnet.jaxb</groupId>
+                                            <artifactId>jaxb-plugin-annotate</artifactId>
+                                            <version>4.0.8</version>
+                                        </plugin>
+                                    </plugins>
+                                </configuration>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.jvnet.jaxb</groupId>
+                                <artifactId>jaxb-plugins</artifactId>
+                                <version>3.0.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Use "mvn verify -Pcentral" to add javadoc and signature -->
+        <profile>
             <id>central</id>
             <build>
                 <plugins>
@@ -446,7 +505,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${javadoc.source.version}</version>
+                        <version>3.11.2</version>
                         <configuration>
                             <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                             <excludePackageNames>org.*:uk.*:fr.gouv.*</excludePackageNames>
@@ -464,7 +523,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>3.2.3</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -475,19 +534,30 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!-- Publish to Maven Central -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.7.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
 
+        <!-- Use "mvn verify -Pgithub" to package the JAR for github -->
         <profile>
-            <!-- Use "mvn verify -Pgithub" to package in one big jar -->
             <id>github</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <version>3.3.0</version>
+                        <version>3.7.1</version>
                         <configuration>
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>

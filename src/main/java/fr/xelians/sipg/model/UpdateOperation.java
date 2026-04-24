@@ -22,67 +22,66 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * La classe UpdateOperation représente une opération de mise à jour d'une unité d'archive. (Not implemented yet)
+ * La classe UpdateOperation représente une opération de mise à jour d'une unité d'archive. (Not
+ * implemented yet)
  *
- * <p>
- * Supporté en SEDA v2.1.
- * </p>
+ * <p>Supporté en SEDA v2.1.
  *
  * @author Emmanuel Deviller
  */
 public class UpdateOperation {
 
-    private String systemId;
-    private String metadataName;
-    private String metadataValue;
+  private String systemId;
+  private String metadataName;
+  private String metadataValue;
 
-    /**
-     * Instantiates a new Update operation.
-     *
-     * @param systemId the system id
-     */
-    public UpdateOperation(String systemId) {
-        this.systemId = systemId;
-    }
+  /**
+   * Instantiates a new Update operation.
+   *
+   * @param systemId the system id
+   */
+  public UpdateOperation(String systemId) {
+    this.systemId = systemId;
+  }
 
-    /**
-     * Instantiates a new Update operation.
-     *
-     * @param metadataName  the metadata name
-     * @param metadataValue the metadata value
-     */
-    @JsonCreator
-    public UpdateOperation(@JsonProperty("metadataName") String metadataName,
-                           @JsonProperty("metadataValue") String metadataValue) {
-        this.metadataName = metadataName;
-        this.metadataValue = metadataValue;
-    }
+  /**
+   * Instantiates a new Update operation.
+   *
+   * @param metadataName the metadata name
+   * @param metadataValue the metadata value
+   */
+  @JsonCreator
+  public UpdateOperation(
+      @JsonProperty("metadataName") String metadataName,
+      @JsonProperty("metadataValue") String metadataValue) {
+    this.metadataName = metadataName;
+    this.metadataValue = metadataValue;
+  }
 
-    /**
-     * Gets system id.
-     *
-     * @return the system id
-     */
-    public String getSystemId() {
-        return systemId;
-    }
+  /**
+   * Gets system id.
+   *
+   * @return the system id
+   */
+  public String getSystemId() {
+    return systemId;
+  }
 
-    /**
-     * Gets metadata name.
-     *
-     * @return the metadata name
-     */
-    public String getMetadataName() {
-        return metadataName;
-    }
+  /**
+   * Gets metadata name.
+   *
+   * @return the metadata name
+   */
+  public String getMetadataName() {
+    return metadataName;
+  }
 
-    /**
-     * Gets metadata value.
-     *
-     * @return the metadata value
-     */
-    public String getMetadataValue() {
-        return metadataValue;
-    }
-
+  /**
+   * Gets metadata value.
+   *
+   * @return the metadata value
+   */
+  public String getMetadataValue() {
+    return metadataValue;
+  }
 }

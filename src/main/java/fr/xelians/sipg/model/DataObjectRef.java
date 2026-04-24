@@ -22,25 +22,23 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * La classe DataObjectRef représente une référence à un objet-données ou à un groupe d'objets-données interne(s).
+ * La classe DataObjectRef représente une référence à un objet-données ou à un groupe
+ * d'objets-données interne(s).
  *
- * <p>
- * Supporté en SEDA v2.1.
- * </p>
+ * <p>Supporté en SEDA v2.1.
  *
  * @author Emmanuel Deviller
  * @see RelationRef
  */
 public class DataObjectRef extends RelationRef<ArchiveUnit> {
 
-    /**
-     * Instancie la classe avec l'argument spécifié.
-     *
-     * @param reference l'unité d'archive interne contenant l'objet référencée
-     */
-    @JsonCreator
-    public DataObjectRef(@JsonProperty("reference") ArchiveUnit reference) {
-        super(reference);
-    }
-
+  /**
+   * Instancie la classe avec l'argument spécifié.
+   *
+   * @param reference l'unité d'archive interne contenant l'objet référencée
+   */
+  @JsonCreator
+  public DataObjectRef(@JsonProperty("reference") ArchiveUnit reference) {
+    super(reference);
+  }
 }

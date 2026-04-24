@@ -22,26 +22,23 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * La classe RepositoryArchiveUnitPID représente une référence à une unité d'archive déjà conservée dans un système
- * d'archivage.
+ * La classe RepositoryArchiveUnitPID représente une référence à une unité d'archive déjà conservée
+ * dans un système d'archivage.
  *
- * <p>
- * Supporté en SEDA v2.1.
- * </p>
+ * <p>Supporté en SEDA v2.1.
  *
  * @author Emmanuel Deviller
  * @see RelationRef
  */
 public class RepositoryArchiveUnitPID extends RelationRef<String> {
 
-    /**
-     * Instancie la classe.
-     *
-     * @param reference l'unité d'archive référencée
-     */
-    @JsonCreator
-    public RepositoryArchiveUnitPID(@JsonProperty("reference") String reference) {
-        super(reference);
-    }
-
+  /**
+   * Instancie la classe.
+   *
+   * @param reference l'unité d'archive référencée
+   */
+  @JsonCreator
+  public RepositoryArchiveUnitPID(@JsonProperty("reference") String reference) {
+    super(reference);
+  }
 }

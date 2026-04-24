@@ -19,106 +19,104 @@
 package fr.xelians.sipg.model;
 
 /**
- * La classe AgentBuilder facilite la création d'un objet Place en suivant le principe de conception du pattern
- * builder.
+ * La classe AgentBuilder facilite la création d'un objet Place en suivant le principe de conception
+ * du pattern builder.
  *
  * @author Emmanuel Deviller
  * @see Place
  */
 public class PlaceBuilder {
 
-    private String geogName;
-    private String address;
-    private String postalCode;
-    private String city;
-    private String region;
-    private String country;
+  private String geogName;
+  private String address;
+  private String postalCode;
+  private String city;
+  private String region;
+  private String country;
 
-    private PlaceBuilder() {
-    }
+  private PlaceBuilder() {}
 
-    /**
-     * Instancie le builder.
-     *
-     * @return le builder
-     */
-    public static PlaceBuilder builder() {
-        return new PlaceBuilder();
-    }
+  /**
+   * Instancie le builder.
+   *
+   * @return le builder
+   */
+  public static PlaceBuilder builder() {
+    return new PlaceBuilder();
+  }
 
-    /**
-     * Spécifie le nom géographique.
-     *
-     * @param geogName le nom géographique.
-     * @return le builder
-     */
-    public PlaceBuilder withGeogName(String geogName) {
-        this.geogName = geogName;
-        return this;
-    }
+  /**
+   * Spécifie le nom géographique.
+   *
+   * @param geogName le nom géographique.
+   * @return le builder
+   */
+  public PlaceBuilder withGeogName(String geogName) {
+    this.geogName = geogName;
+    return this;
+  }
 
-    /**
-     * Spécifie l'adresse.
-     *
-     * @param address l'adresse
-     * @return le builder
-     */
-    public PlaceBuilder withAddress(String address) {
-        this.address = address;
-        return this;
-    }
+  /**
+   * Spécifie l'adresse.
+   *
+   * @param address l'adresse
+   * @return le builder
+   */
+  public PlaceBuilder withAddress(String address) {
+    this.address = address;
+    return this;
+  }
 
-    /**
-     * Spécifie le code postal.
-     *
-     * @param postalCode le code postal
-     * @return le builder
-     */
-    public PlaceBuilder withPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-        return this;
-    }
+  /**
+   * Spécifie le code postal.
+   *
+   * @param postalCode le code postal
+   * @return le builder
+   */
+  public PlaceBuilder withPostalCode(String postalCode) {
+    this.postalCode = postalCode;
+    return this;
+  }
 
-    /**
-     * Spécifie la ville.
-     *
-     * @param city la ville
-     * @return le builder
-     */
-    public PlaceBuilder withCity(String city) {
-        this.city = city;
-        return this;
-    }
+  /**
+   * Spécifie la ville.
+   *
+   * @param city la ville
+   * @return le builder
+   */
+  public PlaceBuilder withCity(String city) {
+    this.city = city;
+    return this;
+  }
 
-    /**
-     * Spécifie la région.
-     *
-     * @param region la région
-     * @return le builder
-     */
-    public PlaceBuilder withRegion(String region) {
-        this.region = region;
-        return this;
-    }
+  /**
+   * Spécifie la région.
+   *
+   * @param region la région
+   * @return le builder
+   */
+  public PlaceBuilder withRegion(String region) {
+    this.region = region;
+    return this;
+  }
 
-    /**
-     * Spécifie le pays.
-     *
-     * @param country le pays
-     * @return le builder
-     */
-    public PlaceBuilder withCountry(String country) {
-        this.country = country;
-        return this;
-    }
+  /**
+   * Spécifie le pays.
+   *
+   * @param country le pays
+   * @return le builder
+   */
+  public PlaceBuilder withCountry(String country) {
+    this.country = country;
+    return this;
+  }
 
-    /**
-     * Instancie la classe Place selon les paramètres précédemment spécifiés dans le builder.
-     *
-     * @return la place
-     */
-    public Place build() {
-        return new Place(geogName, address, postalCode, city, region, country);
-    }
-
+  /**
+   * Instancie la classe Place selon les paramètres précédemment spécifiés dans le builder.
+   *
+   * @return la place
+   */
+  public Place build() {
+    return new Place(geogName, address, postalCode, city, region, country);
+  }
 }

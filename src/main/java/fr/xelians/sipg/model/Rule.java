@@ -21,99 +21,91 @@ package fr.xelians.sipg.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.xelians.sipg.utils.SipUtils;
-import org.apache.commons.lang3.Validate;
-
 import java.time.LocalDate;
 import java.util.Objects;
+import org.apache.commons.lang3.Validate;
 
 /**
  * La classe Rule représente une règle de cycle de vie.
  *
- * <p>
- * Supporté en SEDA v2.1 et FNTC v4.
- * </p>
+ * <p>Supporté en SEDA v2.1 et FNTC v4.
  *
  * @author Emmanuel Deviller
  */
 public class Rule {
 
-    /**
-     * Le nom de la règle.
-     */
-    protected final String name;
+  /** Le nom de la règle. */
+  protected final String name;
 
-    /**
-     * La date de départ du calcul de la règle.
-     */
-    protected final LocalDate startDate;
+  /** La date de départ du calcul de la règle. */
+  protected final LocalDate startDate;
 
-    /**
-     * Instancie la classe avec les arguments spécifiés.
-     *
-     * @param name      le nom
-     * @param startDate la date de départ du calcul
-     */
-    @JsonCreator
-    public Rule(@JsonProperty("name") String name, @JsonProperty("startDate") LocalDate startDate) {
-        Validate.notNull(name, SipUtils.NOT_NULL, "name");
-        this.name = name;
-        this.startDate = startDate;
+  /**
+   * Instancie la classe avec les arguments spécifiés.
+   *
+   * @param name le nom
+   * @param startDate la date de départ du calcul
+   */
+  @JsonCreator
+  public Rule(@JsonProperty("name") String name, @JsonProperty("startDate") LocalDate startDate) {
+    Validate.notNull(name, SipUtils.NOT_NULL, "name");
+    this.name = name;
+    this.startDate = startDate;
+  }
+
+  /**
+   * Indique le nom de la règle
+   *
+   * @return le nom de la règle
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Indique la date de départ du calcul de la règle.
+   *
+   * @return la date de départ du calcul
+   */
+  public LocalDate getStartDate() {
+    return startDate;
+  }
+
+  /**
+   * Indique si un autre objet est égal à celui-ci.
+   *
+   * @param obj l'objet à vérifier
+   * @return true si l'objet est identique, false sinon
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-
-    /**
-     * Indique le nom de la règle
-     *
-     * @return le nom de la règle
-     */
-    public String getName() {
-        return name;
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
     }
+    Rule rule = (Rule) obj;
+    return name.equals(rule.name) && Objects.equals(startDate, rule.startDate);
+  }
 
-    /**
-     * Indique la date de départ du calcul de la règle.
-     *
-     * @return la date de départ du calcul
-     */
-    public LocalDate getStartDate() {
-        return startDate;
-    }
+  /**
+   * Indique la valeur du hash code de l'objet.
+   *
+   * @return le hash code de l'objet
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, startDate);
+  }
 
-    /**
-     * Indique si un autre objet est égal à celui-ci.
-     *
-     * @param obj l'objet à vérifier
-     * @return true si l'objet est identique, false sinon
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        Rule rule = (Rule) obj;
-        return name.equals(rule.name)
-                && Objects.equals(startDate, rule.startDate);
-    }
-
-    /**
-     * Indique la valeur du hash code de l'objet.
-     *
-     * @return le hash code de l'objet
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, startDate);
-    }
-
-    /**
-     * Indique la représentation en tant que String de l'objet.
-     *
-     * @return la représentation en tant que String
-     */
-    @Override
-    public String toString() {
-        return "Rule{" + "name=" + name + ", startDate=" + startDate + '}';
-    }
+  /**
+   * Indique la représentation en tant que String de l'objet.
+   *
+   * @return la représentation en tant que String
+   */
+  @Override
+  public String toString() {
+    return "Rule{" + "name=" + name + ", startDate=" + startDate + '}';
+  }
 }

@@ -22,36 +22,33 @@ import fr.xelians.sipg.utils.SipUtils;
 import org.apache.commons.lang3.Validate;
 
 /**
- * La classe abstraite RelationRef représente une relation de référence à une entité faisant ou ne faisant pas partie du
- * présent paquet d'information.
+ * La classe abstraite RelationRef représente une relation de référence à une entité faisant ou ne
+ * faisant pas partie du présent paquet d'information.
  *
  * @param <T> le type de la référence
  * @author Emmanuel Deviller
  */
 public abstract class RelationRef<T> {
 
-    /**
-     * The Reference.
-     */
-    protected final T reference;
+  /** The Reference. */
+  protected final T reference;
 
-    /**
-     * Instancie la relation de référence
-     *
-     * @param reference la référence
-     */
-    protected RelationRef(T reference) {
-        Validate.notNull(reference, SipUtils.NOT_NULL, "reference");
-        this.reference = reference;
-    }
+  /**
+   * Instancie la relation de référence
+   *
+   * @param reference la référence
+   */
+  protected RelationRef(T reference) {
+    Validate.notNull(reference, SipUtils.NOT_NULL, "reference");
+    this.reference = reference;
+  }
 
-    /**
-     * Indique la référence de la relation
-     *
-     * @return la référence
-     */
-    public T getReference() {
-        return reference;
-    }
-
+  /**
+   * Indique la référence de la relation
+   *
+   * @return la référence
+   */
+  public T getReference() {
+    return reference;
+  }
 }

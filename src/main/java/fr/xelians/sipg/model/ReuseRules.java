@@ -21,32 +21,26 @@ package fr.xelians.sipg.model;
 import java.time.LocalDate;
 
 /**
- * <p>
  * La classe ReuseRules représente les règles de réutilisation des archives.
- * </p>
  *
- * <p>
- * Supporté en SEDA v2.1.
- * </p>
+ * <p>Supporté en SEDA v2.1.
  *
  * @author Emmanuel Deviller
  */
 public class ReuseRules extends AbstractSimpleRules {
 
-    /**
-     * Instancie la classe.
-     */
-    public ReuseRules() {
-        super();
-    }
+  /** Instancie la classe. */
+  public ReuseRules() {
+    super();
+  }
 
-    /**
-     * Instancie la classe avec une règle spécifiée par les paramètres.
-     *
-     * @param name      la référence de la règle réutilisation
-     * @param startDate date de départ de calcul de la règle de réutilisation
-     */
-    public ReuseRules(String name, LocalDate startDate) {
-        super(name, startDate);
-    }
+  /**
+   * Instancie la classe avec une règle spécifiée par les paramètres.
+   *
+   * @param name la référence de la règle réutilisation
+   * @param startDate date de départ de calcul de la règle de réutilisation
+   */
+  public ReuseRules(String name, LocalDate startDate) {
+    super(name, startDate);
+  }
 }
