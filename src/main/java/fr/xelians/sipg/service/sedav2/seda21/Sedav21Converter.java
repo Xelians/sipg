@@ -115,7 +115,8 @@ class Sedav21Converter {
    * @throws ExecutionException the execution exception
    * @throws InterruptedException the interrupted exception
    */
-  static ArchiveTransferType convertToArchiveTransferType(ArchiveTransfer archiveTransfer, SedaConfig config)
+  static ArchiveTransferType convertToArchiveTransferType(
+      ArchiveTransfer archiveTransfer, SedaConfig config)
       throws ExecutionException, InterruptedException {
     return convertToArchiveTransferType(archiveTransfer, null, config);
   }
@@ -130,7 +131,8 @@ class Sedav21Converter {
    * @throws ExecutionException the execution exception
    * @throws InterruptedException the interrupted exception
    */
-  static ArchiveTransferType convertToArchiveTransferType(ArchiveTransfer archiveTransfer, FileSystem zipArchive)
+  static ArchiveTransferType convertToArchiveTransferType(
+      ArchiveTransfer archiveTransfer, FileSystem zipArchive)
       throws ExecutionException, InterruptedException {
     return convertToArchiveTransferType(archiveTransfer, zipArchive, SedaConfig.DEFAULT);
   }
@@ -530,10 +532,8 @@ class Sedav21Converter {
 
     // Coverage Group
     // Originating & Submission Agency Group
-    ifNotNull(
-        unit.getOriginatingAgency(), e -> dmct.setOriginatingAgency(toOrganizationType(e)));
-    ifNotNull(
-        unit.getSubmissionAgency(), e -> dmct.setSubmissionAgency(toOrganizationType(e)));
+    ifNotNull(unit.getOriginatingAgency(), e -> dmct.setOriginatingAgency(toOrganizationType(e)));
+    ifNotNull(unit.getSubmissionAgency(), e -> dmct.setSubmissionAgency(toOrganizationType(e)));
 
     // Authorized Agent & Writing  Group
     unit.getAuthorizedAgents().forEach(agent -> dmct.getAuthorizedAgent().add(toAgentType(agent)));
@@ -566,9 +566,12 @@ class Sedav21Converter {
     ifNotNull(unit.getEndDate(), d -> dmct.setEndDate(SipUtils.toXmlDate(d).toString()));
 
     // Event Group
-    if (!unit.getLogEvents().isEmpty()) {
+    unit.getEvents().forEach(event -> dmct.getEvent().add(toEventType(event)));
+
+    // Logbook Event
+    if (!unit.getLogbookEvents().isEmpty()) {
       LogBookType lbt = sedav2Factory.createLogBookType();
-      unit.getLogEvents().forEach(event -> lbt.getEvent().add(toEventType(event)));
+      unit.getLogbookEvents().forEach(event -> lbt.getEvent().add(toEventType(event)));
       mt.setLogBook(lbt);
     }
 
@@ -1230,7 +1233,8 @@ class Sedav21Converter {
         String digest = SipUtils.digestHex(binaryPath, mdbot.getAlgorithm());
         mdbot.setValue(digest);
 
-        final var sanitizedFileName = SipUtils.sanitizeFileName(binaryPath.getFileName().toString());
+        final var sanitizedFileName =
+            SipUtils.sanitizeFileName(binaryPath.getFileName().toString());
         final var binaryFileName = UUID.randomUUID() + "_" + sanitizedFileName;
 
         // Add binary file to zip

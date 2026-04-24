@@ -67,7 +67,6 @@ import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
 import jakarta.xml.bind.*;
 import jakarta.xml.bind.util.JAXBSource;
-
 import java.io.*;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
@@ -236,7 +235,8 @@ public class Sedav23Adapter implements SedaAdapter {
   @Override
   public InputStream marshal(ArchiveTransfer archiveTransfer, SedaConfig config) {
     try {
-      final var archiveTransferType = Sedav23Converter.convertToArchiveTransferType(archiveTransfer, config);
+      final var archiveTransferType =
+          Sedav23Converter.convertToArchiveTransferType(archiveTransfer, config);
       final Marshaller marshaller = sedaContext.createMarshaller();
       marshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", namespaceMapper);
       final ByteArrayInOutStream outputStream = new ByteArrayInOutStream();
@@ -251,10 +251,10 @@ public class Sedav23Adapter implements SedaAdapter {
   }
 
   @Override
-  public <T> T unmarshal(InputStream inputStream, Class<T> clazz, SedaConfig config) throws JAXBException {
-      final Unmarshaller unmarshaller = sedaContext.createUnmarshaller();
-      final JAXBElement<T> element = unmarshaller.unmarshal(new StreamSource(inputStream), clazz);
-      return element.getValue();
+  public <T> T unmarshal(InputStream inputStream, Class<T> clazz, SedaConfig config)
+      throws JAXBException {
+    final Unmarshaller unmarshaller = sedaContext.createUnmarshaller();
+    final JAXBElement<T> element = unmarshaller.unmarshal(new StreamSource(inputStream), clazz);
+    return element.getValue();
   }
-
 }

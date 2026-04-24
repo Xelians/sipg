@@ -53,13 +53,19 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    * concernant l'unité d'archive : opération de versement, de mise à jour de métadonnées, de
    * préservation, etc.
    */
-  protected final List<Event> logEvents = new ArrayList<>();
+  protected final List<Event> logbookEvents = new ArrayList<>();
 
   /** La liste des intitulés de l'unité d'archive. */
   protected final List<Text> titles = new ArrayList<>();
 
   /** La liste des descriptions de l'unité d'archive. */
   protected final List<Text> descriptions = new ArrayList<>();
+
+  /**
+   * La liste des évènements concernant des évènements survenus au cours d’une procédure (ex.
+   * publication d’un marché, notification d’un marché, recueil d’un avis administratif, etc.).
+   */
+  protected final List<Event> events = new ArrayList<>();
 
   /**
    * La liste des changements successifs de propriété, de responsabilité et de conservation des
@@ -1363,13 +1369,45 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   }
 
   /**
+   * Ajoute un évènement à la liste des évènements du logbook de l'unité d'archive.
+   *
+   * @param event l'évènement à ajouter
+   */
+  public void addLogbookEvent(Event event) {
+    Validate.notNull(event, SipUtils.NOT_NULL, "event");
+    logbookEvents.add(event);
+  }
+
+  /**
+   * Supprime un évènement de la liste des évènements du logbook de l'unité d'archive.
+   *
+   * @param event l'évènement à supprimer
+   * @return true si la suppression a été réalisée avec succès, sinon false
+   */
+  public boolean removeLogbookEvent(Event event) {
+    Validate.notNull(event, SipUtils.NOT_NULL, "event");
+    return logbookEvents.remove(event);
+  }
+
+  /**
+   * Fournit la liste des évènements de l'unité d'archive. Un évènement correspond à toute opération
+   * concernant l'unité d'archive : opération de versement, de mise à jour de métadonnées, de
+   * préservation, etc.
+   *
+   * @return la liste des évènements du logbook de l'unité d'archive
+   */
+  public List<Event> getLogbookEvents() {
+    return new ArrayList<>(logbookEvents);
+  }
+
+  /**
    * Ajoute un évènement à la liste des évènements de l'unité d'archive.
    *
    * @param event l'évènement à ajouter
    */
-  public void addLogEvent(Event event) {
+  public void addEvent(Event event) {
     Validate.notNull(event, SipUtils.NOT_NULL, "event");
-    logEvents.add(event);
+    events.add(event);
   }
 
   /**
@@ -1378,20 +1416,19 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    * @param event l'évènement à supprimer
    * @return true si la suppression a été réalisée avec succès, sinon false
    */
-  public boolean removeLogEvent(Event event) {
+  public boolean removeEvent(Event event) {
     Validate.notNull(event, SipUtils.NOT_NULL, "event");
-    return logEvents.remove(event);
+    return events.remove(event);
   }
 
   /**
-   * Fournit la liste des évènements de l'unité d'archive. Un évènement correspond à toute opération
-   * concernant l'unité d'archive : opération de versement, de mise à jour de métadonnées, de
-   * préservation, etc.
+   * Fournit la liste des évènements survenus au cours d’une procédure (ex. publication d’un marché,
+   * notification d’un marché, recueil d’un avis administratif, etc.).
    *
    * @return la liste des évènements de l'unité d'archive
    */
-  public List<Event> getLogEvents() {
-    return new ArrayList<>(logEvents);
+  public List<Event> getEvents() {
+    return new ArrayList<>(events);
   }
 
   /**

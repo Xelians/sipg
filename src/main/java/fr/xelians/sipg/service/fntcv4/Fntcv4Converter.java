@@ -315,9 +315,10 @@ class Fntcv4Converter {
       }
     }
 
-    if (!unit.getLogEvents().isEmpty()) {
+    // Logbook Event
+    if (!unit.getLogbookEvents().isEmpty()) {
       LogBookType lbt = fntcv4Factory.createLogBookType();
-      unit.getLogEvents().forEach(event -> lbt.getEvent().add(toEventType(event)));
+      unit.getLogbookEvents().forEach(event -> lbt.getEvent().add(toEventType(event)));
       mt.setLogBook(lbt);
     }
 

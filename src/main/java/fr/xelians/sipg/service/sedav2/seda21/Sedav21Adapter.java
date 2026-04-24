@@ -67,7 +67,6 @@ import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
 import jakarta.xml.bind.*;
 import jakarta.xml.bind.util.JAXBSource;
-
 import java.io.*;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
@@ -130,7 +129,8 @@ public class Sedav21Adapter implements SedaAdapter {
       ArchiveTransfer transfer, Validator validator, Path zipPath, SedaConfig config) {
 
     try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath, config.useMemory())) {
-      ArchiveTransferType transferType = Sedav21Converter.convertToArchiveTransferType(transfer, zipArchive, config);
+      ArchiveTransferType transferType =
+          Sedav21Converter.convertToArchiveTransferType(transfer, zipArchive, config);
       doWrite(validator, config, zipArchive, transferType);
     } catch (IOException
         | JAXBException
@@ -235,7 +235,8 @@ public class Sedav21Adapter implements SedaAdapter {
   @Override
   public InputStream marshal(ArchiveTransfer archiveTransfer, SedaConfig config) {
     try {
-      final ArchiveTransferType archiveTransferType = Sedav21Converter.convertToArchiveTransferType(archiveTransfer, config);
+      final ArchiveTransferType archiveTransferType =
+          Sedav21Converter.convertToArchiveTransferType(archiveTransfer, config);
       final Marshaller marshaller = sedaContext.createMarshaller();
       marshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", namespaceMapper);
       final ByteArrayInOutStream outputStream = new ByteArrayInOutStream();
@@ -250,9 +251,10 @@ public class Sedav21Adapter implements SedaAdapter {
   }
 
   @Override
-  public <T> T unmarshal(InputStream stream, Class<T> clazz, SedaConfig config) throws JAXBException {
-      final Unmarshaller unmarshaller = sedaContext.createUnmarshaller();
-      final JAXBElement<T> element = unmarshaller.unmarshal(new StreamSource(stream), clazz);
-      return element.getValue();
+  public <T> T unmarshal(InputStream stream, Class<T> clazz, SedaConfig config)
+      throws JAXBException {
+    final Unmarshaller unmarshaller = sedaContext.createUnmarshaller();
+    final JAXBElement<T> element = unmarshaller.unmarshal(new StreamSource(stream), clazz);
+    return element.getValue();
   }
 }

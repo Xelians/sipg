@@ -18,6 +18,8 @@
  */
 package fr.xelians.sipg.service.sedav2;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.google.common.jimfs.Jimfs;
 import fr.gouv.culture.archivesdefrance.seda.v21.ArchiveTransferType;
 import fr.xelians.sipg.SipFactory;
@@ -28,8 +30,6 @@ import fr.xelians.sipg.model.ArchiveTransfer;
 import fr.xelians.sipg.service.json.JsonService;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.Validators;
-
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
@@ -40,8 +40,6 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The SEDA v2 integration test.
@@ -522,7 +520,9 @@ class Sedav21Test {
   void testMarshalComplexArchiveTransfer(TestInfo testInfo) {
     LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
-    try (FileSystem fs = Jimfs.newFileSystem(); InputStream complexSedaStream = getClass().getClassLoader().getResourceAsStream("seda-2.1/seda_complex.xml") ) {
+    try (FileSystem fs = Jimfs.newFileSystem();
+        InputStream complexSedaStream =
+            getClass().getClassLoader().getResourceAsStream("seda-2.1/seda_complex.xml")) {
       ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
       final var atMarshalled = Sedav2Service.getInstance().marshal(archiveTransfer, sedaConfig);
       assertEquals(TestUtils.readAsString(complexSedaStream), TestUtils.readAsString(atMarshalled));
@@ -537,8 +537,10 @@ class Sedav21Test {
   void testUnMarshalSmallArchiveTransferType(TestInfo testInfo) {
     LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
 
-    try ( InputStream sedaStream = getClass().getClassLoader().getResourceAsStream("seda-2.1/seda_small.xml")) {
-      final var attUnMarshalled = Sedav2Service.getInstance().unmarshal(sedaStream, ArchiveTransferType.class, sedaConfig);
+    try (InputStream sedaStream =
+        getClass().getClassLoader().getResourceAsStream("seda-2.1/seda_small.xml")) {
+      final var attUnMarshalled =
+          Sedav2Service.getInstance().unmarshal(sedaStream, ArchiveTransferType.class, sedaConfig);
       assertNotNull(attUnMarshalled);
     } catch (Exception ex) {
       String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
