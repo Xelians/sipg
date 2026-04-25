@@ -36,7 +36,6 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.junit.jupiter.api.TestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,16 +57,6 @@ public class TestUtils {
   private static final byte[] img100k = loadImage("100k.jpg");
 
   private TestUtils() {}
-
-  /**
-   * Gets method.
-   *
-   * @param testInfo the test info
-   * @return the method
-   */
-  public static String getMethod(TestInfo testInfo) {
-    return testInfo.getTestMethod().get().getName();
-  }
 
   /**
    * Create pdf.

@@ -22,7 +22,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.TestWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +33,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Emmanuel Deviller
  */
-public class TestInit implements BeforeAllCallback {
+public class TestInit implements BeforeAllCallback, BeforeEachCallback, TestWatcher {
 
   /** The constant TEST_RESOURCES. */
   public static final String TEST_RESOURCES = "src/test/resources/";
@@ -48,5 +50,19 @@ public class TestInit implements BeforeAllCallback {
       LOGGER.info("Creating test results directory: " + TEST_RESULTS);
       Files.createDirectories(testDir);
     }
+  }
+
+  @Override
+  public void beforeEach(ExtensionContext context) {
+    String testClassName = context.getRequiredTestClass().getName();
+    String testMethodName = context.getRequiredTestMethod().getName();
+    LoggerFactory.getLogger(testClassName).info(TestUtils.TEST, testMethodName);
+  }
+
+  @Override
+  public void testFailed(ExtensionContext context, Throwable cause) {
+    String testClassName = context.getRequiredTestClass().getName();
+    String testMethodName = context.getRequiredTestMethod().getName();
+    LoggerFactory.getLogger(testClassName).error(TestUtils.FAIL + testMethodName, cause);
   }
 }
