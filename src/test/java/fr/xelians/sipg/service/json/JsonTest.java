@@ -23,16 +23,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.google.common.jimfs.Jimfs;
 import fr.xelians.sipg.SipFactory;
 import fr.xelians.sipg.TestInit;
-import fr.xelians.sipg.TestUtils;
 import fr.xelians.sipg.model.ArchiveTransfer;
 import java.nio.file.FileSystem;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The JSON integration test.
@@ -42,315 +39,163 @@ import org.slf4j.LoggerFactory;
 @ExtendWith(TestInit.class)
 class JsonTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(JsonTest.class);
-
   private final JsonConfig jsonConfig = JsonConfigBuilder.builder().format(true).build();
   private final JsonService jsonService = JsonService.getInstance();
 
-  /**
-   * Test create mini json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test create mini json. */
   @Test
-  void testCreateMiniJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
-    try {
-      Path jsonPath = Paths.get(TestInit.TEST_RESULTS + "minisip_serial.json");
-      ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
-      jsonService.write(archiveTransfer, jsonPath, jsonConfig);
+  void testCreateMiniJson() {
+    Path jsonPath = Paths.get(TestInit.TEST_RESULTS + "minisip_serial.json");
+    ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
+    jsonService.write(archiveTransfer, jsonPath, jsonConfig);
+    assertTrue(Files.exists(jsonPath));
 
-      ArchiveTransfer newArchiveTransfer = jsonService.read(jsonPath);
-      String str = archiveTransfer.getArchiveUnits().get(0).getBinaryPath().toString();
-      String newStr = newArchiveTransfer.getArchiveUnits().get(0).getBinaryPath().toString();
+    ArchiveTransfer newArchiveTransfer = jsonService.read(jsonPath);
+    String str = archiveTransfer.getArchiveUnits().getFirst().getBinaryPath().toString();
+    String newStr = newArchiveTransfer.getArchiveUnits().getFirst().getBinaryPath().toString();
 
-      assertTrue(newStr.contains(str));
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
-    }
+    assertTrue(newStr.contains(str));
   }
 
-  /**
-   * Test read mini json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test read mini json. */
   @Test
-  void testReadMiniJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
-    try {
-      Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "minisip.json");
-      ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
-      jsonService.write(
-          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "minisip_deserial.json"), jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
-    }
+  void testReadMiniJson() {
+    Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "minisip.json");
+    ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
+    Path output = Paths.get(TestInit.TEST_RESULTS + "minisip_deserial.json");
+    jsonService.write(archiveTransfer, output, jsonConfig);
+    assertTrue(Files.exists(output));
   }
 
-  /**
-   * Test create full vitam.
-   *
-   * @param testInfo the test info
-   */
+  /** Test create full vitam. */
   @Test
-  void testCreateFullVitam(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
-
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createSipFullVitam();
-      jsonService.write(
-          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "sip_vitam_full.json"), jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
-    }
+  void testCreateFullVitam() {
+    ArchiveTransfer archiveTransfer = SipFactory.createSipFullVitam();
+    Path output = Paths.get(TestInit.TEST_RESULTS + "sip_vitam_full.json");
+    jsonService.write(archiveTransfer, output, jsonConfig);
+    assertTrue(Files.exists(output));
   }
 
-  /**
-   * Test create simple json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test create simple json. */
   @Test
-  void testCreateSimpleJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
-
+  void testCreateSimpleJson() throws Exception {
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
-      jsonService.write(
-          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "simplesip_serial.json"), jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+      Path output = Paths.get(TestInit.TEST_RESULTS + "simplesip_serial.json");
+      jsonService.write(archiveTransfer, output, jsonConfig);
+      assertTrue(Files.exists(output));
     }
   }
 
-  /**
-   * Test read simple json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test read simple json. */
   @Test
-  void testReadSimpleJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
-    try {
-      Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "simplesip.json");
-      ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
-      jsonService.write(
-          archiveTransfer,
-          Paths.get(TestInit.TEST_RESULTS + "simplesip_deserial.json"),
-          jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
-    }
+  void testReadSimpleJson() {
+    Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "simplesip.json");
+    ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
+    Path output = Paths.get(TestInit.TEST_RESULTS + "simplesip_deserial.json");
+    jsonService.write(archiveTransfer, output, jsonConfig);
+    assertTrue(Files.exists(output));
   }
 
-  /**
-   * Test create read simple json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test create read simple json. */
   @Test
-  void testCreateReadSimpleJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
+  void testCreateReadSimpleJson() throws Exception {
     try (FileSystem fs = Jimfs.newFileSystem()) {
       String serialized = jsonService.write(SipFactory.createComplexSip(fs), jsonConfig);
       ArchiveTransfer archiveTransfer = jsonService.read(serialized);
-      jsonService.write(
-          archiveTransfer,
-          Paths.get(TestInit.TEST_RESULTS + "simplesip_serial_deserial.json"),
-          jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+      Path output = Paths.get(TestInit.TEST_RESULTS + "simplesip_serial_deserial.json");
+      jsonService.write(archiveTransfer, output, jsonConfig);
+      assertTrue(Files.exists(output));
     }
   }
 
-  /**
-   * Test read freemarker json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test read freemarker json. */
   @Test
-  void testReadFreemarkerJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
-    try {
-      String jsonString = SipFactory.createJsonString();
-      ArchiveTransfer archiveTransfer = jsonService.read(jsonString);
-      jsonService.write(
-          archiveTransfer,
-          Paths.get(TestInit.TEST_RESULTS + "freemarker_deserial.json"),
-          jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
-    }
+  void testReadFreemarkerJson() throws Exception {
+    String jsonString = SipFactory.createJsonString();
+    ArchiveTransfer archiveTransfer = jsonService.read(jsonString);
+    Path output = Paths.get(TestInit.TEST_RESULTS + "freemarker_deserial.json");
+    jsonService.write(archiveTransfer, output, jsonConfig);
+    assertTrue(Files.exists(output));
   }
 
-  /**
-   * Test create full text json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test create full text json. */
   @Test
-  void testCreateFullTextJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createFullTextSip();
-      jsonService.write(
-          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "full_serial.json"), jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
-    }
+  void testCreateFullTextJson() {
+    ArchiveTransfer archiveTransfer = SipFactory.createFullTextSip();
+    Path output = Paths.get(TestInit.TEST_RESULTS + "full_serial.json");
+    jsonService.write(archiveTransfer, output, jsonConfig);
+    assertTrue(Files.exists(output));
   }
 
-  /**
-   * Test read full text json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test read full text json. */
   @Test
-  void testReadFullTextJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
-    try {
-      String serialized = jsonService.write(SipFactory.createFullTextSip(), jsonConfig);
-      ArchiveTransfer archiveTransfer = jsonService.read(serialized);
-      jsonService.write(
-          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "full_deserial.json"), jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
-    }
+  void testReadFullTextJson() {
+    String serialized = jsonService.write(SipFactory.createFullTextSip(), jsonConfig);
+    ArchiveTransfer archiveTransfer = jsonService.read(serialized);
+    Path output = Paths.get(TestInit.TEST_RESULTS + "full_deserial.json");
+    jsonService.write(archiveTransfer, output, jsonConfig);
+    assertTrue(Files.exists(output));
   }
 
-  /**
-   * Test create small json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test create small json. */
   @Test
-  void testCreateSmallJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
-    try {
-      ArchiveTransfer archiveTransfer = SipFactory.createSmallSip();
-      Path zipPath = Paths.get(TestInit.TEST_RESULTS + "smallsip_serial.json");
-      jsonService.write(archiveTransfer, zipPath, jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
-    }
+  void testCreateSmallJson() {
+    ArchiveTransfer archiveTransfer = SipFactory.createSmallSip();
+    Path zipPath = Paths.get(TestInit.TEST_RESULTS + "smallsip_serial.json");
+    jsonService.write(archiveTransfer, zipPath, jsonConfig);
+    assertTrue(Files.exists(zipPath));
   }
 
-  /**
-   * Test read small json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test read small json. */
   @Test
-  void testReadSmallJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
-    try {
-      Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "smallsip.json");
-      ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
-      jsonService.write(
-          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "smallsip_deserial.json"), jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
-    }
+  void testReadSmallJson() {
+    Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "smallsip.json");
+    ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
+    Path output = Paths.get(TestInit.TEST_RESULTS + "smallsip_deserial.json");
+    jsonService.write(archiveTransfer, output, jsonConfig);
+    assertTrue(Files.exists(output));
   }
 
-  /**
-   * Test create large json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test create large json. */
   @Test
-  void testCreateLargeJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
+  void testCreateLargeJson() throws Exception {
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createLargeSip(fs);
-      jsonService.write(
-          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_serial.json"), jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+      Path output = Paths.get(TestInit.TEST_RESULTS + "largesip_serial.json");
+      jsonService.write(archiveTransfer, output, jsonConfig);
+      assertTrue(Files.exists(output));
     }
   }
 
-  /**
-   * Test read large json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test read large json. */
   @Test
-  void testReadLargeJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
-    try {
-      Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "largesip.json");
-      ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
-      jsonService.write(
-          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "largesip_deserial.json"), jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
-    }
+  void testReadLargeJson() {
+    Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "largesip.json");
+    ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
+    Path output = Paths.get(TestInit.TEST_RESULTS + "largesip_deserial.json");
+    jsonService.write(archiveTransfer, output, jsonConfig);
+    assertTrue(Files.exists(output));
   }
 
-  /**
-   * Test create deep json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test create deep json. */
   @Test
-  void testCreateDeepJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
+  void testCreateDeepJson() throws Exception {
     try (FileSystem fs = Jimfs.newFileSystem()) {
       ArchiveTransfer archiveTransfer = SipFactory.createDeepSip(fs);
-      jsonService.write(
-          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_serial.json"), jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
+      Path output = Paths.get(TestInit.TEST_RESULTS + "deepsip_serial.json");
+      jsonService.write(archiveTransfer, output, jsonConfig);
+      assertTrue(Files.exists(output));
     }
   }
 
-  /**
-   * Test read deep json.
-   *
-   * @param testInfo the test info
-   */
+  /** Test read deep json. */
   @Test
-  void testReadDeepJson(TestInfo testInfo) {
-    LOGGER.info(TestUtils.TEST, TestUtils.getMethod(testInfo));
-    try {
-      Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "deepsip.json");
-      ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
-      jsonService.write(
-          archiveTransfer, Paths.get(TestInit.TEST_RESULTS + "deepsip_deserial.json"), jsonConfig);
-    } catch (Exception ex) {
-      String msg = TestUtils.FAIL + TestUtils.getMethod(testInfo);
-      LOGGER.warn(msg, ex);
-      fail(msg);
-    }
+  void testReadDeepJson() {
+    Path jsonPath = Paths.get(TestInit.TEST_RESOURCES + "deepsip.json");
+    ArchiveTransfer archiveTransfer = jsonService.read(jsonPath);
+    Path output = Paths.get(TestInit.TEST_RESULTS + "deepsip_deserial.json");
+    jsonService.write(archiveTransfer, output, jsonConfig);
+    assertTrue(Files.exists(output));
   }
 }
