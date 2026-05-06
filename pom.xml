@@ -167,12 +167,12 @@
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-core</artifactId>
-            <version>4.0.6</version>
+            <version>4.0.8</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>4.0.6</version>
+            <version>4.0.8</version>
         </dependency>
         <!-- We need a non-official Xerces 12 to deal with XSD 1.1. Unfortunately the
         official Apache Xerces 12.1 is not released on maven central -->
