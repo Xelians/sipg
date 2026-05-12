@@ -470,7 +470,7 @@
                             <dependency>
                                 <groupId>org.jvnet.jaxb</groupId>
                                 <artifactId>jaxb-plugins</artifactId>
-                                <version>3.0.2</version>
+                                <version>4.0.14</version>
                             </dependency>
                         </dependencies>
                     </plugin>
@@ -524,7 +524,7 @@
                             <dependency>
                                 <groupId>org.jvnet.jaxb</groupId>
                                 <artifactId>jaxb-plugins</artifactId>
-                                <version>3.0.2</version>
+                                <version>4.0.14</version>
                             </dependency>
                         </dependencies>
                     </plugin>
