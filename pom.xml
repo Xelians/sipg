@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.xelians</groupId>
     <artifactId>sipg</artifactId>
-    <version>1.44</version>
+    <version>1.45</version>
     <packaging>jar</packaging>
 
     <organization>
@@ -103,6 +103,7 @@
                     <testSourceDirectory>src/test/java</testSourceDirectory>
                     <verbose>false</verbose>
                     <filesNamePattern>.*\.java</filesNamePattern>
+                    <filesPathPattern>^(?!.*(?:fr/gouv/culture/archivesdefrance/seda|org/w3|org/afnor|org/fntc)).*$</filesPathPattern>
                     <skip>false</skip>
                     <skipSortingImports>false</skipSortingImports>
                     <style>google</style>

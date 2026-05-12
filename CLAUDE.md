@@ -37,7 +37,7 @@ mvn verify -Pcentral
 - `fr.xelians.sipg.service.fntcv4` — FNTC v4 archive generation/validation.
 - `fr.xelians.sipg.service.json` — JSON serialization/deserialization of ArchiveTransfer.
 - `fr.xelians.sipg.utils` — Utilities: `SipUtils` (ZIP/XML/date helpers), `DroidUtils` (file format identification), `Validators` (RNG schema validation).
-- `fr.gouv.culture.archivesdefrance.seda.v2*` — JAXB-generated classes from SEDA XSD schemas (do not edit manually).
+- `fr.gouv.culture.archivesdefrance.seda.v23*` — JAXB-generated classes from SEDA XSD schemas (do not edit manually).
 - `org.afnor.medona.v1` / `org.fntc.ta.v4` — JAXB-generated classes for FNTC/MEDONA (do not edit manually).
 
 ### Key Patterns
