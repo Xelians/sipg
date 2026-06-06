@@ -458,7 +458,7 @@
                                         <plugin>
                                             <groupId>org.jvnet.jaxb</groupId>
                                             <artifactId>jaxb-plugin-annotate</artifactId>
-                                            <version>4.0.14</version>
+                                            <version>4.0.16</version>
                                         </plugin>
                                     </plugins>
                                 </configuration>
@@ -512,7 +512,7 @@
                                         <plugin>
                                             <groupId>org.jvnet.jaxb</groupId>
                                             <artifactId>jaxb-plugin-annotate</artifactId>
-                                            <version>4.0.14</version>
+                                            <version>4.0.16</version>
                                         </plugin>
                                     </plugins>
                                 </configuration>
