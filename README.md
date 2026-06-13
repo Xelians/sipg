@@ -26,7 +26,7 @@ La librairie SipG offre les fonctionnalités suivantes :
 
 Le standard d'échange de données pour l'archivage SEDA modélise les différentes transactions qui peuvent avoir lieu entre des acteurs dans le cadre de l'archivage de données. 
 
-La documentation complète du SEDA v2 est disponible sur le site de [France Archive](https://redirect.francearchives.fr/seda/).
+La documentation complète du SEDA v2 est disponible sur le site de [France Archive](https://francearchives.gouv.fr/seda/).
 
 ## Format FNTC v4
 
