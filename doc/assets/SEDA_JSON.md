@@ -1,6 +1,6 @@
-# Le standard SEDA JSON 1.0
+# Le standard SEDA JSON 2.0
 
-Ce document décrit de manière exhaustive le standard SEDA JSON 1.0 tel qu'implémenté par SipG
+Ce document décrit de manière exhaustive le standard SEDA JSON 2.0 tel qu'implémenté par SipG
 (`fr.xelians.sipg.service.sedajson.SedaJsonService`). Le standard SEDA JSON est une transposition
 en JSON de l'ontologie du standard SEDA v2 : il reprend la sémantique des éléments XML en
 l'adaptant aux idiomes JSON.
