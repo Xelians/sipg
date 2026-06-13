@@ -43,7 +43,7 @@ Les principales différences entre les formats SEDA v2 et FNTC v4 sont [listées
 
 Note. Le standard FNTC v4 est à l'état de draft et n'a pas, à ce jour, été officiellement validé par la FNTC.
 
-## Format SEDA JSON 2.0
+## Format SEDA JSON 2
 
 Le standard SEDA JSON est une transposition en JSON de l'ontologie SEDA v2. Le paquet zip contient un manifeste `manifest.json` à la racine et les objets binaires dans le dossier `content/`.
 
