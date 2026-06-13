@@ -49,7 +49,8 @@ Le standard SEDA JSON est une transposition en JSON de l'ontologie SEDA v2. Le p
 
 Le standard SEDA JSON a pour principales caractéristiques :
 * Couverture de l'ontologie complète du SEDA v2 avec des clés en PascalCase reprenant les noms des éléments XML
-* Absence de mécanisme d'identifiant et de référence : les objets de données sont déclarés directement dans leur unité d'archive et la hiérarchie s'exprime uniquement par imbrication
+* Absence de mécanisme de référence : les objets de données sont déclarés directement dans leur unité d'archive et la hiérarchie s'exprime uniquement par imbrication
+* Identifiants `XmlId` optionnels (générés par défaut) pour identifier de manière unique chaque unité d'archive et chaque objet de données, sans introduire de référence
 * Ordre des clés imposé (miroir de la séquence du XSD SEDA) qui permet un parsing en streaming en une seule passe
 * Validation par un schéma JSON embarqué (structure, clés autorisées, types, longueurs maximales)
 * Extension de l'ontologie autorisée dans l'objet `Content`

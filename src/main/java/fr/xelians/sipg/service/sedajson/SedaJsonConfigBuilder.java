@@ -40,6 +40,7 @@ public class SedaJsonConfigBuilder {
   private boolean checkDigest = true;
   private boolean useMemory = false;
   private boolean identifyFileFormat = true;
+  private boolean xmlId = true;
   private long maxManifestSize = DEFAULT_MAX_MANIFEST_SIZE;
 
   private SedaJsonConfigBuilder() {}
@@ -172,6 +173,19 @@ public class SedaJsonConfigBuilder {
   }
 
   /**
+   * Spécifie si un identifiant unique XmlId est généré pour chaque unité d'archive (préfixe {@code
+   * AU}), chaque objet de données binaire (préfixe {@code BDO}) et chaque objet de données physique
+   * (préfixe {@code PDO}). L'identifiant est unique dans la totalité du manifeste. True par défaut.
+   *
+   * @param xmlId si un identifiant unique XmlId doit être généré
+   * @return le builder
+   */
+  public SedaJsonConfigBuilder xmlId(boolean xmlId) {
+    this.xmlId = xmlId;
+    return this;
+  }
+
+  /**
    * Spécifie la taille maximale en octets du manifeste lors de la validation. La validation par
    * schéma JSON matérialise le manifeste en mémoire (contrairement à la validation XSD qui opère en
    * streaming), d'où cette limite. 128 Mio par défaut.
@@ -201,6 +215,7 @@ public class SedaJsonConfigBuilder {
         checkDigest,
         useMemory,
         identifyFileFormat,
+        xmlId,
         maxManifestSize);
   }
 }

@@ -87,15 +87,20 @@ class SedaJsonConverter {
 
   private final List<Callable<Void>> tasks = new ArrayList<>();
   private final AtomicInteger idCounter = new AtomicInteger();
+  private final AtomicInteger auCounter = new AtomicInteger();
+  private final AtomicInteger bdoCounter = new AtomicInteger();
+  private final AtomicInteger pdoCounter = new AtomicInteger();
   private final DocumentBuilder documentBuilder;
   private final FileSystem zipArchive;
   private final boolean isStrict;
   private final boolean identifyFileFormat;
+  private final boolean xmlId;
 
   private SedaJsonConverter(FileSystem zipArchive, SedaJsonConfig config) {
     this.zipArchive = zipArchive;
     this.isStrict = config.strict();
     this.identifyFileFormat = config.identifyFileFormat();
+    this.xmlId = config.xmlId();
 
     try {
       documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -229,6 +234,12 @@ class SedaJsonConverter {
 
     ObjectNode node = NF.objectNode();
 
+    // L'XmlId, lorsqu'il est activé, est la première clé de l'unité afin d'identifier de manière
+    // unique l'unité dans la totalité du manifeste (préfixe AU)
+    if (xmlId) {
+      node.put(XML_ID, "AU" + auCounter.incrementAndGet());
+    }
+
     ObjectNode management = toManagement(unit);
     if (!management.isEmpty()) {
       node.set(MANAGEMENT, management);
@@ -244,6 +255,9 @@ class SedaJsonConverter {
     if (StringUtils.isNotBlank(unit.getPhysicalId())) {
       ArrayNode physicalObjects = node.putArray(PHYSICAL_DATA_OBJECTS);
       ObjectNode pdo = physicalObjects.addObject();
+      if (xmlId) {
+        pdo.put(XML_ID, "PDO" + pdoCounter.incrementAndGet());
+      }
       ifNotBlank(unit.getPhysicalVersion(), e -> pdo.put(DATA_OBJECT_VERSION, e));
       pdo.put(PHYSICAL_ID, unit.getPhysicalId());
       if (unit.getMeasure() > 0) {
@@ -874,6 +888,9 @@ class SedaJsonConverter {
     }
 
     ObjectNode node = array.addObject();
+    if (xmlId) {
+      node.put(XML_ID, "BDO" + bdoCounter.incrementAndGet());
+    }
     ifNotBlank(bdo.getBinaryVersion(), e -> node.put(DATA_OBJECT_VERSION, e));
 
     String sanitizedFileName = SipUtils.sanitizeFileName(binaryPath.getFileName().toString());
