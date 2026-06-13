@@ -65,8 +65,8 @@ final class SedaJsonSchemaValidator {
           .enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION)
           .build();
 
-  private static final SedaJsonSchemaValidator V10_INSTANCE =
-      new SedaJsonSchemaValidator(SedaJsonVersion.V1_0);
+  private static final SedaJsonSchemaValidator V20_INSTANCE =
+      new SedaJsonSchemaValidator(SedaJsonVersion.V2_0);
 
   private final SedaJsonVersion version;
   private final JsonSchema schema;
@@ -100,7 +100,7 @@ final class SedaJsonSchemaValidator {
    */
   static SedaJsonSchemaValidator getInstance(SedaJsonVersion version) {
     return switch (version) {
-      case V1_0 -> V10_INSTANCE;
+      case V2_0 -> V20_INSTANCE;
     };
   }
 

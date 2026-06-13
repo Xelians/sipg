@@ -59,7 +59,7 @@ import org.apache.commons.lang3.Validate;
  */
 public class SedaJsonService {
 
-  private static final SedaJsonService SEDA_JSON_V10 = new SedaJsonService(SedaJsonVersion.V1_0);
+  private static final SedaJsonService SEDA_JSON_V20 = new SedaJsonService(SedaJsonVersion.V2_0);
 
   private static final JsonMapper MAPPER = JsonMapper.builder().build();
 
@@ -70,12 +70,12 @@ public class SedaJsonService {
   }
 
   /**
-   * Retourne l'instance singleton de la classe SedaJsonService v1.0.
+   * Retourne l'instance singleton de la classe SedaJsonService v2.0.
    *
    * @return l 'instance singleton
    */
   public static SedaJsonService getInstance() {
-    return SEDA_JSON_V10;
+    return SEDA_JSON_V20;
   }
 
   /**

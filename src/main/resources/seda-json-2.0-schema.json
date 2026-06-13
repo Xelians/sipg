@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://xelians.fr/sipg/seda-json/1.0/seda-json-schema.json",
-  "title": "SEDA JSON 1.0 manifest",
+  "$id": "https://xelians.fr/sipg/seda-json/2.0/seda-json-schema.json",
+  "title": "SEDA JSON 2.0 manifest",
   "description": "JSON transposition of the SEDA v2 archive transfer covering the complete sipg ontology. Data objects are declared inline in their archive unit and the unit hierarchy is expressed by nesting only. The key order is normative (mirroring the SEDA XSD sequence) but is enforced by the streaming parser, not by this schema. Extended elements are allowed in Content only.",
   "type": "object",
   "properties": {
     "SedaJsonVersion": {
-      "const": "1.0"
+      "const": "2.0"
     },
     "MessageIdentifier": {
       "type": "string",

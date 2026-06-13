@@ -134,7 +134,7 @@ class SedaJsonTest {
     ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
     try (InputStream is = jsonService.marshal(archiveTransfer)) {
       String manifest = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-      assertTrue(manifest.startsWith("{\"SedaJsonVersion\":\"1.0\""));
+      assertTrue(manifest.startsWith("{\"SedaJsonVersion\":\"2.0\""));
       assertDoesNotThrow(() -> SedaJsonParser.parse(jsonService.marshal(archiveTransfer)));
     }
   }
@@ -361,7 +361,7 @@ class SedaJsonTest {
     ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
 
     JsonSchema esafeSchema;
-    Path schemaPath = Paths.get(SEDA_JSON + "esafe-seda-json-1.0-schema.json");
+    Path schemaPath = Paths.get(SEDA_JSON + "esafe-seda-json-2.0-schema.json");
     try (InputStream is = Files.newInputStream(schemaPath)) {
       esafeSchema =
           JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V202012)
@@ -380,7 +380,7 @@ class SedaJsonTest {
     ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(FileSystems.getDefault());
 
     JsonSchema esafeSchema;
-    Path schemaPath = Paths.get(SEDA_JSON + "esafe-seda-json-1.0-schema.json");
+    Path schemaPath = Paths.get(SEDA_JSON + "esafe-seda-json-2.0-schema.json");
     try (InputStream is = Files.newInputStream(schemaPath)) {
       esafeSchema =
           JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V202012)

@@ -79,7 +79,7 @@ clé optionnelle, `1` une clé obligatoire. La colonne « SEDA XML » indique l'
 
 | Clé | Type | Card. | Longueur max | SEDA XML |
 |---|---|---|---|---|
-| `SedaJsonVersion` | chaîne (constante `"1.0"`) | 1 | — | — (spécifique JSON) |
+| `SedaJsonVersion` | chaîne (constante `"2.0"`) | 1 | — | — (spécifique JSON) |
 | `MessageIdentifier` | chaîne | 0..1 | 1024 | `MessageIdentifier` |
 | `Comment` | chaîne | 0..1 | 5000 | `Comment` |
 | `ArchivalAgreement` | chaîne | 1 | 512 | `ArchivalAgreement` |
@@ -426,7 +426,7 @@ concernée par cette limite.
 
 ```json
 {
-  "SedaJsonVersion": "1.0",
+  "SedaJsonVersion": "2.0",
   "MessageIdentifier": "MSG-2026-0001",
   "Comment": "Versement des dossiers RH 2025",
   "ArchivalAgreement": "IC-000001",
