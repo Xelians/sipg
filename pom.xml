@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.xelians</groupId>
     <artifactId>sipg</artifactId>
-    <version>1.46</version>
+    <version>1.47</version>
     <packaging>jar</packaging>
 
     <organization>
@@ -122,14 +122,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.5</version>
+                <version>3.5.6</version>
             </plugin>
 
             <!-- Jacoco code coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.14</version>
+                <version>0.8.15</version>
                 <configuration>
                     <skip>false</skip>
                 </configuration>
@@ -153,7 +153,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.21.0</version>
+                <version>3.22.0</version>
             </plugin>
         </plugins>
     </build>
@@ -168,12 +168,12 @@
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-core</artifactId>
-            <version>4.0.8</version>
+            <version>4.0.9</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>4.0.8</version>
+            <version>4.0.9</version>
         </dependency>
         <!-- We need a non-official Xerces 12 to deal with XSD 1.1. Unfortunately the
         official Apache Xerces 12.1 is not released on maven central -->
@@ -200,17 +200,17 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.21.3</version>
+            <version>2.22.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.21.3</version>
+            <version>2.22.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.21.3</version>
+            <version>2.22.0</version>
         </dependency>
         <!-- Validation par schéma JSON (manifestes SEDA JSON) -->
         <dependency>
@@ -245,7 +245,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>2.0.17</version>
+            <version>2.0.18</version>
         </dependency>
 
         <!--  File Format -->
@@ -303,19 +303,19 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>6.0.3</version>
+            <version>6.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.32</version>
+            <version>1.5.34</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>xom</groupId>
             <artifactId>xom</artifactId>
-            <version>1.4.1</version>
+            <version>1.4.5</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -364,7 +364,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.14</version>
+                <version>0.8.15</version>
             </plugin>
         </plugins>
     </reporting>
@@ -439,7 +439,7 @@
                     <plugin>
                         <groupId>org.jvnet.jaxb</groupId>
                         <artifactId>jaxb-maven-plugin</artifactId>
-                        <version>4.0.14</version>
+                        <version>4.0.16</version>
                         <executions>
                             <execution>
                                 <configuration>
@@ -464,7 +464,7 @@
                                         <plugin>
                                             <groupId>org.jvnet.jaxb</groupId>
                                             <artifactId>jaxb-plugin-annotate</artifactId>
-                                            <version>4.0.14</version>
+                                            <version>4.0.16</version>
                                         </plugin>
                                     </plugins>
                                 </configuration>
@@ -477,7 +477,7 @@
                             <dependency>
                                 <groupId>org.jvnet.jaxb</groupId>
                                 <artifactId>jaxb-plugins</artifactId>
-                                <version>4.0.14</version>
+                                <version>4.0.16</version>
                             </dependency>
                         </dependencies>
                     </plugin>
@@ -493,7 +493,7 @@
                     <plugin>
                         <groupId>org.jvnet.jaxb</groupId>
                         <artifactId>jaxb-maven-plugin</artifactId>
-                        <version>4.0.14</version>
+                        <version>4.0.16</version>
                         <executions>
                             <execution>
                                 <configuration>
@@ -518,7 +518,7 @@
                                         <plugin>
                                             <groupId>org.jvnet.jaxb</groupId>
                                             <artifactId>jaxb-plugin-annotate</artifactId>
-                                            <version>4.0.14</version>
+                                            <version>4.0.16</version>
                                         </plugin>
                                     </plugins>
                                 </configuration>
@@ -531,7 +531,7 @@
                             <dependency>
                                 <groupId>org.jvnet.jaxb</groupId>
                                 <artifactId>jaxb-plugins</artifactId>
-                                <version>4.0.14</version>
+                                <version>4.0.16</version>
                             </dependency>
                         </dependencies>
                     </plugin>
