@@ -1,0 +1,8 @@
+{
+  "SedaJsonVersion": "1.0",
+  "ArchivalAgreement": "IC-000001",
+  "UnknownKey": "not allowed outside Content",
+  "ArchivalAgency": {
+    "Identifier": "AG-000001"
+  }
+}

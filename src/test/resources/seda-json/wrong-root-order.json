@@ -1,0 +1,9 @@
+{
+  "SedaJsonVersion": "1.0",
+  "Comment": "Comment before MessageIdentifier is misplaced",
+  "MessageIdentifier": "MSG-0001",
+  "ArchivalAgreement": "IC-000001",
+  "ArchivalAgency": {
+    "Identifier": "AG-000001"
+  }
+}

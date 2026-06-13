@@ -7,7 +7,7 @@
 
 La librairie SipG offre les fonctionnalités suivantes : 
 
-* Conformité aux standards FNTC v4 et SEDA v2.1, v2.2 & v2.3
+* Support des standards FNTC v4, SEDA v2.1, v2.2 & v2.3 et SEDA JSON 1.0
 * Génération de SIP (ArchiveTransfer) et de DIP (ArchiveDelivery) 
 * Validation optionnelle du SIP ou DIP généré par un profil RNG
 * Calcul automatique des empreintes des objets binaires
@@ -42,6 +42,19 @@ Le standard FNTC v4 a pour principales caractéristiques :
 Les principales différences entre les formats SEDA v2 et FNTC v4 sont [listées ici](https://github.com/Xelians/sipg/blob/master/doc/assets/Diff_SEDA.md). 
 
 Note. Le standard FNTC v4 est à l'état de draft et n'a pas, à ce jour, été officiellement validé par la FNTC.
+
+## Format SEDA JSON 1.0
+
+Le standard SEDA JSON est une transposition en JSON de l'ontologie SEDA v2. Le paquet zip contient un manifeste `manifest.json` à la racine et les objets binaires dans le dossier `content/`.
+
+Le standard SEDA JSON a pour principales caractéristiques :
+* Couverture de l'ontologie complète du SEDA v2 avec des clés en PascalCase reprenant les noms des éléments XML
+* Absence de mécanisme d'identifiant et de référence : les objets de données sont déclarés directement dans leur unité d'archive et la hiérarchie s'exprime uniquement par imbrication
+* Ordre des clés imposé (miroir de la séquence du XSD SEDA) qui permet un parsing en streaming en une seule passe
+* Validation par un schéma JSON embarqué (structure, clés autorisées, types, longueurs maximales)
+* Extension de l'ontologie autorisée dans l'objet `Content`
+
+La documentation complète du standard SEDA JSON est [disponible ici](https://github.com/Xelians/sipg/blob/master/doc/assets/SEDA_JSON.md).
 
 ## Architecture fonctionnelle
  
@@ -159,6 +172,31 @@ ProgressEvent{id=seda, status=SUCCESS, step=BINARY_SIZE, message=Binary object s
 ProgressEvent{id=seda, status=SUCCESS, step=BINARY_DIGEST, message=Binary object digest is valid}
 ProgressEvent{id=seda, status=SUCCESS, step=COMPLETE, message=Archive is valid}
 ```
+
+### Génération et validation d'une archive SEDA JSON
+
+Code :
+```
+ArchiveTransfer archiveTransfer = new ArchiveTransfer();
+archiveTransfer.setArchivalAgreement("IC-000001");
+archiveTransfer.setArchivalAgency("AG-000001", "Service des archives");
+
+ArchiveUnit unit = new ArchiveUnit();
+unit.addTitle("Dossier individuel — DURAND Paul");
+unit.setBinaryPath(Paths.get("dossier_durand.pdf"));
+archiveTransfer.addArchiveUnit(unit);
+
+SedaJsonService sedaJsonService = SedaJsonService.getInstance();
+
+// Génération du SIP (manifest.json + content/) 
+Path zipPath = Paths.get("sip.zip");
+sedaJsonService.write(archiveTransfer, zipPath);
+
+// Validation complète (taille, schéma JSON, ordre des clés, binaires) avec callback
+sedaJsonService.validate(zipPath, SedaJsonConfig.DEFAULT, e -> System.out.println(e)); 
+```
+
+Le comportement du service peut être modifié via la classe SedaJsonConfigBuilder (formatage du manifeste, mode strict, nombre de threads, taille maximale du manifeste, etc.).
 
 ### Désérialisation JSON
 
