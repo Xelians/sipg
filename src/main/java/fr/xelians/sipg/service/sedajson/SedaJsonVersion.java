@@ -28,8 +28,8 @@ import fr.xelians.sipg.utils.SipException;
  */
 public enum SedaJsonVersion {
 
-  /** La version 1.0 du standard SEDA JSON. */
-  V1_0("1.0", "seda-json-1.0-schema.json");
+  /** La version 2.0 du standard SEDA JSON. */
+  V2_0("2.0", "seda-json-2.0-schema.json");
 
   private final String version;
   private final String schema;
@@ -61,7 +61,7 @@ public enum SedaJsonVersion {
   /**
    * Retourne la version du standard SEDA JSON correspondant à la valeur spécifiée.
    *
-   * @param version la valeur de la version (ex. "1.0")
+   * @param version la valeur de la version (ex. "2.0")
    * @return la version du standard
    */
   public static SedaJsonVersion ofVersion(String version) {

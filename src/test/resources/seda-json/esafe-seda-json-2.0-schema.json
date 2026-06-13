@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://esafe.xelians.fr/seda-json/1.0/seda-json-schema.json",
-  "title": "SEDA JSON 1.0 manifest",
+  "$id": "https://esafe.xelians.fr/seda-json/2.0/seda-json-schema.json",
+  "title": "SEDA JSON 2.0 manifest",
   "description": "Simplified JSON transposition of the SEDA v2 archive transfer, restricted to the elements natively supported by eSafe. Data objects are declared inline in their archive unit and the unit hierarchy is expressed by nesting only. Extended elements are allowed in Content only and are validated against the eSafe ontology at parse time.",
   "type": "object",
   "properties": {
     "SedaJsonVersion": {
-      "const": "1.0"
+      "const": "2.0"
     },
     "MessageIdentifier": {
       "type": "string",

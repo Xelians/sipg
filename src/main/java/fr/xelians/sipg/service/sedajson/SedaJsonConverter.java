@@ -180,7 +180,7 @@ class SedaJsonConverter {
     }
 
     ObjectNode root = NF.objectNode();
-    root.put(SEDA_JSON_VERSION, SedaJsonVersion.V1_0.getVersion());
+    root.put(SEDA_JSON_VERSION, SedaJsonVersion.V2_0.getVersion());
 
     String mi =
         SipUtils.getIfBlank(

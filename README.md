@@ -1,13 +1,13 @@
 # SipG
 
 ## Présentation
-* SipG est une bibliothèque pour générer et valider des archives aux formats FNTC v4 et SEDA v2.1, v2.2 & v2.3. La librairie SipG est publiée en Open Source sous [licence libre Apache v2](./doc/license/LICENCE.APACHE_V2).
+* SipG est une bibliothèque pour générer et valider des archives aux formats FNTC v4 et SEDA v2 (XML & JSON). La librairie SipG est publiée en Open Source sous [licence libre Apache v2](./doc/license/LICENCE.APACHE_V2).
 
 ## Fonctionnalités
 
 La librairie SipG offre les fonctionnalités suivantes : 
 
-* Support des standards FNTC v4, SEDA v2.1, v2.2 & v2.3 et SEDA JSON 1.0
+* Support des standards FNTC v4, SEDA v2.1, v2.2 & v2.3 et SEDA JSON 2.0
 * Génération de SIP (ArchiveTransfer) et de DIP (ArchiveDelivery) 
 * Validation optionnelle du SIP ou DIP généré par un profil RNG
 * Calcul automatique des empreintes des objets binaires
@@ -43,7 +43,7 @@ Les principales différences entre les formats SEDA v2 et FNTC v4 sont [listées
 
 Note. Le standard FNTC v4 est à l'état de draft et n'a pas, à ce jour, été officiellement validé par la FNTC.
 
-## Format SEDA JSON 1.0
+## Format SEDA JSON 2.0
 
 Le standard SEDA JSON est une transposition en JSON de l'ontologie SEDA v2. Le paquet zip contient un manifeste `manifest.json` à la racine et les objets binaires dans le dossier `content/`.
 
