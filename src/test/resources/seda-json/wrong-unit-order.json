@@ -1,0 +1,24 @@
+{
+  "SedaJsonVersion": "1.0",
+  "ArchivalAgreement": "IC-000001",
+  "ArchiveUnits": [
+    {
+      "BinaryDataObjects": [
+        {
+          "Uri": "content/1_dummy.pdf",
+          "MessageDigest": {
+            "Algorithm": "SHA-512",
+            "Value": "9f2c"
+          },
+          "Size": 1
+        }
+      ],
+      "Content": {
+        "Title": "Content after BinaryDataObjects is misplaced"
+      }
+    }
+  ],
+  "ArchivalAgency": {
+    "Identifier": "AG-000001"
+  }
+}

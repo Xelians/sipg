@@ -1,0 +1,692 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://esafe.xelians.fr/seda-json/1.0/seda-json-schema.json",
+  "title": "SEDA JSON 1.0 manifest",
+  "description": "Simplified JSON transposition of the SEDA v2 archive transfer, restricted to the elements natively supported by eSafe. Data objects are declared inline in their archive unit and the unit hierarchy is expressed by nesting only. Extended elements are allowed in Content only and are validated against the eSafe ontology at parse time.",
+  "type": "object",
+  "properties": {
+    "SedaJsonVersion": {
+      "const": "1.0"
+    },
+    "MessageIdentifier": {
+      "type": "string",
+      "maxLength": 1024
+    },
+    "Comment": {
+      "type": "string",
+      "maxLength": 5000
+    },
+    "ArchivalAgreement": {
+      "$ref": "#/$defs/text512"
+    },
+    "ArchiveUnits": {
+      "$ref": "#/$defs/archiveUnits"
+    },
+    "ManagementMetadata": {
+      "$ref": "#/$defs/managementMetadata"
+    },
+    "ArchivalAgency": {
+      "$ref": "#/$defs/agency"
+    },
+    "TransferringAgency": {
+      "$ref": "#/$defs/agency"
+    }
+  },
+  "required": [
+    "SedaJsonVersion",
+    "ArchivalAgreement",
+    "ArchivalAgency"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "text512": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "textArray512": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": {
+        "$ref": "#/$defs/text512"
+      }
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "maxLength": 64
+    },
+    "dateTime": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "agency": {
+      "type": "object",
+      "properties": {
+        "Identifier": {
+          "$ref": "#/$defs/text512"
+        },
+        "OrganizationDescriptiveMetadata": {
+          "type": "object",
+          "properties": {
+            "Name": {
+              "$ref": "#/$defs/text512"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "Identifier"
+      ],
+      "additionalProperties": false
+    },
+    "managementMetadata": {
+      "type": "object",
+      "properties": {
+        "OriginatingAgencyIdentifier": {
+          "$ref": "#/$defs/text512"
+        },
+        "SubmissionAgencyIdentifier": {
+          "$ref": "#/$defs/text512"
+        },
+        "ArchivalProfile": {
+          "$ref": "#/$defs/text512"
+        },
+        "AcquisitionInformation": {
+          "$ref": "#/$defs/text512"
+        },
+        "ServiceLevel": {
+          "$ref": "#/$defs/text512"
+        },
+        "LegalStatus": {
+          "$ref": "#/$defs/text512"
+        }
+      },
+      "additionalProperties": false
+    },
+    "archiveUnits": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/archiveUnit"
+      }
+    },
+    "archiveUnit": {
+      "type": "object",
+      "properties": {
+        "Management": {
+          "$ref": "#/$defs/management"
+        },
+        "Content": {
+          "$ref": "#/$defs/content"
+        },
+        "BinaryDataObjects": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "$ref": "#/$defs/binaryDataObject"
+          }
+        },
+        "PhysicalDataObjects": {
+          "type": "array",
+          "maxItems": 1,
+          "items": {
+            "$ref": "#/$defs/physicalDataObject"
+          }
+        },
+        "ArchiveUnits": {
+          "$ref": "#/$defs/archiveUnits"
+        }
+      },
+      "required": [
+        "Content"
+      ],
+      "additionalProperties": false
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "DescriptionLevel": {
+          "$ref": "#/$defs/text512"
+        },
+        "Title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "Description": {
+          "type": "string",
+          "maxLength": 5000
+        },
+        "FilePlanPositions": {
+          "$ref": "#/$defs/textArray512"
+        },
+        "OriginatingSystemIds": {
+          "$ref": "#/$defs/textArray512"
+        },
+        "ArchivalAgencyArchiveUnitIdentifiers": {
+          "$ref": "#/$defs/textArray512"
+        },
+        "OriginatingAgencyArchiveUnitIdentifiers": {
+          "$ref": "#/$defs/textArray512"
+        },
+        "TransferringAgencyArchiveUnitIdentifiers": {
+          "$ref": "#/$defs/textArray512"
+        },
+        "CustodialHistoryItems": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "$ref": "#/$defs/custodialItem"
+          }
+        },
+        "ArchiveUnitProfile": {
+          "$ref": "#/$defs/text512"
+        },
+        "Type": {
+          "$ref": "#/$defs/text512"
+        },
+        "DocumentType": {
+          "$ref": "#/$defs/text512"
+        },
+        "Status": {
+          "$ref": "#/$defs/text512"
+        },
+        "Version": {
+          "$ref": "#/$defs/text512"
+        },
+        "Tags": {
+          "$ref": "#/$defs/textArray512"
+        },
+        "AcquiredDate": {
+          "$ref": "#/$defs/date"
+        },
+        "CreatedDate": {
+          "$ref": "#/$defs/date"
+        },
+        "EndDate": {
+          "$ref": "#/$defs/date"
+        },
+        "ReceivedDate": {
+          "$ref": "#/$defs/date"
+        },
+        "RegisteredDate": {
+          "$ref": "#/$defs/date"
+        },
+        "StartDate": {
+          "$ref": "#/$defs/date"
+        },
+        "SentDate": {
+          "$ref": "#/$defs/date"
+        },
+        "TransactedDate": {
+          "$ref": "#/$defs/date"
+        },
+        "Keywords": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/keyword"
+          }
+        },
+        "FullText": {
+          "type": "string",
+          "maxLength": 131072
+        }
+      },
+      "required": [
+        "Title"
+      ],
+      "additionalProperties": true
+    },
+    "custodialItem": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/text512"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Value": {
+              "$ref": "#/$defs/text512"
+            },
+            "When": {
+              "$ref": "#/$defs/dateTime"
+            }
+          },
+          "required": [
+            "Value"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "keyword": {
+      "type": "object",
+      "properties": {
+        "KeywordReference": {
+          "$ref": "#/$defs/text512"
+        },
+        "KeywordContent": {
+          "type": "string",
+          "maxLength": 1024
+        }
+      },
+      "required": [
+        "KeywordReference",
+        "KeywordContent"
+      ],
+      "additionalProperties": false
+    },
+    "management": {
+      "type": "object",
+      "properties": {
+        "AppraisalRule": {
+          "$ref": "#/$defs/appraisalRule"
+        },
+        "AccessRule": {
+          "$ref": "#/$defs/commonRule"
+        },
+        "ClassificationRule": {
+          "$ref": "#/$defs/classificationRule"
+        },
+        "DisseminationRule": {
+          "$ref": "#/$defs/commonRule"
+        },
+        "StorageRule": {
+          "$ref": "#/$defs/storageRule"
+        },
+        "ReuseRule": {
+          "$ref": "#/$defs/commonRule"
+        },
+        "HoldRule": {
+          "$ref": "#/$defs/holdRule"
+        },
+        "LogBook": {
+          "type": "array",
+          "maxItems": 10000,
+          "items": {
+            "$ref": "#/$defs/event"
+          }
+        },
+        "UpdateOperation": {
+          "$ref": "#/$defs/updateOperation"
+        }
+      },
+      "additionalProperties": false
+    },
+    "rule": {
+      "type": "object",
+      "properties": {
+        "Rule": {
+          "$ref": "#/$defs/text512"
+        },
+        "StartDate": {
+          "$ref": "#/$defs/date"
+        }
+      },
+      "required": [
+        "Rule"
+      ],
+      "additionalProperties": false
+    },
+    "rules": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    },
+    "commonRule": {
+      "type": "object",
+      "properties": {
+        "Rules": {
+          "$ref": "#/$defs/rules"
+        },
+        "PreventInheritance": {
+          "type": "boolean"
+        },
+        "PreventRuleNames": {
+          "$ref": "#/$defs/textArray512"
+        }
+      },
+      "not": {
+        "required": [
+          "PreventInheritance",
+          "PreventRuleNames"
+        ]
+      },
+      "additionalProperties": false
+    },
+    "appraisalRule": {
+      "type": "object",
+      "properties": {
+        "Rules": {
+          "$ref": "#/$defs/rules"
+        },
+        "PreventInheritance": {
+          "type": "boolean"
+        },
+        "PreventRuleNames": {
+          "$ref": "#/$defs/textArray512"
+        },
+        "Duration": {
+          "$ref": "#/$defs/text512"
+        },
+        "FinalAction": {
+          "$ref": "#/$defs/text512"
+        }
+      },
+      "not": {
+        "required": [
+          "PreventInheritance",
+          "PreventRuleNames"
+        ]
+      },
+      "additionalProperties": false
+    },
+    "storageRule": {
+      "type": "object",
+      "properties": {
+        "Rules": {
+          "$ref": "#/$defs/rules"
+        },
+        "PreventInheritance": {
+          "type": "boolean"
+        },
+        "PreventRuleNames": {
+          "$ref": "#/$defs/textArray512"
+        },
+        "FinalAction": {
+          "$ref": "#/$defs/text512"
+        }
+      },
+      "not": {
+        "required": [
+          "PreventInheritance",
+          "PreventRuleNames"
+        ]
+      },
+      "additionalProperties": false
+    },
+    "classificationRule": {
+      "type": "object",
+      "properties": {
+        "Rules": {
+          "$ref": "#/$defs/rules"
+        },
+        "PreventInheritance": {
+          "type": "boolean"
+        },
+        "PreventRuleNames": {
+          "$ref": "#/$defs/textArray512"
+        },
+        "ClassificationLevel": {
+          "$ref": "#/$defs/text512"
+        },
+        "ClassificationAudience": {
+          "$ref": "#/$defs/text512"
+        },
+        "ClassificationOwner": {
+          "$ref": "#/$defs/text512"
+        },
+        "ClassificationReassessingDate": {
+          "$ref": "#/$defs/date"
+        },
+        "NeedReassessingAuthorization": {
+          "type": "boolean"
+        }
+      },
+      "not": {
+        "required": [
+          "PreventInheritance",
+          "PreventRuleNames"
+        ]
+      },
+      "additionalProperties": false
+    },
+    "holdRule": {
+      "type": "object",
+      "properties": {
+        "Rules": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/holdRuleItem"
+          }
+        },
+        "PreventInheritance": {
+          "type": "boolean"
+        },
+        "PreventRuleNames": {
+          "$ref": "#/$defs/textArray512"
+        }
+      },
+      "not": {
+        "required": [
+          "PreventInheritance",
+          "PreventRuleNames"
+        ]
+      },
+      "additionalProperties": false
+    },
+    "holdRuleItem": {
+      "type": "object",
+      "properties": {
+        "Rule": {
+          "$ref": "#/$defs/text512"
+        },
+        "StartDate": {
+          "$ref": "#/$defs/date"
+        },
+        "HoldOwner": {
+          "$ref": "#/$defs/text512"
+        },
+        "HoldReason": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "HoldEndDate": {
+          "$ref": "#/$defs/date"
+        },
+        "ReassessingDate": {
+          "$ref": "#/$defs/date"
+        },
+        "PreventRearrangement": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "Rule"
+      ],
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "EventIdentifier": {
+          "$ref": "#/$defs/text512"
+        },
+        "EventType": {
+          "$ref": "#/$defs/text512"
+        },
+        "EventTypeCode": {
+          "$ref": "#/$defs/text512"
+        },
+        "EventDateTime": {
+          "$ref": "#/$defs/dateTime"
+        },
+        "EventDetail": {
+          "$ref": "#/$defs/text512"
+        },
+        "Outcome": {
+          "$ref": "#/$defs/text512"
+        },
+        "OutcomeDetail": {
+          "$ref": "#/$defs/text512"
+        },
+        "OutcomeDetailMessage": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "EventDetailData": {
+          "type": "string",
+          "maxLength": 1024
+        }
+      },
+      "additionalProperties": false
+    },
+    "updateOperation": {
+      "type": "object",
+      "properties": {
+        "SystemId": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ]
+        },
+        "MetadataName": {
+          "$ref": "#/$defs/text512"
+        },
+        "MetadataValue": {
+          "$ref": "#/$defs/text512"
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "SystemId"
+          ]
+        },
+        {
+          "required": [
+            "MetadataName",
+            "MetadataValue"
+          ]
+        }
+      ],
+      "additionalProperties": false
+    },
+    "binaryDataObject": {
+      "type": "object",
+      "properties": {
+        "DataObjectVersion": {
+          "$ref": "#/$defs/text512"
+        },
+        "Uri": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "MessageDigest": {
+          "$ref": "#/$defs/messageDigest"
+        },
+        "Size": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "FormatIdentification": {
+          "$ref": "#/$defs/formatIdentification"
+        },
+        "FileInfo": {
+          "$ref": "#/$defs/fileInfo"
+        }
+      },
+      "required": [
+        "Uri",
+        "MessageDigest"
+      ],
+      "additionalProperties": false
+    },
+    "messageDigest": {
+      "type": "object",
+      "properties": {
+        "Algorithm": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "Value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      },
+      "required": [
+        "Algorithm",
+        "Value"
+      ],
+      "additionalProperties": false
+    },
+    "formatIdentification": {
+      "type": "object",
+      "properties": {
+        "FormatId": {
+          "$ref": "#/$defs/text512"
+        },
+        "FormatLitteral": {
+          "$ref": "#/$defs/text512"
+        },
+        "FormatName": {
+          "$ref": "#/$defs/text512"
+        },
+        "MimeType": {
+          "$ref": "#/$defs/text512"
+        },
+        "Encoding": {
+          "$ref": "#/$defs/text512"
+        }
+      },
+      "additionalProperties": false
+    },
+    "fileInfo": {
+      "type": "object",
+      "properties": {
+        "Filename": {
+          "$ref": "#/$defs/text512"
+        },
+        "CreatingApplicationName": {
+          "$ref": "#/$defs/text512"
+        },
+        "CreatingApplicationVersion": {
+          "$ref": "#/$defs/text512"
+        },
+        "CreatingOs": {
+          "$ref": "#/$defs/text512"
+        },
+        "CreatingOsVersion": {
+          "$ref": "#/$defs/text512"
+        },
+        "DateCreatedByApplication": {
+          "$ref": "#/$defs/dateTime"
+        },
+        "LastModified": {
+          "$ref": "#/$defs/dateTime"
+        }
+      },
+      "additionalProperties": false
+    },
+    "physicalDataObject": {
+      "type": "object",
+      "properties": {
+        "DataObjectVersion": {
+          "$ref": "#/$defs/text512"
+        },
+        "PhysicalId": {
+          "$ref": "#/$defs/text512"
+        },
+        "Measure": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
