@@ -43,6 +43,11 @@
       "type": "string",
       "maxLength": 512
     },
+    "xmlId": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}",
+      "maxLength": 512
+    },
     "textArray512": {
       "type": "array",
       "maxItems": 1000,
@@ -165,6 +170,9 @@
     "archiveUnit": {
       "type": "object",
       "properties": {
+        "XmlId": {
+          "$ref": "#/$defs/xmlId"
+        },
         "Management": {
           "$ref": "#/$defs/management"
         },
@@ -1156,6 +1164,9 @@
     "binaryDataObject": {
       "type": "object",
       "properties": {
+        "XmlId": {
+          "$ref": "#/$defs/xmlId"
+        },
         "DataObjectVersion": {
           "$ref": "#/$defs/text512"
         },
@@ -1256,6 +1267,9 @@
     "physicalDataObject": {
       "type": "object",
       "properties": {
+        "XmlId": {
+          "$ref": "#/$defs/xmlId"
+        },
         "DataObjectVersion": {
           "$ref": "#/$defs/text512"
         },

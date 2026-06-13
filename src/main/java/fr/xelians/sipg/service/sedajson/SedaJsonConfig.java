@@ -35,6 +35,8 @@ package fr.xelians.sipg.service.sedajson;
  * @param useMemory spécifie si la génération du sip utilise la mémoire ou le disque
  * @param identifyFileFormat spécifie si le format de fichier des objets binaires doit être
  *     identifié
+ * @param xmlId spécifie si un identifiant unique XmlId est généré pour chaque unité d'archive et
+ *     chaque objet de données
  * @param maxManifestSize spécifie la taille maximale en octets du manifeste lors de la validation
  * @author Emmanuel Deviller
  * @see SedaJsonConfigBuilder
@@ -50,6 +52,7 @@ public record SedaJsonConfig(
     boolean checkDigest,
     boolean useMemory,
     boolean identifyFileFormat,
+    boolean xmlId,
     long maxManifestSize) {
 
   /** The constant DEFAULT. */

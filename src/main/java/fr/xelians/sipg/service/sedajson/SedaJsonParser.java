@@ -164,11 +164,12 @@ final class SedaJsonParser {
 
   private static int unitRankOf(String name) {
     return switch (name) {
-      case MANAGEMENT -> 1;
-      case CONTENT -> 2;
-      case BINARY_DATA_OBJECTS -> 3;
-      case PHYSICAL_DATA_OBJECTS -> 4;
-      case ARCHIVE_UNITS -> 5;
+      case XML_ID -> 1;
+      case MANAGEMENT -> 2;
+      case CONTENT -> 3;
+      case BINARY_DATA_OBJECTS -> 4;
+      case PHYSICAL_DATA_OBJECTS -> 5;
+      case ARCHIVE_UNITS -> 6;
       default -> throw unknownKeyException("ArchiveUnit", name);
     };
   }

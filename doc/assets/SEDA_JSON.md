@@ -24,11 +24,18 @@ l'adaptant aux idiomes JSON.
 * **Pas d'identifiants ni de références.** Contrairement au XML (attributs `id`,
   `DataObjectGroup` déclarés en tête de fichier puis référencés par `DataObjectReference`,
   références inter-unités `ArchiveUnitRefId`), le JSON ne comporte aucun mécanisme de référence :
-  * les objets numériques et physiques sont déclarés **directement dans leur unité d'archive**
+  * les objets numériques et physiques sont déclarés directement dans leur unité d'archive
     (`BinaryDataObjects`, `PhysicalDataObjects`) — un groupe d'objets implicite est créé par
     unité ;
-  * la hiérarchie des unités s'exprime **uniquement par imbrication** (`ArchiveUnits` récursif) ;
+  * la hiérarchie des unités s'exprime uniquement par imbrication (`ArchiveUnits` récursif) ;
   * le partage d'un même groupe d'objets entre plusieurs unités n'est pas supporté.
+* **Identifiants `XmlId` (optionnels).** Pour permettre d'identifier de manière unique certains
+  éléments du manifeste, SipG génère par défaut une clé `XmlId` sur chaque unité d'archive
+  (préfixe `AU`), chaque objet binaire (préfixe `BDO`) et chaque objet physique (préfixe `PDO`).
+  Ces identifiants sont uniques dans la totalité du manifeste et commencent toujours par au moins
+  deux lettres. Il s'agit d'identifiants purement descriptifs : ils ne sont jamais référencés
+  ailleurs dans le manifeste (le principe « pas de références » est préservé). La génération des
+  `XmlId` peut être désactivée via l'option `xmlId` de `SedaJsonConfig`.
 * **Clés en PascalCase** reprenant les noms des éléments SEDA XML.
 * **Éléments multivalués → tableaux JSON** avec un nom au pluriel (`ArchiveUnits`, `Tags`,
   `Keywords`, `BinaryDataObjects`, `Writers`, …).
@@ -37,8 +44,8 @@ l'adaptant aux idiomes JSON.
 * **Appariement explicite des règles** : la juxtaposition positionnelle XML
   `<Rule>`/`<StartDate>` devient un tableau d'objets `"Rules": [{"Rule": "…", "StartDate": "…"}]`.
 * **Ordre des clés imposé** : il permet un parsing en streaming en une seule passe.
-* **Éléments étendus** : toute clé non définie par le standard est acceptée **uniquement dans
-  `Content`**.
+* **Éléments étendus** : toute clé non définie par le standard est acceptée uniquement dans
+  `Content`.
 * **Dates** au format ISO-8601 : `yyyy-MM-dd` pour les dates, `yyyy-MM-dd'T'HH:mm:ss` pour les
   dates-heures.
 
@@ -66,8 +73,8 @@ autres objets, l'ordre indiqué dans ce document est l'ordre normatif de génér
 * **Racine** : `SedaJsonVersion` (obligatoirement en premier), `MessageIdentifier?`, `Comment?`,
   `ArchivalAgreement`, `ArchiveUnits?`, `ManagementMetadata?`, `ArchivalAgency`,
   `TransferringAgency?`.
-* **Unité d'archive** : `Management?`, `Content`, `BinaryDataObjects?`, `PhysicalDataObjects?`,
-  `ArchiveUnits?`.
+* **Unité d'archive** : `XmlId?`, `Management?`, `Content`, `BinaryDataObjects?`,
+  `PhysicalDataObjects?`, `ArchiveUnits?`.
 
 ## Référence des clés
 
@@ -94,14 +101,14 @@ identifiant aléatoire (comme pour les générateurs XML). La date du message (`
 
 ### ManagementMetadata
 
-| Clé | Type | Card. | Longueur max |
-|---|---|---|---|
-| `ArchivalProfile` | chaîne | 0..1 | 512 |
-| `ServiceLevel` | chaîne | 0..1 | 512 |
-| `AcquisitionInformation` | chaîne | 0..1 | 512 |
-| `LegalStatus` | chaîne | 0..1 | 512 |
-| `OriginatingAgencyIdentifier` | chaîne | 0..1 | 512 |
-| `SubmissionAgencyIdentifier` | chaîne | 0..1 | 512 |
+| Clé | Type | Card. | Longueur max | SEDA XML |
+|---|---|---|---|---|
+| `ArchivalProfile` | chaîne | 0..1 | 512 | `ArchivalProfile` |
+| `ServiceLevel` | chaîne | 0..1 | 512 | `ServiceLevel` |
+| `AcquisitionInformation` | chaîne | 0..1 | 512 | `AcquisitionInformation` |
+| `LegalStatus` | chaîne | 0..1 | 512 | `LegalStatus` |
+| `OriginatingAgencyIdentifier` | chaîne | 0..1 | 512 | `OriginatingAgencyIdentifier` |
+| `SubmissionAgencyIdentifier` | chaîne | 0..1 | 512 | `SubmissionAgencyIdentifier` |
 
 ### Agence (`ArchivalAgency`, `TransferringAgency`, `OriginatingAgency`, `SubmissionAgency`)
 
@@ -117,13 +124,17 @@ représentables en JSON (voir [constructions non représentables](#constructions
 
 | Clé | Type | Card. | SEDA XML |
 |---|---|---|---|
+| `XmlId` | chaîne (préfixe `AU`) | 0..1 | — (identifiant généré, spécifique JSON) |
 | `Management` | objet | 0..1 | `ArchiveUnit/Management` |
 | `Content` | objet | 1 | `ArchiveUnit/Content` |
 | `BinaryDataObjects` | tableau (max 1000) | 0..1 | `BinaryDataObject*` du groupe d'objets |
 | `PhysicalDataObjects` | tableau (max 1) | 0..1 | `PhysicalDataObject` du groupe d'objets |
 | `ArchiveUnits` | tableau d'unités | 0..1 | `ArchiveUnit*` imbriquées |
 
-L'attribut `id` de l'unité XML n'a pas d'équivalent et est ignoré.
+L'attribut `id` de l'unité XML (issu de `ArchiveUnit.setId`) n'a pas d'équivalent et est ignoré ;
+le `XmlId` est un identifiant distinct, généré par SipG (voir
+[principes de conception](#principes-de-conception)). Il est présent par défaut et peut être omis
+via l'option `xmlId` de `SedaJsonConfig`.
 
 ### Management
 
@@ -232,44 +243,44 @@ L'ordre des clés suit la séquence du XSD `DescriptiveMetadataContentType` :
 
 ### Événement (`LogBook`, `Events`)
 
-| Clé | Type | Card. | Longueur max |
-|---|---|---|---|
-| `EventIdentifier` | chaîne | 0..1 | 512 |
-| `EventTypeCode` | chaîne | 0..1 | 512 |
-| `EventType` | chaîne | 0..1 | 512 |
-| `EventDateTime` | date-heure | 0..1 | 64 |
-| `EventDetail` | chaîne | 0..1 | 512 |
-| `Outcome` | chaîne | 0..1 | 512 |
-| `OutcomeDetail` | chaîne | 0..1 | 512 |
-| `OutcomeDetailMessage` | chaîne | 0..1 | 1024 |
-| `EventDetailData` | chaîne | 0..1 | 1024 |
+| Clé | Type | Card. | Longueur max | SEDA XML |
+|---|---|---|---|---|
+| `EventIdentifier` | chaîne | 0..1 | 512 | `EventIdentifier` |
+| `EventTypeCode` | chaîne | 0..1 | 512 | `EventTypeCode` |
+| `EventType` | chaîne | 0..1 | 512 | `EventType` |
+| `EventDateTime` | date-heure | 0..1 | 64 | `EventDateTime` |
+| `EventDetail` | chaîne | 0..1 | 512 | `EventDetail` |
+| `Outcome` | chaîne | 0..1 | 512 | `Outcome` |
+| `OutcomeDetail` | chaîne | 0..1 | 512 | `OutcomeDetail` |
+| `OutcomeDetailMessage` | chaîne | 0..1 | 1024 | `OutcomeDetailMessage` |
+| `EventDetailData` | chaîne | 0..1 | 1024 | `EventDetailData` |
 
 ### Agent (`Agents`, `AuthorizedAgents`, `Writers`, `Addressees`, `Recipients`, `Transmitters`, `Senders`)
 
 L'ordre suit la séquence du XSD `AgentType` :
 
-| Clé | Type | Card. | Longueur max |
-|---|---|---|---|
-| `FirstName` | chaîne | 0..1 | 512 |
-| `BirthName` | chaîne | 0..1 | 512 |
-| `FullName` | chaîne | 0..1 | 512 |
-| `GivenName` | chaîne | 0..1 | 512 |
-| `Gender` | chaîne | 0..1 | 512 |
-| `BirthDate` | date | 0..1 | — |
-| `BirthPlace` | lieu | 0..1 | — |
-| `DeathDate` | date | 0..1 | — |
-| `DeathPlace` | lieu | 0..1 | — |
-| `Nationalities` | tableau de chaînes | 0..1 | 512 |
-| `Corpname` | chaîne | 0..1 | 512 |
-| `Identifiers` | tableau de chaînes | 0..1 | 512 |
-| `Functions` | tableau de chaînes | 0..1 | 512 |
-| `Activities` | tableau de chaînes | 0..1 | 512 |
-| `Positions` | tableau de chaînes | 0..1 | 512 |
-| `Roles` | tableau de chaînes | 0..1 | 512 |
-| `Mandates` | tableau de chaînes | 0..1 | 512 |
+| Clé | Type | Card. | Longueur max | SEDA XML |
+|---|---|---|---|---|
+| `FirstName` | chaîne | 0..1 | 512 | `FirstName` |
+| `BirthName` | chaîne | 0..1 | 512 | `BirthName` |
+| `FullName` | chaîne | 0..1 | 512 | `FullName` |
+| `GivenName` | chaîne | 0..1 | 512 | `GivenName` |
+| `Gender` | chaîne | 0..1 | 512 | `Gender` |
+| `BirthDate` | date | 0..1 | — | `BirthDate` |
+| `BirthPlace` | lieu | 0..1 | — | `BirthPlace` |
+| `DeathDate` | date | 0..1 | — | `DeathDate` |
+| `DeathPlace` | lieu | 0..1 | — | `DeathPlace` |
+| `Nationalities` | tableau de chaînes | 0..1 | 512 | `Nationality*` |
+| `Corpname` | chaîne | 0..1 | 512 | `Corpname` |
+| `Identifiers` | tableau de chaînes | 0..1 | 512 | `Identifier*` |
+| `Functions` | tableau de chaînes | 0..1 | 512 | `Function*` |
+| `Activities` | tableau de chaînes | 0..1 | 512 | `Activity*` |
+| `Positions` | tableau de chaînes | 0..1 | 512 | `Position*` |
+| `Roles` | tableau de chaînes | 0..1 | 512 | `Role*` |
+| `Mandates` | tableau de chaînes | 0..1 | 512 | `Mandate*` |
 
-Le **signataire** (`Signer`) ajoute `SigningTime?` (date-heure) en dernière position et le
-**valideur** (`Validator`) ajoute `ValidationTime?` (date-heure).
+Le signataire (`Signer`) ajoute `SigningTime?` (date-heure) en dernière position et le
+valideur (`Validator`) ajoute `ValidationTime?` (date-heure).
 
 ### Lieu (`BirthPlace`, `DeathPlace`)
 
@@ -324,6 +335,7 @@ Les objets sont générés dans l'ordre : BinaryMaster, Dissemination, Thumbnail
 
 | Clé | Type | Card. | Longueur max | SEDA XML |
 |---|---|---|---|---|
+| `XmlId` | chaîne (préfixe `BDO`) | 0..1 | 512 | — (identifiant généré, spécifique JSON) |
 | `DataObjectVersion` | chaîne | 0..1 | 512 | `DataObjectVersion` |
 | `Uri` | chaîne | 1 | 1024 | `Uri` |
 | `MessageDigest` | `{"Algorithm" (1), "Value" (1)}` | 1 | 64/1024 | `MessageDigest` + attribut `algorithm` |
@@ -341,6 +353,7 @@ automatiquement et le format est identifié via la librairie Droid lorsqu'il n'e
 
 | Clé | Type | Card. | SEDA XML |
 |---|---|---|---|
+| `XmlId` | chaîne (préfixe `PDO`) | 0..1 | — (identifiant généré, spécifique JSON) |
 | `DataObjectVersion` | chaîne | 0..1 | `DataObjectVersion` |
 | `PhysicalId` | chaîne | 1 | `PhysicalId` |
 | `Measure` | nombre | 0..1 | `PhysicalDimensions` |
@@ -351,7 +364,7 @@ Le SEDA XML autorise plusieurs `Title` et `Description` avec un attribut `xml:la
 JSON impose une clé `Title` de type chaîne (resp. `Description`) et reporte les autres textes dans
 le tableau pluriel `Titles` (resp. `Descriptions`) :
 
-* `Title` reçoit le message du **premier texte sans langue** ; à défaut, celui du premier texte ;
+* `Title` reçoit le message du premier texte sans langue ; à défaut, celui du premier texte ;
 * les autres textes sont placés dans `Titles` : objets `{"Lang": "…", "Value": "…"}` si une langue
   est définie, chaînes sinon.
 
@@ -364,15 +377,15 @@ le tableau pluriel `Titles` (resp. `Descriptions`) :
 
 ## Éléments étendus
 
-Toute clé non définie par le standard est acceptée **uniquement dans `Content`** et doit être
-placée **après** les clés standard. Les règles de transposition des éléments étendus
+Toute clé non définie par le standard est acceptée uniquement dans `Content` et doit être
+placée après les clés standard. Les règles de transposition des éléments étendus
 (`fr.xelians.sipg.model.Element` ou fragments XML bruts) sont les suivantes :
 
-* un élément feuille sans attribut devient une **chaîne** ;
-* un élément avec enfants devient un **objet** ;
-* les **attributs** deviennent des propriétés de l'objet et la valeur texte est placée sous la clé
+* un élément feuille sans attribut devient une chaîne ;
+* un élément avec enfants devient un objet ;
+* les attributs deviennent des propriétés de l'objet et la valeur texte est placée sous la clé
   `"Value"` ;
-* les noms répétés sont fusionnés en **tableau**.
+* les noms répétés sont fusionnés en tableau.
 
 ```json
 {
@@ -388,7 +401,7 @@ strict (l'attribut est ignoré avec un avertissement en mode non strict).
 ## Constructions non représentables
 
 Les constructions suivantes du modèle SipG n'ont pas d'équivalent dans le standard SEDA JSON. En
-mode **strict** (par défaut), leur présence provoque une `SipException` ; en mode **non strict**,
+mode strict (par défaut), leur présence provoque une `SipException` ; en mode non strict,
 elles sont ignorées avec un avertissement :
 
 | Construction | Raison |
@@ -400,7 +413,7 @@ elles sont ignorées avec un avertissement :
 | Éléments étendus des agences (`Agency.addElement`) | le schéma des agences est fermé |
 | `ArchiveDeliveryRequestReply` (DIP) | le standard JSON ne définit que le transfert |
 
-Sont par ailleurs **toujours ignorés** (trace de debug) : la date du message
+Sont par ailleurs toujours ignorés (trace de debug) : la date du message
 (`ArchiveTransfer.setDate`), les `CodeListVersions`, l'identifiant d'unité (`ArchiveUnit.setId`)
 et le `SignatureStatus`.
 
@@ -432,6 +445,7 @@ concernée par cette limite.
   "ArchivalAgreement": "IC-000001",
   "ArchiveUnits": [
     {
+      "XmlId": "AU1",
       "Management": {
         "AppraisalRule": {
           "Rules": [ { "Rule": "APP-00001", "StartDate": "2025-01-01" } ],
@@ -454,6 +468,7 @@ concernée par cette limite.
       },
       "BinaryDataObjects": [
         {
+          "XmlId": "BDO1",
           "DataObjectVersion": "BinaryMaster_1",
           "Uri": "content/1_dossier_durand.pdf",
           "MessageDigest": { "Algorithm": "SHA-512", "Value": "9f2c…" },
@@ -463,10 +478,10 @@ concernée par cette limite.
         }
       ],
       "PhysicalDataObjects": [
-        { "DataObjectVersion": "PhysicalMaster_1", "PhysicalId": "BOITE-42", "Measure": 1.5 }
+        { "XmlId": "PDO1", "DataObjectVersion": "PhysicalMaster_1", "PhysicalId": "BOITE-42", "Measure": 1.5 }
       ],
       "ArchiveUnits": [
-        { "Content": { "DescriptionLevel": "Item", "Title": "Pièce annexe" } }
+        { "XmlId": "AU2", "Content": { "DescriptionLevel": "Item", "Title": "Pièce annexe" } }
       ]
     }
   ],
@@ -486,11 +501,11 @@ standard et sont acceptés uniquement dans `Content`.
 
 La validation d'un paquet zip (`SedaJsonService.validate(Path)`) opère en trois temps :
 
-1. la **validation par schéma** : le manifeste est validé contre le schéma JSON embarqué
+1. la validation par schéma : le manifeste est validé contre le schéma JSON embarqué
    (structure, clés autorisées, types, longueurs maximales) ;
-2. le **parsing en streaming** : l'ordre des clés imposé par le standard est vérifié et les objets
+2. le parsing en streaming : l'ordre des clés imposé par le standard est vérifié et les objets
    binaires sont extraits ;
-3. la **vérification des binaires** : existence, emplacement dans `content/`, taille et empreinte.
+3. la vérification des binaires : existence, emplacement dans `content/`, taille et empreinte.
 
 Chaque étape est notifiée au callback de progression (`ProgressListener<SedaJsonStep>`) :
 
@@ -538,5 +553,6 @@ La configuration `SedaJsonConfig` (créée via `SedaJsonConfigBuilder`) permet d
 la validation par schéma lors de la génération (`validate`), le formatage du manifeste (`format`,
 `indent`), le nombre de threads (`thread`), le mode strict (`strict`), les vérifications des
 binaires (`checkBinary`, `checkSize`, `checkDigest`), la génération en mémoire (`useMemory`),
-l'identification des formats (`identifyFileFormat`) et la taille maximale du manifeste lors de la
-validation (`maxManifestSize`).
+l'identification des formats (`identifyFileFormat`), la génération des identifiants `XmlId`
+(`xmlId`, activée par défaut) et la taille maximale du manifeste lors de la validation
+(`maxManifestSize`).

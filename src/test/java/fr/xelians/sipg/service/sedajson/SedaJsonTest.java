@@ -67,6 +67,10 @@ class SedaJsonTest {
 
   private final SedaJsonConfig jsonConfig =
       SedaJsonConfigBuilder.builder().format(true).validate(true).strict(false).build();
+  // L'XmlId est une extension sipg absente du sous-ensemble esafe : on le désactive pour valider
+  // la sortie canonique contre le schéma esafe externe
+  private final SedaJsonConfig noXmlIdConfig =
+      SedaJsonConfigBuilder.builder().strict(false).xmlId(false).build();
   private final SedaJsonService jsonService = SedaJsonService.getInstance();
 
   private JsonNode readManifest(Path zipPath) throws Exception {
@@ -106,10 +110,14 @@ class SedaJsonTest {
             "TransferringAgency"),
         fieldNames(manifest));
     JsonNode unit = manifest.get("ArchiveUnits").get(0);
-    assertEquals(List.of("Content", "BinaryDataObjects"), fieldNames(unit));
+    // L'XmlId, activé par défaut, est la première clé de l'unité
+    assertEquals(List.of("XmlId", "Content", "BinaryDataObjects"), fieldNames(unit));
+    assertEquals("AU1", unit.get("XmlId").asText());
     assertEquals("My_Title", unit.get("Content").get("Title").asText());
 
     JsonNode binary = unit.get("BinaryDataObjects").get(0);
+    // L'XmlId est également la première clé de l'objet binaire
+    assertEquals("BDO1", binary.get("XmlId").asText());
     assertEquals("content/1_dummy.pdf", binary.get("Uri").asText());
     assertEquals("SHA-512", binary.get("MessageDigest").get("Algorithm").asText());
     assertTrue(binary.get("Size").asLong() > 0);
@@ -368,7 +376,7 @@ class SedaJsonTest {
               .getSchema(MAPPER.readTree(is));
     }
 
-    try (InputStream is = jsonService.marshal(archiveTransfer)) {
+    try (InputStream is = jsonService.marshal(archiveTransfer, noXmlIdConfig)) {
       Set<ValidationMessage> messages = esafeSchema.validate(MAPPER.readTree(is));
       assertTrue(messages.isEmpty(), messages.toString());
     }
@@ -388,10 +396,51 @@ class SedaJsonTest {
                 .getSchema(MAPPER.readTree(is));
       }
 
-      try (InputStream is = jsonService.marshal(archiveTransfer, jsonConfig)) {
+      try (InputStream is = jsonService.marshal(archiveTransfer, noXmlIdConfig)) {
         Set<ValidationMessage> messages = esafeSchema.validate(MAPPER.readTree(is));
         assertTrue(messages.isEmpty(), messages.toString());
       }
+    }
+  }
+
+  /** Test the XmlId generation, uniqueness and disabling. */
+  @Test
+  void testXmlId() throws Exception {
+    try (FileSystem fs = Jimfs.newFileSystem()) {
+      ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
+
+      // XmlId activé par défaut : chaque unité, objet binaire et objet physique en porte un, unique
+      // dans la totalité du manifeste et préfixé par au moins deux lettres (AU, BDO, PDO)
+      try (InputStream is = jsonService.marshal(archiveTransfer, jsonConfig)) {
+        JsonNode manifest = MAPPER.readTree(is);
+        List<String> ids = new ArrayList<>();
+        collectXmlIds(manifest, ids);
+        assertFalse(ids.isEmpty());
+        assertEquals(ids.size(), Set.copyOf(ids).size(), "XmlId must be unique: " + ids);
+        for (String id : ids) {
+          assertTrue(id.matches("^(AU|BDO|PDO)\\d+$"), "XmlId must start with 2+ letters: " + id);
+        }
+      }
+
+      // XmlId désactivé : aucune clé XmlId n'est générée
+      try (InputStream is = jsonService.marshal(archiveTransfer, noXmlIdConfig)) {
+        JsonNode manifest = MAPPER.readTree(is);
+        List<String> ids = new ArrayList<>();
+        collectXmlIds(manifest, ids);
+        assertTrue(ids.isEmpty(), "No XmlId expected when disabled: " + ids);
+      }
+    }
+  }
+
+  private static void collectXmlIds(JsonNode node, List<String> ids) {
+    if (node.isObject()) {
+      JsonNode id = node.get("XmlId");
+      if (id != null) {
+        ids.add(id.asText());
+      }
+      node.fields().forEachRemaining(e -> collectXmlIds(e.getValue(), ids));
+    } else if (node.isArray()) {
+      node.forEach(child -> collectXmlIds(child, ids));
     }
   }
 }

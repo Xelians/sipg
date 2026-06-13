@@ -51,6 +51,7 @@ final class SedaJsonKeys {
   static final String NAME = "Name";
 
   // Unité d'archive
+  static final String XML_ID = "XmlId";
   static final String MANAGEMENT = "Management";
   static final String CONTENT = "Content";
   static final String BINARY_DATA_OBJECTS = "BinaryDataObjects";
