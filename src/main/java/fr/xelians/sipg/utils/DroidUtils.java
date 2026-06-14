@@ -7,10 +7,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import uk.gov.nationalarchives.droid.core.BinarySignatureIdentifier;
@@ -39,7 +36,26 @@ public final class DroidUtils {
 
   private static final Map<String, List<InternalSignature>> SIGNATURES_BY_ID = new HashMap<>();
 
+  private static final long MAX_BYTES_TO_SCAN = -1L; // Scan all bytes
+
+  // Plain text and json have no binary signature in Droid, so they are identified by extension.
+  private static final List<IdentificationResult> PLAIN_TEXT_RESULT =
+      List.of(createResult("x-fmt/111", "Plain Text File", "txt", "text/plain"));
+  private static final List<IdentificationResult> JSON_RESULT =
+      List.of(createResult("fmt/817", "JSON Data Interchange Format", "json", "application/json"));
+
   private DroidUtils() {}
+
+  private static IdentificationResult createResult(
+      String puid, String name, String version, String mimeType) {
+    IdentificationResultImpl result = new IdentificationResultImpl();
+    result.setPuid(puid);
+    result.setName(name);
+    result.setVersion(version);
+    result.setMimeType(mimeType);
+    result.setMethod(IdentificationMethod.EXTENSION);
+    return result;
+  }
 
   /**
    * Initialise les identifiants binaires des signatures Droid à partir de la ressource par défaut.
@@ -91,6 +107,7 @@ public final class DroidUtils {
       BinarySignatureIdentifier bsi = new BinarySignatureIdentifier();
       bsi.setSignatureFile(signaturePath.toString());
       bsi.init();
+      bsi.getSigFile().setMaxBytesToScan(MAX_BYTES_TO_SCAN);
       return bsi;
     } catch (SignatureParseException ex) {
       throw new SipException("Unable to init Droid signatures identifier", ex);
@@ -135,8 +152,9 @@ public final class DroidUtils {
     RequestIdentifier identifier = new RequestIdentifier(path.toUri());
     identifier.setParentId(1L);
 
-    try (IdentificationRequest<Path> request =
+    try (FileSystemIdentificationRequest request =
         new FileSystemIdentificationRequest(createMetadata(path), identifier)) {
+      request.setExtension(extension);
       request.open(path);
 
       if (!StringUtils.isBlank(extension)) {
@@ -148,7 +166,15 @@ public final class DroidUtils {
           }
         }
       }
-      return bsi.matchBinarySignatures(request).getResults();
+
+      // Full but slow path
+      List<IdentificationResult> results = bsi.matchBinarySignatures(request).getResults();
+      if (!results.isEmpty()) {
+        return results;
+      }
+
+      return bsi.matchExtensions(request, true).getResults();
+
     } catch (IOException ex) {
       throw new SipException("Unable to matchBinarySignatures for " + path, ex);
     }

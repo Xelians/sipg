@@ -1,0 +1,3 @@
+Hello, this is a plain text document.
+It contains several lines.
+Used for DROID format identification tests.
