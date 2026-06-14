@@ -55,6 +55,20 @@ class DroidTest {
     assertEquals("fmt/19", results.getFirst().getPuid());
   }
 
+  @Test
+  void testPlainTextDroid() {
+    Path path = Paths.get(TestInit.TEST_RESOURCES + "dummy.txt");
+    List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "txt");
+    assertEquals("x-fmt/111", results.getFirst().getPuid());
+  }
+
+  @Test
+  void testJsonDroid() {
+    Path path = Paths.get(TestInit.TEST_RESOURCES + "minisip.json");
+    List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "json");
+    assertEquals("fmt/817", results.getFirst().getPuid());
+  }
+
   /** Test loop droid. */
   @Test
   void testLoopDroid() {
