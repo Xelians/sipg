@@ -91,8 +91,9 @@ public final class DroidUtils {
     RequestIdentifier identifier = new RequestIdentifier(path.toUri());
     identifier.setParentId(1L);
 
-    try (IdentificationRequest<Path> request =
+    try (FileSystemIdentificationRequest request =
         new FileSystemIdentificationRequest(createMetadata(path), identifier)) {
+      request.setExtension(extension);
       request.open(path);
 
       // Optimized path

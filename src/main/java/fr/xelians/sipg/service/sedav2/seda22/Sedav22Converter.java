@@ -1397,7 +1397,7 @@ class Sedav22Converter {
         if (results.isEmpty()) {
           bdot.setFormatIdentification(toFormatIdentificationType("Unknown", null, null));
         } else {
-          IdentificationResult r = results.get(0);
+          IdentificationResult r = results.getFirst();
           String name =
               StringUtils.isAllBlank(r.getName(), r.getVersion())
                   ? null
