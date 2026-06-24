@@ -793,7 +793,8 @@ class Fntcv4Converter {
         // jimfs)
         if (StringUtils.isBlank(bdot.getFormat())) {
           String ext = FilenameUtils.getExtension(binaryPath.getFileName().toString());
-          List<IdentificationResult> results = DroidUtils.matchBinarySignatures(binaryPath, ext);
+          List<IdentificationResult> results =
+              DroidUtils.matchBinarySignatures(binaryPath, ext, true);
           String format = results.isEmpty() ? "Unknown Format" : results.get(0).getPuid();
           bdot.setFormat(format);
         }

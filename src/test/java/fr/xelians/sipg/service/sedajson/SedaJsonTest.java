@@ -438,7 +438,7 @@ class SedaJsonTest {
       if (id != null) {
         ids.add(id.asText());
       }
-      node.fields().forEachRemaining(e -> collectXmlIds(e.getValue(), ids));
+      node.properties().forEach(e -> collectXmlIds(e.getValue(), ids));
     } else if (node.isArray()) {
       node.forEach(child -> collectXmlIds(child, ids));
     }

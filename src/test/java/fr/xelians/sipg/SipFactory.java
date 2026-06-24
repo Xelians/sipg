@@ -135,7 +135,7 @@ public class SipFactory {
     HashMap<String, ArchiveUnit> map = new HashMap<>();
 
     try (BufferedReader reader = Files.newBufferedReader(csvPath)) {
-      CSVParser parser = CSVFormat.DEFAULT.builder().setDelimiter(';').build().parse(reader);
+      CSVParser parser = CSVFormat.DEFAULT.builder().setDelimiter(';').get().parse(reader);
       for (CSVRecord csvRecord : parser) {
         ArchiveUnit unit = new ArchiveUnit();
         unit.setBinaryPath(Paths.get(TestInit.TEST_RESOURCES + csvRecord.get(2)));

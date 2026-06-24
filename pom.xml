@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.xelians</groupId>
     <artifactId>sipg</artifactId>
-    <version>1.47</version>
+    <version>1.48</version>
     <packaging>jar</packaging>
 
     <organization>
@@ -239,6 +239,12 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.22.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jspecify</groupId>
+            <artifactId>jspecify</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
         </dependency>
 
         <!--  Log -->
