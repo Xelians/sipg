@@ -1043,7 +1043,7 @@ class SedaJsonConverter {
 
       ObjectNode format = (ObjectNode) formatNode;
       String ext = FilenameUtils.getExtension(binaryPath.getFileName().toString());
-      List<IdentificationResult> results = DroidUtils.matchBinarySignatures(binaryPath, ext);
+      List<IdentificationResult> results = DroidUtils.matchBinarySignatures(binaryPath, ext, true);
       if (results.isEmpty()) {
         format.put(FORMAT_ID, "Unknown");
       } else {

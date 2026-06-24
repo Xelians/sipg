@@ -41,7 +41,7 @@ class DroidTest {
   @Test
   void testSmallPdfDroid() {
     Path path = Paths.get(TestInit.TEST_RESOURCES + "dummy.pdf");
-    List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "pdf");
+    List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "pdf", true);
     assertEquals(1, results.size());
     assertEquals("fmt/18", results.getFirst().getPuid());
   }
@@ -50,7 +50,7 @@ class DroidTest {
   @Test
   void testMediumPdfDroid() {
     Path path = Paths.get(TestInit.TEST_RESOURCES + "citizenfour.pdf");
-    List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "pdf");
+    List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "pdf", true);
     assertEquals(1, results.size());
     assertEquals("fmt/19", results.getFirst().getPuid());
   }
@@ -58,14 +58,14 @@ class DroidTest {
   @Test
   void testPlainTextDroid() {
     Path path = Paths.get(TestInit.TEST_RESOURCES + "dummy.txt");
-    List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "txt");
+    List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "txt", true);
     assertEquals("x-fmt/111", results.getFirst().getPuid());
   }
 
   @Test
   void testJsonDroid() {
     Path path = Paths.get(TestInit.TEST_RESOURCES + "minisip.json");
-    List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "json");
+    List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "json", true);
     assertEquals("fmt/817", results.getFirst().getPuid());
   }
 
@@ -75,7 +75,7 @@ class DroidTest {
     Path path = Paths.get(TestInit.TEST_RESOURCES + "citizenfour.pdf");
 
     for (int i = 0; i < 1000; i++) {
-      List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "pdf");
+      List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "pdf", true);
       assertEquals("fmt/19", results.getFirst().getPuid());
     }
   }

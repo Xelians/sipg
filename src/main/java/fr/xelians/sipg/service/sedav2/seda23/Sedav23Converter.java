@@ -1416,7 +1416,8 @@ class Sedav23Converter {
         // Note. The Signature Identifier does not fully support NIO2 (i.e. does not work with
         // jimfs)
         String ext = FilenameUtils.getExtension(binaryPath.getFileName().toString());
-        List<IdentificationResult> results = DroidUtils.matchBinarySignatures(binaryPath, ext);
+        List<IdentificationResult> results =
+            DroidUtils.matchBinarySignatures(binaryPath, ext, true);
         if (results.isEmpty()) {
           bdot.setFormatIdentification(toFormatIdentificationType("Unknown", null, null));
         } else {
