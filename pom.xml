@@ -258,7 +258,7 @@
         <dependency>
             <groupId>uk.gov.nationalarchives</groupId>
             <artifactId>droid-core</artifactId>
-            <version>6.9.12</version>
+            <version>6.9.13</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.glassfish.jaxb</groupId>
