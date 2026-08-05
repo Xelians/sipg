@@ -260,6 +260,52 @@ class SedaJsonTest {
     }
   }
 
+  /** Test coverage group. */
+  @Test
+  void testCoverage() throws Exception {
+    ArchiveUnit unit = new ArchiveUnit();
+    unit.addTitle("My_Title");
+    unit.addSpatialCoverage("Paris");
+    unit.addSpatialCoverage("Vincennes");
+    unit.addTemporalCoverage("XIXe siecle");
+    unit.addJuridictionalCoverage("Tribunal de Paris");
+
+    ArchiveTransfer archiveTransfer = new ArchiveTransfer();
+    archiveTransfer.setArchivalAgreement("My Archival Agreement");
+    archiveTransfer.setArchivalAgency("AG001", "");
+    archiveTransfer.addArchiveUnit(unit);
+
+    assertDoesNotThrow(() -> jsonService.validate(archiveTransfer));
+
+    try (InputStream is = jsonService.marshal(archiveTransfer)) {
+      JsonNode manifest = MAPPER.readTree(is);
+      JsonNode coverage = manifest.get("ArchiveUnits").get(0).get("Content").get("Coverage");
+      assertNotNull(coverage);
+      assertEquals(2, coverage.get("Spatial").size());
+      assertEquals("Paris", coverage.get("Spatial").get(0).asText());
+      assertEquals("Vincennes", coverage.get("Spatial").get(1).asText());
+      assertEquals("XIXe siecle", coverage.get("Temporal").get(0).asText());
+      assertEquals("Tribunal de Paris", coverage.get("Juridictional").get(0).asText());
+    }
+  }
+
+  /** Test that no coverage group is emitted when the unit carries none. */
+  @Test
+  void testNoCoverage() throws Exception {
+    ArchiveUnit unit = new ArchiveUnit();
+    unit.addTitle("My_Title");
+
+    ArchiveTransfer archiveTransfer = new ArchiveTransfer();
+    archiveTransfer.setArchivalAgreement("My Archival Agreement");
+    archiveTransfer.setArchivalAgency("AG001", "");
+    archiveTransfer.addArchiveUnit(unit);
+
+    try (InputStream is = jsonService.marshal(archiveTransfer)) {
+      JsonNode manifest = MAPPER.readTree(is);
+      assertNull(manifest.get("ArchiveUnits").get(0).get("Content").get("Coverage"));
+    }
+  }
+
   /** Test without agency fail. */
   @Test
   void testWithoutAgencyFail() {

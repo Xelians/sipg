@@ -601,6 +601,8 @@ class Sedav22Converter {
             });
 
     // Coverage Group
+    ifNotNull(toCoverageType(unit), dmct::setCoverage);
+
     // Originating & Submission Agency Group
     ifNotNull(unit.getOriginatingAgency(), e -> dmct.setOriginatingAgency(toOrganizationType(e)));
     ifNotNull(unit.getSubmissionAgency(), e -> dmct.setSubmissionAgency(toOrganizationType(e)));
@@ -1281,6 +1283,22 @@ class Sedav22Converter {
     TextType tt = sedav2Factory.createTextType();
     tt.setValue(text);
     return tt;
+  }
+
+  private CoverageType toCoverageType(ArchiveUnit unit) {
+    List<String> spatials = unit.getSpatialCoverages();
+    List<String> temporals = unit.getTemporalCoverages();
+    List<String> juridictionals = unit.getJuridictionalCoverages();
+
+    if (spatials.isEmpty() && temporals.isEmpty() && juridictionals.isEmpty()) {
+      return null;
+    }
+
+    CoverageType ct = sedav2Factory.createCoverageType();
+    spatials.forEach(e -> ct.getSpatial().add(toTextType(e)));
+    temporals.forEach(e -> ct.getTemporal().add(toTextType(e)));
+    juridictionals.forEach(e -> ct.getJuridictional().add(toTextType(e)));
+    return ct;
   }
 
   private TextType toTextType(Text text) {
