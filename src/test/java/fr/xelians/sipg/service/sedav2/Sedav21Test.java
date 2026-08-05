@@ -31,6 +31,7 @@ import fr.xelians.sipg.service.json.JsonService;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.Validators;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -393,7 +394,10 @@ class Sedav21Test {
       InputStream atMarshalled = Sedav2Service.getInstance().marshal(archiveTransfer, sedaConfig);
       assertNotNull(atMarshalled);
       assertNotNull(stream);
-      assertEquals(TestUtils.readAsString(stream), TestUtils.readAsString(atMarshalled));
+
+      String manifest = new String(atMarshalled.readAllBytes(), StandardCharsets.UTF_8);
+      TestUtils.assertBinarySizes(manifest, fs, 5);
+      assertEquals(TestUtils.readAsString(stream), TestUtils.cleanManifest(manifest));
     }
   }
 
