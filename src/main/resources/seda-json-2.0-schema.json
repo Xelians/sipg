@@ -361,6 +361,9 @@
         "SigningInformation": {
           "$ref": "#/$defs/signingInformation"
         },
+        "Coverage": {
+          "$ref": "#/$defs/coverage"
+        },
         "Gps": {
           "$ref": "#/$defs/gps"
         },
@@ -1127,6 +1130,21 @@
         },
         "AdditionalTimestampingInformation": {
           "$ref": "#/$defs/text512"
+        }
+      },
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "properties": {
+        "Spatial": {
+          "$ref": "#/$defs/textArray512"
+        },
+        "Temporal": {
+          "$ref": "#/$defs/textArray512"
+        },
+        "Juridictional": {
+          "$ref": "#/$defs/textArray512"
         }
       },
       "additionalProperties": false

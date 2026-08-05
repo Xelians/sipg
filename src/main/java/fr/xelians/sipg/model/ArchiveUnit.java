@@ -78,6 +78,15 @@ public class ArchiveUnit implements ArchiveUnitContainer {
   /** La liste des langues du contenu des objets binaires ou physiques. */
   protected final List<String> languages = new ArrayList<>();
 
+  /** La liste des couvertures spatiales ou géographiques. */
+  protected final List<String> spatialCoverages = new ArrayList<>();
+
+  /** La liste des couvertures temporelles. */
+  protected final List<String> temporalCoverages = new ArrayList<>();
+
+  /** La liste des juridictions administratives ou ressorts administratifs. */
+  protected final List<String> juridictionalCoverages = new ArrayList<>();
+
   /** La liste de mots-clés de description. */
   protected final List<Tag> tags = new ArrayList<>();
 
@@ -1938,6 +1947,97 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    */
   public List<String> getLanguages() {
     return new ArrayList<>(languages);
+  }
+
+  /**
+   * Ajoute la couverture spatiale ou géographique à la liste des couvertures spatiales.
+   *
+   * @param spatialCoverage la couverture spatiale à ajouter
+   */
+  public void addSpatialCoverage(String spatialCoverage) {
+    Validate.notNull(spatialCoverage, SipUtils.NOT_NULL, "spatialCoverage");
+    spatialCoverages.add(spatialCoverage);
+  }
+
+  /**
+   * Supprime la couverture spatiale ou géographique de la liste des couvertures spatiales.
+   *
+   * @param spatialCoverage la couverture spatiale à supprimer
+   * @return true si la suppression a été réalisée avec succès, sinon false
+   */
+  public boolean removeSpatialCoverage(String spatialCoverage) {
+    Validate.notNull(spatialCoverage, SipUtils.NOT_NULL, "spatialCoverage");
+    return spatialCoverages.remove(spatialCoverage);
+  }
+
+  /**
+   * Fournit la liste des couvertures spatiales ou géographiques.
+   *
+   * @return la liste des couvertures spatiales
+   */
+  public List<String> getSpatialCoverages() {
+    return new ArrayList<>(spatialCoverages);
+  }
+
+  /**
+   * Ajoute la couverture temporelle à la liste des couvertures temporelles.
+   *
+   * @param temporalCoverage la couverture temporelle à ajouter
+   */
+  public void addTemporalCoverage(String temporalCoverage) {
+    Validate.notNull(temporalCoverage, SipUtils.NOT_NULL, "temporalCoverage");
+    temporalCoverages.add(temporalCoverage);
+  }
+
+  /**
+   * Supprime la couverture temporelle de la liste des couvertures temporelles.
+   *
+   * @param temporalCoverage la couverture temporelle à supprimer
+   * @return true si la suppression a été réalisée avec succès, sinon false
+   */
+  public boolean removeTemporalCoverage(String temporalCoverage) {
+    Validate.notNull(temporalCoverage, SipUtils.NOT_NULL, "temporalCoverage");
+    return temporalCoverages.remove(temporalCoverage);
+  }
+
+  /**
+   * Fournit la liste des couvertures temporelles.
+   *
+   * @return la liste des couvertures temporelles
+   */
+  public List<String> getTemporalCoverages() {
+    return new ArrayList<>(temporalCoverages);
+  }
+
+  /**
+   * Ajoute la juridiction administrative ou le ressort administratif à la liste des juridictions.
+   *
+   * @param juridictionalCoverage la juridiction à ajouter
+   */
+  public void addJuridictionalCoverage(String juridictionalCoverage) {
+    Validate.notNull(juridictionalCoverage, SipUtils.NOT_NULL, "juridictionalCoverage");
+    juridictionalCoverages.add(juridictionalCoverage);
+  }
+
+  /**
+   * Supprime la juridiction administrative ou le ressort administratif de la liste des
+   * juridictions.
+   *
+   * @param juridictionalCoverage la juridiction à supprimer
+   * @return true si la suppression a été réalisée avec succès, sinon false
+   */
+  public boolean removeJuridictionalCoverage(String juridictionalCoverage) {
+    Validate.notNull(juridictionalCoverage, SipUtils.NOT_NULL, "juridictionalCoverage");
+    return juridictionalCoverages.remove(juridictionalCoverage);
+  }
+
+  /**
+   * Fournit la liste des juridictions administratives ou ressorts administratifs.
+   *
+   * @return la liste des juridictions
+   */
+  public List<String> getJuridictionalCoverages() {
+    return new ArrayList<>(juridictionalCoverages);
   }
 
   /**

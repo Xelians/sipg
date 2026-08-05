@@ -503,6 +503,7 @@ class SedaJsonConverter {
 
     ifNotNull(unit.getSigningInformation(), e -> node.set(SIGNING_INFORMATION, toSigning(e)));
 
+    setCoverage(node, unit);
     setGps(node, unit);
 
     // Extended ontology elements
@@ -727,6 +728,21 @@ class SedaJsonConverter {
       setStringArray(item, ADDITIONAL_PROOF_INFORMATION, signing.getAdditionalProofInformation());
     }
     return node;
+  }
+
+  private void setCoverage(ObjectNode node, ArchiveUnit unit) {
+    List<String> spatials = unit.getSpatialCoverages();
+    List<String> temporals = unit.getTemporalCoverages();
+    List<String> juridictionals = unit.getJuridictionalCoverages();
+
+    if (spatials.isEmpty() && temporals.isEmpty() && juridictionals.isEmpty()) {
+      return;
+    }
+
+    ObjectNode coverage = node.putObject(COVERAGE);
+    setStringArray(coverage, SPATIAL, spatials);
+    setStringArray(coverage, TEMPORAL, temporals);
+    setStringArray(coverage, JURIDICTIONAL, juridictionals);
   }
 
   private void setGps(ObjectNode node, ArchiveUnit unit) {

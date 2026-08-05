@@ -152,6 +152,12 @@ final class SedaJsonKeys {
   static final String SIGNING_INFORMATION = "SigningInformation";
   static final String GPS = "Gps";
 
+  // Couverture
+  static final String COVERAGE = "Coverage";
+  static final String SPATIAL = "Spatial";
+  static final String TEMPORAL = "Temporal";
+  static final String JURIDICTIONAL = "Juridictional";
+
   // Texte multilingue
   static final String LANG = "Lang";
   static final String VALUE = "Value";
