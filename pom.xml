@@ -122,7 +122,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.6</version>
+                <version>3.6.0</version>
             </plugin>
 
             <!-- Jacoco code coverage -->
@@ -429,7 +429,7 @@
                             <dependency>
                                 <groupId>org.jvnet.jaxb2_commons</groupId>
                                 <artifactId>jaxb2-basics</artifactId>
-                                <version>1.11.1</version>
+                                <version>1.11.1-PUBLISHED-BY-MISTAKE</version>
                             </dependency>
                         </dependencies>
                     </plugin>
