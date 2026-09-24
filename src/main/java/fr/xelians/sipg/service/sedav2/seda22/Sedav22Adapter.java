@@ -65,6 +65,7 @@ import fr.xelians.sipg.service.sedav2.*;
 import fr.xelians.sipg.utils.ByteArrayInOutStream;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
+import fr.xelians.sipg.utils.XmlSecurity;
 import jakarta.xml.bind.*;
 import jakarta.xml.bind.util.JAXBSource;
 import java.io.*;
@@ -86,8 +87,13 @@ public class Sedav22Adapter implements SedaAdapter {
 
   private static final String HTTP_WWW_W3_ORG_XML_XML_SCHEMA_V1_1 =
       "http://www.w3.org/XML/XMLSchema/v1.1";
+
+  /**
+   * @deprecated utiliser {@link XmlSecurity#harden} pour durcir les parseurs XML.
+   */
+  @Deprecated
   public static final String HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL =
-      "http://apache.org/xml/features/disallow-doctype-decl";
+      XmlSecurity.DISALLOW_DOCTYPE;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Sedav22Adapter.class);
 
@@ -111,8 +117,8 @@ public class Sedav22Adapter implements SedaAdapter {
     try (InputStream is1 = SipUtils.resourceAsStream("seda-vitam-2.2-full.xsd");
         InputStream is2 = SipUtils.resourceAsStream("xml.xsd");
         InputStream is3 = SipUtils.resourceAsStream("xlink.xsd")) {
-      SchemaFactory sf = SchemaFactory.newInstance(HTTP_WWW_W3_ORG_XML_XML_SCHEMA_V1_1);
-      sf.setFeature(HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL, true); // Avoid XXE
+      SchemaFactory sf =
+          XmlSecurity.harden(SchemaFactory.newInstance(HTTP_WWW_W3_ORG_XML_XML_SCHEMA_V1_1));
       sf.setResourceResolver(new SedaResolver(is2, is3));
       sedaSchema = sf.newSchema(new StreamSource(is1));
       sedaContext =
@@ -204,8 +210,7 @@ public class Sedav22Adapter implements SedaAdapter {
       ArchiveTransferType att = Sedav22Converter.convertToArchiveTransferType(archive, config);
       JAXBSource source = new JAXBSource(sedaContext, att);
 
-      Validator sedaValidator = sedaSchema.newValidator();
-      sedaValidator.setFeature(HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL, true);
+      Validator sedaValidator = XmlSecurity.harden(sedaSchema.newValidator());
       sedaValidator.validate(source);
 
       if (validator != null) {
@@ -224,8 +229,7 @@ public class Sedav22Adapter implements SedaAdapter {
   @Override
   public void validate(Source source, SedaConfig config) {
     try {
-      Validator sedaValidator = sedaSchema.newValidator();
-      sedaValidator.setFeature(HTTP_APACHE_ORG_XML_FEATURES_DISALLOW_DOCTYPE_DECL, true);
+      Validator sedaValidator = XmlSecurity.harden(sedaSchema.newValidator());
       sedaValidator.validate(source);
     } catch (SAXException | IOException ex) {
       throw new SipException("Unable to validate archive", ex);
@@ -254,7 +258,7 @@ public class Sedav22Adapter implements SedaAdapter {
   public <T> T unmarshal(InputStream stream, Class<T> clazz, SedaConfig config)
       throws JAXBException {
     final Unmarshaller unmarshaller = sedaContext.createUnmarshaller();
-    final JAXBElement<T> element = unmarshaller.unmarshal(new StreamSource(stream), clazz);
+    final JAXBElement<T> element = unmarshaller.unmarshal(XmlSecurity.newSource(stream), clazz);
     return element.getValue();
   }
 }

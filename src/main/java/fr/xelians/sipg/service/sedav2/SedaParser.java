@@ -37,6 +37,7 @@
  */
 package fr.xelians.sipg.service.sedav2;
 
+import fr.xelians.sipg.utils.XmlSecurity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -74,16 +75,12 @@ class SedaParser extends DefaultHandler {
   static ArrayList<SedaBinaryObject> parse(InputStream is)
       throws IOException, ParserConfigurationException, SAXException {
     SedaParser parser = new SedaParser();
-    XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+    XMLReader reader =
+        XmlSecurity.harden(SAXParserFactory.newInstance()).newSAXParser().getXMLReader();
     reader.setContentHandler(parser);
     reader.setErrorHandler(parser);
     reader.setFeature("http://xml.org/sax/features/validation", false);
     reader.setFeature("http://xml.org/sax/features/namespaces", false);
-
-    // Avoid XXE
-    reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-    reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
-    reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 
     reader.parse(new InputSource(is));
     return parser.binaryObjects;

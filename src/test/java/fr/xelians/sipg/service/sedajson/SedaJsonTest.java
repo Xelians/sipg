@@ -314,6 +314,15 @@ class SedaJsonTest {
     assertThrows(SipException.class, () -> jsonService.write(archiveTransfer, outputPath));
   }
 
+  /** Test extended element with external entity fail. */
+  @Test
+  void testExternalEntityFail() throws Exception {
+    ArchiveTransfer archiveTransfer = SipFactory.createExternalEntitySip();
+    Path outputPath = Paths.get(TestInit.TEST_RESULTS + "xxe_sedajson.zip");
+    assertThrows(
+        SipException.class, () -> jsonService.write(archiveTransfer, outputPath, jsonConfig));
+  }
+
   /** Test strict mode fails on non representable constructs. */
   @Test
   void testStrictComplexSipFail() throws Exception {

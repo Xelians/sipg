@@ -18,6 +18,7 @@
  */
 package fr.xelians.sipg.service.fntcv4;
 
+import fr.xelians.sipg.utils.XmlSecurity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -55,16 +56,12 @@ class Fntcv4Parser extends DefaultHandler {
   static ArrayList<Fntcv4BinaryObject> parse(InputStream is)
       throws IOException, ParserConfigurationException, SAXException {
     Fntcv4Parser parser = new Fntcv4Parser();
-    XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+    XMLReader reader =
+        XmlSecurity.harden(SAXParserFactory.newInstance()).newSAXParser().getXMLReader();
     reader.setContentHandler(parser);
     reader.setErrorHandler(parser);
     reader.setFeature("http://xml.org/sax/features/validation", false);
     reader.setFeature("http://xml.org/sax/features/namespaces", false);
-
-    // Avoid XXE
-    reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-    reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
-    reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 
     reader.parse(new InputSource(is));
     return parser.binaryObjects;

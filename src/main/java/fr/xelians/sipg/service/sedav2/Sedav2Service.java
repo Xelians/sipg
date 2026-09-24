@@ -51,6 +51,7 @@ import fr.xelians.sipg.service.sedav2.seda23.Sedav23Adapter;
 import fr.xelians.sipg.utils.ByteArrayInOutStream;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
+import fr.xelians.sipg.utils.XmlSecurity;
 import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -402,7 +403,7 @@ public class Sedav2Service {
     // Check manifest is valid against rng
     if (validator != null) {
       try (InputStream is = Files.newInputStream(xmlPath)) {
-        validator.validate(new StreamSource(is));
+        validator.validate(XmlSecurity.newSource(is));
       } catch (IOException | SAXException ex) {
         throw new SipException("Unable to validate " + xmlPath, ex);
       }
@@ -472,7 +473,7 @@ public class Sedav2Service {
       // Check manifest is valid against rng
       if (validator != null) {
         try {
-          validator.validate(new StreamSource(manifest.getInputStream()));
+          validator.validate(XmlSecurity.newSource(manifest.getInputStream()));
         } catch (IOException | SAXException ex) {
           String msg = "Unable to validate manifest: " + zipPath;
           updateListener(listener, id, FAIL, SedaStep.MANIFEST_VALIDATOR, msg);

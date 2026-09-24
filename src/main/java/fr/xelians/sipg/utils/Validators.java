@@ -71,10 +71,10 @@ public class Validators {
    */
   public static Validator getRngValidator(Reader rngReader) {
     Validate.notNull(rngReader, SipUtils.NOT_NULL, "rngReader");
-    return getRngSchema(new StreamSource(rngReader)).newValidator();
+    return getRngSchema(XmlSecurity.harden(new StreamSource(rngReader))).newValidator();
   }
 
-  private static Schema getRngSchema(StreamSource source) {
+  private static Schema getRngSchema(Source source) {
     try {
       // Initialize RNG validator through JAXP. SchemaFactory is not tread safe , so we create a new
       // one for each RNG schema. XXE mitigation is not supported
@@ -129,7 +129,7 @@ public class Validators {
     Validate.notNull(validator, SipUtils.NOT_NULL, "validator");
 
     try {
-      validator.validate(source);
+      validator.validate(XmlSecurity.harden(source));
     } catch (IOException | SAXException ex) {
       throw new SipException("Unable to validate " + source + " with validator", ex);
     }
