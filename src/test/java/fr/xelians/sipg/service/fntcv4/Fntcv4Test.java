@@ -18,6 +18,7 @@
  */
 package fr.xelians.sipg.service.fntcv4;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -112,6 +113,24 @@ class Fntcv4Test {
     ArchiveTransfer archiveTransfer = SipFactory.createWithoutAgencySip();
     Path outputPath = Paths.get(TestInit.TEST_RESULTS + "fail_fntc.zip");
     assertThrows(SipException.class, () -> fntcService.write(archiveTransfer, outputPath));
+  }
+
+  /** Test missing binary fail does not interrupt the current thread. */
+  @Test
+  void testMissingBinaryFailDoesNotInterrupt() {
+    ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
+    archiveTransfer
+        .getArchiveUnits()
+        .getFirst()
+        .setBinaryPath(Paths.get(TestInit.TEST_RESOURCES + "missing.pdf"));
+    Path outputPath = Paths.get(TestInit.TEST_RESULTS + "missing_fntc.zip");
+
+    // Thread.interrupted() also clears the flag, so a failure does not leak into other tests
+    assertThrows(
+        SipException.class, () -> fntcService.write(archiveTransfer, outputPath, fntcConfig));
+    assertFalse(Thread.interrupted());
+    assertThrows(SipException.class, () -> fntcService.validate(archiveTransfer, fntcConfig));
+    assertFalse(Thread.interrupted());
   }
 
   /** Test create csv sip. */

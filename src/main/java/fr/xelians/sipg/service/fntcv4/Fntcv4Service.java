@@ -199,11 +199,9 @@ public class Fntcv4Service {
           fntcMarshaller.marshal(att, bos);
         }
       }
-    } catch (IOException
-        | ExecutionException
-        | InterruptedException
-        | JAXBException
-        | SAXException ex) {
+    } catch (IOException | ExecutionException | JAXBException | SAXException ex) {
+      throw new SipException("Unable to serialize archive " + zipPath, ex);
+    } catch (InterruptedException ex) {
       Thread.currentThread().interrupt();
       throw new SipException("Unable to serialize archive " + zipPath, ex);
     }
@@ -272,11 +270,10 @@ public class Fntcv4Service {
         validator.validate(source, result);
       }
 
-    } catch (IOException
-        | ExecutionException
-        | InterruptedException
-        | JAXBException
-        | SAXException ex) {
+    } catch (IOException | ExecutionException | JAXBException | SAXException ex) {
+      throw new SipException("Unable to validate archive with validator", ex);
+    } catch (InterruptedException ex) {
+      Thread.currentThread().interrupt();
       throw new SipException("Unable to validate archive with validator", ex);
     }
   }
