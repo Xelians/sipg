@@ -135,6 +135,26 @@ public class Sedav23Test {
     }
   }
 
+  /** Test missing binary fail does not interrupt the current thread. */
+  @Test
+  void testMissingBinaryFailDoesNotInterrupt() {
+    ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
+    archiveTransfer
+        .getArchiveUnits()
+        .getFirst()
+        .setBinaryPath(Paths.get(TestInit.TEST_RESOURCES + "missing.pdf"));
+    Path outputPath = Paths.get(TestInit.TEST_RESULTS + "missing_seda23.zip");
+
+    // Thread.interrupted() also clears the flag, so a failure does not leak into other tests
+    assertThrows(
+        SipException.class, () -> sedaService.write(archiveTransfer, outputPath, sedaConfig));
+    assertFalse(Thread.interrupted());
+    assertThrows(SipException.class, () -> sedaService.validate(archiveTransfer, sedaConfig));
+    assertFalse(Thread.interrupted());
+    assertThrows(SipException.class, () -> sedaService.marshal(archiveTransfer, sedaConfig));
+    assertFalse(Thread.interrupted());
+  }
+
   /** Test create csv sip. */
   @Test
   void testCreateCsvSip() throws Exception {

@@ -138,11 +138,9 @@ public class Sedav21Adapter implements SedaAdapter {
       ArchiveTransferType transferType =
           Sedav21Converter.convertToArchiveTransferType(transfer, zipArchive, config);
       doWrite(validator, config, zipArchive, transferType);
-    } catch (IOException
-        | JAXBException
-        | SAXException
-        | ExecutionException
-        | InterruptedException ex) {
+    } catch (IOException | JAXBException | SAXException | ExecutionException ex) {
+      throw new SipException("Failed to write archive to " + zipPath, ex);
+    } catch (InterruptedException ex) {
       Thread.currentThread().interrupt();
       throw new SipException("Failed to write archive to " + zipPath, ex);
     }
@@ -160,11 +158,9 @@ public class Sedav21Adapter implements SedaAdapter {
               deliveryRequestReply, zipArchive, config);
       doWrite(validator, config, zipArchive, requestReplyType);
 
-    } catch (IOException
-        | JAXBException
-        | SAXException
-        | ExecutionException
-        | InterruptedException ex) {
+    } catch (IOException | JAXBException | SAXException | ExecutionException ex) {
+      throw new SipException("Failed to write archive to " + zipPath, ex);
+    } catch (InterruptedException ex) {
       Thread.currentThread().interrupt();
       throw new SipException("Failed to write archive to " + zipPath, ex);
     }
@@ -216,11 +212,9 @@ public class Sedav21Adapter implements SedaAdapter {
       if (validator != null) {
         validator.validate(source);
       }
-    } catch (SAXException
-        | IOException
-        | ExecutionException
-        | InterruptedException
-        | JAXBException ex) {
+    } catch (SAXException | IOException | ExecutionException | JAXBException ex) {
+      throw new SipException("Unable to validate archive", ex);
+    } catch (InterruptedException ex) {
       Thread.currentThread().interrupt();
       throw new SipException("Unable to validate archive", ex);
     }
@@ -248,7 +242,9 @@ public class Sedav21Adapter implements SedaAdapter {
       marshaller.marshal(archiveTransferType, outputStream);
 
       return outputStream.getInputStream();
-    } catch (ExecutionException | InterruptedException | JAXBException exception) {
+    } catch (ExecutionException | JAXBException exception) {
+      throw new SipException("Unable to marshal ArchiveTransfer", exception);
+    } catch (InterruptedException exception) {
       Thread.currentThread().interrupt();
       throw new SipException("Unable to marshal ArchiveTransfer", exception);
     }

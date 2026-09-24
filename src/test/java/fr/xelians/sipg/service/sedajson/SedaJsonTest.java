@@ -323,6 +323,26 @@ class SedaJsonTest {
         SipException.class, () -> jsonService.write(archiveTransfer, outputPath, jsonConfig));
   }
 
+  /** Test missing binary fail does not interrupt the current thread. */
+  @Test
+  void testMissingBinaryFailDoesNotInterrupt() {
+    ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
+    archiveTransfer
+        .getArchiveUnits()
+        .getFirst()
+        .setBinaryPath(Paths.get(TestInit.TEST_RESOURCES + "missing.pdf"));
+    Path outputPath = Paths.get(TestInit.TEST_RESULTS + "missing_binary_sedajson.zip");
+
+    // Thread.interrupted() also clears the flag, so a failure does not leak into other tests
+    assertThrows(
+        SipException.class, () -> jsonService.write(archiveTransfer, outputPath, jsonConfig));
+    assertFalse(Thread.interrupted());
+    assertThrows(SipException.class, () -> jsonService.validate(archiveTransfer, jsonConfig));
+    assertFalse(Thread.interrupted());
+    assertThrows(SipException.class, () -> jsonService.marshal(archiveTransfer, jsonConfig));
+    assertFalse(Thread.interrupted());
+  }
+
   /** Test strict mode fails on non representable constructs. */
   @Test
   void testStrictComplexSipFail() throws Exception {
