@@ -19,9 +19,14 @@
 package fr.xelians.sipg.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import fr.xelians.sipg.TestInit;
 import fr.xelians.sipg.utils.DroidUtils;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -67,6 +72,40 @@ class DroidTest {
     Path path = Paths.get(TestInit.TEST_RESOURCES + "minisip.json");
     List<IdentificationResult> results = DroidUtils.matchBinarySignatures(path, "json", true);
     assertEquals("fmt/817", results.getFirst().getPuid());
+  }
+
+  /** Test supported extension. */
+  @Test
+  void testSupportedExtension() {
+    assertTrue(DroidUtils.isSupportedExtension("pdf"));
+    assertTrue(DroidUtils.isSupportedExtension("PDF"));
+    assertFalse(DroidUtils.isSupportedExtension("not_an_extension"));
+    assertFalse(DroidUtils.isSupportedExtension(null));
+  }
+
+  /** Test supported extension is known before the signatures are used. */
+  @Test
+  void testSupportedExtensionFirstCall() throws Exception {
+    // A child first class loader gives a DroidUtils class whose signatures were never loaded,
+    // whatever the tests run before
+    URL classes = DroidUtils.class.getProtectionDomain().getCodeSource().getLocation();
+    try (URLClassLoader loader =
+        new URLClassLoader(new URL[] {classes}, getClass().getClassLoader()) {
+          @Override
+          protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+            if (!name.startsWith("fr.xelians.sipg.")) {
+              return super.loadClass(name, resolve);
+            }
+            synchronized (getClassLoadingLock(name)) {
+              Class<?> loaded = findLoadedClass(name);
+              return loaded != null ? loaded : findClass(name);
+            }
+          }
+        }) {
+      Class<?> droidUtils = loader.loadClass(DroidUtils.class.getName());
+      Method method = droidUtils.getMethod("isSupportedExtension", String.class);
+      assertEquals(Boolean.TRUE, method.invoke(null, "pdf"));
+    }
   }
 
   /** Test loop droid. */

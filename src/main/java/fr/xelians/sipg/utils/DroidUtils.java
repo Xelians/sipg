@@ -26,9 +26,11 @@ import uk.gov.nationalarchives.droid.core.signature.droid6.InternalSignature;
  */
 public final class DroidUtils {
 
+  /** Le nom de la ressource du fichier de signatures DROID embarqué dans sipg. */
+  public static final String DEFAULT_SIGNATURE_FILE = "droid_signaturefile.xml";
+
   private static final Logger LOGGER = LoggerFactory.getLogger(DroidUtils.class);
 
-  private static final Map<String, List<InternalSignature>> SIGNATURES = new HashMap<>();
   private static final long MAX_BYTES_TO_SCAN = -1L; // Scan all bytes
 
   private static final String SIGNATURE_PATH_MUST_NOT_BE_NULL = "signaturePath must not be null";
@@ -73,19 +75,35 @@ public final class DroidUtils {
   }
 
   public static boolean isSupportedExtension(@Nullable String ext) {
-    return StringUtils.isNotBlank(ext) && SIGNATURES.containsKey(ext.toUpperCase());
+    return StringUtils.isNotBlank(ext)
+        && DroidSignaturesHolder.SIGNATURES.containsKey(ext.toUpperCase());
   }
 
   public static List<IdentificationResult> matchBinarySignatures(
       Path path, @Nullable String extension, boolean matchExtension) {
     Validate.notNull(path, PATH_MUST_NOT_BE_NULL);
-    return matchBinarySignatures(path, extension, DroidSignaturesHolder.INSTANCE, matchExtension);
+    return matchBinarySignatures(
+        path,
+        extension,
+        DroidSignaturesHolder.INSTANCE,
+        DroidSignaturesHolder.SIGNATURES,
+        matchExtension);
   }
 
   public static List<IdentificationResult> matchBinarySignatures(
       Path path,
       @Nullable String extension,
       BinarySignatureIdentifier bsi,
+      boolean matchExtension) {
+    // The extension index is built from the default signatures, so it does not apply to bsi
+    return matchBinarySignatures(path, extension, bsi, Map.of(), matchExtension);
+  }
+
+  private static List<IdentificationResult> matchBinarySignatures(
+      Path path,
+      @Nullable String extension,
+      BinarySignatureIdentifier bsi,
+      Map<String, List<InternalSignature>> signatures,
       boolean matchExtension) {
 
     RequestIdentifier identifier = new RequestIdentifier(path.toUri());
@@ -98,7 +116,7 @@ public final class DroidUtils {
 
       // Optimized path
       if (StringUtils.isNotBlank(extension)) {
-        List<InternalSignature> intSigs = SIGNATURES.get(extension.toUpperCase());
+        List<InternalSignature> intSigs = signatures.get(extension.toUpperCase());
         if (intSigs != null) {
           List<IdentificationResult> results = matchBinarySignatures(request, intSigs).getResults();
           if (!results.isEmpty()) {
@@ -203,6 +221,10 @@ public final class DroidUtils {
 
     private static final BinarySignatureIdentifier INSTANCE = initDroidSignatures();
 
+    // Built with INSTANCE in the holder initialization, so it is never read before being filled
+    private static final Map<String, List<InternalSignature>> SIGNATURES =
+        indexByExtension(INSTANCE);
+
     /**
      * Initialise les identifiants binaires des signatures Droid à partir de la ressource par
      * défaut.
@@ -211,13 +233,11 @@ public final class DroidUtils {
      */
     private static BinarySignatureIdentifier initDroidSignatures() {
       Path signaturePath = null;
-      try (InputStream is = SipUtils.resourceAsStream("droid_signaturefile.xml")) {
+      try (InputStream is = SipUtils.resourceAsStream(DEFAULT_SIGNATURE_FILE)) {
         signaturePath = Files.createTempFile("droid", ".xml");
         Files.copy(is, signaturePath, StandardCopyOption.REPLACE_EXISTING);
 
-        BinarySignatureIdentifier bsi = DroidUtils.initDroidSignatures(signaturePath);
-        initInternalSignatures(bsi);
-        return bsi;
+        return DroidUtils.initDroidSignatures(signaturePath);
 
       } catch (IOException ex) {
         throw new SipException("Unable to init Droid signatures identifier", ex);
@@ -232,15 +252,18 @@ public final class DroidUtils {
       }
     }
 
-    private static void initInternalSignatures(BinarySignatureIdentifier bsi) {
+    private static Map<String, List<InternalSignature>> indexByExtension(
+        BinarySignatureIdentifier bsi) {
+      Map<String, List<InternalSignature>> signatures = new HashMap<>();
       for (InternalSignature signature : bsi.getSigFile().getSignatures()) {
         for (int i = 0; i < signature.getNumFileFormats(); i++) {
           for (String extension : signature.getFileFormat(i).getExtensions()) {
             String ext = extension.toUpperCase();
-            SIGNATURES.computeIfAbsent(ext, k -> new ArrayList<>()).add(signature);
+            signatures.computeIfAbsent(ext, k -> new ArrayList<>()).add(signature);
           }
         }
       }
+      return signatures;
     }
   }
 }
