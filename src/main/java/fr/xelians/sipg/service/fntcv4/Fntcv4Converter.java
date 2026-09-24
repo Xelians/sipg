@@ -24,6 +24,7 @@ import fr.xelians.sipg.model.*;
 import fr.xelians.sipg.utils.DroidUtils;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
+import fr.xelians.sipg.utils.XmlSecurity;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
@@ -92,7 +93,8 @@ class Fntcv4Converter {
     this.isStrict = config.strict();
 
     try {
-      this.documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+      this.documentBuilder =
+          XmlSecurity.harden(DocumentBuilderFactory.newInstance()).newDocumentBuilder();
     } catch (ParserConfigurationException ex) {
       LOGGER.warn("Unable to create DOM document builder");
       throw new SipException(ex);

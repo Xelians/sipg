@@ -30,6 +30,7 @@ import fr.xelians.sipg.model.*;
 import fr.xelians.sipg.utils.DroidUtils;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
+import fr.xelians.sipg.utils.XmlSecurity;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
@@ -103,7 +104,8 @@ class SedaJsonConverter {
     this.xmlId = config.xmlId();
 
     try {
-      documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+      documentBuilder =
+          XmlSecurity.harden(DocumentBuilderFactory.newInstance()).newDocumentBuilder();
     } catch (ParserConfigurationException ex) {
       throw new SipException("Unable to create DOM document builder", ex);
     }

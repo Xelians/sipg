@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FFSignatureFile DateCreated="2026-09-02T10:00:00" Version="102" xmlns="http://www.nationalarchives.gov.uk/pronom/SignatureFile">
+    <InternalSignatureCollection>
+        <InternalSignature ID="9" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1" SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>49492A00</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="00">1</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+    </InternalSignatureCollection>
+    <FileFormatCollection>
+        <FileFormat ID="609" MIMEType="application/pdf" Name="Acrobat PDF 1.4 - Portable Document Format" PUID="fmt/18" Version="1.4">
+            <InternalSignatureID>9</InternalSignatureID>
+            <Extension>pdf</Extension>
+        </FileFormat>
+        <FileFormat ID="666" MIMEType="image/png" Name="Portable Network Graphics" PUID="fmt/11" Version="1.0">
+            <Extension>png</Extension>
+        </FileFormat>
+    </FileFormatCollection>
+</FFSignatureFile>

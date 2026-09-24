@@ -43,13 +43,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.xml.sax.InputSource;
 
 /**
  * La classe SipUtils offre des méthodes statiques utilitaires. Note. Il est fortement déconseillé
@@ -119,7 +117,7 @@ public final class SipUtils {
       transformer.setOutputProperty(OutputKeys.INDENT, "yes");
       transformer.setOutputProperty(
           "{http://xml.apache.org/xslt}indent-amount", String.valueOf(Math.abs(indentation)));
-      transformer.transform(new SAXSource(new InputSource(is)), new StreamResult(os));
+      transformer.transform(XmlSecurity.newSource(is), new StreamResult(os));
     } catch (IllegalArgumentException | TransformerException ex) {
       throw new SipException("Unable to create transformer", ex);
     }

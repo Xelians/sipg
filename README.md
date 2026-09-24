@@ -13,6 +13,7 @@ La librairie SipG offre les fonctionnalités suivantes :
 * Calcul automatique des empreintes des objets binaires
 * Support des tags et des fragments XML étendus
 * Identification des formats des objets binaires (via la librairie Droid)
+* Lecture et validation d'un référentiel des formats PRONOM, référentiel des formats par défaut
 * Support des archives numériques et physiques
 * Application automatique de valeurs par défaut raisonnables
 * Validation d'une archive existante aux formats FNTC v4 ou SEDA v2.1, v2.2 & v2.3
@@ -227,6 +228,26 @@ Path jsonPath = Paths.get("minisip.json");
 ArchiveTransfer archiveTransfer = JsonService.getInstance().read(jsonPath);
 ```
 L'objet archiveTransfer, issu de la désérialisation, peut ainsi être utilisé et modifié pour générer une nouvelle archive. 
+
+### Référentiel des formats PRONOM
+
+Un référentiel des formats est la collection des formats (`FileFormatCollection`) d'un fichier de
+signatures DROID. Le service PronomService lit et valide un référentiel envoyé par un client : un
+PUID valide et un nom par format, aucun PUID ni ID en double. Les priorités entre formats
+(`HasPriorityOverFileFormatID`) sont résolues en PUID. Un référentiel invalide lève une
+SipException.
+
+Code :
+```
+PronomService pronomService = PronomService.getInstance();
+
+// Référentiel envoyé par un client
+PronomSignatureFile file = pronomService.parse(Paths.get("fileformats.xml"));
+file.fileFormats().forEach(f -> System.out.println(f.puid() + " " + f.name()));
+
+// Référentiel par défaut : le fichier de signatures utilisé pour identifier les formats
+PronomSignatureFile defaultFile = pronomService.getDefault();
+```
 
 ### Configuration du service 
 

@@ -115,6 +115,15 @@ class Fntcv4Test {
     assertThrows(SipException.class, () -> fntcService.write(archiveTransfer, outputPath));
   }
 
+  /** Test extended element with external entity fail. */
+  @Test
+  void testExternalEntityFail() throws Exception {
+    ArchiveTransfer archiveTransfer = SipFactory.createExternalEntitySip();
+    Path outputPath = Paths.get(TestInit.TEST_RESULTS + "xxe_fntc.zip");
+    assertThrows(
+        SipException.class, () -> fntcService.write(archiveTransfer, outputPath, fntcConfig));
+  }
+
   /** Test missing binary fail does not interrupt the current thread. */
   @Test
   void testMissingBinaryFailDoesNotInterrupt() {

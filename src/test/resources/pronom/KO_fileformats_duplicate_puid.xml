@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FFSignatureFile Version="101" xmlns="http://www.nationalarchives.gov.uk/pronom/SignatureFile">
+    <FileFormatCollection>
+        <FileFormat ID="0" Name="Portable Network Graphics" PUID="fmt/11" Version="1.0"/>
+        <FileFormat ID="1" Name="Portable Network Graphics" PUID="fmt/11" Version="1.1"/>
+    </FileFormatCollection>
+</FFSignatureFile>

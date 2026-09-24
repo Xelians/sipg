@@ -84,6 +84,7 @@ import fr.xelians.sipg.service.sedav2.SedaConfig;
 import fr.xelians.sipg.utils.DroidUtils;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
+import fr.xelians.sipg.utils.XmlSecurity;
 import jakarta.xml.bind.JAXBElement;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -154,7 +155,8 @@ class Sedav22Converter {
     this.identifyFileFormat = config.identifyFileFormat();
 
     try {
-      documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+      documentBuilder =
+          XmlSecurity.harden(DocumentBuilderFactory.newInstance()).newDocumentBuilder();
     } catch (ParserConfigurationException ex) {
       throw new SipException("Unable to create DOM document builder", ex);
     }

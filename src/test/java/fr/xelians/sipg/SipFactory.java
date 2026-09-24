@@ -195,6 +195,45 @@ public class SipFactory {
   }
 
   /**
+   * Create the secret file targeted by the external entities of the XXE tests: a vulnerable parser
+   * would copy its content into the document.
+   *
+   * @return the path of the secret file
+   * @throws IOException the io exception
+   */
+  public static Path createExternalEntitySecret() throws IOException {
+    Path secretPath = Paths.get(TestInit.TEST_RESULTS + "xxe_secret.txt");
+    Files.writeString(secretPath, "XXE_SECRET");
+    return secretPath;
+  }
+
+  /**
+   * Create an XML document whose root element declares an external entity targeting the secret
+   * file.
+   *
+   * @param root the name of the root element
+   * @return the XML document
+   * @throws IOException the io exception
+   */
+  public static String createExternalEntityXml(String root) throws IOException {
+    return String.format(
+        "<!DOCTYPE %s [<!ENTITY e SYSTEM \"%s\">]><%s>&e;</%s>",
+        root, createExternalEntitySecret().toUri(), root, root);
+  }
+
+  /**
+   * Create a mini sip whose extended element declares an external entity.
+   *
+   * @return the archive transfer
+   * @throws IOException the io exception
+   */
+  public static ArchiveTransfer createExternalEntitySip() throws IOException {
+    ArchiveTransfer archiveTransfer = createMiniSip();
+    archiveTransfer.getArchiveUnits().getFirst().addElement(createExternalEntityXml("Ext"));
+    return archiveTransfer;
+  }
+
+  /**
    * Create mini sip archive transfer.
    *
    * @return the archive transfer

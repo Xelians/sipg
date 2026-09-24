@@ -30,6 +30,8 @@ import fr.xelians.sipg.model.ArchiveTransfer;
 import fr.xelians.sipg.service.json.JsonService;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.Validators;
+import jakarta.xml.bind.JAXBException;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
@@ -112,6 +114,27 @@ public class Sedav22Test {
     Path outputPath = Paths.get(TestInit.TEST_RESULTS + "fail_seda.zip");
     assertThrows(
         SipException.class, () -> sedaService.write(archiveTransfer, outputPath, sedaConfig));
+  }
+
+  /** Test extended element with external entity fail. */
+  @Test
+  void testExternalEntityFail() throws Exception {
+    ArchiveTransfer archiveTransfer = SipFactory.createExternalEntitySip();
+    Path outputPath = Paths.get(TestInit.TEST_RESULTS + "xxe_seda22.zip");
+    assertThrows(
+        SipException.class, () -> sedaService.write(archiveTransfer, outputPath, sedaConfig));
+  }
+
+  /** Test unmarshal with external entity fail. */
+  @Test
+  void testUnmarshalExternalEntityFail() throws Exception {
+    byte[] xml =
+        SipFactory.createExternalEntityXml("ArchiveTransfer").getBytes(StandardCharsets.UTF_8);
+    try (InputStream is = new ByteArrayInputStream(xml)) {
+      assertThrows(
+          JAXBException.class,
+          () -> sedaService.unmarshal(is, ArchiveTransferType.class, sedaConfig));
+    }
   }
 
   /** Test missing binary fail does not interrupt the current thread. */
