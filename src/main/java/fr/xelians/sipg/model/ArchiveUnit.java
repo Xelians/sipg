@@ -55,6 +55,13 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    */
   protected final List<Event> logbookEvents = new ArrayList<>();
 
+  /**
+   * La liste des évènements du logbook du groupe d'objets de l'unité d'archive. Un évènement
+   * correspond à toute opération concernant les objets : opération de versement, de préservation,
+   * etc.
+   */
+  protected final List<Event> objectGroupLogbookEvents = new ArrayList<>();
+
   /** La liste des intitulés de l'unité d'archive. */
   protected final List<Text> titles = new ArrayList<>();
 
@@ -1407,6 +1414,39 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    */
   public List<Event> getLogbookEvents() {
     return new ArrayList<>(logbookEvents);
+  }
+
+  /**
+   * Ajoute un évènement à la liste des évènements du logbook du groupe d'objets de l'unité
+   * d'archive.
+   *
+   * @param event l'évènement à ajouter
+   */
+  public void addObjectGroupLogbookEvent(Event event) {
+    Validate.notNull(event, SipUtils.NOT_NULL, "event");
+    objectGroupLogbookEvents.add(event);
+  }
+
+  /**
+   * Supprime un évènement de la liste des évènements du logbook du groupe d'objets de l'unité
+   * d'archive.
+   *
+   * @param event l'évènement à supprimer
+   * @return true si la suppression a été réalisée avec succès, sinon false
+   */
+  public boolean removeObjectGroupLogbookEvent(Event event) {
+    Validate.notNull(event, SipUtils.NOT_NULL, "event");
+    return objectGroupLogbookEvents.remove(event);
+  }
+
+  /**
+   * Fournit la liste des évènements du logbook du groupe d'objets de l'unité d'archive. Le logbook
+   * n'est produit que si l'unité d'archive porte au moins un objet.
+   *
+   * @return la liste des évènements du logbook du groupe d'objets
+   */
+  public List<Event> getObjectGroupLogbookEvents() {
+    return new ArrayList<>(objectGroupLogbookEvents);
   }
 
   /**

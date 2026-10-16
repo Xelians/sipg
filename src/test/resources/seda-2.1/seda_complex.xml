@@ -17,6 +17,28 @@
                 <DataObjectVersion>PhysicalMaster_1</DataObjectVersion>
                 <PhysicalId>physical-0001</PhysicalId>
             </PhysicalDataObject>
+            <LogBook>
+                <Event>
+                    <EventIdentifier>MyIdentifier1</EventIdentifier>
+                    <EventTypeCode>MyTypeCode1</EventTypeCode>
+                    <EventType>MyType1</EventType>
+                    <EventDateTime>2026-03-10T15:08:09</EventDateTime>
+                    <EventDetail>MyDetails1</EventDetail>
+                    <Outcome>MyOutcome1</Outcome>
+                    <OutcomeDetail>MyOutcomeDetail1</OutcomeDetail>
+                    <EventDetailData>MyDetailsData1</EventDetailData>
+                </Event>
+                <Event>
+                    <EventIdentifier>MyIdentifier2</EventIdentifier>
+                    <EventTypeCode>MyTypeCode2</EventTypeCode>
+                    <EventType>MyType2</EventType>
+                    <EventDateTime>2026-03-10T15:08:09</EventDateTime>
+                    <EventDetail>MyDetails2</EventDetail>
+                    <Outcome>MyOutcome2</Outcome>
+                    <OutcomeDetail>MyOutcomeDetail2</OutcomeDetail>
+                    <EventDetailData>MyDetailsData2</EventDetailData>
+                </Event>
+            </LogBook>
         </DataObjectGroup>
         <DataObjectGroup id="ID5">
             <PhysicalDataObject id="ID6">
