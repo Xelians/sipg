@@ -491,10 +491,10 @@ class Sedav22Converter {
     }
 
     if (!dogt.getBinaryDataObjectOrPhysicalDataObject().isEmpty()) {
-      if (!unit.getObjectGroupLogbookEvents().isEmpty()) {
+      List<Event> groupEvents = unit.getObjectGroupLogbookEvents();
+      if (!groupEvents.isEmpty()) {
         LogBookOgType lbt = sedav2Factory.createLogBookOgType();
-        unit.getObjectGroupLogbookEvents()
-            .forEach(event -> lbt.getEvent().add(toEventLogBookOgType(event)));
+        groupEvents.forEach(event -> lbt.getEvent().add(toEventLogBookOgType(event)));
         dogt.setLogBook(lbt);
       }
       dopt.getDataObjectGroupOrBinaryDataObjectOrPhysicalDataObject().add(dogt);
