@@ -425,6 +425,12 @@ class Sedav21Converter {
     }
 
     if (!dogt.getBinaryDataObjectOrPhysicalDataObject().isEmpty()) {
+      List<Event> groupEvents = unit.getObjectGroupLogbookEvents();
+      if (!groupEvents.isEmpty()) {
+        LogBookOgType lbt = sedav2Factory.createLogBookOgType();
+        groupEvents.forEach(event -> lbt.getEvent().add(toEventLogBookOgType(event)));
+        dogt.setLogBook(lbt);
+      }
       dopt.getDataObjectGroupOrBinaryDataObjectOrPhysicalDataObject().add(dogt);
     }
 
@@ -924,8 +930,15 @@ class Sedav21Converter {
     return rit;
   }
 
+  private EventLogBookOgType toEventLogBookOgType(Event event) {
+    return fillEventType(sedav2Factory.createEventLogBookOgType(), event);
+  }
+
   private EventType toEventType(Event event) {
-    EventType et = sedav2Factory.createEventType();
+    return fillEventType(sedav2Factory.createEventType(), event);
+  }
+
+  private <T extends EventType> T fillEventType(T et, Event event) {
     ifNotNull(event.getIdentifier(), et::setEventIdentifier);
     ifNotNull(event.getDateTime(), e -> et.setEventDateTime(SipUtils.toXmlDateTime(e).toString()));
     ifNotNull(event.getDetail(), e -> et.setEventDetail(toTextType(e)));
