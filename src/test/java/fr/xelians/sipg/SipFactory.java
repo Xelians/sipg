@@ -415,10 +415,20 @@ public class SipFactory {
    * @return the archive transfer
    */
   public static ArchiveTransfer createComplexSip(FileSystem fs) {
-    Path binaryPath1 = fs.getPath("helloworld_1.pdf");
+    return createComplexSip(fs.getPath(""));
+  }
+
+  /**
+   * Create simple sip archive transfer.
+   *
+   * @param dir the directory where binaries are created
+   * @return the archive transfer
+   */
+  public static ArchiveTransfer createComplexSip(Path dir) {
+    Path binaryPath1 = dir.resolve("helloworld_1.pdf");
     TestUtils.createPdf("Hello World 1", binaryPath1);
 
-    Path binaryPath2 = fs.getPath("helloworld_2.pdf");
+    Path binaryPath2 = dir.resolve("helloworld_2.pdf");
     TestUtils.createPdf("Hello World 2", binaryPath2);
 
     ArchiveUnit unit1 = new ArchiveUnit();

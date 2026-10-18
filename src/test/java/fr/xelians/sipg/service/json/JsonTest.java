@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * The JSON integration test.
@@ -99,14 +100,13 @@ class JsonTest {
 
   /** Test create read simple json. */
   @Test
-  void testCreateReadSimpleJson() throws Exception {
-    try (FileSystem fs = Jimfs.newFileSystem()) {
-      String serialized = jsonService.write(SipFactory.createComplexSip(fs), jsonConfig);
-      ArchiveTransfer archiveTransfer = jsonService.read(serialized);
-      Path output = Paths.get(TestInit.TEST_RESULTS + "simplesip_serial_deserial.json");
-      jsonService.write(archiveTransfer, output, jsonConfig);
-      assertTrue(Files.exists(output));
-    }
+  void testCreateReadSimpleJson(@TempDir Path tempDir) {
+    // Jackson only deserializes Path with the "file" scheme (no jimfs)
+    String serialized = jsonService.write(SipFactory.createComplexSip(tempDir), jsonConfig);
+    ArchiveTransfer archiveTransfer = jsonService.read(serialized);
+    Path output = Paths.get(TestInit.TEST_RESULTS + "simplesip_serial_deserial.json");
+    jsonService.write(archiveTransfer, output, jsonConfig);
+    assertTrue(Files.exists(output));
   }
 
   /** Test read freemarker json. */
