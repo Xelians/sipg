@@ -23,10 +23,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.jimfs.Jimfs;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.JsonSchemaFactory;
-import com.networknt.schema.SpecVersion;
-import com.networknt.schema.ValidationMessage;
+import com.networknt.schema.InputFormat;
+import com.networknt.schema.Schema;
+import com.networknt.schema.SchemaRegistry;
+import com.networknt.schema.SpecificationVersion;
 import fr.xelians.sipg.SipFactory;
 import fr.xelians.sipg.TestInit;
 import fr.xelians.sipg.model.ArchiveTransfer;
@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -314,6 +315,31 @@ class SedaJsonTest {
     assertThrows(SipException.class, () -> jsonService.write(archiveTransfer, outputPath));
   }
 
+  /** Test a generated manifest violating the schema fails on every generation path. */
+  @Test
+  void testGeneratedManifestSchemaFail() {
+    // Le convertisseur ne borne pas la longueur du titre : seul le schéma la rejette
+    ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
+    ArchiveUnit unit = archiveTransfer.getArchiveUnits().getFirst();
+    unit.getTitles().clear();
+    unit.addTitle("x".repeat(1025));
+    Path outputPath = Paths.get(TestInit.TEST_RESULTS + "schema_fail_sedajson.zip");
+
+    List<Executable> paths =
+        List.of(
+            () -> jsonService.write(archiveTransfer, outputPath, jsonConfig),
+            () -> jsonService.marshal(archiveTransfer, jsonConfig),
+            () -> jsonService.validate(archiveTransfer, jsonConfig));
+    for (Executable path : paths) {
+      SipException ex = assertThrows(SipException.class, path);
+      assertTrue(ex.getMessage().contains("SEDA JSON 2.0 schema"), ex.getMessage());
+    }
+
+    SedaJsonConfig noValidation =
+        SedaJsonConfigBuilder.builder().validate(false).strict(false).build();
+    assertDoesNotThrow(() -> jsonService.marshal(archiveTransfer, noValidation).close());
+  }
+
   /** Test extended element with external entity fail. */
   @Test
   void testExternalEntityFail() throws Exception {
@@ -438,43 +464,32 @@ class SedaJsonTest {
     assertEquals(ProgressState.FAIL, events.getLast().status());
   }
 
-  /** Test the mini sip manifest validates against the esafe subset schema. */
-  @Test
-  void testEsafeSchemaCompatMiniSip() throws Exception {
-    ArchiveTransfer archiveTransfer = SipFactory.createMiniSip();
-
-    JsonSchema esafeSchema;
-    Path schemaPath = Paths.get(SEDA_JSON + "esafe-seda-json-2.0-schema.json");
-    try (InputStream is = Files.newInputStream(schemaPath)) {
+  // Valide le manifeste de l'archive contre le sous-ensemble esafe, schéma externe à sipg
+  private void assertEsafeCompatible(ArchiveTransfer archiveTransfer) throws Exception {
+    Schema esafeSchema;
+    try (InputStream is =
+        Files.newInputStream(Paths.get(SEDA_JSON + "esafe-seda-json-2.0-schema.json"))) {
       esafeSchema =
-          JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V202012)
-              .getSchema(MAPPER.readTree(is));
+          SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_2020_12).getSchema(is);
     }
-
     try (InputStream is = jsonService.marshal(archiveTransfer, noXmlIdConfig)) {
-      Set<ValidationMessage> messages = esafeSchema.validate(MAPPER.readTree(is));
-      assertTrue(messages.isEmpty(), messages.toString());
+      String manifest = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+      var errors = esafeSchema.validate(manifest, InputFormat.JSON);
+      assertTrue(errors.isEmpty(), errors.toString());
     }
   }
 
   /** Test the mini sip manifest validates against the esafe subset schema. */
   @Test
+  void testEsafeSchemaCompatMiniSip() throws Exception {
+    assertEsafeCompatible(SipFactory.createMiniSip());
+  }
+
+  /** Test the complex sip manifest validates against the esafe subset schema. */
+  @Test
   void testEsafeSchemaCompatComplexSip() throws Exception {
     try (FileSystem fs = Jimfs.newFileSystem()) {
-      ArchiveTransfer archiveTransfer = SipFactory.createComplexSip(fs);
-
-      JsonSchema esafeSchema;
-      Path schemaPath = Paths.get(SEDA_JSON + "esafe-seda-json-2.0-schema.json");
-      try (InputStream is = Files.newInputStream(schemaPath)) {
-        esafeSchema =
-            JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V202012)
-                .getSchema(MAPPER.readTree(is));
-      }
-
-      try (InputStream is = jsonService.marshal(archiveTransfer, noXmlIdConfig)) {
-        Set<ValidationMessage> messages = esafeSchema.validate(MAPPER.readTree(is));
-        assertTrue(messages.isEmpty(), messages.toString());
-      }
+      assertEsafeCompatible(SipFactory.createComplexSip(fs));
     }
   }
 
