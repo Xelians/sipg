@@ -26,6 +26,7 @@ import com.google.common.jimfs.Jimfs;
 import com.networknt.schema.InputFormat;
 import com.networknt.schema.Schema;
 import com.networknt.schema.SchemaRegistry;
+import com.networknt.schema.SchemaRegistryConfig;
 import com.networknt.schema.SpecificationVersion;
 import fr.xelians.sipg.SipFactory;
 import fr.xelians.sipg.TestInit;
@@ -337,6 +338,7 @@ class SedaJsonTest {
 
     SedaJsonConfig noValidation =
         SedaJsonConfigBuilder.builder().validate(false).strict(false).build();
+    assertDoesNotThrow(() -> jsonService.write(archiveTransfer, outputPath, noValidation));
     assertDoesNotThrow(() -> jsonService.marshal(archiveTransfer, noValidation).close());
   }
 
@@ -464,13 +466,19 @@ class SedaJsonTest {
     assertEquals(ProgressState.FAIL, events.getLast().status());
   }
 
-  // Valide le manifeste de l'archive contre le sous-ensemble esafe, schéma externe à sipg
+  // Valide le manifeste de l'archive contre le sous-ensemble esafe, schéma externe à sipg, avec
+  // les formats vérifiés comme le fait esafe
   private void assertEsafeCompatible(ArchiveTransfer archiveTransfer) throws Exception {
+    SchemaRegistryConfig config =
+        SchemaRegistryConfig.builder().formatAssertionsEnabled(true).build();
     Schema esafeSchema;
     try (InputStream is =
         Files.newInputStream(Paths.get(SEDA_JSON + "esafe-seda-json-2.0-schema.json"))) {
       esafeSchema =
-          SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_2020_12).getSchema(is);
+          SchemaRegistry.withDefaultDialect(
+                  SpecificationVersion.DRAFT_2020_12,
+                  builder -> builder.schemaRegistryConfig(config))
+              .getSchema(is);
     }
     try (InputStream is = jsonService.marshal(archiveTransfer, noXmlIdConfig)) {
       String manifest = new String(is.readAllBytes(), StandardCharsets.UTF_8);

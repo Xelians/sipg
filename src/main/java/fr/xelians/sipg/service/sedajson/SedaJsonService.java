@@ -36,6 +36,7 @@ import fr.xelians.sipg.utils.SipUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -108,8 +109,15 @@ public class SedaJsonService {
     }
 
     try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath, config.useMemory())) {
-      byte[] manifest = serialize(SedaJsonConverter.convert(archive, zipArchive, config), config);
-      Files.write(zipArchive.getPath(SedaJsonKeys.MANIFEST_JSON), manifest);
+      ObjectNode manifest = SedaJsonConverter.convert(archive, zipArchive, config);
+      Path manifestPath = zipArchive.getPath(SedaJsonKeys.MANIFEST_JSON);
+      if (config.validate()) {
+        Files.write(manifestPath, serialize(manifest, config));
+      } else {
+        try (OutputStream os = Files.newOutputStream(manifestPath)) {
+          getWriter(config).writeValue(os, manifest);
+        }
+      }
     } catch (IOException ex) {
       throw new SipException("Unable to write archive to " + zipPath, ex);
     } catch (ExecutionException ex) {
@@ -142,7 +150,8 @@ public class SedaJsonService {
     Validate.notNull(config, SipUtils.NOT_NULL, "config");
 
     try {
-      validateBytes(MAPPER.writeValueAsBytes(SedaJsonConverter.convert(archive, config)));
+      validateBytes(
+          getWriter(config).writeValueAsBytes(SedaJsonConverter.convert(archive, config)));
     } catch (IOException | ExecutionException ex) {
       throw new SipException("Unable to validate archive", ex);
     } catch (InterruptedException ex) {

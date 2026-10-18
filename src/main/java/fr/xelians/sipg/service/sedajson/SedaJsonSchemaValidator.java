@@ -35,7 +35,9 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.core.StreamReadConstraints;
 import tools.jackson.core.StreamReadFeature;
 import tools.jackson.core.exc.JacksonIOException;
+import tools.jackson.core.exc.StreamConstraintsException;
 import tools.jackson.core.json.JsonFactory;
+import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -57,7 +59,8 @@ final class SedaJsonSchemaValidator {
   private static final int MAX_MESSAGES = 10;
 
   // Le parsing du manifeste est durci : profondeur, longueurs des chaînes, des clés et des
-  // nombres bornées, clés dupliquées rejetées
+  // nombres bornées, clés dupliquées rejetées. Comme avec Jackson 2 et SedaJsonParser, le contenu
+  // qui suit la valeur racine est ignoré
   private static final JsonMapper MAPPER =
       JsonMapper.builder(
               JsonFactory.builder()
@@ -70,6 +73,7 @@ final class SedaJsonSchemaValidator {
                           .build())
                   .enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION)
                   .build())
+          .disable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
           .build();
 
   private static final SedaJsonSchemaValidator V20_INSTANCE =
@@ -127,6 +131,8 @@ final class SedaJsonSchemaValidator {
       manifest = MAPPER.readTree(is);
     } catch (JacksonIOException ex) {
       throw new SipException("Unable to read manifest", ex);
+    } catch (StreamConstraintsException ex) {
+      throw new SipException("Manifest exceeds the parsing limits: " + ex.getOriginalMessage(), ex);
     } catch (JacksonException ex) {
       throw new SipException("Manifest is not a valid json document", ex);
     }

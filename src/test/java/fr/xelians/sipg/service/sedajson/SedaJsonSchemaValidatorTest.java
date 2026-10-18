@@ -59,10 +59,11 @@ class SedaJsonSchemaValidatorTest {
     assertTrue(ex.getMessage().contains(fragment), ex.getMessage());
   }
 
-  /** Test a conforming manifest is accepted. */
+  /** Test a conforming manifest is accepted, ignoring the content after the root value. */
   @Test
   void testValidManifest() {
     assertDoesNotThrow(() -> validator.validate(stream(MINIMAL_MANIFEST)));
+    assertDoesNotThrow(() -> validator.validate(stream(MINIMAL_MANIFEST + " trailing")));
   }
 
   /** Test a schema violation is rejected with the location of the faulty value. */
@@ -98,10 +99,17 @@ class SedaJsonSchemaValidatorTest {
   /** Test a manifest that is not valid json is rejected by the hardened parser. */
   @Test
   void testInvalidJsonFail() throws IOException {
-    int depth = SedaJsonParser.MAX_NESTING_DEPTH + 1;
     assertRejected(stream("{ not json"), "not a valid json document");
-    assertRejected(stream("[".repeat(depth) + "]".repeat(depth)), "not a valid json document");
     assertRejected(fixture("duplicate-key.json"), "not a valid json document");
+  }
+
+  /** Test a manifest exceeding the parsing limits is rejected as such. */
+  @Test
+  void testParsingLimitFail() {
+    int depth = SedaJsonParser.MAX_NESTING_DEPTH + 1;
+    String tooLong = "x".repeat(SedaJsonParser.MAX_STRING_LENGTH + 1);
+    assertRejected(stream("[".repeat(depth) + "]".repeat(depth)), "exceeds the parsing limits");
+    assertRejected(stream("{ \"Text\": \"%s\" }".formatted(tooLong)), "exceeds the parsing limits");
   }
 
   /** Test a failure to read the manifest is not reported as invalid json. */
