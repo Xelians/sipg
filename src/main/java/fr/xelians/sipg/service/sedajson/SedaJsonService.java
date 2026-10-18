@@ -33,6 +33,7 @@ import fr.xelians.sipg.service.common.ProgressState;
 import fr.xelians.sipg.utils.ByteArrayInOutStream;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -109,12 +110,13 @@ public class SedaJsonService {
 
     try (FileSystem zipArchive = SipUtils.newZipFileSystem(zipPath, config.useMemory())) {
       ObjectNode manifest = SedaJsonConverter.convert(archive, zipArchive, config);
+      Path manifestPath = zipArchive.getPath(SedaJsonKeys.MANIFEST_JSON);
       if (config.validate()) {
-        SedaJsonSchemaValidator.getInstance(version).validate(manifest);
-      }
-      try (OutputStream os =
-          Files.newOutputStream(zipArchive.getPath(SedaJsonKeys.MANIFEST_JSON))) {
-        getWriter(config).writeValue(os, manifest);
+        Files.write(manifestPath, serialize(manifest, config));
+      } else {
+        try (OutputStream os = Files.newOutputStream(manifestPath)) {
+          getWriter(config).writeValue(os, manifest);
+        }
       }
     } catch (IOException ex) {
       throw new SipException("Unable to write archive to " + zipPath, ex);
@@ -148,9 +150,9 @@ public class SedaJsonService {
     Validate.notNull(config, SipUtils.NOT_NULL, "config");
 
     try {
-      ObjectNode manifest = SedaJsonConverter.convert(archive, config);
-      SedaJsonSchemaValidator.getInstance(version).validate(manifest);
-    } catch (ExecutionException ex) {
+      validateBytes(
+          getWriter(config).writeValueAsBytes(SedaJsonConverter.convert(archive, config)));
+    } catch (IOException | ExecutionException ex) {
       throw new SipException("Unable to validate archive", ex);
     } catch (InterruptedException ex) {
       Thread.currentThread().interrupt();
@@ -223,13 +225,8 @@ public class SedaJsonService {
     Validate.notNull(config, SipUtils.NOT_NULL, "config");
 
     try {
-      ObjectNode manifest = SedaJsonConverter.convert(archive, config);
-      if (config.validate()) {
-        SedaJsonSchemaValidator.getInstance(version).validate(manifest);
-      }
-      ByteArrayInOutStream baios = new ByteArrayInOutStream(1024);
-      getWriter(config).writeValue(baios, manifest);
-      return baios.getInputStream();
+      return new ByteArrayInputStream(
+          serialize(SedaJsonConverter.convert(archive, config), config));
     } catch (IOException ex) {
       throw new SipException("Unable to marshal archive", ex);
     } catch (ExecutionException ex) {
@@ -238,6 +235,20 @@ public class SedaJsonService {
       Thread.currentThread().interrupt();
       throw new SipException("Unable to marshal archive", ex);
     }
+  }
+
+  // Sérialise le manifeste et valide, si la configuration le demande, les octets mêmes qui sont
+  // livrés : le validateur de schéma JSON ne lit que des manifestes sérialisés
+  private byte[] serialize(ObjectNode manifest, SedaJsonConfig config) throws IOException {
+    byte[] bytes = getWriter(config).writeValueAsBytes(manifest);
+    if (config.validate()) {
+      validateBytes(bytes);
+    }
+    return bytes;
+  }
+
+  private void validateBytes(byte[] manifest) {
+    SedaJsonSchemaValidator.getInstance(version).validate(new ByteArrayInputStream(manifest));
   }
 
   private ObjectWriter getWriter(SedaJsonConfig config) {

@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.xelians</groupId>
     <artifactId>sipg</artifactId>
-    <version>1.51</version>
+    <version>1.52</version>
     <packaging>jar</packaging>
 
     <organization>
@@ -212,11 +212,12 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.22.1</version>
         </dependency>
-        <!-- Validation par schéma JSON (manifestes SEDA JSON) -->
+        <!-- Validation par schéma JSON (manifestes SEDA JSON). Apporte Jackson 3 (tools.jackson),
+             dont l'usage est confiné à SedaJsonSchemaValidator -->
         <dependency>
             <groupId>com.networknt</groupId>
             <artifactId>json-schema-validator</artifactId>
-            <version>1.5.9</version>
+            <version>3.0.8</version>
         </dependency>
 
         <!--  Utils -->

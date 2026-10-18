@@ -18,23 +18,28 @@
  */
 package fr.xelians.sipg.service.sedajson;
 
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.StreamReadConstraints;
-import com.fasterxml.jackson.core.StreamReadFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.JsonSchemaFactory;
-import com.networknt.schema.SchemaValidatorsConfig;
-import com.networknt.schema.SpecVersion;
-import com.networknt.schema.ValidationMessage;
-import com.networknt.schema.resource.DisallowSchemaLoader;
+import com.networknt.schema.Error;
+import com.networknt.schema.Schema;
+import com.networknt.schema.SchemaException;
+import com.networknt.schema.SchemaRegistry;
+import com.networknt.schema.SchemaRegistryConfig;
+import com.networknt.schema.SpecificationVersion;
+import com.networknt.schema.path.PathType;
 import fr.xelians.sipg.utils.SipException;
 import fr.xelians.sipg.utils.SipUtils;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.StreamReadConstraints;
+import tools.jackson.core.StreamReadFeature;
+import tools.jackson.core.exc.JacksonIOException;
+import tools.jackson.core.exc.StreamConstraintsException;
+import tools.jackson.core.json.JsonFactory;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * La classe SedaJsonSchemaValidator valide la conformité d'un manifeste au schéma JSON embarqué du
@@ -43,6 +48,10 @@ import java.util.Set;
  * mémoire ; les appelants doivent donc contrôler au préalable la taille du manifeste. Note. La
  * classe est thread-safe.
  *
+ * <p>Le validateur de schéma JSON repose sur Jackson 3 (tools.jackson), alors que le reste de la
+ * bibliothèque utilise Jackson 2 (com.fasterxml) : il ne lit donc que des manifestes sérialisés,
+ * les manifestes générés étant validés sur les octets qui sont livrés.
+ *
  * @author Emmanuel Deviller
  */
 final class SedaJsonSchemaValidator {
@@ -50,7 +59,8 @@ final class SedaJsonSchemaValidator {
   private static final int MAX_MESSAGES = 10;
 
   // Le parsing du manifeste est durci : profondeur, longueurs des chaînes, des clés et des
-  // nombres bornées, clés dupliquées rejetées
+  // nombres bornées, clés dupliquées rejetées. Comme avec Jackson 2 et SedaJsonParser, le contenu
+  // qui suit la valeur racine est ignoré
   private static final JsonMapper MAPPER =
       JsonMapper.builder(
               JsonFactory.builder()
@@ -61,32 +71,37 @@ final class SedaJsonSchemaValidator {
                           .maxNameLength(SedaJsonParser.MAX_NAME_LENGTH)
                           .maxNumberLength(SedaJsonParser.MAX_NUMBER_LENGTH)
                           .build())
+                  .enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION)
                   .build())
-          .enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION)
+          .disable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
           .build();
 
   private static final SedaJsonSchemaValidator V20_INSTANCE =
       new SedaJsonSchemaValidator(SedaJsonVersion.V2_0);
 
   private final SedaJsonVersion version;
-  private final JsonSchema schema;
+  private final Schema schema;
 
   private SedaJsonSchemaValidator(SedaJsonVersion version) {
     this.version = version;
     try (InputStream is = SipUtils.resourceAsStream(version.getSchema())) {
-      JsonNode schemaNode = MAPPER.readTree(is);
-      JsonSchemaFactory factory =
-          JsonSchemaFactory.getInstance(
-              SpecVersion.VersionFlag.V202012,
+      SchemaRegistryConfig config =
+          SchemaRegistryConfig.builder()
+              .formatAssertionsEnabled(true)
+              // Les messages localisent la valeur fautive sous la forme '$.ArchiveUnits[0]'
+              .pathType(PathType.LEGACY)
+              .build();
+      SchemaRegistry registry =
+          SchemaRegistry.withDefaultDialect(
+              SpecificationVersion.DRAFT_2020_12,
               builder ->
-                  builder.schemaLoaders(
-                      loaders -> loaders.add(DisallowSchemaLoader.getInstance())));
-      SchemaValidatorsConfig config =
-          SchemaValidatorsConfig.builder().formatAssertionsEnabled(true).build();
-      this.schema = factory.getSchema(schemaNode, config);
+                  builder
+                      .schemaRegistryConfig(config)
+                      .schemaLoader(loader -> loader.allow(iri -> false)));
+      this.schema = registry.getSchema(MAPPER.readTree(is));
       // Force la résolution de toutes les $refs à l'initialisation
       this.schema.initializeValidators();
-    } catch (IOException ex) {
+    } catch (IOException | JacksonException | SchemaException ex) {
       throw new SipException(
           String.format("Failed to initialize SEDA JSON schema '%s'", version.getSchema()), ex);
     }
@@ -105,33 +120,6 @@ final class SedaJsonSchemaValidator {
   }
 
   /**
-   * Valide le manifeste selon le schéma JSON embarqué du standard SEDA JSON.
-   *
-   * @param manifest le manifeste à valider
-   */
-  void validate(JsonNode manifest) {
-    if (manifest == null || !manifest.isObject()) {
-      throw new SipException("Manifest must be a json object");
-    }
-
-    JsonNode versionNode = manifest.path(SedaJsonKeys.SEDA_JSON_VERSION);
-    if (!versionNode.isTextual()
-        || SedaJsonVersion.ofVersion(versionNode.asText()) != this.version) {
-      throw new SipException(
-          String.format(
-              "SEDA JSON version '%s' is not supported by this validator", versionNode.asText()));
-    }
-
-    Set<ValidationMessage> messages = schema.validate(manifest);
-    if (!messages.isEmpty()) {
-      throw new SipException(
-          String.format(
-              "Manifest does not conform to the SEDA JSON %s schema: %s",
-              version.getVersion(), formatMessages(messages)));
-    }
-  }
-
-  /**
    * Valide le flux du manifeste selon le schéma JSON embarqué du standard SEDA JSON. Le flux est
    * matérialisé en mémoire : l'appelant doit contrôler au préalable la taille du manifeste.
    *
@@ -141,19 +129,42 @@ final class SedaJsonSchemaValidator {
     JsonNode manifest;
     try {
       manifest = MAPPER.readTree(is);
+    } catch (JacksonIOException ex) {
+      throw new SipException("Unable to read manifest", ex);
+    } catch (StreamConstraintsException ex) {
+      throw new SipException("Manifest exceeds the parsing limits: " + ex.getOriginalMessage(), ex);
     } catch (JacksonException ex) {
       throw new SipException("Manifest is not a valid json document", ex);
-    } catch (IOException ex) {
-      throw new SipException("Unable to read manifest", ex);
     }
-    validate(manifest);
+
+    if (!manifest.isObject()) {
+      throw new SipException("Manifest must be a json object");
+    }
+
+    JsonNode versionNode = manifest.path(SedaJsonKeys.SEDA_JSON_VERSION);
+    if (!versionNode.isString()
+        || SedaJsonVersion.ofVersion(versionNode.asString()) != this.version) {
+      throw new SipException(
+          String.format(
+              "SEDA JSON version '%s' is not supported by this validator",
+              versionNode.asString("")));
+    }
+
+    List<Error> errors = schema.validate(manifest);
+    if (!errors.isEmpty()) {
+      throw new SipException(
+          String.format(
+              "Manifest does not conform to the SEDA JSON %s schema: %s",
+              version.getVersion(), formatErrors(errors)));
+    }
   }
 
-  private static String formatMessages(Set<ValidationMessage> messages) {
-    return messages.stream()
+  // Un message est la localisation de la valeur fautive suivie de la violation : le message seul
+  // ne porte pas la localisation
+  private static String formatErrors(List<Error> errors) {
+    return errors.stream()
         .limit(MAX_MESSAGES)
-        .map(ValidationMessage::getMessage)
-        .reduce((a, b) -> a + "; " + b)
-        .orElse("");
+        .map(Error::toString)
+        .collect(Collectors.joining("; "));
   }
 }
