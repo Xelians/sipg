@@ -24,7 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import fr.xelians.sipg.TestInit;
 import fr.xelians.sipg.utils.DroidUtils;
+import fr.xelians.sipg.utils.SipUtils;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -38,6 +40,8 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
+import uk.gov.nationalarchives.droid.container.ContainerSignatureSaxParser;
+import uk.gov.nationalarchives.droid.container.FileFormatMapping;
 import uk.gov.nationalarchives.droid.core.interfaces.IdentificationResult;
 
 /**
@@ -92,6 +96,16 @@ class DroidTest {
       assertEquals(
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
           result.getMimeType());
+    }
+  }
+
+  /** Test every format of the container signatures is known to the binary signatures. */
+  @Test
+  void testContainerSignaturesPairing() throws Exception {
+    try (InputStream is = SipUtils.resourceAsStream(DroidUtils.CONTAINER_SIGNATURE_FILE)) {
+      for (FileFormatMapping mapping : new ContainerSignatureSaxParser().parse(is).getFormats()) {
+        assertTrue(DroidUtils.isSupportedFormat(mapping.getPuid()), mapping.getPuid());
+      }
     }
   }
 

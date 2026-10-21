@@ -207,19 +207,21 @@ public final class DroidUtils {
       return results;
     }
 
-    // A container match only holds the puid: name, version and mime type come from the signatures
+    // A container match only holds the puid: name, version and mime type come from the signatures.
+    // A puid unknown there would give a format without mime type, so the generic one is kept.
     List<IdentificationResult> enriched = new ArrayList<>();
     for (IdentificationResult result : containerResults) {
       FileFormat format = bsi.getSigFile().getFileFormat(result.getPuid());
+      if (format == null) {
+        return results;
+      }
       enriched.add(
-          format == null
-              ? result
-              : createResult(
-                  format.getPUID(),
-                  format.getName(),
-                  format.getVersion(),
-                  format.getMimeType(),
-                  IdentificationMethod.CONTAINER));
+          createResult(
+              format.getPUID(),
+              format.getName(),
+              format.getVersion(),
+              format.getMimeType(),
+              IdentificationMethod.CONTAINER));
     }
     return enriched;
   }
@@ -355,7 +357,7 @@ public final class DroidUtils {
         ContainerSignatureFileReader reader =
             new ContainerSignatureFileReader() {
               @Override
-              public synchronized ContainerSignatureDefinitions getDefinitions() {
+              public ContainerSignatureDefinitions getDefinitions() {
                 return definitions;
               }
             };
