@@ -1,12 +1,12 @@
 package fr.xelians.sipg.utils;
 
+import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
-import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.jspecify.annotations.Nullable;
@@ -15,7 +15,9 @@ import org.slf4j.LoggerFactory;
 import uk.gov.nationalarchives.droid.container.AbstractContainerIdentifier;
 import uk.gov.nationalarchives.droid.container.AbstractIdentifierEngine;
 import uk.gov.nationalarchives.droid.container.ContainerFileIdentificationRequestFactory;
+import uk.gov.nationalarchives.droid.container.ContainerSignatureDefinitions;
 import uk.gov.nationalarchives.droid.container.ContainerSignatureFileReader;
+import uk.gov.nationalarchives.droid.container.ContainerSignatureSaxParser;
 import uk.gov.nationalarchives.droid.container.ole2.Ole2Identifier;
 import uk.gov.nationalarchives.droid.container.zip.ZipIdentifier;
 import uk.gov.nationalarchives.droid.core.BinarySignatureIdentifier;
@@ -142,18 +144,18 @@ public final class DroidUtils {
       request.open(path);
 
       // Optimized path
+      List<IdentificationResult> results = List.of();
       if (StringUtils.isNotBlank(extension)) {
         List<InternalSignature> intSigs = signatures.get(extension.toUpperCase());
         if (intSigs != null) {
-          List<IdentificationResult> results = matchBinarySignatures(request, intSigs).getResults();
-          if (!results.isEmpty()) {
-            return matchContainerSignatures(request, results, bsi);
-          }
+          results = matchBinarySignatures(request, intSigs).getResults();
         }
       }
 
       // Full but slow path
-      List<IdentificationResult> results = bsi.matchBinarySignatures(request).getResults();
+      if (results.isEmpty()) {
+        results = bsi.matchBinarySignatures(request).getResults();
+      }
       if (!results.isEmpty()) {
         return matchContainerSignatures(request, results, bsi);
       }
@@ -288,28 +290,6 @@ public final class DroidUtils {
     return matchingSigs;
   }
 
-  // Droid reads its signature files from the file system, so the resource is copied to a temp file
-  private static <T> T withResourceFile(String resource, Function<Path, T> reader) {
-    Path signaturePath = null;
-    try (InputStream is = SipUtils.resourceAsStream(resource)) {
-      signaturePath = Files.createTempFile("droid", ".xml");
-      Files.copy(is, signaturePath, StandardCopyOption.REPLACE_EXISTING);
-
-      return reader.apply(signaturePath);
-
-    } catch (IOException ex) {
-      throw new SipException("Unable to init Droid signatures identifier", ex);
-    } finally {
-      if (signaturePath != null) {
-        try {
-          Files.deleteIfExists(signaturePath);
-        } catch (IOException e) {
-          LOGGER.error(e.getMessage());
-        }
-      }
-    }
-  }
-
   /** Allow lazy initialization of Droid Signatures */
   private static class DroidSignaturesHolder {
 
@@ -326,7 +306,24 @@ public final class DroidUtils {
      * @return les identifiants binaires des signatures
      */
     private static BinarySignatureIdentifier initDroidSignatures() {
-      return withResourceFile(DEFAULT_SIGNATURE_FILE, DroidUtils::initDroidSignatures);
+      Path signaturePath = null;
+      try (InputStream is = SipUtils.resourceAsStream(DEFAULT_SIGNATURE_FILE)) {
+        signaturePath = Files.createTempFile("droid", ".xml");
+        Files.copy(is, signaturePath, StandardCopyOption.REPLACE_EXISTING);
+
+        return DroidUtils.initDroidSignatures(signaturePath);
+
+      } catch (IOException ex) {
+        throw new SipException("Unable to init Droid signatures identifier", ex);
+      } finally {
+        if (signaturePath != null) {
+          try {
+            Files.deleteIfExists(signaturePath);
+          } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+          }
+        }
+      }
     }
 
     private static Map<String, List<InternalSignature>> indexByExtension(
@@ -349,28 +346,33 @@ public final class DroidUtils {
 
     // Filled by the container identifiers init: trigger puid -> container type -> identifier
     private static final ArchiveFormatResolver RESOLVER = new ArchiveFormatResolverImpl();
-    private static final ContainerIdentifierFactory FACTORY = new ContainerIdentifierFactoryImpl();
+    private static final ContainerIdentifierFactory FACTORY = initIdentifiers();
 
-    static {
-      withResourceFile(CONTAINER_SIGNATURE_FILE, ContainerSignaturesHolder::initIdentifiers);
-    }
-
-    private static Void initIdentifiers(Path signaturePath) {
-      ContainerSignatureFileReader reader = new ContainerSignatureFileReader(signaturePath);
-      ContainerFileIdentificationRequestFactory requestFactory =
-          new ContainerFileIdentificationRequestFactory();
-      try {
+    private static ContainerIdentifierFactory initIdentifiers() {
+      try (InputStream is = SipUtils.resourceAsStream(CONTAINER_SIGNATURE_FILE)) {
+        ContainerSignatureDefinitions definitions = new ContainerSignatureSaxParser().parse(is);
+        // The reader only knows how to read a file: hand it the definitions parsed from the jar
+        ContainerSignatureFileReader reader =
+            new ContainerSignatureFileReader() {
+              @Override
+              public synchronized ContainerSignatureDefinitions getDefinitions() {
+                return definitions;
+              }
+            };
+        ContainerIdentifierFactory factory = new ContainerIdentifierFactoryImpl();
+        ContainerFileIdentificationRequestFactory requestFactory =
+            new ContainerFileIdentificationRequestFactory();
         for (AbstractContainerIdentifier identifier :
             List.of(new ZipIdentifier(), new Ole2Identifier())) {
           ((AbstractIdentifierEngine) identifier.getIdentifierEngine())
               .setRequestFactory(requestFactory);
           identifier.setSignatureReader(reader);
-          identifier.setContainerIdentifierFactory(FACTORY);
+          identifier.setContainerIdentifierFactory(factory);
           identifier.setContainerFormatResolver(RESOLVER);
           identifier.init();
         }
-        return null;
-      } catch (SignatureFileException ex) {
+        return factory;
+      } catch (IOException | JAXBException | SignatureParseException | SignatureFileException ex) {
         throw new SipException("Unable to init Droid container signatures identifier", ex);
       }
     }
