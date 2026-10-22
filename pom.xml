@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.xelians</groupId>
     <artifactId>sipg</artifactId>
-    <version>1.52</version>
+    <version>1.53</version>
     <packaging>jar</packaging>
 
     <organization>
@@ -272,6 +272,40 @@
                 <exclusion>
                     <groupId>org.bouncycastle</groupId>
                     <artifactId>bcprov-ext-jdk15on</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Container signatures (docx, xlsx, odt...). The excluded artifacts only serve the
+             signature update service or clash with logback and ibis-xerces -->
+        <dependency>
+            <groupId>uk.gov.nationalarchives</groupId>
+            <artifactId>droid-container</artifactId>
+            <version>6.9.13</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.glassfish.jaxb</groupId>
+                    <artifactId>jaxb-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j2-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-configuration2</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpcore</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
