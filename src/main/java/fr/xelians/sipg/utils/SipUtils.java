@@ -307,7 +307,8 @@ public final class SipUtils {
   /**
    * Sanitize un nom de fichier en retirant les accents et caractères spéciaux. Les caractères sont
    * normalisés puis seuls les caractères alphanumériques, points, tirets et underscores sont
-   * conservés.
+   * conservés. Les points consécutifs sont fusionnés en un seul, car Vitam refuse une entrée de zip
+   * contenant "..".
    *
    * @param fileName le nom du fichier à sanitizer
    * @return le nom de fichier sanitizé
@@ -316,6 +317,9 @@ public final class SipUtils {
     Validate.notNull(fileName, NOT_NULL, "fileName");
 
     String normalized = Normalizer.normalize(fileName, Normalizer.Form.NFD);
-    return normalized.replaceAll("[^\\p{ASCII}]", "").replaceAll("[^a-zA-Z0-9._-]", "_");
+    return normalized
+        .replaceAll("[^\\p{ASCII}]", "")
+        .replaceAll("[^a-zA-Z0-9._-]", "_")
+        .replaceAll("\\.{2,}", ".");
   }
 }
