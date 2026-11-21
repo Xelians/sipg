@@ -263,7 +263,8 @@ class Sedav22Converter {
       ExecutorService executor =
           Executors.newFixedThreadPool(SipUtils.getPoolSize(config.thread()));
       try {
-        List<Future<Void>> futures = executor.invokeAll(converter.tasks);
+        // The conversion fails with its first task: the ones not started yet then ask for no binary
+        List<Future<Void>> futures = executor.invokeAll(SipUtils.skipAfterFailure(converter.tasks));
         // Join all threads and throw an exception if one task has failed
         for (Future<Void> future : futures) {
           future.get();
@@ -419,16 +420,15 @@ class Sedav22Converter {
   }
 
   private void addBinaryDataObjectType(DataObjectGroupType dogt, BinaryDataObject bdo) {
-    boolean removePath = false;
+    // A supplied path is asked for by the zip task, not here: a supplier usually creates the file
+    // it returns, and every file would otherwise exist before the first one is zipped
     Path binaryPath = bdo.getBinaryPath();
-    if (binaryPath == null) {
-      Supplier<Path> bs = bdo.getBinaryPathSupplier();
-      if (bs == null) {
-        return;
-      }
-      binaryPath = bdo.getBinaryPathSupplier().get();
-      removePath = true;
+    Supplier<Path> pathSupplier =
+        binaryPath == null ? bdo.getBinaryPathSupplier() : () -> binaryPath;
+    if (pathSupplier == null) {
+      return;
     }
+    boolean removePath = binaryPath == null;
 
     MessageDigestBinaryObjectType mdbot = sedav2Factory.createMessageDigestBinaryObjectType();
     mdbot.setAlgorithm(bdo.getDigestAlgorithm());
@@ -447,11 +447,11 @@ class Sedav22Converter {
 
     FileInfo fileInfo = bdo.getFileInfo();
     if (fileInfo != null) {
-      bdot.setFileInfo(toFileInfoType(fileInfo, binaryPath.getFileName().toString()));
+      bdot.setFileInfo(toFileInfoType(fileInfo));
     }
 
     dogt.getBinaryDataObjectOrPhysicalDataObject().add(bdot);
-    tasks.add(new ZipTask(binaryPath, removePath, this.identifyFileFormat, bdot));
+    tasks.add(new ZipTask(pathSupplier, removePath, this.identifyFileFormat, bdot));
   }
 
   private ArchiveUnitType toArchiveUnitType(ArchiveUnit unit, DataObjectPackageType dopt) {
@@ -834,11 +834,11 @@ class Sedav22Converter {
     return fit;
   }
 
-  private FileInfoType toFileInfoType(FileInfo fileInfo, String binaryName) {
+  private FileInfoType toFileInfoType(FileInfo fileInfo) {
     FileInfoType fit = sedav2Factory.createFileInfoType();
 
-    fit.setFilename(
-        StringUtils.isBlank(fileInfo.getFilename()) ? binaryName : fileInfo.getFilename());
+    // Left null when blank: the zip task then sets the name of the binary file
+    ifNotBlank(fileInfo.getFilename(), fit::setFilename);
     ifNotNull(fileInfo.getCreatingApplicationName(), fit::setCreatingApplicationName);
     ifNotNull(fileInfo.getCreatingApplicationVersion(), fit::setCreatingApplicationVersion);
     ifNotNull(fileInfo.getCreatingOs(), fit::setCreatingOs);
@@ -1336,7 +1336,7 @@ class Sedav22Converter {
 
   private class ZipTask implements Callable<Void> {
 
-    private final Path binaryPath;
+    private final Supplier<Path> pathSupplier;
     private final boolean removePath;
     private final BinaryDataObjectType bdot;
     private final boolean identifyFileFormat;
@@ -1344,15 +1344,17 @@ class Sedav22Converter {
     /**
      * Instantiates a new Zip task.
      *
-     * @param binaryPath the binary path
+     * @param pathSupplier the supplier of the binary path, called when the task runs
+     * @param removePath whether the binary file is deleted once zipped
+     * @param identifyFileFormat whether the format of the binary file is identified
      * @param bdot the bdot
      */
     public ZipTask(
-        Path binaryPath,
+        Supplier<Path> pathSupplier,
         boolean removePath,
         boolean identifyFileFormat,
         BinaryDataObjectType bdot) {
-      this.binaryPath = binaryPath;
+      this.pathSupplier = pathSupplier;
       this.removePath = removePath;
       this.identifyFileFormat = identifyFileFormat;
       this.bdot = bdot;
@@ -1380,14 +1382,22 @@ class Sedav22Converter {
     @Override
     public Void call() {
       MessageDigestBinaryObjectType mdbot = bdot.getMessageDigest();
+      Path binaryPath = null;
 
       try {
+        binaryPath = pathSupplier.get();
+        String filename = binaryPath.getFileName().toString();
+
+        FileInfoType fileInfoType = bdot.getFileInfo();
+        if (fileInfoType != null && fileInfoType.getFilename() == null) {
+          fileInfoType.setFilename(filename);
+        }
+
         // Compute Digest
         String digest = SipUtils.digestHex(binaryPath, mdbot.getAlgorithm());
         mdbot.setValue(digest);
 
-        final var sanitizedFileName =
-            SipUtils.sanitizeFileName(binaryPath.getFileName().toString());
+        final var sanitizedFileName = SipUtils.sanitizeFileName(filename);
         final var binaryFileName = UUID.randomUUID() + "_" + sanitizedFileName;
 
         // Add binary file to zip
@@ -1403,13 +1413,13 @@ class Sedav22Converter {
 
         FormatIdentificationType fit = bdot.getFormatIdentification();
         if (fit == null || StringUtils.isBlank(fit.getFormatId())) {
-          processFileFormatIdentification();
+          processFileFormatIdentification(binaryPath);
         }
 
         if (removePath) Files.delete(binaryPath);
       } catch (Exception ex) {
         try {
-          if (removePath) Files.deleteIfExists(binaryPath);
+          if (removePath && binaryPath != null) Files.deleteIfExists(binaryPath);
         } catch (IOException ioex) {
           // Ignore
         }
@@ -1420,7 +1430,7 @@ class Sedav22Converter {
       return null;
     }
 
-    private void processFileFormatIdentification() {
+    private void processFileFormatIdentification(Path binaryPath) {
       if (identifyFileFormat) {
         // Note. The Signature Identifier does not fully support NIO2 (i.e. does not work with
         // jimfs)
