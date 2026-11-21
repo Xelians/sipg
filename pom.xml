@@ -410,14 +410,6 @@
         </plugins>
     </reporting>
 
-    <repositories>
-        <repository>
-            <id>maven_central</id>
-            <name>Maven Central</name>
-            <url>https://repo.maven.apache.org/maven2/</url>
-        </repository>
-    </repositories>
-
     <profiles>
         <!-- Use "mvn clean generate-sources -Pseda21" to generate jaxb classes from SEDA 2.1 -->
         <profile>
