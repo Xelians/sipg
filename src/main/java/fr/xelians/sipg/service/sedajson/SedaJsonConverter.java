@@ -156,7 +156,9 @@ class SedaJsonConverter {
       ExecutorService executor =
           Executors.newFixedThreadPool(SipUtils.getPoolSize(config.thread()));
       try {
-        List<Future<Void>> futures = executor.invokeAll(converter.tasks);
+        // La conversion échoue avec sa première tâche : celles qui n'ont pas démarré ne demandent
+        // alors plus de binaire
+        List<Future<Void>> futures = executor.invokeAll(SipUtils.skipAfterFailure(converter.tasks));
         // Join all threads and throw an exception if one task has failed
         for (Future<Void> future : futures) {
           future.get();
@@ -894,16 +896,17 @@ class SedaJsonConverter {
       return;
     }
 
-    boolean removePath = false;
+    // Un path fourni par un supplier est demandé par la tâche de zip et non ici : un supplier crée
+    // en général le fichier qu'il retourne, et tous les fichiers existeraient sinon avant que le
+    // premier soit zippé. Le nom du fichier n'étant connu qu'alors, la tâche complète l'URI et, à
+    // défaut de nom dans le FileInfo, le Filename
     Path binaryPath = bdo.getBinaryPath();
-    if (binaryPath == null) {
-      Supplier<Path> bs = bdo.getBinaryPathSupplier();
-      if (bs == null) {
-        return;
-      }
-      binaryPath = bs.get();
-      removePath = true;
+    Supplier<Path> pathSupplier =
+        binaryPath == null ? bdo.getBinaryPathSupplier() : () -> binaryPath;
+    if (pathSupplier == null) {
+      return;
     }
+    boolean removePath = binaryPath == null;
 
     ObjectNode node = array.addObject();
     if (xmlId) {
@@ -911,9 +914,7 @@ class SedaJsonConverter {
     }
     ifNotBlank(bdo.getBinaryVersion(), e -> node.put(DATA_OBJECT_VERSION, e));
 
-    String sanitizedFileName = SipUtils.sanitizeFileName(binaryPath.getFileName().toString());
-    String binaryFileName = idCounter.incrementAndGet() + "_" + sanitizedFileName;
-    node.put(URI, CONTENT_DIR + "/" + binaryFileName);
+    node.put(URI, "");
 
     ObjectNode digest = node.putObject(MESSAGE_DIGEST);
     digest.put(ALGORITHM, bdo.getDigestAlgorithm());
@@ -936,11 +937,7 @@ class SedaJsonConverter {
     FileInfo fileInfo = bdo.getFileInfo();
     if (fileInfo != null) {
       ObjectNode info = node.putObject(FILE_INFO);
-      info.put(
-          FILENAME,
-          StringUtils.isBlank(fileInfo.getFilename())
-              ? binaryPath.getFileName().toString()
-              : fileInfo.getFilename());
+      info.put(FILENAME, SipUtils.getIfBlank(fileInfo.getFilename(), ""));
       ifNotBlank(
           fileInfo.getCreatingApplicationName(), e -> info.put(CREATING_APPLICATION_NAME, e));
       ifNotBlank(
@@ -953,7 +950,9 @@ class SedaJsonConverter {
       ifNotNull(fileInfo.getLastModified(), e -> info.put(LAST_MODIFIED, toJsonDateTime(e)));
     }
 
-    tasks.add(new JsonZipTask(binaryPath, binaryFileName, removePath, identifyFileFormat, node));
+    tasks.add(
+        new JsonZipTask(
+            pathSupplier, idCounter.incrementAndGet(), removePath, identifyFileFormat, node));
   }
 
   private void reject(String what) {
@@ -983,20 +982,20 @@ class SedaJsonConverter {
 
   private class JsonZipTask implements Callable<Void> {
 
-    private final Path binaryPath;
-    private final String binaryFileName;
+    private final Supplier<Path> pathSupplier;
+    private final int binaryId;
     private final boolean removePath;
     private final boolean identifyFileFormat;
     private final ObjectNode node;
 
     JsonZipTask(
-        Path binaryPath,
-        String binaryFileName,
+        Supplier<Path> pathSupplier,
+        int binaryId,
         boolean removePath,
         boolean identifyFileFormat,
         ObjectNode node) {
-      this.binaryPath = binaryPath;
-      this.binaryFileName = binaryFileName;
+      this.pathSupplier = pathSupplier;
+      this.binaryId = binaryId;
       this.removePath = removePath;
       this.identifyFileFormat = identifyFileFormat;
       this.node = node;
@@ -1021,14 +1020,26 @@ class SedaJsonConverter {
 
     @Override
     public Void call() {
+      Path binaryPath = null;
       try {
+        binaryPath = pathSupplier.get();
+
+        String filename = binaryPath.getFileName().toString();
+        String binaryFileName = binaryId + "_" + SipUtils.sanitizeFileName(filename);
+        node.put(URI, CONTENT_DIR + "/" + binaryFileName);
+
+        ObjectNode info = (ObjectNode) node.get(FILE_INFO);
+        if (info != null && info.get(FILENAME).asText().isEmpty()) {
+          info.put(FILENAME, filename);
+        }
+
         // Compute Digest
         ObjectNode digest = (ObjectNode) node.get(MESSAGE_DIGEST);
         digest.put(VALUE, SipUtils.digestHex(binaryPath, digest.get(ALGORITHM).asText()));
 
         // L'identification du format opère sur le fichier source car la librairie Droid ne
         // supporte pas les systèmes de fichiers NIO (zip, jimfs)
-        processFileFormatIdentification();
+        processFileFormatIdentification(binaryPath);
 
         // Add binary file to zip
         if (zipArchive != null) {
@@ -1042,7 +1053,7 @@ class SedaJsonConverter {
         if (removePath) Files.delete(binaryPath);
       } catch (Exception ex) {
         try {
-          if (removePath) Files.deleteIfExists(binaryPath);
+          if (removePath && binaryPath != null) Files.deleteIfExists(binaryPath);
         } catch (IOException ioex) {
           // Ignore
         }
@@ -1053,7 +1064,7 @@ class SedaJsonConverter {
       return null;
     }
 
-    private void processFileFormatIdentification() {
+    private void processFileFormatIdentification(Path binaryPath) {
       JsonNode formatNode = node.get(FORMAT_IDENTIFICATION);
       if (!identifyFileFormat || formatNode == null || !formatNode.isEmpty()) {
         return;

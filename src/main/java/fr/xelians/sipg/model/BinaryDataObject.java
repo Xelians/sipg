@@ -72,7 +72,15 @@ public abstract class BinaryDataObject {
   }
 
   /**
-   * Spécifie le fournisseur du path de l'objet binaire.
+   * Spécifie le fournisseur du path de l'objet binaire, utilisé à défaut de path. Le fournisseur
+   * est appelé au moment où l'objet binaire est ajouté à l'archive, et le fichier qu'il retourne
+   * est supprimé aussitôt après : un fournisseur qui crée ce fichier à l'appel n'en laisse donc
+   * exister qu'un par thread de conversion à la fois. Les objets binaires étant ajoutés en
+   * parallèle, les fournisseurs d'une même archive sont appelés depuis plusieurs threads.
+   *
+   * <p>Une exception levée par le fournisseur fait échouer l'écriture de l'archive par une {@link
+   * fr.xelians.sipg.utils.SipException} dont elle est la cause première. Les fournisseurs des
+   * objets binaires qui n'ont pas encore été ajoutés ne sont alors plus appelés.
    *
    * @param binaryPathSupplier le fournisseur du path de l'objet binaire
    */

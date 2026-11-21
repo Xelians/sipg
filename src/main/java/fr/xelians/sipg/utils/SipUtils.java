@@ -31,7 +31,10 @@ import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -167,6 +170,33 @@ public final class SipUtils {
    */
   public static int getPoolSize(int n) {
     return n <= 0 ? Runtime.getRuntime().availableProcessors() : n;
+  }
+
+  /**
+   * Enveloppe les tâches de sorte que, dès que l'une d'elles a échoué, celles qui n'ont pas encore
+   * démarré se terminent sans rien faire. Les tâches en cours ne sont pas interrompues.
+   *
+   * @param <T> le type du résultat des tâches
+   * @param tasks les tâches à envelopper
+   * @return les tâches enveloppées
+   */
+  public static <T> List<Callable<T>> skipAfterFailure(List<Callable<T>> tasks) {
+    AtomicBoolean failed = new AtomicBoolean();
+    return tasks.stream()
+        .<Callable<T>>map(
+            task ->
+                () -> {
+                  if (failed.get()) {
+                    return null;
+                  }
+                  try {
+                    return task.call();
+                  } catch (Throwable t) {
+                    failed.set(true);
+                    throw t;
+                  }
+                })
+        .toList();
   }
 
   /**

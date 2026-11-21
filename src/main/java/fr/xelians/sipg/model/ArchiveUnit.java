@@ -462,6 +462,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    * Spécifie le fournisseur du path de l'objet binaire de type binary master.
    *
    * @param binaryPathSupplier le fournisseur du path de l'objet binaire
+   * @see BinaryDataObject#setBinaryPathSupplier(Supplier)
    */
   public void setBinaryPathSupplier(Supplier<Path> binaryPathSupplier) {
     provideBinaryMasterDataObject().setBinaryPathSupplier(binaryPathSupplier);
@@ -622,6 +623,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    * Spécifie le fournisseur du path de l'objet binaire de type dissemination (publication).
    *
    * @param binaryPathSupplier le fournisseur du path de l'objet binaire
+   * @see BinaryDataObject#setBinaryPathSupplier(Supplier)
    */
   public void setDisseminationPathSupplier(Supplier<Path> binaryPathSupplier) {
     provideDisseminationDataObject().setBinaryPathSupplier(binaryPathSupplier);
@@ -782,6 +784,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    * Spécifie le fournisseur du path de l'objet binaire de type thumbnail (vignette).
    *
    * @param binaryPathSupplier le fournisseur du path de l'objet binaire
+   * @see BinaryDataObject#setBinaryPathSupplier(Supplier)
    */
   public void setThumbnailPathSupplier(Supplier<Path> binaryPathSupplier) {
     provideThumbnailDataObject().setBinaryPathSupplier(binaryPathSupplier);
@@ -942,6 +945,7 @@ public class ArchiveUnit implements ArchiveUnitContainer {
    * Spécifie le fournisseur du path de l'objet binaire de type text content (contenu texte).
    *
    * @param binaryPathSupplier le fournisseur du path de l'objet binaire
+   * @see BinaryDataObject#setBinaryPathSupplier(Supplier)
    */
   public void setTextContentPathSupplier(Supplier<Path> binaryPathSupplier) {
     provideTextContentDataObject().setBinaryPathSupplier(binaryPathSupplier);
